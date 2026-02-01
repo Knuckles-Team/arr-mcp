@@ -53,6 +53,13 @@ DEFAULT_HOST = os.getenv("HOST", "0.0.0.0")
 DEFAULT_PORT = to_integer(string=os.getenv("PORT", "8000"))
 
 
+def register_prompts(mcp: FastMCP):
+    @mcp.prompt(name="search_artist", description="Search for an artist.")
+    def search_artist() -> str:
+        """Search for an artist."""
+        return "Please search for an artist."
+
+
 def register_tools(mcp: FastMCP):
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
@@ -6205,6 +6212,7 @@ def lidarr_mcp():
 
     mcp = FastMCP("Lidarr", auth=auth)
     register_tools(mcp)
+    register_prompts(mcp)
 
     for mw in middlewares:
         mcp.add_middleware(mw)

@@ -36,7 +36,6 @@ from arr_mcp.radarr_agent import create_agent as create_radarr_agent
 from arr_mcp.prowlarr_agent import create_agent as create_prowlarr_agent
 from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 
-
 __version__ = "0.1.1"
 
 logging.basicConfig(

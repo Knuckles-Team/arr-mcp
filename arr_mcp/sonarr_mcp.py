@@ -53,6 +53,20 @@ DEFAULT_HOST = os.getenv("HOST", "0.0.0.0")
 DEFAULT_PORT = to_integer(string=os.getenv("PORT", "8000"))
 
 
+def register_prompts(mcp: FastMCP):
+    @mcp.prompt(
+        name="search_series", description="Search for a TV series to add or view."
+    )
+    def search_series(query: str) -> str:
+        """Search for a TV series."""
+        return f"Please search for the TV series '{query}'"
+
+    @mcp.prompt(name="calendar", description="Check the upcoming TV schedule.")
+    def calendar() -> str:
+        """Check the upcoming TV schedule."""
+        return "Please check the upcoming TV schedule."
+
+
 def register_tools(mcp: FastMCP):
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
@@ -6202,6 +6216,7 @@ def sonarr_mcp():
 
     mcp = FastMCP("Sonarr", auth=auth)
     register_tools(mcp)
+    register_prompts(mcp)
 
     for mw in middlewares:
         mcp.add_middleware(mw)

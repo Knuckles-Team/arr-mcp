@@ -53,6 +53,13 @@ DEFAULT_HOST = os.getenv("HOST", "0.0.0.0")
 DEFAULT_PORT = to_integer(string=os.getenv("PORT", "8000"))
 
 
+def register_prompts(mcp: FastMCP):
+    @mcp.prompt(name="search_indexers", description="Search for indexers.")
+    def search_indexers() -> str:
+        """Search for indexers."""
+        return "Please search for indexers."
+
+
 def register_tools(mcp: FastMCP):
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
@@ -3681,6 +3688,7 @@ def prowlarr_mcp():
 
     mcp = FastMCP("Prowlarr", auth=auth)
     register_tools(mcp)
+    register_prompts(mcp)
 
     for mw in middlewares:
         mcp.add_middleware(mw)
