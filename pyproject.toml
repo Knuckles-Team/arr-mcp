@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=80.9.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arr-mcp"
+version = "0.1.1"
+description = "Arr Suite MCP Server for Agentic AI!"
+readme = "README.md"
+authors = [{ name = "Genius", email = "genius@example.com" }]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Console",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.8.1",
+    "urllib3>=2.2.2",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+mcp = [
+    "fastmcp>=3.0.0b1",
+    "eunomia-mcp>=0.3.10",
+    "fastapi>=0.128.0"
+]
+
+a2a = [
+    "pydantic-ai-slim[fastmcp,openai,anthropic,google,huggingface,a2a,ag-ui,web]>=1.32.0",
+    "pydantic-ai-skills",
+    "fastapi>=0.128.0"
+]
+
+all = [
+    "fastmcp>=3.0.0b1",
+    "eunomia-mcp>=0.3.10",
+    "pydantic-ai-slim[fastmcp,openai,anthropic,google,huggingface,a2a,ag-ui,web]>=1.32.0",
+    "pydantic-ai-skills",
+    "fastapi>=0.128.0"
+]
+
+[project.scripts]
+chaptarr-mcp = "arr_mcp.chaptarr_mcp:chaptarr_mcp"
+chaptarr-agent = "arr_mcp.chaptarr_agent:agent_server"
+lidarr-mcp = "arr_mcp.lidarr_mcp:lidarr_mcp"
+lidarr-agent = "arr_mcp.lidarr_agent:agent_server"
+prowlarr-mcp = "arr_mcp.prowlarr_mcp:prowlarr_mcp"
+prowlarr-agent = "arr_mcp.prowlarr_agent:agent_server"
+radarr-mcp = "arr_mcp.radarr_mcp:radarr_mcp"
+radarr-agent = "arr_mcp.radarr_agent:agent_server"
+sonarr-mcp = "arr_mcp.sonarr_mcp:sonarr_mcp"
+sonarr-agent = "arr_mcp.sonarr_agent:agent_server"
+arr-mcp = "arr_mcp.arr_mcp"
+arr-agent = "arr_mcp.arr_agent"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+arr_mcp = ["mcp_config.json", "skills/**"]

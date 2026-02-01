@@ -1,0 +1,194 @@
+services:
+  chaptarr-mcp:
+    image: docker.io/knucklessg1/arr-mcp:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    container_name: chaptarr-mcp
+    hostname: chaptarr-mcp
+    command: [ "chaptarr-mcp" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    environment:
+      - "HOST=0.0.0.0"
+      - "PORT=8060"
+      - "TRANSPORT=streamable-http"
+      - "CHAPTARR_BASE_URL=${CHAPTARR_BASE_URL}"
+      - "CHAPTARR_API_KEY=${CHAPTARR_API_KEY}"
+      - "CHAPTARR_VERIFY=${CHAPTARR_VERIFY:-True}"
+    ports:
+      - "8060:8060"
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8060/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  lidarr-mcp:
+    image: docker.io/knucklessg1/arr-mcp:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    container_name: lidarr-mcp
+    hostname: lidarr-mcp
+    command: [ "lidarr-mcp" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    environment:
+      - "HOST=0.0.0.0"
+      - "PORT=8061"
+      - "TRANSPORT=streamable-http"
+      - "PROWLARR_BASE_URL=${PROWLARR_BASE_URL}"
+      - "PROWLARR_API_KEY=${PROWLARR_API_KEY}"
+      - "PROWLARR_VERIFY=${PROWLARR_VERIFY:-True}"
+    ports:
+      - "8061:8061"
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8061/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  prowlarr-mcp:
+    image: docker.io/knucklessg1/arr-mcp:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    container_name: prowlarr-mcp
+    hostname: prowlarr-mcp
+    command: [ "prowlarr-mcp" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    environment:
+      - "HOST=0.0.0.0"
+      - "PORT=8062"
+      - "TRANSPORT=streamable-http"
+      - "PROWLARR_BASE_URL=${PROWLARR_BASE_URL}"
+      - "PROWLARR_API_KEY=${PROWLARR_API_KEY}"
+      - "PROWLARR_VERIFY=${PROWLARR_VERIFY:-True}"
+    ports:
+      - "8062:8062"
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8062/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  radarr-mcp:
+    image: docker.io/knucklessg1/arr-mcp:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    container_name: radarr-mcp
+    hostname: radarr-mcp
+    command: [ "radarr-mcp" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    environment:
+      - "HOST=0.0.0.0"
+      - "PORT=8063"
+      - "TRANSPORT=streamable-http"
+      - "RADARR_BASE_URL=${RADARR_BASE_URL}"
+      - "RADARR_API_KEY=${RADARR_API_KEY}"
+      - "RADARR_VERIFY=${RADARR_VERIFY:-True}"
+    ports:
+      - "8063:8063"
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8063/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  sonarr-mcp:
+    image: docker.io/knucklessg1/arr-mcp:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    container_name: sonarr-mcp
+    hostname: sonarr-mcp
+    command: [ "sonarr-mcp" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    environment:
+      - "HOST=0.0.0.0"
+      - "PORT=8064"
+      - "TRANSPORT=streamable-http"
+      - "SONARR_BASE_URL=${SONARR_BASE_URL}"
+      - "SONARR_API_KEY=${SONARR_API_KEY}"
+      - "SONARR_VERIFY=${SONARR_VERIFY:-True}"
+    ports:
+      - "8064:8064"
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8064/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  arr-mcp:
+    image: docker.io/knucklessg1/arr-mcp:latest
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
+    container_name: arr-mcp
+    hostname: arr-mcp
+    command: [ "arr-mcp" ]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+    environment:
+      - "HOST=0.0.0.0"
+      - "PORT=8065"
+      - "TRANSPORT=streamable-http"
+      - "CHAPTARR_MCP_URL=http://chaptarr-mcp:8060/mcp"
+      - "LIDARR_MCP_URL=http://lidarr-mcp:8061/mcp"
+      - "PROWLARR_MCP_URL=http://prowlarr-mcp:8062/mcp"
+      - "RADARR_MCP_URL=http://radarr-mcp:8063/mcp"
+      - "SONARR_MCP_URL=http://sonarr-mcp:8064/mcp"
+    ports:
+      - "8065:8065"
+    healthcheck:
+      test: [ "CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8065/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
