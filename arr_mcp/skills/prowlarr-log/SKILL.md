@@ -1,0 +1,27 @@
+---
+name: prowlarr-log
+description: "Generated skill for Log operations. Contains 1 tools."
+---
+
+### Overview
+This skill handles operations related to Log.
+
+### Available Tools
+- `get_log`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `level` (str)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.
