@@ -9,7 +9,6 @@ from typing import Optional, Any, List
 from contextlib import asynccontextmanager
 
 from pydantic_ai import Agent, ModelSettings, RunContext
-from fasta2a import Skill
 from arr_mcp.utils import (
     to_integer,
     to_boolean,
@@ -288,17 +287,17 @@ async def stream_chat(agent: Agent, prompt: str) -> None:
 
 
 def create_agent_server(
-        provider: str = DEFAULT_PROVIDER,
-        model_id: str = DEFAULT_MODEL_ID,
-        base_url: Optional[str] = None,
-        api_key: Optional[str] = None,
-        mcp_url: str = DEFAULT_MCP_URL,
-        mcp_config: str = DEFAULT_MCP_CONFIG,
-        skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
-        debug: Optional[bool] = DEFAULT_DEBUG,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[int] = DEFAULT_PORT,
-        enable_web_ui: bool = DEFAULT_ENABLE_WEB_UI,
+    provider: str = DEFAULT_PROVIDER,
+    model_id: str = DEFAULT_MODEL_ID,
+    base_url: Optional[str] = None,
+    api_key: Optional[str] = None,
+    mcp_url: str = DEFAULT_MCP_URL,
+    mcp_config: str = DEFAULT_MCP_CONFIG,
+    skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
+    debug: Optional[bool] = DEFAULT_DEBUG,
+    host: Optional[str] = DEFAULT_HOST,
+    port: Optional[int] = DEFAULT_PORT,
+    enable_web_ui: bool = DEFAULT_ENABLE_WEB_UI,
 ):
     print(
         f"Starting {AGENT_NAME} with provider={provider}, model={model_id}, mcp={mcp_url} | {mcp_config}"
@@ -318,7 +317,6 @@ def create_agent_server(
     if skills_directory and os.path.exists(skills_directory):
         skills = load_skills_from_directory(skills_directory)
         logger.info(f"Loaded {len(skills)} skills from {skills_directory}")
-
 
     # Create A2A app explicitly before main app to bind lifespan
     a2a_app = agent.to_a2a(
