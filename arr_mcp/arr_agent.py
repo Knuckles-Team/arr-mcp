@@ -36,7 +36,7 @@ from arr_mcp.radarr_agent import create_agent as create_radarr_agent
 from arr_mcp.prowlarr_agent import create_agent as create_prowlarr_agent
 from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -288,17 +288,17 @@ async def stream_chat(agent: Agent, prompt: str) -> None:
 
 
 def create_agent_server(
-    provider: str = DEFAULT_PROVIDER,
-    model_id: str = DEFAULT_MODEL_ID,
-    base_url: Optional[str] = None,
-    api_key: Optional[str] = None,
-    mcp_url: str = DEFAULT_MCP_URL,
-    mcp_config: str = DEFAULT_MCP_CONFIG,
-    skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
-    debug: Optional[bool] = DEFAULT_DEBUG,
-    host: Optional[str] = DEFAULT_HOST,
-    port: Optional[int] = DEFAULT_PORT,
-    enable_web_ui: bool = DEFAULT_ENABLE_WEB_UI,
+        provider: str = DEFAULT_PROVIDER,
+        model_id: str = DEFAULT_MODEL_ID,
+        base_url: Optional[str] = None,
+        api_key: Optional[str] = None,
+        mcp_url: str = DEFAULT_MCP_URL,
+        mcp_config: str = DEFAULT_MCP_CONFIG,
+        skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
+        debug: Optional[bool] = DEFAULT_DEBUG,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        enable_web_ui: bool = DEFAULT_ENABLE_WEB_UI,
 ):
     print(
         f"Starting {AGENT_NAME} with provider={provider}, model={model_id}, mcp={mcp_url} | {mcp_config}"
@@ -313,21 +313,14 @@ def create_agent_server(
         skills_directory=skills_directory,
     )
 
+    skills = []
+    # Define Skills for Agent Card
     if skills_directory and os.path.exists(skills_directory):
         skills = load_skills_from_directory(skills_directory)
         logger.info(f"Loaded {len(skills)} skills from {skills_directory}")
-    else:
-        skills = [
-            Skill(
-                id="lidarr_agent",
-                name="Lidarr Agent",
-                description="General access to Lidarr tools",
-                tags=["lidarr"],
-                input_modes=["text"],
-                output_modes=["text"],
-            )
-        ]
 
+
+    # Create A2A app explicitly before main app to bind lifespan
     a2a_app = agent.to_a2a(
         name=AGENT_NAME,
         description=AGENT_DESCRIPTION,
@@ -338,12 +331,15 @@ def create_agent_server(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        # Trigger A2A (sub-app) startup/shutdown events
+        # This is critical for TaskManager initialization in A2A
         if hasattr(a2a_app, "router"):
             async with a2a_app.router.lifespan_context(a2a_app):
                 yield
         else:
             yield
 
+    # Create main FastAPI app
     app = FastAPI(
         title=f"{AGENT_NAME} - A2A + AG-UI Server",
         description=AGENT_DESCRIPTION,
@@ -355,12 +351,15 @@ def create_agent_server(
     async def health_check():
         return {"status": "OK"}
 
+    # Mount A2A as sub-app at /a2a
     app.mount("/a2a", a2a_app)
 
+    # Add AG-UI endpoint (POST to /ag-ui)
     @app.post("/ag-ui")
     async def ag_ui_endpoint(request: Request) -> Response:
         accept = request.headers.get("accept", SSE_CONTENT_TYPE)
         try:
+            # Parse incoming AG-UI RunAgentInput from request body
             run_input = AGUIAdapter.build_run_input(await request.body())
         except ValidationError as e:
             return Response(
@@ -373,15 +372,17 @@ def create_agent_server(
         if hasattr(run_input, "messages"):
             run_input.messages = prune_large_messages(run_input.messages)
 
+        # Create adapter and run the agent → stream AG-UI events
         adapter = AGUIAdapter(agent=agent, run_input=run_input, accept=accept)
-        event_stream = adapter.run_stream()
-        sse_stream = adapter.encode_stream(event_stream)
+        event_stream = adapter.run_stream()  # Runs agent, yields events
+        sse_stream = adapter.encode_stream(event_stream)  # Encodes to SSE
 
         return StreamingResponse(
             sse_stream,
             media_type=accept,
         )
 
+    # Mount Web UI if enabled
     if enable_web_ui:
         web_ui = agent.to_web(instructions=SUPERVISOR_SYSTEM_PROMPT)
         app.mount("/", web_ui)
@@ -396,56 +397,79 @@ def create_agent_server(
         app,
         host=host,
         port=port,
-        timeout_keep_alive=1800,
+        timeout_keep_alive=1800,  # 30 minute timeout
         timeout_graceful_shutdown=60,
         log_level="debug" if debug else "info",
     )
 
 
-if __name__ == "__main__":
-    import uvicorn
+def agent_server():
+    print(f"audio_transcriber_agent v{__version__}")
+    parser = argparse.ArgumentParser(
+        description=f"Run the {AGENT_NAME} A2A + AG-UI Server"
+    )
+    parser.add_argument(
+        "--host", default=DEFAULT_HOST, help="Host to bind the server to"
+    )
+    parser.add_argument(
+        "--port", type=int, default=DEFAULT_PORT, help="Port to bind the server to"
+    )
+    parser.add_argument("--debug", type=bool, default=DEFAULT_DEBUG, help="Debug mode")
+    parser.add_argument("--reload", action="store_true", help="Enable auto-reload")
 
-    parser = argparse.ArgumentParser(description=f"Start {AGENT_NAME} Microservice")
-    parser.add_argument("--host", type=str, default=DEFAULT_HOST, help="Host to bind")
-    parser.add_argument("--port", type=int, default=DEFAULT_PORT, help="Port to bind")
     parser.add_argument(
-        "--debug", type=bool, default=DEFAULT_DEBUG, help="Enable debug mode"
+        "--provider",
+        default=DEFAULT_PROVIDER,
+        choices=["openai", "anthropic", "google", "huggingface"],
+        help="LLM Provider",
     )
+    parser.add_argument("--model-id", default=DEFAULT_MODEL_ID, help="LLM Model ID")
     parser.add_argument(
-        "--provider", type=str, default=DEFAULT_PROVIDER, help="LLM Provider"
+        "--base-url",
+        default=DEFAULT_OPENAI_BASE_URL,
+        help="LLM Base URL (for OpenAI compatible providers)",
     )
+    parser.add_argument("--api-key", default=DEFAULT_OPENAI_API_KEY, help="LLM API Key")
+    parser.add_argument("--mcp-url", default=DEFAULT_MCP_URL, help="MCP Server URL")
     parser.add_argument(
-        "--model-id", type=str, default=DEFAULT_MODEL_ID, help="Model ID"
-    )
-    parser.add_argument(
-        "--base-url", type=str, default=DEFAULT_OPENAI_BASE_URL, help="Base URL"
-    )
-    parser.add_argument(
-        "--api-key", type=str, default=DEFAULT_OPENAI_API_KEY, help="API Key"
-    )
-    parser.add_argument("--mcp-url", type=str, default=DEFAULT_MCP_URL, help="MCP URL")
-    parser.add_argument(
-        "--mcp-config",
-        type=str,
-        default=DEFAULT_MCP_CONFIG,
-        help="MCP Config Path",
+        "--mcp-config", default=DEFAULT_MCP_CONFIG, help="MCP Server Config"
     )
     parser.add_argument(
         "--skills-directory",
-        type=str,
         default=DEFAULT_SKILLS_DIRECTORY,
-        help="Skills directory",
+        help="Directory containing agent skills",
     )
+
     parser.add_argument(
-        "--enable-web-ui",
-        type=bool,
+        "--web",
+        action="store_true",
         default=DEFAULT_ENABLE_WEB_UI,
-        help="Enable Web UI",
+        help="Enable Pydantic AI Web UI",
     )
 
     args = parser.parse_args()
 
-    app = create_agent_server(
+    if args.debug:
+        # Force reconfiguration of logging
+        for handler in logging.root.handlers[:]:
+            logging.root.removeHandler(handler)
+
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            handlers=[logging.StreamHandler()],
+            force=True,
+        )
+        logging.getLogger("pydantic_ai").setLevel(logging.DEBUG)
+        logging.getLogger("fastmcp").setLevel(logging.DEBUG)
+        logging.getLogger("httpcore").setLevel(logging.DEBUG)
+        logging.getLogger("httpx").setLevel(logging.DEBUG)
+        logger.setLevel(logging.DEBUG)
+        logger.debug("Debug mode enabled")
+
+    # Create the agent with CLI args
+    # Create the agent with CLI args
+    create_agent_server(
         provider=args.provider,
         model_id=args.model_id,
         base_url=args.base_url,
@@ -456,7 +480,9 @@ if __name__ == "__main__":
         debug=args.debug,
         host=args.host,
         port=args.port,
-        enable_web_ui=args.enable_web_ui,
+        enable_web_ui=args.web,
     )
 
-    uvicorn.run(app, host=args.host, port=args.port)
+
+if __name__ == "__main__":
+    agent_server()
