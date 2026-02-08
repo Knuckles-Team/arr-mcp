@@ -27,7 +27,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -64,6 +64,29 @@ def register_tools(mcp: FastMCP):
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
         return JSONResponse({"status": "OK"})
+
+    @mcp.tool(
+        exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
+        tags={"Search"},
+    )
+    async def search(
+        query: str = Field(default=..., description="Search query"),
+        prowlarr_base_url: str = Field(
+            default=os.environ.get("PROWLARR_BASE_URL", None), description="Base URL"
+        ),
+        prowlarr_api_key: Optional[str] = Field(
+            default=os.environ.get("PROWLARR_API_KEY", None), description="API Key"
+        ),
+        prowlarr_verify: bool = Field(
+            default=to_boolean(os.environ.get("PROWLARR_VERIFY", "False")),
+            description="Verify SSL",
+        ),
+    ) -> List[Dict]:
+        """Search for indexers using the search endpoint."""
+        client = Api(
+            base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
+        )
+        return client.search(query=query)
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
@@ -3195,7 +3218,7 @@ def register_tools(mcp: FastMCP):
 
 
 def prowlarr_mcp():
-    print(f"prowlarr_mcp v{__version__}")
+    print(f"Prowlarr MCP v{__version__}")
     parser = argparse.ArgumentParser(add_help=False, description="Prowlarr MCP")
 
     parser.add_argument(

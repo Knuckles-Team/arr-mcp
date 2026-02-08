@@ -1,6 +1,7 @@
 import os
 import json
 import pickle
+import logging
 from distutils.util import strtobool
 
 
@@ -10,9 +11,9 @@ def to_boolean(value: str) -> bool:
     return bool(strtobool(str(value)))
 
 
-def to_integer(value: str) -> int:
+def to_integer(string: str) -> int:
     try:
-        return int(value)
+        return int(string)
     except (ValueError, TypeError):
         return 0
 
@@ -310,3 +311,16 @@ def tool_in_tag(tool_def: any, tag: str) -> bool:
         return True
     else:
         return False
+
+
+def get_logger(name: str) -> logging.Logger:
+    logger = logging.getLogger(name)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger

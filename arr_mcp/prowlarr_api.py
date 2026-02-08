@@ -1151,3 +1151,9 @@ class Api:
         return self.request(
             "GET", f"/api/v1/log/file/update/{filename}", params=params, data=None
         )
+
+    def search(self, query: str) -> List[Dict]:
+        """
+        Search for indexers using the search endpoint.
+        """
+        return self.get_search(query=query)

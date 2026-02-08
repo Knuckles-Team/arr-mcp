@@ -23,7 +23,7 @@ from ansible_tower_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -75,6 +75,14 @@ mcp_config = {
         },
         "sonarr": {
             "url": os.getenv("SONARR_MCP_URL", "http://localhost:8064/mcp"),
+            "transport": "streamable-http",
+        },
+        "seerr": {
+            "url": os.getenv("SEERR_MCP_URL", "http://localhost:8065/mcp"),
+            "transport": "streamable-http",
+        },
+        "bazarr": {
+            "url": os.getenv("BAZARR_MCP_URL", "http://localhost:8066/mcp"),
             "transport": "streamable-http",
         },
     }

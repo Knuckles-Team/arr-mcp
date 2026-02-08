@@ -1818,3 +1818,41 @@ class Api:
         return self.request(
             "GET", f"/api/v3/log/file/update/{filename}", params=params, data=None
         )
+
+    def lookup_movie(self, term: str) -> List[Dict]:
+        """
+        Search for a movie using the lookup endpoint.
+        """
+        return self.get_movie_lookup(term=term)
+
+    def add_movie(
+        self,
+        term: str,
+        root_folder_path: str,
+        quality_profile_id: int,
+        monitored: bool = True,
+        search_for_movie: bool = True,
+    ) -> Dict:
+        """
+        Lookup a movie by term, pick the first result, and add it to Radarr.
+        """
+        results = self.lookup_movie(term)
+        if not results:
+            return {"error": f"No movie found for term: {term}"}
+
+        movie = results[0]
+
+        # Prepare the payload for adding the movie
+        payload = {
+            "title": movie.get("title"),
+            "qualityProfileId": quality_profile_id,
+            "rootFolderPath": root_folder_path,
+            "monitored": monitored,
+            "tmdbId": movie.get("tmdbId"),
+            "year": movie.get("year"),
+            "titleSlug": movie.get("titleSlug"),
+            "images": movie.get("images", []),
+            "addOptions": {"searchForMovie": search_for_movie},
+        }
+
+        return self.post_movie(data=payload)

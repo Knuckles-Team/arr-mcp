@@ -1906,3 +1906,41 @@ class Api:
         return self.request(
             "GET", f"/api/v3/log/file/update/{filename}", params=params, data=None
         )
+
+    def lookup_series(self, term: str) -> List[Dict]:
+        """
+        Search for a series using the lookup endpoint.
+        """
+        return self.get_series_lookup(term=term)
+
+    def add_series(
+        self,
+        term: str,
+        root_folder_path: str,
+        quality_profile_id: int,
+        monitored: bool = True,
+        search_for_missing_episodes: bool = True,
+    ) -> Dict:
+        """
+        Lookup a series by term, pick the first result, and add it to Sonarr.
+        """
+        results = self.lookup_series(term)
+        if not results:
+            return {"error": f"No series found for term: {term}"}
+
+        series = results[0]
+
+        # Prepare the payload for adding the series
+        payload = {
+            "title": series.get("title"),
+            "qualityProfileId": quality_profile_id,
+            "rootFolderPath": root_folder_path,
+            "monitored": monitored,
+            "tvdbId": series.get("tvdbId"),
+            "year": series.get("year"),
+            "titleSlug": series.get("titleSlug"),
+            "images": series.get("images", []),
+            "addOptions": {"searchForMissingEpisodes": search_for_missing_episodes},
+        }
+
+        return self.post_series(data=payload)

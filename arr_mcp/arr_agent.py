@@ -36,8 +36,10 @@ from arr_mcp.sonarr_agent import create_agent as create_sonarr_agent
 from arr_mcp.radarr_agent import create_agent as create_radarr_agent
 from arr_mcp.prowlarr_agent import create_agent as create_prowlarr_agent
 from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
+from arr_mcp.seerr_agent import create_agent as create_seerr_agent
+from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -98,6 +100,8 @@ SUPERVISOR_SYSTEM_PROMPT = os.environ.get(
         "- Radarr Agent: For movie management.\n"
         "- Prowlarr Agent: For indexer management.\n"
         "- Chaptarr Agent: For book management.\n"
+        "- Seerr Agent: For media requests and discovery.\n"
+        "- Bazarr Agent: For subtitle management.\n"
         "\n"
         "Analyze the user's request and determine which service it relates to.\n"
         "Then, use the appropriate 'ask_..._agent' tool to delegate the task.\n"
@@ -193,6 +197,24 @@ def create_agent(
     except Exception as e:
         logger.error(f"Failed to initialize Chaptarr Agent: {e}")
 
+    # 6. Seerr
+    try:
+        child_agents["seerr"] = create_seerr_agent(
+            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+        )
+        logger.info("Seerr Agent initialized.")
+    except Exception as e:
+        logger.error(f"Failed to initialize Seerr Agent: {e}")
+
+    # 7. Bazarr
+    try:
+        child_agents["bazarr"] = create_bazarr_agent(
+            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+        )
+        logger.info("Bazarr Agent initialized.")
+    except Exception as e:
+        logger.error(f"Failed to initialize Bazarr Agent: {e}")
+
     # Create Supervisor Agent
     supervisor = Agent(
         name=AGENT_NAME,
@@ -262,6 +284,30 @@ def create_agent(
             return "Chaptarr Agent is not available."
         return (
             await child_agents["chaptarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+        ).output
+
+    @supervisor.tool
+    async def ask_seerr_agent(ctx: RunContext[Any], task: str) -> str:
+        """
+        Delegate a task to the Seerr Agent (Requests & Discovery).
+        Use this for searching movies/TV, making requests, or managing users.
+        """
+        if "seerr" not in child_agents:
+            return "Seerr Agent is not available."
+        return (
+            await child_agents["seerr"].run(task, usage=ctx.usage, deps=ctx.deps)
+        ).output
+
+    @supervisor.tool
+    async def ask_bazarr_agent(ctx: RunContext[Any], task: str) -> str:
+        """
+        Delegate a task to the Bazarr Agent (Subtitles).
+        Use this for finding, downloading, or managing subtitles for movies and TV shows.
+        """
+        if "bazarr" not in child_agents:
+            return "Bazarr Agent is not available."
+        return (
+            await child_agents["bazarr"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     return supervisor

@@ -27,7 +27,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -69,6 +69,68 @@ def register_tools(mcp: FastMCP):
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
         return JSONResponse({"status": "OK"})
+
+    @mcp.tool(
+        exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
+        tags={"Movie"},
+    )
+    async def lookup_movie(
+        term: str = Field(default=..., description="Search term for the movie"),
+        radarr_base_url: str = Field(
+            default=os.environ.get("RADARR_BASE_URL", None), description="Base URL"
+        ),
+        radarr_api_key: Optional[str] = Field(
+            default=os.environ.get("RADARR_API_KEY", None), description="API Key"
+        ),
+        radarr_verify: bool = Field(
+            default=to_boolean(os.environ.get("RADARR_VERIFY", "False")),
+            description="Verify SSL",
+        ),
+    ) -> List[Dict]:
+        """Search for a movie using the lookup endpoint."""
+        client = Api(
+            base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
+        )
+        return client.lookup_movie(term=term)
+
+    @mcp.tool(
+        exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
+        tags={"Movie"},
+    )
+    async def add_movie(
+        term: str = Field(default=..., description="Search term for the movie"),
+        root_folder_path: str = Field(
+            default=..., description="Root folder path for the movie"
+        ),
+        quality_profile_id: int = Field(
+            default=..., description="Quality profile ID for the movie"
+        ),
+        monitored: bool = Field(default=True, description="Monitor the movie"),
+        search_for_movie: bool = Field(
+            default=True, description="Search for movie immediately"
+        ),
+        radarr_base_url: str = Field(
+            default=os.environ.get("RADARR_BASE_URL", None), description="Base URL"
+        ),
+        radarr_api_key: Optional[str] = Field(
+            default=os.environ.get("RADARR_API_KEY", None), description="API Key"
+        ),
+        radarr_verify: bool = Field(
+            default=to_boolean(os.environ.get("RADARR_VERIFY", "False")),
+            description="Verify SSL",
+        ),
+    ) -> Dict:
+        """Lookup a movie by term, pick the first result, and add it to Radarr."""
+        client = Api(
+            base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
+        )
+        return client.add_movie(
+            term=term,
+            root_folder_path=root_folder_path,
+            quality_profile_id=quality_profile_id,
+            monitored=monitored,
+            search_for_movie=search_for_movie,
+        )
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
