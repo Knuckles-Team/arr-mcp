@@ -27,7 +27,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -6156,7 +6156,7 @@ def chaptarr_mcp():
 
 def usage():
     print(
-        f"Arr Mcp ({__version__}): Chaptarr MCP\n\n"
+        f"Arr Mcp ({__version__}): Chaptarr MCP Server\n\n"
         "Usage:\n"
         "-t | --transport                   [ Transport method: 'stdio', 'streamable-http', or 'sse' [legacy] (default: stdio) ]\n"
         "-s | --host                        [ Host address for HTTP transport (default: 0.0.0.0) ]\n"

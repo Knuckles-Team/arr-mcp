@@ -34,7 +34,7 @@ from pydantic import ValidationError
 from pydantic_ai.ui import SSE_CONTENT_TYPE
 from pydantic_ai.ui.ag_ui import AGUIAdapter
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -1765,7 +1765,7 @@ def agent_server():
 
 def usage():
     print(
-        f"Arr Mcp ({__version__}): CLI Tool\n\n"
+        f"Arr Mcp ({__version__}): Chaptarr Agent\n\n"
         "Usage:\n"
         "--host                [ Host to bind the server to ]\n"
         "--port                [ Port to bind the server to ]\n"

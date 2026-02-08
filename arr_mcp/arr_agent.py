@@ -39,7 +39,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -540,7 +540,7 @@ def agent_server():
 
 def usage():
     print(
-        f"Arr Mcp ({__version__}): CLI Tool\n\n"
+        f"Arr Mcp ({__version__}): Arr Supervisor Agent\n\n"
         "Usage:\n"
         "--host                [ Host to bind the server to ]\n"
         "--port                [ Port to bind the server to ]\n"

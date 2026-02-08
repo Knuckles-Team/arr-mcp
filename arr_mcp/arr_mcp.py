@@ -7,6 +7,8 @@ import logging
 from typing import List, Union
 
 import requests
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 from eunomia_mcp.middleware import EunomiaMcpMiddleware
 from fastmcp.server import create_proxy
 from fastmcp.server.auth.oidc_proxy import OIDCProxy
@@ -17,13 +19,13 @@ from fastmcp.server.middleware.timing import TimingMiddleware
 from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
 from fastmcp.server.middleware.error_handling import ErrorHandlingMiddleware
 from fastmcp.utilities.logging import get_logger
-from ansible_tower_mcp.utils import to_boolean, to_integer
-from ansible_tower_mcp.middlewares import (
+from arr_mcp.utils import to_boolean, to_integer
+from arr_mcp.middlewares import (
     UserTokenMiddleware,
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -49,12 +51,6 @@ DEFAULT_HOST = os.getenv("HOST", "0.0.0.0")
 DEFAULT_PORT = to_integer(string=os.getenv("PORT", "8000"))
 
 
-# def register_tools(mcp: FastMCP):
-#     @mcp.custom_route("/health", methods=["GET"])
-#     async def health_check(request: Request) -> JSONResponse:
-#         return JSONResponse({"status": "OK"})
-# Configuration for the proxy
-# We use environment variables to define the URLs, falling back to localhost for local dev
 mcp_config = {
     "mcpServers": {
         "chaptarr": {
@@ -589,11 +585,13 @@ def arr_mcp():
             logger.error("Failed to load Eunomia middleware", extra={"error": str(e)})
             sys.exit(1)
 
-    mcp = create_proxy(
-        config=mcp_config, name="Arr", auth=auth, middlewares=middlewares
-    )
+    mcp = create_proxy(mcp_config, name="Arr", auth=auth, middleware=middlewares)
     for mw in middlewares:
         mcp.add_middleware(mw)
+
+    @mcp.custom_route("/health", methods=["GET"])
+    async def health_check(request: Request) -> JSONResponse:
+        return JSONResponse({"status": "OK"})
 
     print(f"Arr MCP v{__version__}")
     print("\nStarting Arr MCP Server")
@@ -615,7 +613,7 @@ def arr_mcp():
 
 def usage():
     print(
-        f"Arr Mcp ({__version__}): Arr MCP\n\n"
+        f"Arr Mcp ({__version__}): Arr MCP Server\n\n"
         "Usage:\n"
         "-t | --transport                   [ Transport method: 'stdio', 'streamable-http', or 'sse' [legacy] (default: stdio) ]\n"
         "-s | --host                        [ Host address for HTTP transport (default: 0.0.0.0) ]\n"
