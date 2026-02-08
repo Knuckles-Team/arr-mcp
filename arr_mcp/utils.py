@@ -2,23 +2,37 @@ import os
 import json
 import pickle
 import logging
-from distutils.util import strtobool
+from typing import Union
 
 
-def to_boolean(value: str) -> bool:
-    if value is None:
-        return False
-    return bool(strtobool(str(value)))
-
-
-def to_integer(string: str) -> int:
-    try:
-        return int(string)
-    except (ValueError, TypeError):
+def to_integer(string: Union[str, int] = None) -> int:
+    if isinstance(string, int):
+        return string
+    if not string:
         return 0
+    try:
+        return int(string.strip())
+    except ValueError:
+        raise ValueError(f"Cannot convert '{string}' to integer")
 
 
-def to_float(string: str = None) -> float:
+def to_boolean(string: Union[str, bool] = None) -> bool:
+    if isinstance(string, bool):
+        return string
+    if not string:
+        return False
+    normalized = str(string).strip().lower()
+    true_values = {"t", "true", "y", "yes", "1"}
+    false_values = {"f", "false", "n", "no", "0"}
+    if normalized in true_values:
+        return True
+    elif normalized in false_values:
+        return False
+    else:
+        raise ValueError(f"Cannot convert '{string}' to boolean")
+
+
+def to_float(string: Union[str, float] = None) -> float:
     if isinstance(string, float):
         return string
     if not string:
@@ -29,7 +43,7 @@ def to_float(string: str = None) -> float:
         raise ValueError(f"Cannot convert '{string}' to float")
 
 
-def to_list(string: str = None) -> list:
+def to_list(string: Union[str, list] = None) -> list:
     if isinstance(string, list):
         return string
     if not string:
@@ -40,7 +54,7 @@ def to_list(string: str = None) -> list:
         return string.split(",")
 
 
-def to_dict(string: str = None) -> dict:
+def to_dict(string: Union[str, dict] = None) -> dict:
     if isinstance(string, dict):
         return string
     if not string:

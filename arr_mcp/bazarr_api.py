@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import requests
-from typing import Dict, List, Optional, Any
+from typing import Dict, Optional, Any
 from urllib.parse import urljoin
 import urllib3
 
@@ -72,9 +72,7 @@ class Api:
             return self.request(
                 "POST", "/api/episodes/search", data={"episodeId": episode_id}
             )
-        return self.request(
-            "POST", "/api/series/search", data={"seriesId": series_id}
-        )
+        return self.request("POST", "/api/series/search", data={"seriesId": series_id})
 
     def download_series_subtitle(
         self,

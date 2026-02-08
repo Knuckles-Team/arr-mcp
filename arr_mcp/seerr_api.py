@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import requests
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Optional, Any
 from urllib.parse import urljoin
 import urllib3
 
@@ -90,13 +90,18 @@ class Api:
         """Get logged-in user"""
         return self.request("GET", "/api/v1/auth/me")
 
-    def post_request(self, media_type: str, media_id: int, seasons: List[int] = None, is4k: bool = False, server_id: int = None, profile_id: int = None, root_folder: str = None) -> Any:
+    def post_request(
+        self,
+        media_type: str,
+        media_id: int,
+        seasons: List[int] = None,
+        is4k: bool = False,
+        server_id: int = None,
+        profile_id: int = None,
+        root_folder: str = None,
+    ) -> Any:
         """Create a new request"""
-        data = {
-            "mediaType": media_type,
-            "mediaId": media_id,
-            "is4k": is4k
-        }
+        data = {"mediaType": media_type, "mediaId": media_id, "is4k": is4k}
         if seasons:
             data["seasons"] = seasons
         if server_id:
@@ -105,37 +110,41 @@ class Api:
             data["profileId"] = profile_id
         if root_folder:
             data["rootFolder"] = root_folder
-            
+
         return self.request("POST", "/api/v1/request", data=data)
 
-    def get_request(self, take: int = 20, skip: int = 0, filter: str = None, sort: str = 'added') -> Any:
+    def get_request(
+        self, take: int = 20, skip: int = 0, filter: str = None, sort: str = "added"
+    ) -> Any:
         """Get all requests"""
-        params = {
-            "take": take,
-            "skip": skip,
-            "sort": sort
-        }
+        params = {"take": take, "skip": skip, "sort": sort}
         if filter:
             params["filter"] = filter
         return self.request("GET", "/api/v1/request", params=params)
 
     def get_request_id(self, request_id: int) -> Any:
-         """Get a specific request"""
-         return self.request("GET", f"/api/v1/request/{request_id}")
+        """Get a specific request"""
+        return self.request("GET", f"/api/v1/request/{request_id}")
 
-    def put_request_id(self, request_id: int, media_type: str, seasons: List[int] = None, server_id: int = None, profile_id: int = None, root_folder: str = None) -> Any:
+    def put_request_id(
+        self,
+        request_id: int,
+        media_type: str,
+        seasons: List[int] = None,
+        server_id: int = None,
+        profile_id: int = None,
+        root_folder: str = None,
+    ) -> Any:
         """Update a request"""
-        data = {
-            "mediaType": media_type
-        }
+        data = {"mediaType": media_type}
         if seasons:
             data["seasons"] = seasons
         if server_id:
             data["serverId"] = server_id
         if profile_id:
-             data["profileId"] = profile_id
+            data["profileId"] = profile_id
         if root_folder:
-             data["rootFolder"] = root_folder
+            data["rootFolder"] = root_folder
         return self.request("PUT", f"/api/v1/request/{request_id}", data=data)
 
     def delete_request_id(self, request_id: int) -> Any:
@@ -145,7 +154,7 @@ class Api:
     def post_request_id_approve(self, request_id: int) -> Any:
         """Approve a request"""
         return self.request("POST", f"/api/v1/request/{request_id}/approve")
-        
+
     def post_request_id_decline(self, request_id: int) -> Any:
         """Decline a request"""
         return self.request("POST", f"/api/v1/request/{request_id}/decline")
@@ -157,23 +166,15 @@ class Api:
     def get_tv_id(self, tv_id: int) -> Any:
         """Get TV details"""
         return self.request("GET", f"/api/v1/tv/{tv_id}")
-    
-    def get_search(self, query: str, page: int = 1, language: str = 'en') -> Any:
+
+    def get_search(self, query: str, page: int = 1, language: str = "en") -> Any:
         """Search for content"""
-        params = {
-            "query": query,
-            "page": page,
-            "language": language
-        }
+        params = {"query": query, "page": page, "language": language}
         return self.request("GET", "/api/v1/search", params=params)
-    
-    def get_user(self, take: int = 20, skip: int = 0, sort: str = 'created') -> Any:
+
+    def get_user(self, take: int = 20, skip: int = 0, sort: str = "created") -> Any:
         """Get all users"""
-        params = {
-            "take": take,
-            "skip": skip,
-            "sort": sort
-        }
+        params = {"take": take, "skip": skip, "sort": sort}
         return self.request("GET", "/api/v1/user", params=params)
 
     def get_user_id(self, user_id: int) -> Any:
