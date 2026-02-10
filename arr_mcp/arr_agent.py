@@ -39,7 +39,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -377,13 +377,7 @@ def create_agent_server(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        # Trigger A2A (sub-app) startup/shutdown events
-        # This is critical for TaskManager initialization in A2A
-        if hasattr(a2a_app, "router"):
-            async with a2a_app.router.lifespan_context(a2a_app):
-                yield
-        else:
-            yield
+        yield
 
     # Create main FastAPI app
     app = FastAPI(
