@@ -213,11 +213,7 @@ def create_agent_server(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        if hasattr(a2a_app, "router"):
-            async with a2a_app.router.lifespan_context(a2a_app):
-                yield
-        else:
-            yield
+        yield
 
     app = FastAPI(
         title=f"{AGENT_NAME} - A2A + AG-UI Server",
