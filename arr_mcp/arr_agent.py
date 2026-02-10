@@ -39,7 +39,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -109,7 +109,6 @@ SUPERVISOR_SYSTEM_PROMPT = os.environ.get(
         "Always be warm, professional, and helpful."
     ),
 )
-
 
 # -------------------------------------------------------------------------
 # 2. Agent Creation Logic
@@ -377,7 +376,11 @@ def create_agent_server(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        yield
+        if hasattr(a2a_app, "router") and hasattr(a2a_app.router, "lifespan_context"):
+            async with a2a_app.router.lifespan_context(a2a_app):
+                yield
+        else:
+            yield
 
     # Create main FastAPI app
     app = FastAPI(
