@@ -55,9 +55,9 @@ services:
       - "HOST=0.0.0.0"
       - "PORT=8061"
       - "TRANSPORT=streamable-http"
-      - "PROWLARR_BASE_URL=${PROWLARR_BASE_URL:-http://arr-stack_lidarr:8686}"
-      - "PROWLARR_API_KEY=${PROWLARR_API_KEY}"
-      - "PROWLARR_VERIFY=${PROWLARR_VERIFY:-False}"
+      - "LIDARR_BASE_URL=${LIDARR_BASE_URL:-http://arr-stack_lidarr:8686}"
+      - "LIDARR_API_KEY=${LIDARR_API_KEY}"
+      - "LIDARR_VERIFY=${LIDARR_VERIFY:-False}"
     ports:
       - "8061:8061"
     healthcheck:
