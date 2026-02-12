@@ -38,7 +38,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -126,6 +126,7 @@ def create_agent(
         base_url=base_url,
         api_key=api_key,
         ssl_verify=ssl_verify,
+        timeout=DEFAULT_TIMEOUT,
     )
     settings = ModelSettings(
         max_tokens=DEFAULT_MAX_TOKENS,
@@ -154,6 +155,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Lidarr Agent initialized.")
     except Exception as e:
@@ -169,6 +171,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Sonarr Agent initialized.")
     except Exception as e:
@@ -184,6 +187,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Radarr Agent initialized.")
     except Exception as e:
@@ -199,6 +203,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Prowlarr Agent initialized.")
     except Exception as e:
@@ -214,6 +219,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Chaptarr Agent initialized.")
     except Exception as e:
@@ -229,6 +235,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Seerr Agent initialized.")
     except Exception as e:
@@ -244,6 +251,7 @@ def create_agent(
             mcp_config,
             skills_directory,
             ssl_verify=ssl_verify,
+            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Bazarr Agent initialized.")
     except Exception as e:
@@ -396,6 +404,7 @@ def create_agent_server(
         mcp_config=mcp_config,
         skills_directory=skills_directory,
         ssl_verify=ssl_verify,
+        timeout=DEFAULT_TIMEOUT,
     )
 
     skills = []

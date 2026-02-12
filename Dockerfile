@@ -53,7 +53,7 @@ ENV HOST=${HOST} \
 RUN apt-get update \
     && apt-get install -y curl nano \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && uv pip install --system --upgrade --verbose --no-cache --break-system-packages --prerelease=allow arr-mcp[all]>=0.2.6
+    && uv pip install --system --upgrade --verbose --no-cache --break-system-packages --prerelease=allow arr-mcp[all]>=0.2.7
 
 # Default command (can be overridden)
 CMD ["arr-mcp"]
