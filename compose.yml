@@ -41,8 +41,6 @@ services:
     container_name: lidarr-mcp
     hostname: lidarr-mcp
     command: [ "lidarr-mcp" ]
-    env_file:
-      - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -111,8 +109,6 @@ services:
     container_name: radarr-mcp
     hostname: radarr-mcp
     command: [ "radarr-mcp" ]
-    env_file:
-      - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -181,8 +177,6 @@ services:
     container_name: bazarr-mcp
     hostname: bazarr-mcp
     command: [ "bazarr-mcp" ]
-    env_file:
-      - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
     logging:
@@ -251,8 +245,6 @@ services:
     container_name: arr-mcp
     hostname: arr-mcp
     command: [ "arr-mcp" ]
-    env_file:
-      - .env
     depends_on:
       chaptarr-mcp:
         condition: service_healthy
