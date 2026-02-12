@@ -38,7 +38,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -518,6 +518,12 @@ def agent_server():
         action="store_true",
         default=DEFAULT_ENABLE_WEB_UI,
         help="Enable Pydantic AI Web UI",
+    )
+
+    parser.add_argument(
+        "--insecure",
+        action="store_true",
+        help="Disable SSL verification for LLM requests (Use with caution)",
     )
 
     parser.add_argument("--help", action="store_true", help="Show usage")
