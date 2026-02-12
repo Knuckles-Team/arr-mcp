@@ -30,7 +30,6 @@ from pydantic import ValidationError
 from pydantic_ai.ui import SSE_CONTENT_TYPE
 from pydantic_ai.ui.ag_ui import AGUIAdapter
 
-# Import child agents creation functions
 from arr_mcp.lidarr_agent import create_agent as create_lidarr_agent
 from arr_mcp.sonarr_agent import create_agent as create_sonarr_agent
 from arr_mcp.radarr_agent import create_agent as create_radarr_agent
@@ -39,12 +38,12 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()],  # Output to console
+    handlers=[logging.StreamHandler()],
 )
 logging.getLogger("pydantic_ai").setLevel(logging.INFO)
 logging.getLogger("fastmcp").setLevel(logging.INFO)
@@ -64,7 +63,6 @@ DEFAULT_SKILLS_DIRECTORY = os.getenv("SKILLS_DIRECTORY", get_skills_path())
 DEFAULT_ENABLE_WEB_UI = to_boolean(os.getenv("ENABLE_WEB_UI", "False"))
 DEFAULT_SSL_VERIFY = to_boolean(os.getenv("SSL_VERIFY", "True"))
 
-# Model Settings
 DEFAULT_MAX_TOKENS = to_integer(os.getenv("MAX_TOKENS", "16384"))
 DEFAULT_TEMPERATURE = to_float(os.getenv("TEMPERATURE", "0.7"))
 DEFAULT_TOP_P = to_float(os.getenv("TOP_P", "1.0"))
@@ -84,9 +82,6 @@ AGENT_DESCRIPTION = (
     "A supervisor agent for the Arr stack (Lidarr, Sonarr, Radarr, Prowlarr, Chaptarr)."
 )
 
-# -------------------------------------------------------------------------
-# 1. System Prompts
-# -------------------------------------------------------------------------
 
 SUPERVISOR_SYSTEM_PROMPT = os.environ.get(
     "SUPERVISOR_SYSTEM_PROMPT",
@@ -109,16 +104,12 @@ SUPERVISOR_SYSTEM_PROMPT = os.environ.get(
     ),
 )
 
-# -------------------------------------------------------------------------
-# 2. Agent Creation Logic
-# -------------------------------------------------------------------------
-
 
 def create_agent(
     provider: str = DEFAULT_PROVIDER,
     model_id: str = DEFAULT_MODEL_ID,
-    base_url: Optional[str] = None,
-    api_key: Optional[str] = None,
+    base_url: Optional[str] = DEFAULT_LLM_BASE_URL,
+    api_key: Optional[str] = DEFAULT_LLM_API_KEY,
     mcp_url: str = DEFAULT_MCP_URL,
     mcp_config: str = DEFAULT_MCP_CONFIG,
     skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
@@ -151,76 +142,113 @@ def create_agent(
         extra_body=DEFAULT_EXTRA_BODY,
     )
 
-    # Dictionary to hold initialized child agents
     child_agents = {}
 
-    # Initialize Child Agents
-    # We pass the same configuration to child agents
-
-    # 1. Lidarr
     try:
         child_agents["lidarr"] = create_lidarr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Lidarr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Lidarr Agent: {e}")
 
-    # 2. Sonarr
     try:
         child_agents["sonarr"] = create_sonarr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Sonarr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Sonarr Agent: {e}")
 
-    # 3. Radarr
     try:
         child_agents["radarr"] = create_radarr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Radarr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Radarr Agent: {e}")
 
-    # 4. Prowlarr
     try:
         child_agents["prowlarr"] = create_prowlarr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Prowlarr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Prowlarr Agent: {e}")
 
-    # 5. Chaptarr
     try:
         child_agents["chaptarr"] = create_chaptarr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Chaptarr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Chaptarr Agent: {e}")
 
-    # 6. Seerr
     try:
         child_agents["seerr"] = create_seerr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Seerr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Seerr Agent: {e}")
 
-    # 7. Bazarr
     try:
         child_agents["bazarr"] = create_bazarr_agent(
-            provider, model_id, base_url, api_key, mcp_url, mcp_config, skills_directory
+            provider,
+            model_id,
+            base_url,
+            api_key,
+            mcp_url,
+            mcp_config,
+            skills_directory,
+            ssl_verify=ssl_verify,
         )
         logger.info("Bazarr Agent initialized.")
     except Exception as e:
         logger.error(f"Failed to initialize Bazarr Agent: {e}")
 
-    # Create Supervisor Agent
     supervisor = Agent(
         name=AGENT_NAME,
         system_prompt=SUPERVISOR_SYSTEM_PROMPT,
@@ -228,8 +256,6 @@ def create_agent(
         model_settings=settings,
         deps_type=Any,
     )
-
-    # Define delegation tools
 
     @supervisor.tool
     async def ask_lidarr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -342,8 +368,8 @@ async def stream_chat(agent: Agent, prompt: str) -> None:
 def create_agent_server(
     provider: str = DEFAULT_PROVIDER,
     model_id: str = DEFAULT_MODEL_ID,
-    base_url: Optional[str] = None,
-    api_key: Optional[str] = None,
+    base_url: Optional[str] = DEFAULT_LLM_BASE_URL,
+    api_key: Optional[str] = DEFAULT_LLM_API_KEY,
     mcp_url: str = DEFAULT_MCP_URL,
     mcp_config: str = DEFAULT_MCP_CONFIG,
     skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
@@ -354,7 +380,12 @@ def create_agent_server(
     ssl_verify: bool = DEFAULT_SSL_VERIFY,
 ):
     print(
-        f"Starting {AGENT_NAME} with provider={provider}, model={model_id}, mcp={mcp_url} | {mcp_config}"
+        f"Starting {AGENT_NAME}:"
+        f"\tprovider={provider}"
+        f"\tmodel={model_id}"
+        f"\tbase_url={base_url}"
+        f"\tmcp={mcp_url} | {mcp_config}"
+        f"\tssl_verify={ssl_verify}"
     )
     agent = create_agent(
         provider=provider,
@@ -368,12 +399,10 @@ def create_agent_server(
     )
 
     skills = []
-    # Define Skills for Agent Card
     if skills_directory and os.path.exists(skills_directory):
         skills = load_skills_from_directory(skills_directory)
         logger.info(f"Loaded {len(skills)} skills from {skills_directory}")
 
-    # Create A2A app explicitly before main app to bind lifespan
     a2a_app = agent.to_a2a(
         name=AGENT_NAME,
         description=AGENT_DESCRIPTION,
@@ -390,7 +419,6 @@ def create_agent_server(
         else:
             yield
 
-    # Create main FastAPI app
     app = FastAPI(
         title=f"{AGENT_NAME} - A2A + AG-UI Server",
         description=AGENT_DESCRIPTION,
@@ -402,15 +430,12 @@ def create_agent_server(
     async def health_check():
         return {"status": "OK"}
 
-    # Mount A2A as sub-app at /a2a
     app.mount("/a2a", a2a_app)
 
-    # Add AG-UI endpoint (POST to /ag-ui)
     @app.post("/ag-ui")
     async def ag_ui_endpoint(request: Request) -> Response:
         accept = request.headers.get("accept", SSE_CONTENT_TYPE)
         try:
-            # Parse incoming AG-UI RunAgentInput from request body
             run_input = AGUIAdapter.build_run_input(await request.body())
         except ValidationError as e:
             return Response(
@@ -419,21 +444,18 @@ def create_agent_server(
                 status_code=422,
             )
 
-        # Prune large messages from history
         if hasattr(run_input, "messages"):
             run_input.messages = prune_large_messages(run_input.messages)
 
-        # Create adapter and run the agent → stream AG-UI events
         adapter = AGUIAdapter(agent=agent, run_input=run_input, accept=accept)
-        event_stream = adapter.run_stream()  # Runs agent, yields events
-        sse_stream = adapter.encode_stream(event_stream)  # Encodes to SSE
+        event_stream = adapter.run_stream()
+        sse_stream = adapter.encode_stream(event_stream)
 
         return StreamingResponse(
             sse_stream,
             media_type=accept,
         )
 
-    # Mount Web UI if enabled
     if enable_web_ui:
         web_ui = agent.to_web(instructions=SUPERVISOR_SYSTEM_PROMPT)
         app.mount("/", web_ui)
@@ -448,7 +470,7 @@ def create_agent_server(
         app,
         host=host,
         port=port,
-        timeout_keep_alive=1800,  # 30 minute timeout
+        timeout_keep_alive=1800,
         timeout_graceful_shutdown=60,
         log_level="debug" if debug else "info",
     )
@@ -509,7 +531,6 @@ def agent_server():
         sys.exit(0)
 
     if args.debug:
-        # Force reconfiguration of logging
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
 
@@ -526,8 +547,6 @@ def agent_server():
         logger.setLevel(logging.DEBUG)
         logger.debug("Debug mode enabled")
 
-    # Create the agent with CLI args
-    # Create the agent with CLI args
     create_agent_server(
         provider=args.provider,
         model_id=args.model_id,
