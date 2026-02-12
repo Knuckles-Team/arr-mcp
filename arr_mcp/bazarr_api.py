@@ -49,7 +49,6 @@ class Api:
         except Exception:
             return {"status": "success", "text": response.text}
 
-    # Series Subtitles
     def get_series(self, page: int = 1, page_size: int = 20) -> Any:
         """Get all series managed by Bazarr."""
         return self.request(
@@ -90,7 +89,6 @@ class Api:
         }
         return self.request("POST", "/api/episodes/subtitles", data=data)
 
-    # Movie Subtitles
     def get_movies(self, page: int = 1, page_size: int = 20) -> Any:
         """Get all movies managed by Bazarr."""
         return self.request(
@@ -121,14 +119,12 @@ class Api:
         }
         return self.request("POST", "/api/movies/subtitles", data=data)
 
-    # Subtitle History
     def get_history(self, page: int = 1, page_size: int = 20) -> Any:
         """Get subtitle download history."""
         return self.request(
             "GET", "/api/history", params={"page": page, "pageSize": page_size}
         )
 
-    # Languages
     def get_languages(self) -> Any:
         """Get all available subtitle languages."""
         return self.request("GET", "/api/languages")
@@ -137,7 +133,6 @@ class Api:
         """Get currently enabled subtitle languages."""
         return self.request("GET", "/api/languages/enabled")
 
-    # Providers
     def get_providers(self) -> Any:
         """Get all subtitle providers."""
         return self.request("GET", "/api/providers")
@@ -152,7 +147,6 @@ class Api:
             "POST", "/api/providers/test", data={"provider": provider_name}
         )
 
-    # System
     def get_system_status(self) -> Any:
         """Get Bazarr system status."""
         return self.request("GET", "/api/system/status")
@@ -165,7 +159,6 @@ class Api:
         """Get system logs."""
         return self.request("GET", "/api/system/logs", params={"lines": lines})
 
-    # Config
     def get_settings(self) -> Any:
         """Get Bazarr settings."""
         return self.request("GET", "/api/system/settings")
@@ -174,7 +167,6 @@ class Api:
         """Update Bazarr settings."""
         return self.request("POST", "/api/system/settings", data=settings_data)
 
-    # Wanted
     def get_wanted_series(self, page: int = 1, page_size: int = 20) -> Any:
         """Get series episodes with wanted/missing subtitles."""
         return self.request(
@@ -187,7 +179,6 @@ class Api:
             "GET", "/api/movies/wanted", params={"page": page, "pageSize": page_size}
         )
 
-    # Blacklist
     def get_blacklist(self) -> Any:
         """Get blacklisted subtitles."""
         return self.request("GET", "/api/blacklist")

@@ -7,6 +7,7 @@ import os
 import argparse
 import logging
 import uvicorn
+import httpx
 from typing import Optional, List
 from contextlib import asynccontextmanager
 
@@ -42,7 +43,7 @@ __version__ = "0.1.3"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()],  # Output to console
+    handlers=[logging.StreamHandler()],
 )
 logging.getLogger("pydantic_ai").setLevel(logging.INFO)
 logging.getLogger("fastmcp").setLevel(logging.INFO)
@@ -62,7 +63,6 @@ DEFAULT_SKILLS_DIRECTORY = os.getenv("SKILLS_DIRECTORY", get_skills_path())
 DEFAULT_ENABLE_WEB_UI = to_boolean(os.getenv("ENABLE_WEB_UI", "False"))
 DEFAULT_SSL_VERIFY = to_boolean(os.getenv("SSL_VERIFY", "True"))
 
-# Model Settings
 DEFAULT_MAX_TOKENS = to_integer(os.getenv("MAX_TOKENS", "16384"))
 DEFAULT_TEMPERATURE = to_float(os.getenv("TEMPERATURE", "0.7"))
 DEFAULT_TOP_P = to_float(os.getenv("TOP_P", "1.0"))
@@ -93,8 +93,8 @@ When presenting media, show the title, year, and ID.
 def create_agent(
     provider: str = DEFAULT_PROVIDER,
     model_id: str = DEFAULT_MODEL_ID,
-    base_url: Optional[str] = None,
-    api_key: Optional[str] = None,
+    base_url: Optional[str] = DEFAULT_LLM_BASE_URL,
+    api_key: Optional[str] = DEFAULT_LLM_API_KEY,
     mcp_url: str = DEFAULT_MCP_URL,
     mcp_config: str = DEFAULT_MCP_CONFIG,
     skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
@@ -127,17 +127,23 @@ def create_agent(
         extra_body=DEFAULT_EXTRA_BODY,
     )
 
-    # Load master toolsets
     agent_toolsets = []
     if mcp_url:
         if "sse" in mcp_url.lower():
-            server = MCPServerSSE(mcp_url)
+            server = MCPServerSSE(
+                mcp_url, http_client=httpx.AsyncClient(verify=ssl_verify)
+            )
         else:
-            server = MCPServerStreamableHTTP(mcp_url)
+            server = MCPServerStreamableHTTP(
+                mcp_url, http_client=httpx.AsyncClient(verify=ssl_verify)
+            )
         agent_toolsets.append(server)
         logger.info(f"Connected to MCP Server: {mcp_url}")
     elif mcp_config:
         mcp_toolset = load_mcp_servers(mcp_config)
+        for server in mcp_toolset:
+            if hasattr(server, "http_client"):
+                server.http_client = httpx.AsyncClient(verify=ssl_verify)
         agent_toolsets.extend(mcp_toolset)
         logger.info(f"Connected to MCP Config JSON: {mcp_toolset}")
 
@@ -178,8 +184,8 @@ async def stream_chat(agent: Agent, prompt: str) -> None:
 def create_agent_server(
     provider: str = DEFAULT_PROVIDER,
     model_id: str = DEFAULT_MODEL_ID,
-    base_url: Optional[str] = None,
-    api_key: Optional[str] = None,
+    base_url: Optional[str] = DEFAULT_LLM_BASE_URL,
+    api_key: Optional[str] = DEFAULT_LLM_API_KEY,
     mcp_url: str = DEFAULT_MCP_URL,
     mcp_config: str = DEFAULT_MCP_CONFIG,
     skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
@@ -190,7 +196,12 @@ def create_agent_server(
     ssl_verify: bool = DEFAULT_SSL_VERIFY,
 ):
     print(
-        f"Starting {AGENT_NAME} with provider={provider}, model={model_id}, mcp={mcp_url} | {mcp_config}"
+        f"Starting {AGENT_NAME}:"
+        f"\tprovider={provider}"
+        f"\tmodel={model_id}"
+        f"\tbase_url={base_url}"
+        f"\tmcp={mcp_url} | {mcp_config}"
+        f"\tssl_verify={ssl_verify}"
     )
     agent = create_agent(
         provider=provider,
@@ -259,7 +270,6 @@ def create_agent_server(
                 status_code=422,
             )
 
-        # Prune large messages from history
         if hasattr(run_input, "messages"):
             run_input.messages = prune_large_messages(run_input.messages)
 

@@ -3,7 +3,6 @@ import os
 import re
 from typing import Dict
 
-# Mapping OpenAPI types to Python types
 TYPE_MAPPING = {
     "string": "str",
     "integer": "int",
@@ -15,12 +14,9 @@ TYPE_MAPPING = {
 
 
 def clean_param_name(name: str) -> str:
-    # Remove characters that are not allowed in python variable names
     clean = re.sub(r"[^0-9a-zA-Z_]", "", name)
-    # Ensure it doesn't start with a number
     if clean and clean[0].isdigit():
         clean = f"param_{clean}"
-    # Handle reserved keywords if necessary, though simpler to just append _ if needed
     if clean in [
         "from",
         "import",
@@ -71,10 +67,8 @@ class Generator:
 
                 operation_id = operation.get("operationId")
                 if not operation_id:
-                    # Generate operationId if missing
                     operation_id = f"{method}_{path.replace('/', '_').strip('_')}"
 
-                # Clean operation_id to be a valid python function name
                 func_name = to_snake_case(clean_param_name(operation_id))
 
                 description = (
@@ -86,14 +80,13 @@ class Generator:
 
                 params = []
 
-                # Check for parameters
                 for param in operation.get("parameters", []):
                     p_name = clean_param_name(param["name"])
                     p_type = TYPE_MAPPING.get(
                         param.get("schema", {}).get("type", "string"), "Any"
                     )
                     p_required = param.get("required", False)
-                    p_in = param.get("in", "query")  # query, path, header, etc.
+                    p_in = param.get("in", "query")
                     params.append(
                         {
                             "name": p_name,
@@ -105,11 +98,8 @@ class Generator:
                         }
                     )
 
-                # Check for request body
                 req_body_desc = operation.get("requestBody", {})
                 if req_body_desc:
-                    # Simplified handling: just accept a Dict called 'data'
-                    # unless it's a file upload, which we might skip or handle as optional
                     content = req_body_desc.get("content", {})
                     if "application/json" in content:
                         params.append(
@@ -117,9 +107,9 @@ class Generator:
                                 "name": "data",
                                 "orig_name": "data",
                                 "type": "Dict",
-                                "required": True,  # Usually required if body exists
+                                "required": True,
                                 "in": "body",
-                                "default": "...",  # Ellipsis for required field
+                                "default": "...",
                             }
                         )
 
@@ -193,8 +183,6 @@ class Generator:
         ]
 
         for method in self.api_methods:
-            # Function signature
-            # Group params: required first, then optional
 
             sorted_params = sorted(method["params"], key=lambda x: not x["required"])
 
@@ -208,17 +196,11 @@ class Generator:
             content.append(f"    def {method['name']}({sig_str}) -> Any:")
             content.append(f"        \"\"\"{method['description']}\"\"\"")
 
-            # Prepare params dict
             path_params = [p for p in method["params"] if p["in"] == "path"]
             query_params = [p for p in method["params"] if p["in"] == "query"]
 
-            # Construct endpoint with path params
             endpoint_str = f"f\"{method['path']}\""
             if path_params:
-                # Replace {id} with {id} (f-string format)
-                # But we need to match the python var name
-                # The spec uses {id}, but our var might be id or param_id
-                # So we replace {p['orig_name']} with {p['name']}
                 target_endpoint = method["path"]
                 for p in path_params:
                     target_endpoint = target_endpoint.replace(
@@ -268,8 +250,6 @@ class Generator:
         ]
 
         for method in self.api_methods:
-            # Decorator
-            # We add hidden args for connection details
             exclude_args_str = f"exclude_args=['{self.service_name}_base_url', '{self.service_name}_api_key', '{self.service_name}_verify']"
 
             tags_str = ""
@@ -278,8 +258,6 @@ class Generator:
 
             content.append(f"@mcp.tool({exclude_args_str}{tags_str})")
 
-            # Signature
-            # Standard args + hidden connection args
             sorted_params = sorted(method["params"], key=lambda x: not x["required"])
 
             func_name = method["name"]
@@ -294,7 +272,6 @@ class Generator:
                 )
                 sig_lines.append(f"    {p['name']}: {p['type']} = {field_desc},")
 
-            # Append connection args
             sig_lines.append(
                 f'    {self.service_name}_base_url: str = Field(default=os.environ.get("{service_upper}_BASE_URL", None), description="Base URL"),'
             )
@@ -309,10 +286,8 @@ class Generator:
 
             content.extend(sig_lines)
 
-            # Docstring
             content.append(f"    \"\"\"{method['description']}\"\"\"")
 
-            # Implementation
             content.append(
                 f"    client = Api(base_url={self.service_name}_base_url, token={self.service_name}_api_key, verify={self.service_name}_verify)"
             )
@@ -364,7 +339,6 @@ def agent_server():
 if __name__ == "__main__":
     agent_server()
 """
-        # Writing the file
         with open(filepath, "w") as f:
             f.write(content)
 
@@ -373,12 +347,8 @@ def main():
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_dir = os.path.join(root_dir, "arr_mcp")
 
-    # ensure output dir exists
     os.makedirs(output_dir, exist_ok=True)
 
-    # Scan for json specs
-
-    # Add manually known ones if pattern matching fails or catches extra
     known_specs = [
         "chaptarr.json",
         "homarr.json",

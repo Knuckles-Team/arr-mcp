@@ -23,9 +23,7 @@ class Api:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         if token:
-            # Some arr apps accept key in header X-Api-Key
             self._session.headers.update({"X-Api-Key": token})
-            # Also support query param in requests if needed, but header is cleaner
 
     def request(
         self,

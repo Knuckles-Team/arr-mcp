@@ -51,6 +51,8 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
       - "HOST=0.0.0.0"
       - "PORT=8061"
@@ -119,6 +121,8 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
       - "HOST=0.0.0.0"
       - "PORT=8063"
@@ -187,6 +191,8 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
       - "HOST=0.0.0.0"
       - "PORT=8065"
@@ -270,6 +276,8 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
       - "HOST=0.0.0.0"
       - "PORT=8099"
