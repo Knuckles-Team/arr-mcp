@@ -1,0 +1,293 @@
+---
+name: chaptarr-catalog
+description: "Generated skill for Catalog operations. Contains 42 tools."
+---
+
+### Overview
+This skill handles operations related to Catalog.
+
+### Available Tools
+- `get_author`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_author`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_author_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `moveFiles` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_author_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `deleteFiles` (bool)
+    - `addImportListExclusion` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_author_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_author_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_author_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_author_lookup`: No description
+  - **Parameters**:
+    - `term` (str)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_book`: No description
+  - **Parameters**:
+    - `authorId` (int)
+    - `bookIds` (List)
+    - `titleSlug` (str)
+    - `includeAllAuthorBooks` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_book`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_book_id_overview`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_book_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_book_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `deleteFiles` (bool)
+    - `addImportListExclusion` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_book_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_book_monitor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_book_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_book_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_bookfile`: No description
+  - **Parameters**:
+    - `authorId` (int)
+    - `bookFileIds` (List)
+    - `bookId` (List)
+    - `unmapped` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_bookfile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_bookfile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_bookfile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_bookfile_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_bookfile_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_book_lookup`: No description
+  - **Parameters**:
+    - `term` (str)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_bookshelf`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_edition`: No description
+  - **Parameters**:
+    - `bookId` (List)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_mediacover_author_author_id_filename`: No description
+  - **Parameters**:
+    - `authorId` (int)
+    - `filename` (str)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_mediacover_book_book_id_filename`: No description
+  - **Parameters**:
+    - `bookId` (int)
+    - `filename` (str)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_metadata`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_metadata`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_metadata_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_metadata_schema`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_metadata_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_metadata_testall`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_metadata_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_wanted_missing`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `includeAuthor` (bool)
+    - `monitored` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_wanted_missing_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_rename`: No description
+  - **Parameters**:
+    - `authorId` (int)
+    - `bookId` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_retag`: No description
+  - **Parameters**:
+    - `authorId` (int)
+    - `bookId` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_series`: No description
+  - **Parameters**:
+    - `authorId` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

@@ -1,5 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Sonarr API Client.
+
+This module provides a class to interact with the Sonarr API for managing TV show collections.
+"""
 
 import requests
 from typing import Dict, List, Optional, Any
@@ -8,12 +11,27 @@ import urllib3
 
 
 class Api:
+    """
+    API client for Sonarr.
+
+    Handles authentication, request session management, and provides methods
+    for various Sonarr endpoints including series, episodes, quality profiles, and system settings.
+    """
+
     def __init__(
         self,
         base_url: str,
         token: Optional[str] = None,
         verify: bool = False,
     ):
+        """
+        Initialize the Sonarr API client.
+
+        Args:
+            base_url (str): The base URL of the Sonarr instance.
+            token (Optional[str]): The API key or token for authentication.
+            verify (bool): Whether to verify SSL certificates. Defaults to False.
+        """
         self.base_url = base_url
         self.token = token
         self._session = requests.Session()
@@ -32,6 +50,21 @@ class Api:
         params: Dict = None,
         data: Dict = None,
     ) -> Any:
+        """
+        Generic request method for the Sonarr API.
+
+        Args:
+            method (str): HTTP method (GET, POST, DELETE, etc.).
+            endpoint (str): API endpoint path.
+            params (Dict, optional): Query parameters for the request.
+            data (Dict, optional): JSON body data for the request.
+
+        Returns:
+            Any: The JSON response from the API or a success status dictionary.
+
+        Raises:
+            Exception: If the API returns a status code >= 400.
+        """
         url = urljoin(self.base_url, endpoint)
         response = self._session.request(
             method=method, url=url, params=params, json=data
@@ -50,86 +83,86 @@ class Api:
             return {"status": "success", "text": response.text}
 
     def get_api(self) -> Any:
-        """No description"""
+        """Get the base API information."""
         params = {}
         return self.request("GET", "/api", params=params, data=None)
 
     def post_login(self, returnUrl: str = None) -> Any:
-        """No description"""
+        """Log in to the Sonarr web interface."""
         params = {}
         if returnUrl is not None:
             params["returnUrl"] = returnUrl
         return self.request("POST", "/login", params=params, data=None)
 
     def get_login(self) -> Any:
-        """No description"""
+        """Get the login status and information."""
         params = {}
         return self.request("GET", "/login", params=params, data=None)
 
     def get_logout(self) -> Any:
-        """No description"""
+        """Log out from the Sonarr web interface."""
         params = {}
         return self.request("GET", "/logout", params=params, data=None)
 
     def post_autotagging(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new auto-tagging rule."""
         params = {}
         return self.request("POST", "/api/v3/autotagging", params=params, data=data)
 
     def get_autotagging(self) -> Any:
-        """No description"""
+        """Get all auto-tagging rules."""
         params = {}
         return self.request("GET", "/api/v3/autotagging", params=params, data=None)
 
     def put_autotagging_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update an existing auto-tagging rule by ID."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/autotagging/{id}", params=params, data=data
         )
 
     def delete_autotagging_id(self, id: int) -> Any:
-        """No description"""
+        """Delete an auto-tagging rule by ID."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/autotagging/{id}", params=params, data=None
         )
 
     def get_autotagging_id(self, id: int) -> Any:
-        """No description"""
+        """Get details for a specific auto-tagging rule by ID."""
         params = {}
         return self.request(
             "GET", f"/api/v3/autotagging/{id}", params=params, data=None
         )
 
     def get_autotagging_schema(self) -> Any:
-        """No description"""
+        """Get the schema for auto-tagging rules."""
         params = {}
         return self.request(
             "GET", "/api/v3/autotagging/schema", params=params, data=None
         )
 
     def get_system_backup(self) -> Any:
-        """No description"""
+        """Get information about available system backups."""
         params = {}
         return self.request("GET", "/api/v3/system/backup", params=params, data=None)
 
     def delete_system_backup_id(self, id: int) -> Any:
-        """No description"""
+        """Delete a system backup file by ID."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/system/backup/{id}", params=params, data=None
         )
 
     def post_system_backup_restore_id(self, id: int) -> Any:
-        """No description"""
+        """Add a new system backup restore id."""
         params = {}
         return self.request(
             "POST", f"/api/v3/system/backup/restore/{id}", params=params, data=None
         )
 
     def post_system_backup_restore_upload(self) -> Any:
-        """No description"""
+        """Add a new system backup restore upload."""
         params = {}
         return self.request(
             "POST", "/api/v3/system/backup/restore/upload", params=params, data=None
@@ -144,7 +177,7 @@ class Api:
         seriesIds: List = None,
         protocols: List = None,
     ) -> Any:
-        """No description"""
+        """Get blocklist."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -161,14 +194,14 @@ class Api:
         return self.request("GET", "/api/v3/blocklist", params=params, data=None)
 
     def delete_blocklist_id(self, id: int) -> Any:
-        """No description"""
+        """Delete a blocklisted item by ID."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/blocklist/{id}", params=params, data=None
         )
 
     def delete_blocklist_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete blocklist bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v3/blocklist/bulk", params=params, data=data
@@ -184,7 +217,7 @@ class Api:
         includeEpisodeImages: bool = None,
         tags: str = None,
     ) -> Any:
-        """No description"""
+        """Get calendar."""
         params = {}
         if start is not None:
             params["start"] = start
@@ -203,7 +236,7 @@ class Api:
         return self.request("GET", "/api/v3/calendar", params=params, data=None)
 
     def get_calendar_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific calendar."""
         params = {}
         return self.request("GET", f"/api/v3/calendar/{id}", params=params, data=None)
 
@@ -216,7 +249,7 @@ class Api:
         premieresOnly: bool = None,
         asAllDay: bool = None,
     ) -> Any:
-        """No description"""
+        """Get feed v3 calendar sonarrics."""
         params = {}
         if pastDays is not None:
             params["pastDays"] = pastDays
@@ -235,103 +268,103 @@ class Api:
         )
 
     def post_command(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new command."""
         params = {}
         return self.request("POST", "/api/v3/command", params=params, data=data)
 
     def get_command(self) -> Any:
-        """No description"""
+        """Get command."""
         params = {}
         return self.request("GET", "/api/v3/command", params=params, data=None)
 
     def delete_command_id(self, id: int) -> Any:
-        """No description"""
+        """Delete command id."""
         params = {}
         return self.request("DELETE", f"/api/v3/command/{id}", params=params, data=None)
 
     def get_command_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific command."""
         params = {}
         return self.request("GET", f"/api/v3/command/{id}", params=params, data=None)
 
     def get_customfilter(self) -> Any:
-        """No description"""
+        """Get customfilter."""
         params = {}
         return self.request("GET", "/api/v3/customfilter", params=params, data=None)
 
     def post_customfilter(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new customfilter."""
         params = {}
         return self.request("POST", "/api/v3/customfilter", params=params, data=data)
 
     def put_customfilter_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update customfilter id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/customfilter/{id}", params=params, data=data
         )
 
     def delete_customfilter_id(self, id: int) -> Any:
-        """No description"""
+        """Delete customfilter id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/customfilter/{id}", params=params, data=None
         )
 
     def get_customfilter_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific customfilter."""
         params = {}
         return self.request(
             "GET", f"/api/v3/customfilter/{id}", params=params, data=None
         )
 
     def get_customformat(self) -> Any:
-        """No description"""
+        """Get customformat."""
         params = {}
         return self.request("GET", "/api/v3/customformat", params=params, data=None)
 
     def post_customformat(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new customformat."""
         params = {}
         return self.request("POST", "/api/v3/customformat", params=params, data=data)
 
     def put_customformat_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update customformat id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/customformat/{id}", params=params, data=data
         )
 
     def delete_customformat_id(self, id: int) -> Any:
-        """No description"""
+        """Delete customformat id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/customformat/{id}", params=params, data=None
         )
 
     def get_customformat_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific customformat."""
         params = {}
         return self.request(
             "GET", f"/api/v3/customformat/{id}", params=params, data=None
         )
 
     def put_customformat_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update customformat bulk."""
         params = {}
         return self.request(
             "PUT", "/api/v3/customformat/bulk", params=params, data=data
         )
 
     def delete_customformat_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete customformat bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v3/customformat/bulk", params=params, data=data
         )
 
     def get_customformat_schema(self) -> Any:
-        """No description"""
+        """Get customformat schema."""
         params = {}
         return self.request(
             "GET", "/api/v3/customformat/schema", params=params, data=None
@@ -348,7 +381,7 @@ class Api:
         includeImages: bool = None,
         monitored: bool = None,
     ) -> Any:
-        """No description"""
+        """Get wanted cutoff."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -369,45 +402,45 @@ class Api:
         return self.request("GET", "/api/v3/wanted/cutoff", params=params, data=None)
 
     def get_wanted_cutoff_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific wanted cutoff."""
         params = {}
         return self.request(
             "GET", f"/api/v3/wanted/cutoff/{id}", params=params, data=None
         )
 
     def post_delayprofile(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new delayprofile."""
         params = {}
         return self.request("POST", "/api/v3/delayprofile", params=params, data=data)
 
     def get_delayprofile(self) -> Any:
-        """No description"""
+        """Get delayprofile."""
         params = {}
         return self.request("GET", "/api/v3/delayprofile", params=params, data=None)
 
     def delete_delayprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Delete delayprofile id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/delayprofile/{id}", params=params, data=None
         )
 
     def put_delayprofile_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update delayprofile id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/delayprofile/{id}", params=params, data=data
         )
 
     def get_delayprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific delayprofile."""
         params = {}
         return self.request(
             "GET", f"/api/v3/delayprofile/{id}", params=params, data=None
         )
 
     def put_delayprofile_reorder_id(self, id: int, after: int = None) -> Any:
-        """No description"""
+        """Update delayprofile reorder id."""
         params = {}
         if after is not None:
             params["after"] = after
@@ -416,24 +449,24 @@ class Api:
         )
 
     def get_diskspace(self) -> Any:
-        """No description"""
+        """Get diskspace."""
         params = {}
         return self.request("GET", "/api/v3/diskspace", params=params, data=None)
 
     def get_downloadclient(self) -> Any:
-        """No description"""
+        """Get downloadclient."""
         params = {}
         return self.request("GET", "/api/v3/downloadclient", params=params, data=None)
 
     def post_downloadclient(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new downloadclient."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v3/downloadclient", params=params, data=data)
 
     def put_downloadclient_id(self, id: int, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update downloadclient id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
@@ -442,42 +475,42 @@ class Api:
         )
 
     def delete_downloadclient_id(self, id: int) -> Any:
-        """No description"""
+        """Delete downloadclient id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/downloadclient/{id}", params=params, data=None
         )
 
     def get_downloadclient_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific downloadclient."""
         params = {}
         return self.request(
             "GET", f"/api/v3/downloadclient/{id}", params=params, data=None
         )
 
     def put_downloadclient_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update downloadclient bulk."""
         params = {}
         return self.request(
             "PUT", "/api/v3/downloadclient/bulk", params=params, data=data
         )
 
     def delete_downloadclient_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete downloadclient bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v3/downloadclient/bulk", params=params, data=data
         )
 
     def get_downloadclient_schema(self) -> Any:
-        """No description"""
+        """Get downloadclient schema."""
         params = {}
         return self.request(
             "GET", "/api/v3/downloadclient/schema", params=params, data=None
         )
 
     def post_downloadclient_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test downloadclient."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
@@ -486,35 +519,35 @@ class Api:
         )
 
     def post_downloadclient_testall(self) -> Any:
-        """No description"""
+        """Add a new downloadclient testall."""
         params = {}
         return self.request(
             "POST", "/api/v3/downloadclient/testall", params=params, data=None
         )
 
     def post_downloadclient_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new downloadclient action name."""
         params = {}
         return self.request(
             "POST", f"/api/v3/downloadclient/action/{name}", params=params, data=data
         )
 
     def get_config_downloadclient(self) -> Any:
-        """No description"""
+        """Get config downloadclient."""
         params = {}
         return self.request(
             "GET", "/api/v3/config/downloadclient", params=params, data=None
         )
 
     def put_config_downloadclient_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config downloadclient id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/config/downloadclient/{id}", params=params, data=data
         )
 
     def get_config_downloadclient_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config downloadclient."""
         params = {}
         return self.request(
             "GET", f"/api/v3/config/downloadclient/{id}", params=params, data=None
@@ -530,7 +563,7 @@ class Api:
         includeEpisodeFile: bool = None,
         includeImages: bool = None,
     ) -> Any:
-        """No description"""
+        """Get episode."""
         params = {}
         if seriesId is not None:
             params["seriesId"] = seriesId
@@ -549,24 +582,24 @@ class Api:
         return self.request("GET", "/api/v3/episode", params=params, data=None)
 
     def put_episode_id(self, id: int, data: Dict) -> Any:
-        """No description"""
+        """Update episode id."""
         params = {}
         return self.request("PUT", f"/api/v3/episode/{id}", params=params, data=data)
 
     def get_episode_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific episode."""
         params = {}
         return self.request("GET", f"/api/v3/episode/{id}", params=params, data=None)
 
     def put_episode_monitor(self, data: Dict, includeImages: bool = None) -> Any:
-        """No description"""
+        """Update episode monitor."""
         params = {}
         if includeImages is not None:
             params["includeImages"] = includeImages
         return self.request("PUT", "/api/v3/episode/monitor", params=params, data=data)
 
     def get_episodefile(self, seriesId: int = None, episodeFileIds: List = None) -> Any:
-        """No description"""
+        """Get episodefile."""
         params = {}
         if seriesId is not None:
             params["seriesId"] = seriesId
@@ -575,42 +608,42 @@ class Api:
         return self.request("GET", "/api/v3/episodefile", params=params, data=None)
 
     def put_episodefile_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update episodefile id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/episodefile/{id}", params=params, data=data
         )
 
     def delete_episodefile_id(self, id: int) -> Any:
-        """No description"""
+        """Delete episodefile id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/episodefile/{id}", params=params, data=None
         )
 
     def get_episodefile_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific episodefile."""
         params = {}
         return self.request(
             "GET", f"/api/v3/episodefile/{id}", params=params, data=None
         )
 
     def put_episodefile_editor(self, data: Dict) -> Any:
-        """No description"""
+        """Update episodefile editor."""
         params = {}
         return self.request(
             "PUT", "/api/v3/episodefile/editor", params=params, data=data
         )
 
     def delete_episodefile_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete episodefile bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v3/episodefile/bulk", params=params, data=data
         )
 
     def put_episodefile_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update episodefile bulk."""
         params = {}
         return self.request("PUT", "/api/v3/episodefile/bulk", params=params, data=data)
 
@@ -620,7 +653,7 @@ class Api:
         includeFiles: bool = None,
         allowFoldersWithoutTrailingSlashes: bool = None,
     ) -> Any:
-        """No description"""
+        """Get filesystem."""
         params = {}
         if path is not None:
             params["path"] = path
@@ -633,14 +666,14 @@ class Api:
         return self.request("GET", "/api/v3/filesystem", params=params, data=None)
 
     def get_filesystem_type(self, path: str = None) -> Any:
-        """No description"""
+        """Get filesystem type."""
         params = {}
         if path is not None:
             params["path"] = path
         return self.request("GET", "/api/v3/filesystem/type", params=params, data=None)
 
     def get_filesystem_mediafiles(self, path: str = None) -> Any:
-        """No description"""
+        """Get filesystem mediafiles."""
         params = {}
         if path is not None:
             params["path"] = path
@@ -649,7 +682,7 @@ class Api:
         )
 
     def get_health(self) -> Any:
-        """No description"""
+        """Get health."""
         params = {}
         return self.request("GET", "/api/v3/health", params=params, data=None)
 
@@ -668,7 +701,7 @@ class Api:
         languages: List = None,
         quality: List = None,
     ) -> Any:
-        """No description"""
+        """Get history."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -703,7 +736,7 @@ class Api:
         includeSeries: bool = None,
         includeEpisode: bool = None,
     ) -> Any:
-        """No description"""
+        """Get history since."""
         params = {}
         if date is not None:
             params["date"] = date
@@ -723,7 +756,7 @@ class Api:
         includeSeries: bool = None,
         includeEpisode: bool = None,
     ) -> Any:
-        """No description"""
+        """Get history series."""
         params = {}
         if seriesId is not None:
             params["seriesId"] = seriesId
@@ -738,132 +771,132 @@ class Api:
         return self.request("GET", "/api/v3/history/series", params=params, data=None)
 
     def post_history_failed_id(self, id: int) -> Any:
-        """No description"""
+        """Add a new history failed id."""
         params = {}
         return self.request(
             "POST", f"/api/v3/history/failed/{id}", params=params, data=None
         )
 
     def get_config_host(self) -> Any:
-        """No description"""
+        """Get config host."""
         params = {}
         return self.request("GET", "/api/v3/config/host", params=params, data=None)
 
     def put_config_host_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config host id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/config/host/{id}", params=params, data=data
         )
 
     def get_config_host_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config host."""
         params = {}
         return self.request(
             "GET", f"/api/v3/config/host/{id}", params=params, data=None
         )
 
     def get_importlist(self) -> Any:
-        """No description"""
+        """Get importlist."""
         params = {}
         return self.request("GET", "/api/v3/importlist", params=params, data=None)
 
     def post_importlist(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new import list configuration."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v3/importlist", params=params, data=data)
 
     def put_importlist_id(self, id: int, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update an existing import list configuration."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("PUT", f"/api/v3/importlist/{id}", params=params, data=data)
 
     def delete_importlist_id(self, id: int) -> Any:
-        """No description"""
+        """Delete an import list configuration by ID."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/importlist/{id}", params=params, data=None
         )
 
     def get_importlist_id(self, id: int) -> Any:
-        """No description"""
+        """Get details for a specific import list by ID."""
         params = {}
         return self.request("GET", f"/api/v3/importlist/{id}", params=params, data=None)
 
     def put_importlist_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update importlist bulk."""
         params = {}
         return self.request("PUT", "/api/v3/importlist/bulk", params=params, data=data)
 
     def delete_importlist_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete importlist bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v3/importlist/bulk", params=params, data=data
         )
 
     def get_importlist_schema(self) -> Any:
-        """No description"""
+        """Get importlist schema."""
         params = {}
         return self.request(
             "GET", "/api/v3/importlist/schema", params=params, data=None
         )
 
     def post_importlist_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test importlist."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
         return self.request("POST", "/api/v3/importlist/test", params=params, data=data)
 
     def post_importlist_testall(self) -> Any:
-        """No description"""
+        """Add a new importlist testall."""
         params = {}
         return self.request(
             "POST", "/api/v3/importlist/testall", params=params, data=None
         )
 
     def post_importlist_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new importlist action name."""
         params = {}
         return self.request(
             "POST", f"/api/v3/importlist/action/{name}", params=params, data=data
         )
 
     def get_config_importlist(self) -> Any:
-        """No description"""
+        """Get config importlist."""
         params = {}
         return self.request(
             "GET", "/api/v3/config/importlist", params=params, data=None
         )
 
     def put_config_importlist_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config importlist id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/config/importlist/{id}", params=params, data=data
         )
 
     def get_config_importlist_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config importlist."""
         params = {}
         return self.request(
             "GET", f"/api/v3/config/importlist/{id}", params=params, data=None
         )
 
     def get_importlistexclusion(self) -> Any:
-        """No description"""
+        """Get importlistexclusion."""
         params = {}
         return self.request(
             "GET", "/api/v3/importlistexclusion", params=params, data=None
         )
 
     def post_importlistexclusion(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new importlistexclusion."""
         params = {}
         return self.request(
             "POST", "/api/v3/importlistexclusion", params=params, data=data
@@ -876,7 +909,7 @@ class Api:
         sortKey: str = None,
         sortDirection: str = None,
     ) -> Any:
-        """No description"""
+        """Get importlistexclusion paged."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -891,182 +924,182 @@ class Api:
         )
 
     def put_importlistexclusion_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update importlistexclusion id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/importlistexclusion/{id}", params=params, data=data
         )
 
     def delete_importlistexclusion_id(self, id: int) -> Any:
-        """No description"""
+        """Delete importlistexclusion id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/importlistexclusion/{id}", params=params, data=None
         )
 
     def get_importlistexclusion_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific importlistexclusion."""
         params = {}
         return self.request(
             "GET", f"/api/v3/importlistexclusion/{id}", params=params, data=None
         )
 
     def delete_importlistexclusion_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete importlistexclusion bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v3/importlistexclusion/bulk", params=params, data=data
         )
 
     def get_indexer(self) -> Any:
-        """No description"""
+        """Get indexer."""
         params = {}
         return self.request("GET", "/api/v3/indexer", params=params, data=None)
 
     def post_indexer(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new indexer configuration."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v3/indexer", params=params, data=data)
 
     def put_indexer_id(self, id: int, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update an existing indexer configuration by ID."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("PUT", f"/api/v3/indexer/{id}", params=params, data=data)
 
     def delete_indexer_id(self, id: int) -> Any:
-        """No description"""
+        """Delete an indexer configuration by ID."""
         params = {}
         return self.request("DELETE", f"/api/v3/indexer/{id}", params=params, data=None)
 
     def get_indexer_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific indexer."""
         params = {}
         return self.request("GET", f"/api/v3/indexer/{id}", params=params, data=None)
 
     def put_indexer_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update indexer bulk."""
         params = {}
         return self.request("PUT", "/api/v3/indexer/bulk", params=params, data=data)
 
     def delete_indexer_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete indexer bulk."""
         params = {}
         return self.request("DELETE", "/api/v3/indexer/bulk", params=params, data=data)
 
     def get_indexer_schema(self) -> Any:
-        """No description"""
+        """Get indexer schema."""
         params = {}
         return self.request("GET", "/api/v3/indexer/schema", params=params, data=None)
 
     def post_indexer_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test indexer."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
         return self.request("POST", "/api/v3/indexer/test", params=params, data=data)
 
     def post_indexer_testall(self) -> Any:
-        """No description"""
+        """Add a new indexer testall."""
         params = {}
         return self.request("POST", "/api/v3/indexer/testall", params=params, data=None)
 
     def post_indexer_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new indexer action name."""
         params = {}
         return self.request(
             "POST", f"/api/v3/indexer/action/{name}", params=params, data=data
         )
 
     def get_config_indexer(self) -> Any:
-        """No description"""
+        """Get config indexer."""
         params = {}
         return self.request("GET", "/api/v3/config/indexer", params=params, data=None)
 
     def put_config_indexer_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config indexer id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/config/indexer/{id}", params=params, data=data
         )
 
     def get_config_indexer_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config indexer."""
         params = {}
         return self.request(
             "GET", f"/api/v3/config/indexer/{id}", params=params, data=None
         )
 
     def get_indexerflag(self) -> Any:
-        """No description"""
+        """Get indexerflag."""
         params = {}
         return self.request("GET", "/api/v3/indexerflag", params=params, data=None)
 
     def get_language(self) -> Any:
-        """No description"""
+        """Get language."""
         params = {}
         return self.request("GET", "/api/v3/language", params=params, data=None)
 
     def get_language_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific language."""
         params = {}
         return self.request("GET", f"/api/v3/language/{id}", params=params, data=None)
 
     def post_languageprofile(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new languageprofile."""
         params = {}
         return self.request("POST", "/api/v3/languageprofile", params=params, data=data)
 
     def get_languageprofile(self) -> Any:
-        """No description"""
+        """Get languageprofile."""
         params = {}
         return self.request("GET", "/api/v3/languageprofile", params=params, data=None)
 
     def delete_languageprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Delete languageprofile id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/languageprofile/{id}", params=params, data=None
         )
 
     def put_languageprofile_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update languageprofile id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/languageprofile/{id}", params=params, data=data
         )
 
     def get_languageprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific languageprofile."""
         params = {}
         return self.request(
             "GET", f"/api/v3/languageprofile/{id}", params=params, data=None
         )
 
     def get_languageprofile_schema(self) -> Any:
-        """No description"""
+        """Get languageprofile schema."""
         params = {}
         return self.request(
             "GET", "/api/v3/languageprofile/schema", params=params, data=None
         )
 
     def get_localization(self) -> Any:
-        """No description"""
+        """Get localization."""
         params = {}
         return self.request("GET", "/api/v3/localization", params=params, data=None)
 
     def get_localization_language(self) -> Any:
-        """No description"""
+        """Get localization language."""
         params = {}
         return self.request(
             "GET", "/api/v3/localization/language", params=params, data=None
         )
 
     def get_localization_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific localization."""
         params = {}
         return self.request(
             "GET", f"/api/v3/localization/{id}", params=params, data=None
@@ -1080,7 +1113,7 @@ class Api:
         sortDirection: str = None,
         level: str = None,
     ) -> Any:
-        """No description"""
+        """Get log."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -1095,12 +1128,12 @@ class Api:
         return self.request("GET", "/api/v3/log", params=params, data=None)
 
     def get_log_file(self) -> Any:
-        """No description"""
+        """Get log file."""
         params = {}
         return self.request("GET", "/api/v3/log/file", params=params, data=None)
 
     def get_log_file_filename(self, filename: str) -> Any:
-        """No description"""
+        """Get log file filename."""
         params = {}
         return self.request(
             "GET", f"/api/v3/log/file/{filename}", params=params, data=None
@@ -1114,7 +1147,7 @@ class Api:
         seasonNumber: int = None,
         filterExistingFiles: bool = None,
     ) -> Any:
-        """No description"""
+        """Get manualimport."""
         params = {}
         if folder is not None:
             params["folder"] = folder
@@ -1129,90 +1162,90 @@ class Api:
         return self.request("GET", "/api/v3/manualimport", params=params, data=None)
 
     def post_manualimport(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new manualimport."""
         params = {}
         return self.request("POST", "/api/v3/manualimport", params=params, data=data)
 
     def get_mediacover_series_id_filename(self, seriesId: int, filename: str) -> Any:
-        """No description"""
+        """Get specific mediacover series filename."""
         params = {}
         return self.request(
             "GET", f"/api/v3/mediacover/{seriesId}/{filename}", params=params, data=None
         )
 
     def get_config_mediamanagement(self) -> Any:
-        """No description"""
+        """Get config mediamanagement."""
         params = {}
         return self.request(
             "GET", "/api/v3/config/mediamanagement", params=params, data=None
         )
 
     def put_config_mediamanagement_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config mediamanagement id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/config/mediamanagement/{id}", params=params, data=data
         )
 
     def get_config_mediamanagement_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config mediamanagement."""
         params = {}
         return self.request(
             "GET", f"/api/v3/config/mediamanagement/{id}", params=params, data=None
         )
 
     def get_metadata(self) -> Any:
-        """No description"""
+        """Get metadata."""
         params = {}
         return self.request("GET", "/api/v3/metadata", params=params, data=None)
 
     def post_metadata(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new metadata."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v3/metadata", params=params, data=data)
 
     def put_metadata_id(self, id: int, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update metadata id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("PUT", f"/api/v3/metadata/{id}", params=params, data=data)
 
     def delete_metadata_id(self, id: int) -> Any:
-        """No description"""
+        """Delete metadata id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/metadata/{id}", params=params, data=None
         )
 
     def get_metadata_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific metadata."""
         params = {}
         return self.request("GET", f"/api/v3/metadata/{id}", params=params, data=None)
 
     def get_metadata_schema(self) -> Any:
-        """No description"""
+        """Get metadata schema."""
         params = {}
         return self.request("GET", "/api/v3/metadata/schema", params=params, data=None)
 
     def post_metadata_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test metadata."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
         return self.request("POST", "/api/v3/metadata/test", params=params, data=data)
 
     def post_metadata_testall(self) -> Any:
-        """No description"""
+        """Add a new metadata testall."""
         params = {}
         return self.request(
             "POST", "/api/v3/metadata/testall", params=params, data=None
         )
 
     def post_metadata_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new metadata action name."""
         params = {}
         return self.request(
             "POST", f"/api/v3/metadata/action/{name}", params=params, data=data
@@ -1228,7 +1261,7 @@ class Api:
         includeImages: bool = None,
         monitored: bool = None,
     ) -> Any:
-        """No description"""
+        """Get wanted missing."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -1247,26 +1280,26 @@ class Api:
         return self.request("GET", "/api/v3/wanted/missing", params=params, data=None)
 
     def get_wanted_missing_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific wanted missing."""
         params = {}
         return self.request(
             "GET", f"/api/v3/wanted/missing/{id}", params=params, data=None
         )
 
     def get_config_naming(self) -> Any:
-        """No description"""
+        """Get config naming."""
         params = {}
         return self.request("GET", "/api/v3/config/naming", params=params, data=None)
 
     def put_config_naming_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config naming id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/config/naming/{id}", params=params, data=data
         )
 
     def get_config_naming_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config naming."""
         params = {}
         return self.request(
             "GET", f"/api/v3/config/naming/{id}", params=params, data=None
@@ -1288,7 +1321,7 @@ class Api:
         id: int = None,
         resourceName: str = None,
     ) -> Any:
-        """No description"""
+        """Get config naming examples."""
         params = {}
         if renameEpisodes is not None:
             params["renameEpisodes"] = renameEpisodes
@@ -1321,19 +1354,19 @@ class Api:
         )
 
     def get_notification(self) -> Any:
-        """No description"""
+        """Get notification."""
         params = {}
         return self.request("GET", "/api/v3/notification", params=params, data=None)
 
     def post_notification(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new notification."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v3/notification", params=params, data=data)
 
     def put_notification_id(self, id: int, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update notification id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
@@ -1342,28 +1375,28 @@ class Api:
         )
 
     def delete_notification_id(self, id: int) -> Any:
-        """No description"""
+        """Delete notification id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/notification/{id}", params=params, data=None
         )
 
     def get_notification_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific notification."""
         params = {}
         return self.request(
             "GET", f"/api/v3/notification/{id}", params=params, data=None
         )
 
     def get_notification_schema(self) -> Any:
-        """No description"""
+        """Get notification schema."""
         params = {}
         return self.request(
             "GET", "/api/v3/notification/schema", params=params, data=None
         )
 
     def post_notification_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test notification."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
@@ -1372,21 +1405,21 @@ class Api:
         )
 
     def post_notification_testall(self) -> Any:
-        """No description"""
+        """Add a new notification testall."""
         params = {}
         return self.request(
             "POST", "/api/v3/notification/testall", params=params, data=None
         )
 
     def post_notification_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new notification action name."""
         params = {}
         return self.request(
             "POST", f"/api/v3/notification/action/{name}", params=params, data=data
         )
 
     def get_parse(self, title: str = None, path: str = None) -> Any:
-        """No description"""
+        """Get parse."""
         params = {}
         if title is not None:
             params["title"] = title
@@ -1395,78 +1428,78 @@ class Api:
         return self.request("GET", "/api/v3/parse", params=params, data=None)
 
     def get_ping(self) -> Any:
-        """No description"""
+        """Ping the Sonarr API to check connectivity."""
         params = {}
         return self.request("GET", "/ping", params=params, data=None)
 
     def put_qualitydefinition_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update qualitydefinition id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/qualitydefinition/{id}", params=params, data=data
         )
 
     def get_qualitydefinition_id(self, id: int) -> Any:
-        """No description"""
+        """Get a specific quality definition by ID."""
         params = {}
         return self.request(
             "GET", f"/api/v3/qualitydefinition/{id}", params=params, data=None
         )
 
     def get_qualitydefinition(self) -> Any:
-        """No description"""
+        """Get all quality definitions."""
         params = {}
         return self.request(
             "GET", "/api/v3/qualitydefinition", params=params, data=None
         )
 
     def put_qualitydefinition_update(self, data: Dict) -> Any:
-        """No description"""
+        """Update qualitydefinition update."""
         params = {}
         return self.request(
             "PUT", "/api/v3/qualitydefinition/update", params=params, data=data
         )
 
     def get_qualitydefinition_limits(self) -> Any:
-        """No description"""
+        """Get qualitydefinition limits."""
         params = {}
         return self.request(
             "GET", "/api/v3/qualitydefinition/limits", params=params, data=None
         )
 
     def post_qualityprofile(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new qualityprofile."""
         params = {}
         return self.request("POST", "/api/v3/qualityprofile", params=params, data=data)
 
     def get_qualityprofile(self) -> Any:
-        """No description"""
+        """Get qualityprofile."""
         params = {}
         return self.request("GET", "/api/v3/qualityprofile", params=params, data=None)
 
     def delete_qualityprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Delete qualityprofile id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/qualityprofile/{id}", params=params, data=None
         )
 
     def put_qualityprofile_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update qualityprofile id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/qualityprofile/{id}", params=params, data=data
         )
 
     def get_qualityprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific qualityprofile."""
         params = {}
         return self.request(
             "GET", f"/api/v3/qualityprofile/{id}", params=params, data=None
         )
 
     def get_qualityprofile_schema(self) -> Any:
-        """No description"""
+        """Get qualityprofile schema."""
         params = {}
         return self.request(
             "GET", "/api/v3/qualityprofile/schema", params=params, data=None
@@ -1480,7 +1513,7 @@ class Api:
         skipRedownload: bool = None,
         changeCategory: bool = None,
     ) -> Any:
-        """No description"""
+        """Delete queue id."""
         params = {}
         if removeFromClient is not None:
             params["removeFromClient"] = removeFromClient
@@ -1500,7 +1533,7 @@ class Api:
         skipRedownload: bool = None,
         changeCategory: bool = None,
     ) -> Any:
-        """No description"""
+        """Delete queue bulk."""
         params = {}
         if removeFromClient is not None:
             params["removeFromClient"] = removeFromClient
@@ -1527,7 +1560,7 @@ class Api:
         quality: List = None,
         status: List = None,
     ) -> Any:
-        """No description"""
+        """Get queue."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -1556,14 +1589,14 @@ class Api:
         return self.request("GET", "/api/v3/queue", params=params, data=None)
 
     def post_queue_grab_id(self, id: int) -> Any:
-        """No description"""
+        """Add a new queue grab id."""
         params = {}
         return self.request(
             "POST", f"/api/v3/queue/grab/{id}", params=params, data=None
         )
 
     def post_queue_grab_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new queue grab bulk."""
         params = {}
         return self.request("POST", "/api/v3/queue/grab/bulk", params=params, data=data)
 
@@ -1574,7 +1607,7 @@ class Api:
         includeSeries: bool = None,
         includeEpisode: bool = None,
     ) -> Any:
-        """No description"""
+        """Get queue details."""
         params = {}
         if seriesId is not None:
             params["seriesId"] = seriesId
@@ -1587,19 +1620,19 @@ class Api:
         return self.request("GET", "/api/v3/queue/details", params=params, data=None)
 
     def get_queue_status(self) -> Any:
-        """No description"""
+        """Get queue status."""
         params = {}
         return self.request("GET", "/api/v3/queue/status", params=params, data=None)
 
     def post_release(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new release."""
         params = {}
         return self.request("POST", "/api/v3/release", params=params, data=data)
 
     def get_release(
         self, seriesId: int = None, episodeId: int = None, seasonNumber: int = None
     ) -> Any:
-        """No description"""
+        """Get release."""
         params = {}
         if seriesId is not None:
             params["seriesId"] = seriesId
@@ -1610,78 +1643,78 @@ class Api:
         return self.request("GET", "/api/v3/release", params=params, data=None)
 
     def post_releaseprofile(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new releaseprofile."""
         params = {}
         return self.request("POST", "/api/v3/releaseprofile", params=params, data=data)
 
     def get_releaseprofile(self) -> Any:
-        """No description"""
+        """Get releaseprofile."""
         params = {}
         return self.request("GET", "/api/v3/releaseprofile", params=params, data=None)
 
     def delete_releaseprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Delete releaseprofile id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/releaseprofile/{id}", params=params, data=None
         )
 
     def put_releaseprofile_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update releaseprofile id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/releaseprofile/{id}", params=params, data=data
         )
 
     def get_releaseprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific releaseprofile."""
         params = {}
         return self.request(
             "GET", f"/api/v3/releaseprofile/{id}", params=params, data=None
         )
 
     def post_release_push(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new release push."""
         params = {}
         return self.request("POST", "/api/v3/release/push", params=params, data=data)
 
     def post_remotepathmapping(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new remotepathmapping."""
         params = {}
         return self.request(
             "POST", "/api/v3/remotepathmapping", params=params, data=data
         )
 
     def get_remotepathmapping(self) -> Any:
-        """No description"""
+        """Get remotepathmapping."""
         params = {}
         return self.request(
             "GET", "/api/v3/remotepathmapping", params=params, data=None
         )
 
     def delete_remotepathmapping_id(self, id: int) -> Any:
-        """No description"""
+        """Delete remotepathmapping id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/remotepathmapping/{id}", params=params, data=None
         )
 
     def put_remotepathmapping_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update remotepathmapping id."""
         params = {}
         return self.request(
             "PUT", f"/api/v3/remotepathmapping/{id}", params=params, data=data
         )
 
     def get_remotepathmapping_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific remotepathmapping."""
         params = {}
         return self.request(
             "GET", f"/api/v3/remotepathmapping/{id}", params=params, data=None
         )
 
     def get_rename(self, seriesId: int = None, seasonNumber: int = None) -> Any:
-        """No description"""
+        """Get rename."""
         params = {}
         if seriesId is not None:
             params["seriesId"] = seriesId
@@ -1690,34 +1723,34 @@ class Api:
         return self.request("GET", "/api/v3/rename", params=params, data=None)
 
     def post_rootfolder(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new rootfolder."""
         params = {}
         return self.request("POST", "/api/v3/rootfolder", params=params, data=data)
 
     def get_rootfolder(self) -> Any:
-        """No description"""
+        """Get rootfolder."""
         params = {}
         return self.request("GET", "/api/v3/rootfolder", params=params, data=None)
 
     def delete_rootfolder_id(self, id: int) -> Any:
-        """No description"""
+        """Delete rootfolder id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v3/rootfolder/{id}", params=params, data=None
         )
 
     def get_rootfolder_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific rootfolder."""
         params = {}
         return self.request("GET", f"/api/v3/rootfolder/{id}", params=params, data=None)
 
     def post_seasonpass(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new seasonpass."""
         params = {}
         return self.request("POST", "/api/v3/seasonpass", params=params, data=data)
 
     def get_series(self, tvdbId: int = None, includeSeasonImages: bool = None) -> Any:
-        """No description"""
+        """Get series."""
         params = {}
         if tvdbId is not None:
             params["tvdbId"] = tvdbId
@@ -1726,19 +1759,19 @@ class Api:
         return self.request("GET", "/api/v3/series", params=params, data=None)
 
     def post_series(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new series."""
         params = {}
         return self.request("POST", "/api/v3/series", params=params, data=data)
 
     def get_series_id(self, id: int, includeSeasonImages: bool = None) -> Any:
-        """No description"""
+        """Get specific series."""
         params = {}
         if includeSeasonImages is not None:
             params["includeSeasonImages"] = includeSeasonImages
         return self.request("GET", f"/api/v3/series/{id}", params=params, data=None)
 
     def put_series_id(self, id: str, data: Dict, moveFiles: bool = None) -> Any:
-        """No description"""
+        """Update series id."""
         params = {}
         if moveFiles is not None:
             params["moveFiles"] = moveFiles
@@ -1747,7 +1780,7 @@ class Api:
     def delete_series_id(
         self, id: int, deleteFiles: bool = None, addImportListExclusion: bool = None
     ) -> Any:
-        """No description"""
+        """Delete series."""
         params = {}
         if deleteFiles is not None:
             params["deleteFiles"] = deleteFiles
@@ -1756,150 +1789,150 @@ class Api:
         return self.request("DELETE", f"/api/v3/series/{id}", params=params, data=None)
 
     def put_series_editor(self, data: Dict) -> Any:
-        """No description"""
+        """Update series editor."""
         params = {}
         return self.request("PUT", "/api/v3/series/editor", params=params, data=data)
 
     def delete_series_editor(self, data: Dict) -> Any:
-        """No description"""
+        """Delete series editor."""
         params = {}
         return self.request("DELETE", "/api/v3/series/editor", params=params, data=data)
 
     def get_series_id_folder(self, id: int) -> Any:
-        """No description"""
+        """Get series folder."""
         params = {}
         return self.request(
             "GET", f"/api/v3/series/{id}/folder", params=params, data=None
         )
 
     def post_series_import(self, data: Dict) -> Any:
-        """No description"""
+        """Import series."""
         params = {}
         return self.request("POST", "/api/v3/series/import", params=params, data=data)
 
     def get_series_lookup(self, term: str = None) -> Any:
-        """No description"""
+        """Lookup series."""
         params = {}
         if term is not None:
             params["term"] = term
         return self.request("GET", "/api/v3/series/lookup", params=params, data=None)
 
     def get_content_path(self, path: str) -> Any:
-        """No description"""
+        """Get content path."""
         params = {}
         return self.request("GET", f"/content/{path}", params=params, data=None)
 
     def get_(self, path: str) -> Any:
-        """No description"""
+        """Get resource by path."""
         params = {}
         return self.request("GET", "/", params=params, data=None)
 
     def get_path(self, path: str) -> Any:
-        """No description"""
+        """Get system routes."""
         params = {}
         return self.request("GET", f"/{path}", params=params, data=None)
 
     def get_system_status(self) -> Any:
-        """No description"""
+        """Get system status."""
         params = {}
         return self.request("GET", "/api/v3/system/status", params=params, data=None)
 
     def get_system_routes(self) -> Any:
-        """No description"""
+        """Get system routes."""
         params = {}
         return self.request("GET", "/api/v3/system/routes", params=params, data=None)
 
     def get_system_routes_duplicate(self) -> Any:
-        """No description"""
+        """Get duplicate system routes."""
         params = {}
         return self.request(
             "GET", "/api/v3/system/routes/duplicate", params=params, data=None
         )
 
     def post_system_shutdown(self) -> Any:
-        """No description"""
+        """Trigger system shutdown."""
         params = {}
         return self.request("POST", "/api/v3/system/shutdown", params=params, data=None)
 
     def post_system_restart(self) -> Any:
-        """No description"""
+        """Trigger system restart."""
         params = {}
         return self.request("POST", "/api/v3/system/restart", params=params, data=None)
 
     def get_tag(self) -> Any:
-        """No description"""
+        """Get tags."""
         params = {}
         return self.request("GET", "/api/v3/tag", params=params, data=None)
 
     def post_tag(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new tag."""
         params = {}
         return self.request("POST", "/api/v3/tag", params=params, data=data)
 
     def put_tag_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update a tag."""
         params = {}
         return self.request("PUT", f"/api/v3/tag/{id}", params=params, data=data)
 
     def delete_tag_id(self, id: int) -> Any:
-        """No description"""
+        """Delete a tag."""
         params = {}
         return self.request("DELETE", f"/api/v3/tag/{id}", params=params, data=None)
 
     def get_tag_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific tag."""
         params = {}
         return self.request("GET", f"/api/v3/tag/{id}", params=params, data=None)
 
     def get_tag_detail(self) -> Any:
-        """No description"""
+        """Get tag usage details."""
         params = {}
         return self.request("GET", "/api/v3/tag/detail", params=params, data=None)
 
     def get_tag_detail_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific tag usage details."""
         params = {}
         return self.request("GET", f"/api/v3/tag/detail/{id}", params=params, data=None)
 
     def get_system_task(self) -> Any:
-        """No description"""
+        """Get system tasks."""
         params = {}
         return self.request("GET", "/api/v3/system/task", params=params, data=None)
 
     def get_system_task_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific system task."""
         params = {}
         return self.request(
             "GET", f"/api/v3/system/task/{id}", params=params, data=None
         )
 
     def put_config_ui_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update UI configuration."""
         params = {}
         return self.request("PUT", f"/api/v3/config/ui/{id}", params=params, data=data)
 
     def get_config_ui_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific UI configuration."""
         params = {}
         return self.request("GET", f"/api/v3/config/ui/{id}", params=params, data=None)
 
     def get_config_ui(self) -> Any:
-        """No description"""
+        """Get UI configuration."""
         params = {}
         return self.request("GET", "/api/v3/config/ui", params=params, data=None)
 
     def get_update(self) -> Any:
-        """No description"""
+        """Get available updates."""
         params = {}
         return self.request("GET", "/api/v3/update", params=params, data=None)
 
     def get_log_file_update(self) -> Any:
-        """No description"""
+        """Get log file update."""
         params = {}
         return self.request("GET", "/api/v3/log/file/update", params=params, data=None)
 
     def get_log_file_update_filename(self, filename: str) -> Any:
-        """No description"""
+        """Get log file update content."""
         params = {}
         return self.request(
             "GET", f"/api/v3/log/file/update/{filename}", params=params, data=None

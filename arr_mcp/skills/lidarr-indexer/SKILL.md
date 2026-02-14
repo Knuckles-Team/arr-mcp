@@ -1,6 +1,6 @@
 ---
 name: lidarr-indexer
-description: "Generated skill for Indexer operations. Contains 11 tools."
+description: "Generated skill for Indexer operations. Contains 15 tools."
 ---
 
 ### Overview
@@ -72,6 +72,29 @@ This skill handles operations related to Indexer.
   - **Parameters**:
     - `name` (str)
     - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_indexer_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_config_indexer_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_indexer`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_indexerflag`: No description
+  - **Parameters**:
     - `lidarr_base_url` (str)
     - `lidarr_api_key` (Optional[str])
     - `lidarr_verify` (bool)

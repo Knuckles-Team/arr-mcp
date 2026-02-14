@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arr-mcp"
-version = "0.2.7"
+version = "0.2.8"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 authors = [{ name = "Genius", email = "genius@example.com" }]

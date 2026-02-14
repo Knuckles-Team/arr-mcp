@@ -7,23 +7,27 @@ services:
     container_name: chaptarr-mcp
     hostname: chaptarr-mcp
     command: [ "chaptarr-mcp" ]
-    env_file:
-      - .env
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8060"
       - "TRANSPORT=streamable-http"
-      - "CHAPTARR_BASE_URL=${CHAPTARR_BASE_URL:-http://arr-stack_chaptarr:8789}"
+      - "CHAPTARR_BASE_URL=${CHAPTARR_BASE_URL:-http://chaptarr.arpa}"
       - "CHAPTARR_API_KEY=${CHAPTARR_API_KEY}"
-      - "CHAPTARR_VERIFY=${CHAPTARR_VERIFY:-False}"
+      - "CHAPTARR_VERIFY=${CHAPTARR_VERIFY:-True}"
     ports:
       - "8060:8060"
     healthcheck:
@@ -41,8 +45,11 @@ services:
     container_name: lidarr-mcp
     hostname: lidarr-mcp
     command: [ "lidarr-mcp" ]
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
@@ -52,12 +59,13 @@ services:
     env_file:
       - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8061"
       - "TRANSPORT=streamable-http"
-      - "LIDARR_BASE_URL=${LIDARR_BASE_URL:-http://arr-stack_lidarr:8686}"
+      - "LIDARR_BASE_URL=${LIDARR_BASE_URL:-http://lidarr.arpa}"
       - "LIDARR_API_KEY=${LIDARR_API_KEY}"
-      - "LIDARR_VERIFY=${LIDARR_VERIFY:-False}"
+      - "LIDARR_VERIFY=${LIDARR_VERIFY:-True}"
     ports:
       - "8061:8061"
     healthcheck:
@@ -75,23 +83,27 @@ services:
     container_name: prowlarr-mcp
     hostname: prowlarr-mcp
     command: [ "prowlarr-mcp" ]
-    env_file:
-      - .env
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8062"
       - "TRANSPORT=streamable-http"
-      - "PROWLARR_BASE_URL=${PROWLARR_BASE_URL:-http://arr-stack_prowlarr:9696}"
+      - "PROWLARR_BASE_URL=${PROWLARR_BASE_URL:-http://prowlarr.arpa}"
       - "PROWLARR_API_KEY=${PROWLARR_API_KEY}"
-      - "PROWLARR_VERIFY=${PROWLARR_VERIFY:-False}"
+      - "PROWLARR_VERIFY=${PROWLARR_VERIFY:-True}"
     ports:
       - "8062:8062"
     healthcheck:
@@ -109,8 +121,11 @@ services:
     container_name: radarr-mcp
     hostname: radarr-mcp
     command: [ "radarr-mcp" ]
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
@@ -120,12 +135,13 @@ services:
     env_file:
       - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8063"
       - "TRANSPORT=streamable-http"
-      - "RADARR_BASE_URL=${RADARR_BASE_URL:-http://arr-stack_radarr:7878}"
+      - "RADARR_BASE_URL=${RADARR_BASE_URL:-http://radarr.arpa}"
       - "RADARR_API_KEY=${RADARR_API_KEY}"
-      - "RADARR_VERIFY=${RADARR_VERIFY:-False}"
+      - "RADARR_VERIFY=${RADARR_VERIFY:-True}"
     ports:
       - "8063:8063"
     healthcheck:
@@ -143,23 +159,27 @@ services:
     container_name: sonarr-mcp
     hostname: sonarr-mcp
     command: [ "sonarr-mcp" ]
-    env_file:
-      - .env
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8064"
       - "TRANSPORT=streamable-http"
-      - "SONARR_BASE_URL=${SONARR_BASE_URL:-http://arr-stack_sonarr:8989}"
+      - "SONARR_BASE_URL=${SONARR_BASE_URL:-http://sonarr.arpa}"
       - "SONARR_API_KEY=${SONARR_API_KEY}"
-      - "SONARR_VERIFY=${SONARR_VERIFY:-False}"
+      - "SONARR_VERIFY=${SONARR_VERIFY:-True}"
     ports:
       - "8064:8064"
     healthcheck:
@@ -177,8 +197,11 @@ services:
     container_name: bazarr-mcp
     hostname: bazarr-mcp
     command: [ "bazarr-mcp" ]
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
@@ -188,12 +211,13 @@ services:
     env_file:
       - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8065"
       - "TRANSPORT=streamable-http"
-      - "BAZARR_BASE_URL=${BAZARR_BASE_URL:-http://arr-stack_bazarr:6767}"
+      - "BAZARR_BASE_URL=${BAZARR_BASE_URL:-http://bazarr.arpa}"
       - "BAZARR_API_KEY=${BAZARR_API_KEY}"
-      - "BAZARR_VERIFY=${BAZARR_VERIFY:-False}"
+      - "BAZARR_VERIFY=${BAZARR_VERIFY:-True}"
     ports:
       - "8065:8065"
     healthcheck:
@@ -211,23 +235,27 @@ services:
     container_name: seerr-mcp
     hostname: seerr-mcp
     command: [ "seerr-mcp" ]
-    env_file:
-      - .env
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8066"
       - "TRANSPORT=streamable-http"
-      - "SEERR_BASE_URL=${SEERR_BASE_URL:-http://arr-stack_seerr:5055}"
+      - "SEERR_BASE_URL=${SEERR_BASE_URL:-http://seerr.arpa}"
       - "SEERR_API_KEY=${SEERR_API_KEY}"
-      - "SEERR_VERIFY=${SEERR_VERIFY:-False}"
+      - "SEERR_VERIFY=${SEERR_VERIFY:-True}"
     ports:
       - "8066:8066"
     healthcheck:
@@ -260,8 +288,11 @@ services:
         condition: service_healthy
       seerr-mcp:
         condition: service_healthy
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     logging:
       driver: json-file
       options:
@@ -271,16 +302,17 @@ services:
     env_file:
       - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=8099"
       - "TRANSPORT=streamable-http"
-      - "CHAPTARR_MCP_URL=http://chaptarr-mcp:8060/mcp"
-      - "LIDARR_MCP_URL=http://lidarr-mcp:8061/mcp"
-      - "PROWLARR_MCP_URL=http://prowlarr-mcp:8062/mcp"
-      - "RADARR_MCP_URL=http://radarr-mcp:8063/mcp"
-      - "SONARR_MCP_URL=http://sonarr-mcp:8064/mcp"
-      - "BAZARR_MCP_URL=http://sonarr-mcp:8065/mcp"
-      - "SEERR_MCP_URL=http://sonarr-mcp:8066/mcp"
+      - "CHAPTARR_MCP_URL=${CHAPTARR_MCP_URL:-http://chaptarr-mcp:8060/mcp}"
+      - "LIDARR_MCP_URL=${LIDARR_MCP_URL:-http://lidarr-mcp:8061/mcp}"
+      - "PROWLARR_MCP_URL=${PROWLARR_MCP_URL:-http://prowlarr-mcp:8062/mcp}"
+      - "RADARR_MCP_URL=${RADARR_MCP_URL:-http://radarr-mcp:8063/mcp}"
+      - "SONARR_MCP_URL=${SONARR_MCP_URL:-http://sonarr-mcp:8064/mcp}"
+      - "BAZARR_MCP_URL=${BAZARR_MCP_URL:-http://sonarr-mcp:8065/mcp}"
+      - "SEERR_MCP_URL=${SEERR_MCP_URL:-http://sonarr-mcp:8066/mcp}"
     ports:
       - "8099:8099"
     healthcheck:
@@ -298,8 +330,11 @@ services:
     container_name: arr-agent
     hostname: arr-agent
     command: [ "arr-agent" ]
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    dns:
+      - "${IP_DNS:-1.1.1.1}"
     depends_on:
       arr-mcp:
         condition: service_healthy
@@ -309,10 +344,19 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: always
+    env_file:
+      - .env
     environment:
+      - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
       - "PORT=9099"
-      - "TRANSPORT=streamable-http"
+      - "MCP_URL=http://arr-mcp:8099/mcp"
+      - "PROVIDER=openai"
+      - "LLM_BASE_URL=${LLM_BASE_URL:-http://host.docker.internal:1234/v1}"
+      - "LLM_API_KEY=${LLM_API_KEY:-llama}"
+      - "MODEL_ID=${MODEL_ID:-qwen/qwen3-coder-next}"
+      - "DEBUG=False"
+      - "ENABLE_WEB_UI=True"
     ports:
       - "9099:9099"
     healthcheck:

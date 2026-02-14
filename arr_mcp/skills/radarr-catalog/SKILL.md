@@ -1,0 +1,305 @@
+---
+name: radarr-catalog
+description: "Generated skill for Catalog operations. Contains 44 tools."
+---
+
+### Overview
+This skill handles operations related to Catalog.
+
+### Available Tools
+- `lookup_movie`: Search for a movie using the lookup endpoint.
+  - **Parameters**:
+    - `term` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `add_movie`: Lookup a movie by term, pick the first result, and add it to Radarr.
+  - **Parameters**:
+    - `term` (str)
+    - `root_folder_path` (str)
+    - `quality_profile_id` (int)
+    - `monitored` (bool)
+    - `search_for_movie` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_alttitle`: No description
+  - **Parameters**:
+    - `movieId` (int)
+    - `movieMetadataId` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_alttitle_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_collection`: No description
+  - **Parameters**:
+    - `tmdbId` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_collection`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_collection_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_collection_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_credit`: No description
+  - **Parameters**:
+    - `movieId` (int)
+    - `movieMetadataId` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_credit_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_extrafile`: No description
+  - **Parameters**:
+    - `movieId` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_importlist_movie`: No description
+  - **Parameters**:
+    - `includeRecommendations` (bool)
+    - `includeTrending` (bool)
+    - `includePopular` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_importlist_movie`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_mediacover_movie_id_filename`: No description
+  - **Parameters**:
+    - `movieId` (int)
+    - `filename` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_metadata`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_metadata`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_metadata_schema`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_metadata_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_metadata_testall`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_metadata_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_wanted_missing`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `monitored` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_movie`: No description
+  - **Parameters**:
+    - `tmdbId` (int)
+    - `excludeLocalCovers` (bool)
+    - `languageId` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_movie`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_movie_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `moveFiles` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_movie_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `deleteFiles` (bool)
+    - `addImportExclusion` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_movie_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_movie_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_movie_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_moviefile`: No description
+  - **Parameters**:
+    - `movieId` (List)
+    - `movieFileIds` (List)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_moviefile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_moviefile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_moviefile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_moviefile_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_moviefile_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_moviefile_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_movie_id_folder`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_movie_import`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_movie_lookup_tmdb`: No description
+  - **Parameters**:
+    - `tmdbId` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_movie_lookup_imdb`: No description
+  - **Parameters**:
+    - `imdbId` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_movie_lookup`: No description
+  - **Parameters**:
+    - `term` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_rename`: No description
+  - **Parameters**:
+    - `movieId` (List)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

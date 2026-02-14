@@ -1,12 +1,157 @@
 ---
 name: radarr-system
-description: "Generated skill for System operations. Contains 5 tools."
+description: "Generated skill for System operations. Contains 45 tools."
 ---
 
 ### Overview
 This skill handles operations related to System.
 
 ### Available Tools
+- `get_api`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_login`: No description
+  - **Parameters**:
+    - `returnUrl` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_login`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_logout`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_system_backup`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_system_backup_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_system_backup_restore_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_system_backup_restore_upload`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_diskspace`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_filesystem`: No description
+  - **Parameters**:
+    - `path` (str)
+    - `includeFiles` (bool)
+    - `allowFoldersWithoutTrailingSlashes` (bool)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_filesystem_type`: No description
+  - **Parameters**:
+    - `path` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_filesystem_mediafiles`: No description
+  - **Parameters**:
+    - `path` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_health`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_config_host`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_config_host_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_config_host_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_localization`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_localization_language`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_log`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `level` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_log_file`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_log_file_filename`: No description
+  - **Parameters**:
+    - `filename` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_ping`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_content_path`: No description
+  - **Parameters**:
+    - `path` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_`: No description
+  - **Parameters**:
+    - `path` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_path`: No description
+  - **Parameters**:
+    - `path` (str)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
 - `get_system_status`: No description
   - **Parameters**:
     - `radarr_base_url` (str)
@@ -29,6 +174,92 @@ This skill handles operations related to System.
     - `radarr_verify` (bool)
 - `post_system_restart`: No description
   - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_tag`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `post_tag`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_tag_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `delete_tag_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_tag_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_tag_detail`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_tag_detail_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_system_task`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_system_task_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_config_ui_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_config_ui_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_config_ui`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_update`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_log_file_update`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_log_file_update_filename`: No description
+  - **Parameters**:
+    - `filename` (str)
     - `radarr_base_url` (str)
     - `radarr_api_key` (Optional[str])
     - `radarr_verify` (bool)

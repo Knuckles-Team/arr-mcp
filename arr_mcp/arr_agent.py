@@ -38,7 +38,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -86,21 +86,21 @@ AGENT_DESCRIPTION = (
 SUPERVISOR_SYSTEM_PROMPT = os.environ.get(
     "SUPERVISOR_SYSTEM_PROMPT",
     default=(
-        "You are the Arr Supervisor Agent.\n"
-        "Your goal is to assist the user by assigning tasks to specialized child agents for each service in the Arr stack.\n"
+        "You are the Arr Supervisor Agent, a highly capable coordinator for a suite of specialized media management services.\n"
+        "Your role is to analyze user requests and delegate them to the appropriate specialist agent using the available 'ask_..._agent' tools.\n\n"
         "You have access to the following specialists:\n"
-        "- Lidarr Agent: For music management.\n"
-        "- Sonarr Agent: For TV show management.\n"
-        "- Radarr Agent: For movie management.\n"
-        "- Prowlarr Agent: For indexer management.\n"
-        "- Chaptarr Agent: For book management.\n"
-        "- Seerr Agent: For media requests and discovery.\n"
-        "- Bazarr Agent: For subtitle management.\n"
-        "\n"
-        "Analyze the user's request and determine which service it relates to.\n"
-        "Then, use the appropriate 'ask_..._agent' tool to delegate the task.\n"
-        "Synthesize the results from the child agent into a final helpful response.\n"
-        "Always be warm, professional, and helpful."
+        "- **Lidarr Agent (Music)**: Expert in music collection management. Use this for searching artists, monitoring albums, managing music library files, and handling music-related quality profiles.\n"
+        "- **Sonarr Agent (TV Shows)**: Specialist in television series management. Use this for tracking shows, monitoring episodes/seasons, viewing release calendars, and managing TV media files.\n"
+        "- **Radarr Agent (Movies)**: Focused on movie collection management. Use this for discovering movies, monitoring releases, managing movie files, and handling film collections.\n"
+        "- **Prowlarr Agent (Indexers & Search)**: Manages search indexers and trackers. Use this for searching across multiple sites, configuring indexers/trackers, and managing download clients.\n"
+        "- **Chaptarr Agent (Books)**: Dedicated to book and author management. Use this for tracking authors, monitoring book releases (ebooks/audiobooks), and managing book libraries.\n"
+        "- **Seerr Agent (Discovery & Requests)**: Handles media discovery and user requests. Use this for searching trending/popular media via TMDB, making requests for movies or TV shows, and managing those requests.\n"
+        "- **Bazarr Agent (Subtitles)**: Specialist in subtitle management. Use this for searching, downloading, and managing subtitles for movies and TV series already in your library.\n\n"
+        "GUIDELINES:\n"
+        "1. Identify the core intent of the user's request.\n"
+        "2. Delegate to the most appropriate agent(s) using the 'ask_..._agent' tools. You can call multiple agents if required (e.g., check Prowlarr indexers after adding a movie in Radarr).\n"
+        "3. Synthesize the results from all tools into a single, cohesive, and helpful response.\n"
+        "4. Be professional, warm, and proactive. If an action fails, explain why and suggest alternatives."
     ),
 )
 
@@ -147,15 +147,14 @@ def create_agent(
 
     try:
         child_agents["lidarr"] = create_lidarr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Lidarr Agent initialized.")
     except Exception as e:
@@ -163,15 +162,14 @@ def create_agent(
 
     try:
         child_agents["sonarr"] = create_sonarr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Sonarr Agent initialized.")
     except Exception as e:
@@ -179,15 +177,14 @@ def create_agent(
 
     try:
         child_agents["radarr"] = create_radarr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Radarr Agent initialized.")
     except Exception as e:
@@ -195,15 +192,14 @@ def create_agent(
 
     try:
         child_agents["prowlarr"] = create_prowlarr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Prowlarr Agent initialized.")
     except Exception as e:
@@ -211,15 +207,14 @@ def create_agent(
 
     try:
         child_agents["chaptarr"] = create_chaptarr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Chaptarr Agent initialized.")
     except Exception as e:
@@ -227,15 +222,14 @@ def create_agent(
 
     try:
         child_agents["seerr"] = create_seerr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Seerr Agent initialized.")
     except Exception as e:
@@ -243,15 +237,14 @@ def create_agent(
 
     try:
         child_agents["bazarr"] = create_bazarr_agent(
-            provider,
-            model_id,
-            base_url,
-            api_key,
-            mcp_url,
-            mcp_config,
-            skills_directory,
+            provider=provider,
+            model_id=model_id,
+            base_url=base_url,
+            api_key=api_key,
+            mcp_url=mcp_url,
+            mcp_config=mcp_config,
+            skills_directory=skills_directory,
             ssl_verify=ssl_verify,
-            timeout=DEFAULT_TIMEOUT,
         )
         logger.info("Bazarr Agent initialized.")
     except Exception as e:
@@ -273,9 +266,13 @@ def create_agent(
         """
         if "lidarr" not in child_agents:
             return "Lidarr Agent is not available."
-        return (
-            await child_agents["lidarr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["lidarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in lidarr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def ask_sonarr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -285,9 +282,13 @@ def create_agent(
         """
         if "sonarr" not in child_agents:
             return "Sonarr Agent is not available."
-        return (
-            await child_agents["sonarr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["sonarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in sonarr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def ask_radarr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -297,9 +298,13 @@ def create_agent(
         """
         if "radarr" not in child_agents:
             return "Radarr Agent is not available."
-        return (
-            await child_agents["radarr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["radarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in radarr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def ask_prowlarr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -309,9 +314,13 @@ def create_agent(
         """
         if "prowlarr" not in child_agents:
             return "Prowlarr Agent is not available."
-        return (
-            await child_agents["prowlarr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["prowlarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in prowlarr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def ask_chaptarr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -321,9 +330,13 @@ def create_agent(
         """
         if "chaptarr" not in child_agents:
             return "Chaptarr Agent is not available."
-        return (
-            await child_agents["chaptarr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["chaptarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in chaptarr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def ask_seerr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -333,9 +346,13 @@ def create_agent(
         """
         if "seerr" not in child_agents:
             return "Seerr Agent is not available."
-        return (
-            await child_agents["seerr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["seerr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in seerr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def ask_bazarr_agent(ctx: RunContext[Any], task: str) -> str:
@@ -345,9 +362,13 @@ def create_agent(
         """
         if "bazarr" not in child_agents:
             return "Bazarr Agent is not available."
-        return (
-            await child_agents["bazarr"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        try:
+            return (
+                await child_agents["bazarr"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in bazarr agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     return supervisor
 
@@ -404,7 +425,6 @@ def create_agent_server(
         mcp_config=mcp_config,
         skills_directory=skills_directory,
         ssl_verify=ssl_verify,
-        timeout=DEFAULT_TIMEOUT,
     )
 
     skills = []

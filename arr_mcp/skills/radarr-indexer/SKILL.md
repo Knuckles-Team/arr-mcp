@@ -1,6 +1,6 @@
 ---
 name: radarr-indexer
-description: "Generated skill for Indexer operations. Contains 11 tools."
+description: "Generated skill for Indexer operations. Contains 15 tools."
 ---
 
 ### Overview
@@ -72,6 +72,29 @@ This skill handles operations related to Indexer.
   - **Parameters**:
     - `name` (str)
     - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_config_indexer`: No description
+  - **Parameters**:
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `put_config_indexer_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_config_indexer_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `radarr_base_url` (str)
+    - `radarr_api_key` (Optional[str])
+    - `radarr_verify` (bool)
+- `get_indexerflag`: No description
+  - **Parameters**:
     - `radarr_base_url` (str)
     - `radarr_api_key` (Optional[str])
     - `radarr_verify` (bool)

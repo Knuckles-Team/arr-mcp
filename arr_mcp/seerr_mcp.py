@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Seerr MCP Server.
+
+This module implements an MCP server for Seerr (Overseerr/Jellyseerr),
+providing tools to manage media requests and discover content. It handles
+authentication, middleware, and API interactions.
+"""
+
 import os
 import argparse
 import sys
@@ -27,7 +33,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -67,7 +73,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Status"},
+        tags={"system"},
     )
     async def get_status(
         seerr_base_url: str = Field(
@@ -89,7 +95,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Status"},
+        tags={"system"},
     )
     async def get_status_appdata(
         seerr_base_url: str = Field(
@@ -103,7 +109,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """Get application data volume status"""
+        """Get information about the application data volumes."""
         client = Api(
             base_url=seerr_base_url, api_key=seerr_api_key, verify=seerr_verify
         )
@@ -111,7 +117,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def get_auth_me(
         seerr_base_url: str = Field(
@@ -133,7 +139,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def post_request(
         media_type: str = Field(..., description="mediaType (movie or tv)"),
@@ -170,7 +176,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def get_request(
         take: int = Field(default=20, description="take"),
@@ -199,7 +205,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def get_request_id(
         request_id: int = Field(..., description="request_id"),
@@ -222,7 +228,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def put_request_id(
         request_id: int = Field(..., description="request_id"),
@@ -257,7 +263,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def delete_request_id(
         request_id: int = Field(..., description="request_id"),
@@ -280,7 +286,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def approve_request(
         request_id: int = Field(..., description="request_id"),
@@ -303,7 +309,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Request"},
+        tags={"search"},
     )
     async def decline_request(
         request_id: int = Field(..., description="request_id"),
@@ -326,7 +332,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def get_movie(
         movie_id: int = Field(..., description="movie_id (TMDB ID)"),
@@ -349,7 +355,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"TV"},
+        tags={"catalog"},
     )
     async def get_tv(
         tv_id: int = Field(..., description="tv_id (TMDB ID)"),
@@ -372,7 +378,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def search(
         query: str = Field(..., description="query"),
@@ -397,7 +403,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"User"},
+        tags={"system"},
     )
     async def get_users(
         take: int = Field(default=20, description="take"),
@@ -422,7 +428,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"User"},
+        tags={"system"},
     )
     async def get_user_id(
         user_id: int = Field(..., description="user_id"),

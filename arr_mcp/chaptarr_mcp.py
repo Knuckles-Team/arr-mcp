@@ -1,5 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Chaptarr MCP Server.
+
+This module implements an MCP server for Chaptarr, providing tools to manage
+books and authors. It handles authentication, middleware, and API interactions.
+"""
+
 import os
 import argparse
 import sys
@@ -27,7 +32,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -60,7 +65,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ApiInfo"},
+        tags={"system"},
     )
     async def get_api(
         chaptarr_base_url: str = Field(
@@ -74,7 +79,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the base API information for Chaptarr."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -82,7 +87,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -97,7 +102,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform a login operation to the Chaptarr instance."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -105,7 +110,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_login(
         chaptarr_base_url: str = Field(
@@ -119,7 +124,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the current login status for the Chaptarr instance."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -127,7 +132,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def get_logout(
         chaptarr_base_url: str = Field(
@@ -141,7 +146,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform a logout operation from the Chaptarr instance."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -149,7 +154,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Author"},
+        tags={"catalog"},
     )
     async def get_author(
         chaptarr_base_url: str = Field(
@@ -163,7 +168,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get all authors managed by Chaptarr."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -171,7 +176,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Author"},
+        tags={"catalog"},
     )
     async def post_author(
         data: Dict = Field(default=..., description="data"),
@@ -186,7 +191,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new author to Chaptarr."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -194,7 +199,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Author"},
+        tags={"catalog"},
     )
     async def put_author_id(
         id: str = Field(default=..., description="id"),
@@ -211,7 +216,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an author's information by ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -219,7 +224,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Author"},
+        tags={"catalog"},
     )
     async def delete_author_id(
         id: int = Field(default=..., description="id"),
@@ -238,7 +243,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an author from Chaptarr."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -250,7 +255,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Author"},
+        tags={"catalog"},
     )
     async def get_author_id(
         id: int = Field(default=..., description="id"),
@@ -265,7 +270,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get information for a specific author by ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -273,7 +278,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"AuthorEditor"},
+        tags={"catalog"},
     )
     async def put_author_editor(
         data: Dict = Field(default=..., description="data"),
@@ -288,7 +293,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update author parameters."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -296,7 +301,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"AuthorEditor"},
+        tags={"catalog"},
     )
     async def delete_author_editor(
         data: Dict = Field(default=..., description="data"),
@@ -311,7 +316,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete authors."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -319,7 +324,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"AuthorLookup"},
+        tags={"catalog"},
     )
     async def get_author_lookup(
         term: str = Field(default=None, description="term"),
@@ -334,7 +339,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Search for authors matching a term."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -342,7 +347,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def get_system_backup(
         chaptarr_base_url: str = Field(
@@ -356,7 +361,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all system backups."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -364,7 +369,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -379,7 +384,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a specific system backup."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -387,7 +392,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -402,7 +407,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Restore a system backup."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -410,7 +415,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_upload(
         chaptarr_base_url: str = Field(
@@ -424,7 +429,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Upload and restore a system backup."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -432,7 +437,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def get_blocklist(
         page: int = Field(default=None, description="page"),
@@ -450,7 +455,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the blocklist."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -460,7 +465,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def delete_blocklist_id(
         id: int = Field(default=..., description="id"),
@@ -475,7 +480,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an item from the blocklist."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -483,7 +488,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def delete_blocklist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -498,7 +503,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete items from the blocklist."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -506,7 +511,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def get_book(
         authorId: int = Field(default=None, description="authorId"),
@@ -526,7 +531,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all books."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -539,7 +544,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def post_book(
         data: Dict = Field(default=..., description="data"),
@@ -554,7 +559,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new book."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -562,7 +567,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def get_book_id_overview(
         id: int = Field(default=..., description="id"),
@@ -577,7 +582,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve overview for a specific book."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -585,7 +590,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def put_book_id(
         id: str = Field(default=..., description="id"),
@@ -601,7 +606,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve a paginated list of items in the blocklist."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -609,7 +614,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def delete_book_id(
         id: int = Field(default=..., description="id"),
@@ -628,7 +633,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Remove an item from the blocklist by its ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -640,7 +645,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def get_book_id(
         id: int = Field(default=..., description="id"),
@@ -655,7 +660,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk removal of items from the blocklist."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -663,7 +668,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Book"},
+        tags={"catalog"},
     )
     async def put_book_monitor(
         data: Dict = Field(default=..., description="data"),
@@ -678,7 +683,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific book by its ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -686,7 +691,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookEditor"},
+        tags={"catalog"},
     )
     async def put_book_editor(
         data: Dict = Field(default=..., description="data"),
@@ -701,7 +706,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing book configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -709,7 +714,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookEditor"},
+        tags={"catalog"},
     )
     async def delete_book_editor(
         data: Dict = Field(default=..., description="data"),
@@ -724,7 +729,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the schema for book configurations."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -732,7 +737,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookFile"},
+        tags={"catalog"},
     )
     async def get_bookfile(
         authorId: int = Field(default=None, description="authorId"),
@@ -750,7 +755,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all book files for a specific book."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -760,7 +765,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookFile"},
+        tags={"catalog"},
     )
     async def put_bookfile_id(
         id: str = Field(default=..., description="id"),
@@ -776,7 +781,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a specific book file."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -784,7 +789,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookFile"},
+        tags={"catalog"},
     )
     async def delete_bookfile_id(
         id: int = Field(default=..., description="id"),
@@ -799,7 +804,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific book file by its ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -807,7 +812,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookFile"},
+        tags={"catalog"},
     )
     async def get_bookfile_id(
         id: int = Field(default=..., description="id"),
@@ -822,7 +827,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple book files."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -830,7 +835,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookFile"},
+        tags={"catalog"},
     )
     async def put_bookfile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -845,7 +850,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update book file editor."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -853,7 +858,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookFile"},
+        tags={"catalog"},
     )
     async def delete_bookfile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -868,7 +873,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete book files."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -876,7 +881,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"BookLookup"},
+        tags={"catalog"},
     )
     async def get_book_lookup(
         term: str = Field(default=None, description="term"),
@@ -891,7 +896,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Search for books."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -899,7 +904,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Bookshelf"},
+        tags={"catalog"},
     )
     async def post_bookshelf(
         data: Dict = Field(default=..., description="data"),
@@ -914,7 +919,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add book to bookshelf."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -922,7 +927,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Calendar"},
+        tags={"operations"},
     )
     async def get_calendar(
         start: str = Field(default=None, description="start"),
@@ -940,7 +945,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get calendar events."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -950,7 +955,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Calendar"},
+        tags={"operations"},
     )
     async def get_calendar_id(
         id: int = Field(default=..., description="id"),
@@ -965,7 +970,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific calendar event."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -973,7 +978,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CalendarFeed"},
+        tags={"operations"},
     )
     async def get_feed_v1_calendar_readarrics(
         pastDays: int = Field(default=None, description="pastDays"),
@@ -991,7 +996,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get calendar feed."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1004,7 +1009,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -1019,7 +1024,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Execute a command."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1027,7 +1032,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command(
         chaptarr_base_url: str = Field(
@@ -1041,7 +1046,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get all commands."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1049,7 +1054,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -1064,7 +1069,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a specific command."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1072,7 +1077,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -1087,7 +1092,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific command by ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1095,7 +1100,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter(
         chaptarr_base_url: str = Field(
@@ -1109,7 +1114,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get custom filters."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1117,7 +1122,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def post_customfilter(
         data: Dict = Field(default=..., description="data"),
@@ -1132,7 +1137,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new custom filter."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1140,7 +1145,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def put_customfilter_id(
         id: str = Field(default=..., description="id"),
@@ -1156,7 +1161,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a custom filter."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1164,7 +1169,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def delete_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -1179,7 +1184,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a custom filter."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1187,7 +1192,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -1202,7 +1207,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific custom filter."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1210,7 +1215,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def post_customformat(
         data: Dict = Field(default=..., description="data"),
@@ -1225,7 +1230,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new custom format."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1233,7 +1238,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat(
         chaptarr_base_url: str = Field(
@@ -1247,7 +1252,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a custom format."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1255,7 +1260,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def put_customformat_id(
         id: str = Field(default=..., description="id"),
@@ -1271,7 +1276,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a custom format."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1279,7 +1284,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def delete_customformat_id(
         id: int = Field(default=..., description="id"),
@@ -1294,7 +1299,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific custom format."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1302,7 +1307,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat_id(
         id: int = Field(default=..., description="id"),
@@ -1317,7 +1322,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update custom formats."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1325,7 +1330,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat_schema(
         chaptarr_base_url: str = Field(
@@ -1339,7 +1344,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete custom formats."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1347,7 +1352,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Cutoff"},
+        tags={"profiles"},
     )
     async def get_wanted_cutoff(
         page: int = Field(default=None, description="page"),
@@ -1367,7 +1372,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get custom format schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1382,7 +1387,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Cutoff"},
+        tags={"profiles"},
     )
     async def get_wanted_cutoff_id(
         id: int = Field(default=..., description="id"),
@@ -1397,7 +1402,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new delay profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1405,7 +1410,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def post_delayprofile(
         data: Dict = Field(default=..., description="data"),
@@ -1420,7 +1425,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get delay profiles."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1428,7 +1433,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def get_delayprofile(
         chaptarr_base_url: str = Field(
@@ -1442,7 +1447,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a delay profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1450,7 +1455,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def delete_delayprofile_id(
         id: int = Field(default=..., description="id"),
@@ -1465,7 +1470,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a delay profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1473,7 +1478,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def put_delayprofile_id(
         id: str = Field(default=..., description="id"),
@@ -1489,7 +1494,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific delay profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1497,7 +1502,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def get_delayprofile_id(
         id: int = Field(default=..., description="id"),
@@ -1512,7 +1517,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Reorder delay profiles."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1520,7 +1525,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def put_delayprofile_reorder_id(
         id: int = Field(default=..., description="id"),
@@ -1536,7 +1541,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get disk space information."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1544,7 +1549,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DevelopmentConfig"},
+        tags={"system"},
     )
     async def get_config_development(
         chaptarr_base_url: str = Field(
@@ -1558,7 +1563,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get download clients."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1566,7 +1571,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DevelopmentConfig"},
+        tags={"system"},
     )
     async def put_config_development_id(
         id: str = Field(default=..., description="id"),
@@ -1582,7 +1587,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new download client."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1590,7 +1595,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DevelopmentConfig"},
+        tags={"system"},
     )
     async def get_config_development_id(
         id: int = Field(default=..., description="id"),
@@ -1605,7 +1610,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a download client."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1613,7 +1618,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DiskSpace"},
+        tags={"system"},
     )
     async def get_diskspace(
         chaptarr_base_url: str = Field(
@@ -1627,7 +1632,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a download client."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1635,7 +1640,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient(
         chaptarr_base_url: str = Field(
@@ -1649,7 +1654,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific download client."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1657,7 +1662,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient(
         data: Dict = Field(default=..., description="data"),
@@ -1673,7 +1678,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get download client configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1681,7 +1686,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_id(
         id: str = Field(default=..., description="id"),
@@ -1698,7 +1703,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update download client configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1706,7 +1711,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1721,7 +1726,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific download client configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1729,7 +1734,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1744,7 +1749,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get missing books."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1752,7 +1757,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1767,7 +1772,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get books missing cutoff."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1775,7 +1780,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1790,7 +1795,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1798,7 +1803,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_schema(
         chaptarr_base_url: str = Field(
@@ -1812,7 +1817,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Mark history item as failed."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1820,7 +1825,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_test(
         data: Dict = Field(default=..., description="data"),
@@ -1836,7 +1841,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific history item."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1844,7 +1849,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_testall(
         chaptarr_base_url: str = Field(
@@ -1858,7 +1863,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history for a book."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1866,7 +1871,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_action_name(
         name: str = Field(default=..., description="name"),
@@ -1882,7 +1887,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system health."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1890,7 +1895,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient(
         chaptarr_base_url: str = Field(
@@ -1904,7 +1909,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get import lists."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1912,7 +1917,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def put_config_downloadclient_id(
         id: str = Field(default=..., description="id"),
@@ -1928,7 +1933,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new import list."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1936,7 +1941,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1951,7 +1956,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an import list."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1959,7 +1964,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Edition"},
+        tags={"catalog"},
     )
     async def get_edition(
         bookId: List = Field(default=None, description="bookId"),
@@ -1974,7 +1979,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an import list."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -1982,7 +1987,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -2001,7 +2006,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific import list."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2013,7 +2018,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -2028,7 +2033,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update import lists."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2036,7 +2041,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_mediafiles(
         path: str = Field(default=None, description="path"),
@@ -2051,7 +2056,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete import lists."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2059,7 +2064,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Health"},
+        tags={"system"},
     )
     async def get_health(
         chaptarr_base_url: str = Field(
@@ -2073,7 +2078,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get import list schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2081,7 +2086,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history(
         page: int = Field(default=None, description="page"),
@@ -2104,7 +2109,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test an import list."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2122,7 +2127,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_since(
         date: str = Field(default=None, description="date"),
@@ -2140,7 +2145,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all import lists."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2153,7 +2158,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_author(
         authorId: int = Field(default=None, description="authorId"),
@@ -2172,7 +2177,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform action on import list."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2186,7 +2191,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def post_history_failed_id(
         id: int = Field(default=..., description="id"),
@@ -2201,7 +2206,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get import list configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2209,7 +2214,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host(
         chaptarr_base_url: str = Field(
@@ -2223,7 +2228,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update import list configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2231,7 +2236,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -2247,7 +2252,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific import list configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2255,7 +2260,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -2270,7 +2275,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get import list exclusions."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2278,7 +2283,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist(
         chaptarr_base_url: str = Field(
@@ -2292,7 +2297,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add import list exclusion."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2300,7 +2305,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist(
         data: Dict = Field(default=..., description="data"),
@@ -2316,7 +2321,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update import list exclusion."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2324,7 +2329,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def put_importlist_id(
         id: str = Field(default=..., description="id"),
@@ -2341,7 +2346,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete import list exclusion."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2349,7 +2354,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def delete_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2364,7 +2369,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific import list exclusion."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2372,7 +2377,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2387,7 +2392,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexers."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2395,7 +2400,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def put_importlist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2410,7 +2415,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2418,7 +2423,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def delete_importlist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2433,7 +2438,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2441,7 +2446,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist_schema(
         chaptarr_base_url: str = Field(
@@ -2455,7 +2460,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2463,7 +2468,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_test(
         data: Dict = Field(default=..., description="data"),
@@ -2479,7 +2484,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2487,7 +2492,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_testall(
         chaptarr_base_url: str = Field(
@@ -2501,7 +2506,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update indexers."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2509,7 +2514,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_action_name(
         name: str = Field(default=..., description="name"),
@@ -2525,7 +2530,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete indexers."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2533,7 +2538,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_importlistexclusion(
         chaptarr_base_url: str = Field(
@@ -2547,7 +2552,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2555,7 +2560,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def post_importlistexclusion(
         data: Dict = Field(default=..., description="data"),
@@ -2570,7 +2575,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test an indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2578,7 +2583,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def put_importlistexclusion_id(
         id: str = Field(default=..., description="id"),
@@ -2594,7 +2599,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all indexers."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2602,7 +2607,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def delete_importlistexclusion_id(
         id: int = Field(default=..., description="id"),
@@ -2617,7 +2622,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform action on indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2625,7 +2630,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_importlistexclusion_id(
         id: int = Field(default=..., description="id"),
@@ -2640,7 +2645,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2648,7 +2653,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer(
         chaptarr_base_url: str = Field(
@@ -2662,7 +2667,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update indexer configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2670,7 +2675,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer(
         data: Dict = Field(default=..., description="data"),
@@ -2686,7 +2691,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexer configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2694,7 +2699,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_id(
         id: str = Field(default=..., description="id"),
@@ -2711,7 +2716,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer flags."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2719,7 +2724,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2734,7 +2739,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get available languages."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2742,7 +2747,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2757,7 +2762,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific language."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2765,7 +2770,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2780,7 +2785,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get localization."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2788,7 +2793,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2803,7 +2808,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system logs."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2811,7 +2816,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_schema(
         chaptarr_base_url: str = Field(
@@ -2825,7 +2830,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log files."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2833,7 +2838,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_test(
         data: Dict = Field(default=..., description="data"),
@@ -2849,7 +2854,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file content."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2857,7 +2862,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_testall(
         chaptarr_base_url: str = Field(
@@ -2871,7 +2876,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer testall."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2879,7 +2884,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_action_name(
         name: str = Field(default=..., description="name"),
@@ -2895,7 +2900,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform action on indexer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2903,7 +2908,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def get_config_indexer(
         chaptarr_base_url: str = Field(
@@ -2917,7 +2922,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2925,7 +2930,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def put_config_indexer_id(
         id: str = Field(default=..., description="id"),
@@ -2941,7 +2946,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update indexer configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2949,7 +2954,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def get_config_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2964,7 +2969,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexer configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2972,7 +2977,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"IndexerFlag"},
+        tags={"indexer"},
     )
     async def get_indexerflag(
         chaptarr_base_url: str = Field(
@@ -2986,7 +2991,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer flags."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -2994,7 +2999,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Language"},
+        tags={"profiles"},
     )
     async def get_language(
         chaptarr_base_url: str = Field(
@@ -3008,7 +3013,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get available languages."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3016,7 +3021,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Language"},
+        tags={"profiles"},
     )
     async def get_language_id(
         id: int = Field(default=..., description="id"),
@@ -3031,7 +3036,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific language."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3039,7 +3044,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Localization"},
+        tags={"system"},
     )
     async def get_localization(
         chaptarr_base_url: str = Field(
@@ -3053,7 +3058,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get localization."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3061,7 +3066,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Log"},
+        tags={"system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -3080,7 +3085,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system logs."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3094,7 +3099,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file(
         chaptarr_base_url: str = Field(
@@ -3108,7 +3113,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log files."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3116,7 +3121,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3131,7 +3136,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file content."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3139,7 +3144,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ManualImport"},
+        tags={"downloads"},
     )
     async def post_manualimport(
         data: Dict = Field(default=..., description="data"),
@@ -3154,7 +3159,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new manualimport."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3162,7 +3167,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ManualImport"},
+        tags={"downloads"},
     )
     async def get_manualimport(
         folder: str = Field(default=None, description="folder"),
@@ -3185,7 +3190,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get manualimport."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3199,7 +3204,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MediaCover"},
+        tags={"catalog"},
     )
     async def get_mediacover_author_author_id_filename(
         authorId: int = Field(default=..., description="authorId"),
@@ -3215,7 +3220,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific mediacover author author filename."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3225,7 +3230,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MediaCover"},
+        tags={"catalog"},
     )
     async def get_mediacover_book_book_id_filename(
         bookId: int = Field(default=..., description="bookId"),
@@ -3241,7 +3246,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific mediacover book book filename."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3251,7 +3256,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def get_config_mediamanagement(
         chaptarr_base_url: str = Field(
@@ -3265,7 +3270,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config mediamanagement."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3273,7 +3278,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def put_config_mediamanagement_id(
         id: str = Field(default=..., description="id"),
@@ -3289,7 +3294,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config mediamanagement id."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3297,7 +3302,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def get_config_mediamanagement_id(
         id: int = Field(default=..., description="id"),
@@ -3312,7 +3317,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific media management configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3320,7 +3325,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata(
         chaptarr_base_url: str = Field(
@@ -3334,7 +3339,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata consumers."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3342,7 +3347,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3358,7 +3363,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new metadata consumer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3366,7 +3371,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def put_metadata_id(
         id: str = Field(default=..., description="id"),
@@ -3383,7 +3388,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a metadata consumer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3391,7 +3396,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3406,7 +3411,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a metadata consumer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3414,7 +3419,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3429,7 +3434,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific metadata consumer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3437,7 +3442,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata_schema(
         chaptarr_base_url: str = Field(
@@ -3451,7 +3456,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3459,7 +3464,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3475,7 +3480,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test metadata consumer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3483,7 +3488,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_testall(
         chaptarr_base_url: str = Field(
@@ -3497,7 +3502,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all metadata consumers."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3505,7 +3510,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3521,7 +3526,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform action on metadata consumer."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3529,7 +3534,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def post_metadataprofile(
         data: Dict = Field(default=..., description="data"),
@@ -3544,7 +3549,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new metadata profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3552,7 +3557,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def get_metadataprofile(
         chaptarr_base_url: str = Field(
@@ -3566,7 +3571,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata profiles."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3574,7 +3579,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def delete_metadataprofile_id(
         id: int = Field(default=..., description="id"),
@@ -3589,7 +3594,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a metadata profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3597,7 +3602,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def put_metadataprofile_id(
         id: str = Field(default=..., description="id"),
@@ -3613,7 +3618,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a metadata profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3621,7 +3626,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def get_metadataprofile_id(
         id: int = Field(default=..., description="id"),
@@ -3636,7 +3641,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific metadata profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3644,7 +3649,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProfileSchema"},
+        tags={"profiles"},
     )
     async def get_metadataprofile_schema(
         chaptarr_base_url: str = Field(
@@ -3658,7 +3663,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata profile schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3666,7 +3671,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProviderConfig"},
+        tags={"profiles"},
     )
     async def get_config_metadataprovider(
         chaptarr_base_url: str = Field(
@@ -3680,7 +3685,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata provider configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3688,7 +3693,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProviderConfig"},
+        tags={"profiles"},
     )
     async def put_config_metadataprovider_id(
         id: str = Field(default=..., description="id"),
@@ -3704,7 +3709,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update metadata provider configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3712,7 +3717,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"MetadataProviderConfig"},
+        tags={"profiles"},
     )
     async def get_config_metadataprovider_id(
         id: int = Field(default=..., description="id"),
@@ -3727,7 +3732,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific metadata provider configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3735,7 +3740,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Missing"},
+        tags={"catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3755,7 +3760,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get missing books."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3770,7 +3775,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Missing"},
+        tags={"catalog"},
     )
     async def get_wanted_missing_id(
         id: int = Field(default=..., description="id"),
@@ -3785,7 +3790,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get missing books (paged)."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3793,7 +3798,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming(
         chaptarr_base_url: str = Field(
@@ -3807,7 +3812,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get naming configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3815,7 +3820,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def put_config_naming_id(
         id: str = Field(default=..., description="id"),
@@ -3831,7 +3836,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update naming configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3839,7 +3844,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming_id(
         id: int = Field(default=..., description="id"),
@@ -3854,7 +3859,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific naming configuration."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3862,7 +3867,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming_examples(
         renameBooks: bool = Field(default=None, description="renameBooks"),
@@ -3893,7 +3898,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get naming configuration examples."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3915,7 +3920,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification(
         chaptarr_base_url: str = Field(
@@ -3929,7 +3934,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get notifications."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3937,7 +3942,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification(
         data: Dict = Field(default=..., description="data"),
@@ -3953,7 +3958,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3961,7 +3966,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def put_notification_id(
         id: str = Field(default=..., description="id"),
@@ -3978,7 +3983,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a notification."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -3986,7 +3991,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def delete_notification_id(
         id: int = Field(default=..., description="id"),
@@ -4001,7 +4006,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a notification."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4009,7 +4014,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_id(
         id: int = Field(default=..., description="id"),
@@ -4024,7 +4029,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific notification."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4032,7 +4037,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_schema(
         chaptarr_base_url: str = Field(
@@ -4046,7 +4051,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get notification schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4054,7 +4059,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_test(
         data: Dict = Field(default=..., description="data"),
@@ -4070,7 +4075,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test notification."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4078,7 +4083,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_testall(
         chaptarr_base_url: str = Field(
@@ -4092,7 +4097,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all notifications."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4100,7 +4105,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_action_name(
         name: str = Field(default=..., description="name"),
@@ -4116,7 +4121,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform action on notification."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4124,7 +4129,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Parse"},
+        tags={"operations"},
     )
     async def get_parse(
         title: str = Field(default=None, description="title"),
@@ -4139,7 +4144,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Parse book information."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4147,7 +4152,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Ping"},
+        tags={"system"},
     )
     async def get_ping(
         chaptarr_base_url: str = Field(
@@ -4161,7 +4166,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get quality definitions."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4169,7 +4174,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def put_qualitydefinition_id(
         id: str = Field(default=..., description="id"),
@@ -4185,7 +4190,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update quality definition."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4193,7 +4198,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition_id(
         id: int = Field(default=..., description="id"),
@@ -4208,7 +4213,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific quality definition."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4216,7 +4221,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition(
         chaptarr_base_url: str = Field(
@@ -4230,7 +4235,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get quality profiles."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4238,7 +4243,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def put_qualitydefinition_update(
         data: Dict = Field(default=..., description="data"),
@@ -4253,7 +4258,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new quality profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4261,7 +4266,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def post_qualityprofile(
         data: Dict = Field(default=..., description="data"),
@@ -4276,7 +4281,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a quality profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4284,7 +4289,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def get_qualityprofile(
         chaptarr_base_url: str = Field(
@@ -4298,7 +4303,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a quality profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4306,7 +4311,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def delete_qualityprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4321,7 +4326,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific quality profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4329,7 +4334,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def put_qualityprofile_id(
         id: str = Field(default=..., description="id"),
@@ -4345,7 +4350,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get quality profile schema."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4353,7 +4358,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def get_qualityprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4368,7 +4373,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4376,7 +4381,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QualityProfileSchema"},
+        tags={"profiles"},
     )
     async def get_qualityprofile_schema(
         chaptarr_base_url: str = Field(
@@ -4390,7 +4395,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue details."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4398,7 +4403,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def delete_queue_id(
         id: int = Field(default=..., description="id"),
@@ -4417,7 +4422,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue status."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4431,7 +4436,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def delete_queue_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4450,7 +4455,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete queue items."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4464,7 +4469,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def get_queue(
         page: int = Field(default=None, description="page"),
@@ -4487,7 +4492,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4503,7 +4508,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QueueAction"},
+        tags={"queue"},
     )
     async def post_queue_grab_id(
         id: int = Field(default=..., description="id"),
@@ -4518,7 +4523,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Grab queue item."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4526,7 +4531,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QueueAction"},
+        tags={"queue"},
     )
     async def post_queue_grab_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4541,7 +4546,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk grab queue items."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4549,7 +4554,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QueueDetails"},
+        tags={"queue"},
     )
     async def get_queue_details(
         authorId: int = Field(default=None, description="authorId"),
@@ -4567,7 +4572,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue details."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4580,7 +4585,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"QueueStatus"},
+        tags={"queue"},
     )
     async def get_queue_status(
         chaptarr_base_url: str = Field(
@@ -4594,7 +4599,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue status."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4602,7 +4607,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Release"},
+        tags={"downloads"},
     )
     async def post_release(
         data: Dict = Field(default=..., description="data"),
@@ -4617,7 +4622,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a release."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4625,7 +4630,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Release"},
+        tags={"downloads"},
     )
     async def get_release(
         bookId: int = Field(default=None, description="bookId"),
@@ -4641,7 +4646,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get releases."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4649,7 +4654,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def get_releaseprofile(
         chaptarr_base_url: str = Field(
@@ -4663,7 +4668,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get release profiles."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4671,7 +4676,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def post_releaseprofile(
         data: Dict = Field(default=..., description="data"),
@@ -4686,7 +4691,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a release profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4694,7 +4699,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def put_releaseprofile_id(
         id: str = Field(default=..., description="id"),
@@ -4710,7 +4715,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a release profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4718,7 +4723,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def delete_releaseprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4733,7 +4738,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a release profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4741,7 +4746,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def get_releaseprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4756,7 +4761,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get a specific release profile."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4764,7 +4769,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"ReleasePush"},
+        tags={"downloads"},
     )
     async def post_release_push(
         data: Dict = Field(default=..., description="data"),
@@ -4779,7 +4784,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Push release."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4787,7 +4792,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def post_remotepathmapping(
         data: Dict = Field(default=..., description="data"),
@@ -4802,7 +4807,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add remote path mapping."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4810,7 +4815,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def get_remotepathmapping(
         chaptarr_base_url: str = Field(
@@ -4824,7 +4829,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get remote path mappings."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4832,7 +4837,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def delete_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -4847,7 +4852,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete remote path mapping."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4855,7 +4860,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def put_remotepathmapping_id(
         id: str = Field(default=..., description="id"),
@@ -4871,7 +4876,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update remote path mapping."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4879,7 +4884,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def get_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -4894,7 +4899,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific remote path mapping."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4902,7 +4907,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RenameBook"},
+        tags={"catalog"},
     )
     async def get_rename(
         authorId: int = Field(default=None, description="authorId"),
@@ -4918,7 +4923,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get rename suggestions."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4926,7 +4931,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RetagBook"},
+        tags={"catalog"},
     )
     async def get_retag(
         authorId: int = Field(default=None, description="authorId"),
@@ -4942,7 +4947,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retag books."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4950,7 +4955,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def post_rootfolder(
         data: Dict = Field(default=..., description="data"),
@@ -4965,7 +4970,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new root folder."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4973,7 +4978,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def get_rootfolder(
         chaptarr_base_url: str = Field(
@@ -4987,7 +4992,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get root folders."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -4995,7 +5000,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def put_rootfolder_id(
         id: str = Field(default=..., description="id"),
@@ -5011,7 +5016,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a root folder."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5019,7 +5024,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def delete_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -5034,7 +5039,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a root folder."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5042,7 +5047,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def get_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -5057,7 +5062,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific root folder."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5065,7 +5070,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def get_search(
         term: str = Field(default=None, description="term"),
@@ -5080,7 +5085,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Search for books."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5088,7 +5093,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Series"},
+        tags={"catalog"},
     )
     async def get_series(
         authorId: int = Field(default=None, description="authorId"),
@@ -5103,7 +5108,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get series info."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5111,7 +5116,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -5126,7 +5131,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get content path."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5134,7 +5139,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -5149,7 +5154,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get resource by path."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5157,7 +5162,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -5172,7 +5177,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system paths."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5180,7 +5185,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_status(
         chaptarr_base_url: str = Field(
@@ -5194,7 +5199,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current download queue."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5202,7 +5207,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes(
         chaptarr_base_url: str = Field(
@@ -5216,7 +5221,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed entries in the download queue."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5224,7 +5229,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes_duplicate(
         chaptarr_base_url: str = Field(
@@ -5238,7 +5243,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve status information for the download queue."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5246,7 +5251,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_shutdown(
         chaptarr_base_url: str = Field(
@@ -5260,7 +5265,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current system status of Chaptarr."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5268,7 +5273,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_restart(
         chaptarr_base_url: str = Field(
@@ -5282,7 +5287,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve available system routes."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5290,7 +5295,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag(
         chaptarr_base_url: str = Field(
@@ -5304,7 +5309,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve duplicate system routes."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5312,7 +5317,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -5327,7 +5332,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all system backups."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5335,7 +5340,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -5351,7 +5356,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a system backup by its ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5359,7 +5364,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5374,7 +5379,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined tags."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5382,7 +5387,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5397,7 +5402,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new tag to Chaptarr."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5405,7 +5410,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail(
         chaptarr_base_url: str = Field(
@@ -5419,7 +5424,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an existing tag."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5427,7 +5432,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -5442,7 +5447,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific tag by its ID."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5450,7 +5455,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task(
         chaptarr_base_url: str = Field(
@@ -5464,7 +5469,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed usage information for all tags."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5472,7 +5477,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -5487,7 +5492,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed usage information for a specific tag."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5495,7 +5500,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -5511,7 +5516,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve information about system tasks."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5519,7 +5524,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -5534,7 +5539,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific system task."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5542,7 +5547,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui(
         chaptarr_base_url: str = Field(
@@ -5556,7 +5561,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve logs for system tasks."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5564,7 +5569,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"Update"},
+        tags={"system"},
     )
     async def get_update(
         chaptarr_base_url: str = Field(
@@ -5578,7 +5583,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve logs for a specific system task."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5586,7 +5591,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update(
         chaptarr_base_url: str = Field(
@@ -5600,7 +5605,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve available log file updates."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )
@@ -5608,7 +5613,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),
@@ -5623,7 +5628,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve content of a specific log file update."""
         client = Api(
             base_url=chaptarr_base_url, token=chaptarr_api_key, verify=chaptarr_verify
         )

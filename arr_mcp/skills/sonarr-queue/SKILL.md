@@ -1,12 +1,35 @@
 ---
 name: sonarr-queue
-description: "Generated skill for Queue operations. Contains 3 tools."
+description: "Generated skill for Queue operations. Contains 10 tools."
 ---
 
 ### Overview
 This skill handles operations related to Queue.
 
 ### Available Tools
+- `get_blocklist`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `seriesIds` (List)
+    - `protocols` (List)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_blocklist_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_blocklist_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
 - `delete_queue_id`: No description
   - **Parameters**:
     - `id` (int)
@@ -41,6 +64,32 @@ This skill handles operations related to Queue.
     - `languages` (List)
     - `quality` (List)
     - `status` (List)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_queue_grab_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_queue_grab_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_queue_details`: No description
+  - **Parameters**:
+    - `seriesId` (int)
+    - `episodeIds` (List)
+    - `includeSeries` (bool)
+    - `includeEpisode` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_queue_status`: No description
+  - **Parameters**:
     - `sonarr_base_url` (str)
     - `sonarr_api_key` (Optional[str])
     - `sonarr_verify` (bool)

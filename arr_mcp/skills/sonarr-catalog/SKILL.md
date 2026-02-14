@@ -1,0 +1,269 @@
+---
+name: sonarr-catalog
+description: "Generated skill for Catalog operations. Contains 37 tools."
+---
+
+### Overview
+This skill handles operations related to Catalog.
+
+### Available Tools
+- `lookup_series`: Search for a series using the lookup endpoint.
+  - **Parameters**:
+    - `term` (str)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `add_series`: Lookup a series by term, pick the first result, and add it to Sonarr.
+  - **Parameters**:
+    - `term` (str)
+    - `root_folder_path` (str)
+    - `quality_profile_id` (int)
+    - `monitored` (bool)
+    - `search_for_missing_episodes` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_episode`: No description
+  - **Parameters**:
+    - `seriesId` (int)
+    - `seasonNumber` (int)
+    - `episodeIds` (List)
+    - `episodeFileId` (int)
+    - `includeSeries` (bool)
+    - `includeEpisodeFile` (bool)
+    - `includeImages` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_episode_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_episode_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_episode_monitor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `includeImages` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_episodefile`: No description
+  - **Parameters**:
+    - `seriesId` (int)
+    - `episodeFileIds` (List)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_episodefile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_episodefile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_episodefile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_episodefile_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_episodefile_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_episodefile_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_mediacover_series_id_filename`: No description
+  - **Parameters**:
+    - `seriesId` (int)
+    - `filename` (str)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_metadata`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_metadata`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_metadata_schema`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_metadata_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_metadata_testall`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_metadata_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_wanted_missing`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `includeSeries` (bool)
+    - `includeImages` (bool)
+    - `monitored` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_wanted_missing_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_rename`: No description
+  - **Parameters**:
+    - `seriesId` (int)
+    - `seasonNumber` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_seasonpass`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_series`: No description
+  - **Parameters**:
+    - `tvdbId` (int)
+    - `includeSeasonImages` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_series`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_series_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `includeSeasonImages` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_series_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `moveFiles` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_series_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `deleteFiles` (bool)
+    - `addImportListExclusion` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_series_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_series_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_series_id_folder`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_series_import`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_series_lookup`: No description
+  - **Parameters**:
+    - `term` (str)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

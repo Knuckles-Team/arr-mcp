@@ -1,5 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Bazarr API Client.
+
+This module provides a class to interact with the Bazarr API for managing subtitles.
+"""
 
 import requests
 from typing import Dict, Optional, Any
@@ -8,12 +11,27 @@ import urllib3
 
 
 class Api:
+    """
+    API client for Bazarr.
+
+    Handles authentication, request session management, and provides methods
+    for various Bazarr endpoints including series, movies, subtitles, and system status.
+    """
+
     def __init__(
         self,
         base_url: str,
         api_key: Optional[str] = None,
         verify: bool = False,
     ):
+        """
+        Initialize the Bazarr API client.
+
+        Args:
+            base_url (str): The base URL of the Bazarr instance (e.g., http://localhost:6767).
+            api_key (Optional[str]): The API key for authentication.
+            verify (bool): Whether to verify SSL certificates. Defaults to False.
+        """
         self.base_url = base_url
         self.api_key = api_key
         self._session = requests.Session()
@@ -32,6 +50,21 @@ class Api:
         params: Dict = None,
         data: Dict = None,
     ) -> Any:
+        """
+        Generic request method for the Bazarr API.
+
+        Args:
+            method (str): HTTP method (GET, POST, DELETE, etc.).
+            endpoint (str): API endpoint path.
+            params (Dict, optional): Query parameters for the request.
+            data (Dict, optional): JSON body data for the request.
+
+        Returns:
+            Any: The JSON response from the API or a success status dictionary.
+
+        Raises:
+            Exception: If the API returns a status code >= 400.
+        """
         url = urljoin(self.base_url, endpoint)
         response = self._session.request(
             method=method, url=url, params=params, json=data

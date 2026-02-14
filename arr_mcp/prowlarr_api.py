@@ -1,5 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Prowlarr API Client.
+
+This module provides a class to interact with the Prowlarr API for managing indexers and applications.
+"""
 
 import requests
 from typing import Dict, List, Optional, Any
@@ -8,12 +11,27 @@ import urllib3
 
 
 class Api:
+    """
+    API client for Prowlarr.
+
+    Handles authentication, request session management, and provides methods
+    for various Prowlarr endpoints including applications, indexers, and system settings.
+    """
+
     def __init__(
         self,
         base_url: str,
         token: Optional[str] = None,
         verify: bool = False,
     ):
+        """
+        Initialize the Prowlarr API client.
+
+        Args:
+            base_url (str): The base URL of the Prowlarr instance.
+            token (Optional[str]): The API key or token for authentication.
+            verify (bool): Whether to verify SSL certificates. Defaults to False.
+        """
         self.base_url = base_url
         self.token = token
         self._session = requests.Session()
@@ -32,6 +50,21 @@ class Api:
         params: Dict = None,
         data: Dict = None,
     ) -> Any:
+        """
+        Generic request method for the Prowlarr API.
+
+        Args:
+            method (str): HTTP method (GET, POST, DELETE, etc.).
+            endpoint (str): API endpoint path.
+            params (Dict, optional): Query parameters for the request.
+            data (Dict, optional): JSON body data for the request.
+
+        Returns:
+            Any: The JSON response from the API or a success status dictionary.
+
+        Raises:
+            Exception: If the API returns a status code >= 400.
+        """
         url = urljoin(self.base_url, endpoint)
         response = self._session.request(
             method=method, url=url, params=params, json=data
@@ -50,19 +83,19 @@ class Api:
             return {"status": "success", "text": response.text}
 
     def get_api(self) -> Any:
-        """No description"""
+        """Get the base API information."""
         params = {}
         return self.request("GET", "/api", params=params, data=None)
 
     def get_applications_id(self, id: int) -> Any:
-        """No description"""
+        """Get details for a specific application by ID."""
         params = {}
         return self.request(
             "GET", f"/api/v1/applications/{id}", params=params, data=None
         )
 
     def put_applications_id(self, id: str, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update an existing application configuration."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
@@ -71,47 +104,47 @@ class Api:
         )
 
     def delete_applications_id(self, id: int) -> Any:
-        """No description"""
+        """Delete an application configuration."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/applications/{id}", params=params, data=None
         )
 
     def get_applications(self) -> Any:
-        """No description"""
+        """Get all applications managed by Prowlarr."""
         params = {}
         return self.request("GET", "/api/v1/applications", params=params, data=None)
 
     def post_applications(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new applications."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v1/applications", params=params, data=data)
 
     def put_applications_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update applications bulk."""
         params = {}
         return self.request(
             "PUT", "/api/v1/applications/bulk", params=params, data=data
         )
 
     def delete_applications_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete applications bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v1/applications/bulk", params=params, data=data
         )
 
     def get_applications_schema(self) -> Any:
-        """No description"""
+        """Get applications schema."""
         params = {}
         return self.request(
             "GET", "/api/v1/applications/schema", params=params, data=None
         )
 
     def post_applications_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test applications."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
@@ -120,177 +153,177 @@ class Api:
         )
 
     def post_applications_testall(self) -> Any:
-        """No description"""
+        """Add a new applications testall."""
         params = {}
         return self.request(
             "POST", "/api/v1/applications/testall", params=params, data=None
         )
 
     def post_applications_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new applications action name."""
         params = {}
         return self.request(
             "POST", f"/api/v1/applications/action/{name}", params=params, data=data
         )
 
     def post_appprofile(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new appprofile."""
         params = {}
         return self.request("POST", "/api/v1/appprofile", params=params, data=data)
 
     def get_appprofile(self) -> Any:
-        """No description"""
+        """Get appprofile."""
         params = {}
         return self.request("GET", "/api/v1/appprofile", params=params, data=None)
 
     def delete_appprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Delete appprofile id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/appprofile/{id}", params=params, data=None
         )
 
     def put_appprofile_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update appprofile id."""
         params = {}
         return self.request("PUT", f"/api/v1/appprofile/{id}", params=params, data=data)
 
     def get_appprofile_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific appprofile."""
         params = {}
         return self.request("GET", f"/api/v1/appprofile/{id}", params=params, data=None)
 
     def get_appprofile_schema(self) -> Any:
-        """No description"""
+        """Get appprofile schema."""
         params = {}
         return self.request(
             "GET", "/api/v1/appprofile/schema", params=params, data=None
         )
 
     def post_login(self, returnUrl: str = None) -> Any:
-        """No description"""
+        """Add a new login."""
         params = {}
         if returnUrl is not None:
             params["returnUrl"] = returnUrl
         return self.request("POST", "/login", params=params, data=None)
 
     def get_login(self) -> Any:
-        """No description"""
+        """Get login."""
         params = {}
         return self.request("GET", "/login", params=params, data=None)
 
     def get_logout(self) -> Any:
-        """No description"""
+        """Get logout."""
         params = {}
         return self.request("GET", "/logout", params=params, data=None)
 
     def get_system_backup(self) -> Any:
-        """No description"""
+        """Get system backup."""
         params = {}
         return self.request("GET", "/api/v1/system/backup", params=params, data=None)
 
     def delete_system_backup_id(self, id: int) -> Any:
-        """No description"""
+        """Delete system backup id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/system/backup/{id}", params=params, data=None
         )
 
     def post_system_backup_restore_id(self, id: int) -> Any:
-        """No description"""
+        """Add a new system backup restore id."""
         params = {}
         return self.request(
             "POST", f"/api/v1/system/backup/restore/{id}", params=params, data=None
         )
 
     def post_system_backup_restore_upload(self) -> Any:
-        """No description"""
+        """Add a new system backup restore upload."""
         params = {}
         return self.request(
             "POST", "/api/v1/system/backup/restore/upload", params=params, data=None
         )
 
     def get_command_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific command."""
         params = {}
         return self.request("GET", f"/api/v1/command/{id}", params=params, data=None)
 
     def delete_command_id(self, id: int) -> Any:
-        """No description"""
+        """Delete command id."""
         params = {}
         return self.request("DELETE", f"/api/v1/command/{id}", params=params, data=None)
 
     def post_command(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new command."""
         params = {}
         return self.request("POST", "/api/v1/command", params=params, data=data)
 
     def get_command(self) -> Any:
-        """No description"""
+        """Get command."""
         params = {}
         return self.request("GET", "/api/v1/command", params=params, data=None)
 
     def get_customfilter_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific customfilter."""
         params = {}
         return self.request(
             "GET", f"/api/v1/customfilter/{id}", params=params, data=None
         )
 
     def put_customfilter_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update customfilter id."""
         params = {}
         return self.request(
             "PUT", f"/api/v1/customfilter/{id}", params=params, data=data
         )
 
     def delete_customfilter_id(self, id: int) -> Any:
-        """No description"""
+        """Delete customfilter id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/customfilter/{id}", params=params, data=None
         )
 
     def get_customfilter(self) -> Any:
-        """No description"""
+        """Get customfilter."""
         params = {}
         return self.request("GET", "/api/v1/customfilter", params=params, data=None)
 
     def post_customfilter(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new customfilter."""
         params = {}
         return self.request("POST", "/api/v1/customfilter", params=params, data=data)
 
     def put_config_development_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config development id."""
         params = {}
         return self.request(
             "PUT", f"/api/v1/config/development/{id}", params=params, data=data
         )
 
     def get_config_development_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config development."""
         params = {}
         return self.request(
             "GET", f"/api/v1/config/development/{id}", params=params, data=None
         )
 
     def get_config_development(self) -> Any:
-        """No description"""
+        """Get config development."""
         params = {}
         return self.request(
             "GET", "/api/v1/config/development", params=params, data=None
         )
 
     def get_downloadclient_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific downloadclient."""
         params = {}
         return self.request(
             "GET", f"/api/v1/downloadclient/{id}", params=params, data=None
         )
 
     def put_downloadclient_id(self, id: str, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update downloadclient id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
@@ -299,47 +332,47 @@ class Api:
         )
 
     def delete_downloadclient_id(self, id: int) -> Any:
-        """No description"""
+        """Delete downloadclient id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/downloadclient/{id}", params=params, data=None
         )
 
     def get_downloadclient(self) -> Any:
-        """No description"""
+        """Get downloadclient."""
         params = {}
         return self.request("GET", "/api/v1/downloadclient", params=params, data=None)
 
     def post_downloadclient(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new downloadclient."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v1/downloadclient", params=params, data=data)
 
     def put_downloadclient_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update downloadclient bulk."""
         params = {}
         return self.request(
             "PUT", "/api/v1/downloadclient/bulk", params=params, data=data
         )
 
     def delete_downloadclient_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete downloadclient bulk."""
         params = {}
         return self.request(
             "DELETE", "/api/v1/downloadclient/bulk", params=params, data=data
         )
 
     def get_downloadclient_schema(self) -> Any:
-        """No description"""
+        """Get downloadclient schema."""
         params = {}
         return self.request(
             "GET", "/api/v1/downloadclient/schema", params=params, data=None
         )
 
     def post_downloadclient_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test downloadclient."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
@@ -348,35 +381,35 @@ class Api:
         )
 
     def post_downloadclient_testall(self) -> Any:
-        """No description"""
+        """Add a new downloadclient testall."""
         params = {}
         return self.request(
             "POST", "/api/v1/downloadclient/testall", params=params, data=None
         )
 
     def post_downloadclient_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new downloadclient action name."""
         params = {}
         return self.request(
             "POST", f"/api/v1/downloadclient/action/{name}", params=params, data=data
         )
 
     def get_config_downloadclient_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config downloadclient."""
         params = {}
         return self.request(
             "GET", f"/api/v1/config/downloadclient/{id}", params=params, data=None
         )
 
     def put_config_downloadclient_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config downloadclient id."""
         params = {}
         return self.request(
             "PUT", f"/api/v1/config/downloadclient/{id}", params=params, data=data
         )
 
     def get_config_downloadclient(self) -> Any:
-        """No description"""
+        """Get config downloadclient."""
         params = {}
         return self.request(
             "GET", "/api/v1/config/downloadclient", params=params, data=None
@@ -388,7 +421,7 @@ class Api:
         includeFiles: bool = None,
         allowFoldersWithoutTrailingSlashes: bool = None,
     ) -> Any:
-        """No description"""
+        """Get filesystem."""
         params = {}
         if path is not None:
             params["path"] = path
@@ -401,14 +434,14 @@ class Api:
         return self.request("GET", "/api/v1/filesystem", params=params, data=None)
 
     def get_filesystem_type(self, path: str = None) -> Any:
-        """No description"""
+        """Get filesystem type."""
         params = {}
         if path is not None:
             params["path"] = path
         return self.request("GET", "/api/v1/filesystem/type", params=params, data=None)
 
     def get_health(self) -> Any:
-        """No description"""
+        """Get health."""
         params = {}
         return self.request("GET", "/api/v1/health", params=params, data=None)
 
@@ -423,7 +456,7 @@ class Api:
         downloadId: str = None,
         indexerIds: List = None,
     ) -> Any:
-        """No description"""
+        """Get history."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -444,7 +477,7 @@ class Api:
         return self.request("GET", "/api/v1/history", params=params, data=None)
 
     def get_history_since(self, date: str = None, eventType: str = None) -> Any:
-        """No description"""
+        """Get history since."""
         params = {}
         if date is not None:
             params["date"] = date
@@ -455,7 +488,7 @@ class Api:
     def get_history_indexer(
         self, indexerId: int = None, eventType: str = None, limit: int = None
     ) -> Any:
-        """No description"""
+        """Get history indexer."""
         params = {}
         if indexerId is not None:
             params["indexerId"] = indexerId
@@ -466,103 +499,103 @@ class Api:
         return self.request("GET", "/api/v1/history/indexer", params=params, data=None)
 
     def get_config_host_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config host."""
         params = {}
         return self.request(
             "GET", f"/api/v1/config/host/{id}", params=params, data=None
         )
 
     def put_config_host_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config host id."""
         params = {}
         return self.request(
             "PUT", f"/api/v1/config/host/{id}", params=params, data=data
         )
 
     def get_config_host(self) -> Any:
-        """No description"""
+        """Get config host."""
         params = {}
         return self.request("GET", "/api/v1/config/host", params=params, data=None)
 
     def get_indexer_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific indexer."""
         params = {}
         return self.request("GET", f"/api/v1/indexer/{id}", params=params, data=None)
 
     def put_indexer_id(self, id: str, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update indexer id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("PUT", f"/api/v1/indexer/{id}", params=params, data=data)
 
     def delete_indexer_id(self, id: int) -> Any:
-        """No description"""
+        """Delete indexer id."""
         params = {}
         return self.request("DELETE", f"/api/v1/indexer/{id}", params=params, data=None)
 
     def get_indexer(self) -> Any:
-        """No description"""
+        """Get indexer."""
         params = {}
         return self.request("GET", "/api/v1/indexer", params=params, data=None)
 
     def post_indexer(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new indexer."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v1/indexer", params=params, data=data)
 
     def put_indexer_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Update indexer bulk."""
         params = {}
         return self.request("PUT", "/api/v1/indexer/bulk", params=params, data=data)
 
     def delete_indexer_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Delete indexer bulk."""
         params = {}
         return self.request("DELETE", "/api/v1/indexer/bulk", params=params, data=data)
 
     def get_indexer_schema(self) -> Any:
-        """No description"""
+        """Get indexer schema."""
         params = {}
         return self.request("GET", "/api/v1/indexer/schema", params=params, data=None)
 
     def post_indexer_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test indexer."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
         return self.request("POST", "/api/v1/indexer/test", params=params, data=data)
 
     def post_indexer_testall(self) -> Any:
-        """No description"""
+        """Add a new indexer testall."""
         params = {}
         return self.request("POST", "/api/v1/indexer/testall", params=params, data=None)
 
     def post_indexer_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new indexer action name."""
         params = {}
         return self.request(
             "POST", f"/api/v1/indexer/action/{name}", params=params, data=data
         )
 
     def get_indexer_categories(self) -> Any:
-        """No description"""
+        """Get indexer categories."""
         params = {}
         return self.request(
             "GET", "/api/v1/indexer/categories", params=params, data=None
         )
 
     def get_indexerproxy_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific indexerproxy."""
         params = {}
         return self.request(
             "GET", f"/api/v1/indexerproxy/{id}", params=params, data=None
         )
 
     def put_indexerproxy_id(self, id: str, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update indexerproxy id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
@@ -571,33 +604,33 @@ class Api:
         )
 
     def delete_indexerproxy_id(self, id: int) -> Any:
-        """No description"""
+        """Delete indexerproxy id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/indexerproxy/{id}", params=params, data=None
         )
 
     def get_indexerproxy(self) -> Any:
-        """No description"""
+        """Get indexerproxy."""
         params = {}
         return self.request("GET", "/api/v1/indexerproxy", params=params, data=None)
 
     def post_indexerproxy(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new indexerproxy."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v1/indexerproxy", params=params, data=data)
 
     def get_indexerproxy_schema(self) -> Any:
-        """No description"""
+        """Get indexerproxy schema."""
         params = {}
         return self.request(
             "GET", "/api/v1/indexerproxy/schema", params=params, data=None
         )
 
     def post_indexerproxy_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test indexerproxy."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
@@ -606,14 +639,14 @@ class Api:
         )
 
     def post_indexerproxy_testall(self) -> Any:
-        """No description"""
+        """Add a new indexerproxy testall."""
         params = {}
         return self.request(
             "POST", "/api/v1/indexerproxy/testall", params=params, data=None
         )
 
     def post_indexerproxy_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new indexerproxy action name."""
         params = {}
         return self.request(
             "POST", f"/api/v1/indexerproxy/action/{name}", params=params, data=data
@@ -627,7 +660,7 @@ class Api:
         protocols: str = None,
         tags: str = None,
     ) -> Any:
-        """No description"""
+        """Get indexerstats."""
         params = {}
         if startDate is not None:
             params["startDate"] = startDate
@@ -642,17 +675,17 @@ class Api:
         return self.request("GET", "/api/v1/indexerstats", params=params, data=None)
 
     def get_indexerstatus(self) -> Any:
-        """No description"""
+        """Get indexerstatus."""
         params = {}
         return self.request("GET", "/api/v1/indexerstatus", params=params, data=None)
 
     def get_localization(self) -> Any:
-        """No description"""
+        """Get localization."""
         params = {}
         return self.request("GET", "/api/v1/localization", params=params, data=None)
 
     def get_localization_options(self) -> Any:
-        """No description"""
+        """Get localization options."""
         params = {}
         return self.request(
             "GET", "/api/v1/localization/options", params=params, data=None
@@ -666,7 +699,7 @@ class Api:
         sortDirection: str = None,
         level: str = None,
     ) -> Any:
-        """No description"""
+        """Get log."""
         params = {}
         if page is not None:
             params["page"] = page
@@ -681,12 +714,12 @@ class Api:
         return self.request("GET", "/api/v1/log", params=params, data=None)
 
     def get_log_file(self) -> Any:
-        """No description"""
+        """Get log file."""
         params = {}
         return self.request("GET", "/api/v1/log/file", params=params, data=None)
 
     def get_log_file_filename(self, filename: str) -> Any:
-        """No description"""
+        """Get log file filename."""
         params = {}
         return self.request(
             "GET", f"/api/v1/log/file/{filename}", params=params, data=None
@@ -728,7 +761,7 @@ class Api:
         host: str = None,
         server: str = None,
     ) -> Any:
-        """No description"""
+        """Get specific indexer newznab."""
         params = {}
         if t is not None:
             params["t"] = t
@@ -834,7 +867,7 @@ class Api:
         host: str = None,
         server: str = None,
     ) -> Any:
-        """No description"""
+        """Get results for a specific indexer endpoint in Newznab format."""
         params = {}
         if t is not None:
             params["t"] = t
@@ -905,7 +938,7 @@ class Api:
     def get_indexer_id_download(
         self, id: int, link: str = None, file: str = None
     ) -> Any:
-        """No description"""
+        """Download a release from a specific indexer."""
         params = {}
         if link is not None:
             params["link"] = link
@@ -916,7 +949,7 @@ class Api:
         )
 
     def get_id_download(self, id: int, link: str = None, file: str = None) -> Any:
-        """No description"""
+        """Get specific id download."""
         params = {}
         if link is not None:
             params["link"] = link
@@ -925,14 +958,14 @@ class Api:
         return self.request("GET", f"/{id}/download", params=params, data=None)
 
     def get_notification_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific notification."""
         params = {}
         return self.request(
             "GET", f"/api/v1/notification/{id}", params=params, data=None
         )
 
     def put_notification_id(self, id: str, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Update notification id."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
@@ -941,33 +974,33 @@ class Api:
         )
 
     def delete_notification_id(self, id: int) -> Any:
-        """No description"""
+        """Delete notification id."""
         params = {}
         return self.request(
             "DELETE", f"/api/v1/notification/{id}", params=params, data=None
         )
 
     def get_notification(self) -> Any:
-        """No description"""
+        """Get all configured notifications."""
         params = {}
         return self.request("GET", "/api/v1/notification", params=params, data=None)
 
     def post_notification(self, data: Dict, forceSave: bool = None) -> Any:
-        """No description"""
+        """Add a new notification."""
         params = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
         return self.request("POST", "/api/v1/notification", params=params, data=data)
 
     def get_notification_schema(self) -> Any:
-        """No description"""
+        """Get notification schema."""
         params = {}
         return self.request(
             "GET", "/api/v1/notification/schema", params=params, data=None
         )
 
     def post_notification_test(self, data: Dict, forceTest: bool = None) -> Any:
-        """No description"""
+        """Test notification."""
         params = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
@@ -976,26 +1009,26 @@ class Api:
         )
 
     def post_notification_testall(self) -> Any:
-        """No description"""
+        """Add a new notification testall."""
         params = {}
         return self.request(
             "POST", "/api/v1/notification/testall", params=params, data=None
         )
 
     def post_notification_action_name(self, name: str, data: Dict) -> Any:
-        """No description"""
+        """Add a new notification action name."""
         params = {}
         return self.request(
             "POST", f"/api/v1/notification/action/{name}", params=params, data=data
         )
 
     def get_ping(self) -> Any:
-        """No description"""
+        """Ping the Prowlarr API to check connectivity."""
         params = {}
         return self.request("GET", "/ping", params=params, data=None)
 
     def post_search(self, data: Dict) -> Any:
-        """No description"""
+        """Perform a bulk search across multiple indexers."""
         params = {}
         return self.request("POST", "/api/v1/search", params=params, data=data)
 
@@ -1008,7 +1041,7 @@ class Api:
         limit: int = None,
         offset: int = None,
     ) -> Any:
-        """No description"""
+        """Get search."""
         params = {}
         if query is not None:
             params["query"] = query
@@ -1025,126 +1058,126 @@ class Api:
         return self.request("GET", "/api/v1/search", params=params, data=None)
 
     def post_search_bulk(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new search bulk."""
         params = {}
         return self.request("POST", "/api/v1/search/bulk", params=params, data=data)
 
     def get_content_path(self, path: str) -> Any:
-        """No description"""
+        """Get content path."""
         params = {}
         return self.request("GET", f"/content/{path}", params=params, data=None)
 
     def get_(self, path: str) -> Any:
-        """No description"""
+        """Get ."""
         params = {}
         return self.request("GET", "/", params=params, data=None)
 
     def get_path(self, path: str) -> Any:
-        """No description"""
+        """Get path."""
         params = {}
         return self.request("GET", f"/{path}", params=params, data=None)
 
     def get_system_status(self) -> Any:
-        """No description"""
+        """Get system status."""
         params = {}
         return self.request("GET", "/api/v1/system/status", params=params, data=None)
 
     def get_system_routes(self) -> Any:
-        """No description"""
+        """Get system routes."""
         params = {}
         return self.request("GET", "/api/v1/system/routes", params=params, data=None)
 
     def get_system_routes_duplicate(self) -> Any:
-        """No description"""
+        """Get system routes duplicate."""
         params = {}
         return self.request(
             "GET", "/api/v1/system/routes/duplicate", params=params, data=None
         )
 
     def post_system_shutdown(self) -> Any:
-        """No description"""
+        """Add a new system shutdown."""
         params = {}
         return self.request("POST", "/api/v1/system/shutdown", params=params, data=None)
 
     def post_system_restart(self) -> Any:
-        """No description"""
+        """Add a new system restart."""
         params = {}
         return self.request("POST", "/api/v1/system/restart", params=params, data=None)
 
     def get_tag_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific tag."""
         params = {}
         return self.request("GET", f"/api/v1/tag/{id}", params=params, data=None)
 
     def put_tag_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update tag id."""
         params = {}
         return self.request("PUT", f"/api/v1/tag/{id}", params=params, data=data)
 
     def delete_tag_id(self, id: int) -> Any:
-        """No description"""
+        """Delete tag id."""
         params = {}
         return self.request("DELETE", f"/api/v1/tag/{id}", params=params, data=None)
 
     def get_tag(self) -> Any:
-        """No description"""
+        """Get tag."""
         params = {}
         return self.request("GET", "/api/v1/tag", params=params, data=None)
 
     def post_tag(self, data: Dict) -> Any:
-        """No description"""
+        """Add a new tag."""
         params = {}
         return self.request("POST", "/api/v1/tag", params=params, data=data)
 
     def get_tag_detail_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific tag detail."""
         params = {}
         return self.request("GET", f"/api/v1/tag/detail/{id}", params=params, data=None)
 
     def get_tag_detail(self) -> Any:
-        """No description"""
+        """Get tag detail."""
         params = {}
         return self.request("GET", "/api/v1/tag/detail", params=params, data=None)
 
     def get_system_task(self) -> Any:
-        """No description"""
+        """Get system task."""
         params = {}
         return self.request("GET", "/api/v1/system/task", params=params, data=None)
 
     def get_system_task_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific system task."""
         params = {}
         return self.request(
             "GET", f"/api/v1/system/task/{id}", params=params, data=None
         )
 
     def put_config_ui_id(self, id: str, data: Dict) -> Any:
-        """No description"""
+        """Update config ui id."""
         params = {}
         return self.request("PUT", f"/api/v1/config/ui/{id}", params=params, data=data)
 
     def get_config_ui_id(self, id: int) -> Any:
-        """No description"""
+        """Get specific config ui."""
         params = {}
         return self.request("GET", f"/api/v1/config/ui/{id}", params=params, data=None)
 
     def get_config_ui(self) -> Any:
-        """No description"""
+        """Get config ui."""
         params = {}
         return self.request("GET", "/api/v1/config/ui", params=params, data=None)
 
     def get_update(self) -> Any:
-        """No description"""
+        """Get update."""
         params = {}
         return self.request("GET", "/api/v1/update", params=params, data=None)
 
     def get_log_file_update(self) -> Any:
-        """No description"""
+        """Get log file update."""
         params = {}
         return self.request("GET", "/api/v1/log/file/update", params=params, data=None)
 
     def get_log_file_update_filename(self, filename: str) -> Any:
-        """No description"""
+        """Get log file update filename."""
         params = {}
         return self.request(
             "GET", f"/api/v1/log/file/update/{filename}", params=params, data=None

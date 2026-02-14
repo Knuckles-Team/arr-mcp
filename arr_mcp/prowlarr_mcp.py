@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Prowlarr MCP Server.
+
+This module implements an MCP server for Prowlarr, providing tools to manage
+indexers and search across multiple indexers. It handles authentication,
+middleware, and API interactions.
+"""
+
 import os
 import argparse
 import sys
@@ -27,7 +33,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -67,7 +73,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def search(
         query: str = Field(default=..., description="Search query"),
@@ -90,7 +96,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"ApiInfo"},
+        tags={"system"},
     )
     async def get_api(
         prowlarr_base_url: str = Field(
@@ -104,7 +110,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the base API information for Prowlarr."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -112,7 +118,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def get_applications_id(
         id: int = Field(default=..., description="id"),
@@ -127,7 +133,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get information for a specific application by ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -135,7 +141,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def put_applications_id(
         id: str = Field(default=..., description="id"),
@@ -152,7 +158,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an application configuration by ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -160,7 +166,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def delete_applications_id(
         id: int = Field(default=..., description="id"),
@@ -175,7 +181,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an application configuration by ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -183,7 +189,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def get_applications(
         prowlarr_base_url: str = Field(
@@ -197,7 +203,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get all applications managed by Prowlarr."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -205,7 +211,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def post_applications(
         data: Dict = Field(default=..., description="data"),
@@ -221,7 +227,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new application to Prowlarr."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -229,7 +235,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def put_applications_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -244,7 +250,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update application configurations."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -252,7 +258,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def delete_applications_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -267,7 +273,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete application configurations."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -275,7 +281,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def get_applications_schema(
         prowlarr_base_url: str = Field(
@@ -289,7 +295,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the configuration schema for applications."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -297,7 +303,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def post_applications_test(
         data: Dict = Field(default=..., description="data"),
@@ -313,7 +319,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing custom filter by its ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -321,7 +327,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def post_applications_testall(
         prowlarr_base_url: str = Field(
@@ -335,7 +341,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific custom filter by its ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -343,7 +349,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Application"},
+        tags={"system"},
     )
     async def post_applications_action_name(
         name: str = Field(default=..., description="name"),
@@ -359,7 +365,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new download client to Prowlarr."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -367,7 +373,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"AppProfile"},
+        tags={"system"},
     )
     async def post_appprofile(
         data: Dict = Field(default=..., description="data"),
@@ -382,7 +388,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing download client configuration."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -390,7 +396,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"AppProfile"},
+        tags={"system"},
     )
     async def get_appprofile(
         prowlarr_base_url: str = Field(
@@ -404,7 +410,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a download client from Prowlarr."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -412,7 +418,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"AppProfile"},
+        tags={"system"},
     )
     async def delete_appprofile_id(
         id: int = Field(default=..., description="id"),
@@ -427,7 +433,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all configured download clients."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -435,7 +441,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"AppProfile"},
+        tags={"system"},
     )
     async def put_appprofile_id(
         id: str = Field(default=..., description="id"),
@@ -451,7 +457,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple download clients."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -459,7 +465,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"AppProfile"},
+        tags={"system"},
     )
     async def get_appprofile_id(
         id: int = Field(default=..., description="id"),
@@ -474,7 +480,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple download clients."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -482,7 +488,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"AppProfile"},
+        tags={"system"},
     )
     async def get_appprofile_schema(
         prowlarr_base_url: str = Field(
@@ -496,7 +502,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for download clients."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -504,7 +510,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -519,7 +525,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test a download client configuration."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -527,7 +533,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_login(
         prowlarr_base_url: str = Field(
@@ -541,7 +547,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all configured download clients."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -549,7 +555,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def get_logout(
         prowlarr_base_url: str = Field(
@@ -563,7 +569,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform an action on a download client."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -571,7 +577,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def get_system_backup(
         prowlarr_base_url: str = Field(
@@ -585,7 +591,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve download client configuration by ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -593,7 +599,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -608,7 +614,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update download client configuration by ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -616,7 +622,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -631,7 +637,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all download client configurations."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -639,7 +645,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_upload(
         prowlarr_base_url: str = Field(
@@ -653,7 +659,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Browse the local filesystem."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -661,7 +667,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -676,7 +682,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get information about a specific filesystem path."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -684,7 +690,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -699,7 +705,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current health status of Prowlarr."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -707,7 +713,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -722,7 +728,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve Prowlarr activity history."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -730,7 +736,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command(
         prowlarr_base_url: str = Field(
@@ -744,7 +750,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve activity history since a specific date."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -752,7 +758,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -767,7 +773,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific custom filter by its ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -775,7 +781,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def put_customfilter_id(
         id: str = Field(default=..., description="id"),
@@ -791,7 +797,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a custom filter by its ID."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -799,7 +805,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def delete_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -814,7 +820,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get application info."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -822,7 +828,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter(
         prowlarr_base_url: str = Field(
@@ -836,7 +842,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get custom filters."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -844,7 +850,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def post_customfilter(
         data: Dict = Field(default=..., description="data"),
@@ -859,7 +865,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an application."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -867,7 +873,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DevelopmentConfig"},
+        tags={"system"},
     )
     async def put_config_development_id(
         id: str = Field(default=..., description="id"),
@@ -883,7 +889,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific application."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -891,7 +897,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DevelopmentConfig"},
+        tags={"system"},
     )
     async def get_config_development_id(
         id: int = Field(default=..., description="id"),
@@ -906,7 +912,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get application schema."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -914,7 +920,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DevelopmentConfig"},
+        tags={"system"},
     )
     async def get_config_development(
         prowlarr_base_url: str = Field(
@@ -928,7 +934,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system backups."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -936,7 +942,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -951,7 +957,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a system backup."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -959,7 +965,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_id(
         id: str = Field(default=..., description="id"),
@@ -976,7 +982,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update download client."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -984,7 +990,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -999,7 +1005,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete download client."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1007,7 +1013,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient(
         prowlarr_base_url: str = Field(
@@ -1021,7 +1027,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get downloadclient."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1029,7 +1035,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient(
         data: Dict = Field(default=..., description="data"),
@@ -1045,7 +1051,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new downloadclient."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1053,7 +1059,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1068,7 +1074,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update downloadclient bulk."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1076,7 +1082,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1091,7 +1097,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete downloadclient bulk."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1099,7 +1105,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_schema(
         prowlarr_base_url: str = Field(
@@ -1113,7 +1119,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update general configuration."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1121,7 +1127,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_test(
         data: Dict = Field(default=..., description="data"),
@@ -1137,7 +1143,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test downloadclient."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1145,7 +1151,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_testall(
         prowlarr_base_url: str = Field(
@@ -1159,7 +1165,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new downloadclient testall."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1167,7 +1173,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_action_name(
         name: str = Field(default=..., description="name"),
@@ -1183,7 +1189,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new download client."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1191,7 +1197,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1206,7 +1212,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config downloadclient."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1214,7 +1220,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def put_config_downloadclient_id(
         id: str = Field(default=..., description="id"),
@@ -1230,7 +1236,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a download client."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1238,7 +1244,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient(
         prowlarr_base_url: str = Field(
@@ -1252,7 +1258,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config downloadclient."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1260,7 +1266,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1279,7 +1285,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get filesystem."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1291,7 +1297,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1306,7 +1312,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get filesystem type."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1314,7 +1320,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Health"},
+        tags={"system"},
     )
     async def get_health(
         prowlarr_base_url: str = Field(
@@ -1328,7 +1334,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system health."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1336,7 +1342,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history(
         page: int = Field(default=None, description="page"),
@@ -1358,7 +1364,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1375,7 +1381,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_since(
         date: str = Field(default=None, description="date"),
@@ -1391,7 +1397,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history since date."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1399,7 +1405,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_indexer(
         indexerId: int = Field(default=None, description="indexerId"),
@@ -1416,7 +1422,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer history."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1426,7 +1432,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -1441,7 +1447,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific host config."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1449,7 +1455,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -1465,7 +1471,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update host config."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1473,7 +1479,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host(
         prowlarr_base_url: str = Field(
@@ -1487,7 +1493,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get host config."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1495,7 +1501,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -1510,7 +1516,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexer."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1518,7 +1524,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_id(
         id: str = Field(default=..., description="id"),
@@ -1535,7 +1541,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an indexer."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1543,7 +1549,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -1558,7 +1564,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an indexer."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1566,7 +1572,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer(
         prowlarr_base_url: str = Field(
@@ -1580,7 +1586,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexers."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1588,7 +1594,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer(
         data: Dict = Field(default=..., description="data"),
@@ -1604,7 +1610,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1612,7 +1618,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1627,7 +1633,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update indexers."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1635,7 +1641,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1650,7 +1656,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete indexers."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1658,7 +1664,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_schema(
         prowlarr_base_url: str = Field(
@@ -1672,7 +1678,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer schema."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1680,7 +1686,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_test(
         data: Dict = Field(default=..., description="data"),
@@ -1696,7 +1702,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test an indexer."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1704,7 +1710,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_testall(
         prowlarr_base_url: str = Field(
@@ -1718,7 +1724,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all indexers."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1726,7 +1732,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_action_name(
         name: str = Field(default=..., description="name"),
@@ -1742,7 +1748,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer action name."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1750,7 +1756,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerDefaultCategories"},
+        tags={"indexer"},
     )
     async def get_indexer_categories(
         prowlarr_base_url: str = Field(
@@ -1764,7 +1770,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer categories."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1772,7 +1778,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def get_indexerproxy_id(
         id: int = Field(default=..., description="id"),
@@ -1787,7 +1793,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexerproxy."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1795,7 +1801,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def put_indexerproxy_id(
         id: str = Field(default=..., description="id"),
@@ -1812,7 +1818,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update indexerproxy id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1820,7 +1826,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def delete_indexerproxy_id(
         id: int = Field(default=..., description="id"),
@@ -1835,7 +1841,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete indexerproxy id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1843,7 +1849,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def get_indexerproxy(
         prowlarr_base_url: str = Field(
@@ -1857,7 +1863,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexerproxy."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1865,7 +1871,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def post_indexerproxy(
         data: Dict = Field(default=..., description="data"),
@@ -1881,7 +1887,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexerproxy."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1889,7 +1895,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def get_indexerproxy_schema(
         prowlarr_base_url: str = Field(
@@ -1903,7 +1909,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexerproxy schema."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1911,7 +1917,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def post_indexerproxy_test(
         data: Dict = Field(default=..., description="data"),
@@ -1927,7 +1933,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test indexerproxy."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1935,7 +1941,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def post_indexerproxy_testall(
         prowlarr_base_url: str = Field(
@@ -1949,7 +1955,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexerproxy testall."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1957,7 +1963,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerProxy"},
+        tags={"indexer"},
     )
     async def post_indexerproxy_action_name(
         name: str = Field(default=..., description="name"),
@@ -1973,7 +1979,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexerproxy action name."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -1981,7 +1987,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerStats"},
+        tags={"indexer"},
     )
     async def get_indexerstats(
         startDate: str = Field(default=None, description="startDate"),
@@ -2000,7 +2006,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexerstats."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2014,7 +2020,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"IndexerStatus"},
+        tags={"indexer"},
     )
     async def get_indexerstatus(
         prowlarr_base_url: str = Field(
@@ -2028,7 +2034,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexerstatus."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2036,7 +2042,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Localization"},
+        tags={"system"},
     )
     async def get_localization(
         prowlarr_base_url: str = Field(
@@ -2050,7 +2056,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get localization."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2058,7 +2064,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Localization"},
+        tags={"system"},
     )
     async def get_localization_options(
         prowlarr_base_url: str = Field(
@@ -2072,7 +2078,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get localization options."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2080,7 +2086,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Log"},
+        tags={"system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -2099,7 +2105,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2113,7 +2119,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file(
         prowlarr_base_url: str = Field(
@@ -2127,7 +2133,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2135,7 +2141,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -2150,7 +2156,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file filename."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2158,7 +2164,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Newznab"},
+        tags={"indexer"},
     )
     async def get_indexer_id_newznab(
         id: int = Field(default=..., description="id"),
@@ -2205,7 +2211,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexer newznab."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2247,7 +2253,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Newznab"},
+        tags={"indexer"},
     )
     async def get_id_api(
         id: int = Field(default=..., description="id"),
@@ -2294,7 +2300,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific id api."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2336,7 +2342,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Newznab"},
+        tags={"indexer"},
     )
     async def get_indexer_id_download(
         id: int = Field(default=..., description="id"),
@@ -2353,7 +2359,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexer download."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2361,7 +2367,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Newznab"},
+        tags={"indexer"},
     )
     async def get_id_download(
         id: int = Field(default=..., description="id"),
@@ -2378,7 +2384,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific id download."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2386,7 +2392,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_id(
         id: int = Field(default=..., description="id"),
@@ -2401,7 +2407,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific notification."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2409,7 +2415,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def put_notification_id(
         id: str = Field(default=..., description="id"),
@@ -2426,7 +2432,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update notification id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2434,7 +2440,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def delete_notification_id(
         id: int = Field(default=..., description="id"),
@@ -2449,7 +2455,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete notification id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2457,7 +2463,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification(
         prowlarr_base_url: str = Field(
@@ -2471,7 +2477,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get notification."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2479,7 +2485,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification(
         data: Dict = Field(default=..., description="data"),
@@ -2495,7 +2501,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2503,7 +2509,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_schema(
         prowlarr_base_url: str = Field(
@@ -2517,7 +2523,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get notification schema."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2525,7 +2531,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_test(
         data: Dict = Field(default=..., description="data"),
@@ -2541,7 +2547,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test notification."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2549,7 +2555,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_testall(
         prowlarr_base_url: str = Field(
@@ -2563,7 +2569,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification testall."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2571,7 +2577,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_action_name(
         name: str = Field(default=..., description="name"),
@@ -2587,7 +2593,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification action name."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2595,7 +2601,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Ping"},
+        tags={"system"},
     )
     async def get_ping(
         prowlarr_base_url: str = Field(
@@ -2609,7 +2615,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get ping."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2617,7 +2623,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def post_search(
         data: Dict = Field(default=..., description="data"),
@@ -2632,7 +2638,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new search."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2640,7 +2646,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def get_search(
         query: str = Field(default=None, description="query"),
@@ -2660,7 +2666,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get search."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2675,7 +2681,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def post_search_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2690,7 +2696,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new search bulk."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2698,7 +2704,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -2713,7 +2719,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get content path."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2721,7 +2727,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -2736,7 +2742,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get ."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2744,7 +2750,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -2759,7 +2765,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get path."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2767,7 +2773,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_status(
         prowlarr_base_url: str = Field(
@@ -2781,7 +2787,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system status."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2789,7 +2795,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes(
         prowlarr_base_url: str = Field(
@@ -2803,7 +2809,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system routes."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2811,7 +2817,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes_duplicate(
         prowlarr_base_url: str = Field(
@@ -2825,7 +2831,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system routes duplicate."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2833,7 +2839,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_shutdown(
         prowlarr_base_url: str = Field(
@@ -2847,7 +2853,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new system shutdown."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2855,7 +2861,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_restart(
         prowlarr_base_url: str = Field(
@@ -2869,7 +2875,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new system restart."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2877,7 +2883,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -2892,7 +2898,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific tag."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2900,7 +2906,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -2916,7 +2922,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update tag id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2924,7 +2930,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -2939,7 +2945,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete tag id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2947,7 +2953,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag(
         prowlarr_base_url: str = Field(
@@ -2961,7 +2967,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get tag."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2969,7 +2975,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -2984,7 +2990,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new tag."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -2992,7 +2998,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -3007,7 +3013,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific tag detail."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3015,7 +3021,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail(
         prowlarr_base_url: str = Field(
@@ -3029,7 +3035,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get tag detail."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3037,7 +3043,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task(
         prowlarr_base_url: str = Field(
@@ -3051,7 +3057,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system task."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3059,7 +3065,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -3074,7 +3080,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific system task."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3082,7 +3088,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -3098,7 +3104,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config ui id."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3106,7 +3112,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -3121,7 +3127,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config ui."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3129,7 +3135,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui(
         prowlarr_base_url: str = Field(
@@ -3143,7 +3149,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config ui."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3151,7 +3157,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"Update"},
+        tags={"system"},
     )
     async def get_update(
         prowlarr_base_url: str = Field(
@@ -3165,7 +3171,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get update."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3173,7 +3179,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update(
         prowlarr_base_url: str = Field(
@@ -3187,7 +3193,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file update."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )
@@ -3195,7 +3201,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3210,7 +3216,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file update filename."""
         client = Api(
             base_url=prowlarr_base_url, token=prowlarr_api_key, verify=prowlarr_verify
         )

@@ -1,5 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Bazarr MCP Server.
+
+This module implements an MCP server for Bazarr, providing tools to manage subtitles
+for movies and series. It handles authentication, middleware, and API interactions.
+"""
+
 import os
 import argparse
 import sys
@@ -27,7 +32,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -59,7 +64,11 @@ BAZARR_VERIFY_SSL = to_boolean(os.getenv("BAZARR_VERIFY_SSL", "False"))
 def register_prompts(mcp: FastMCP):
     @mcp.prompt("search_subtitles")
     def search_subtitles_prompt(query: str) -> str:
-        """Search for subtitles for a movie or series."""
+        """
+        Search for subtitles for a movie or series.
+
+        This prompt helps users find subtitles by providing a clear search query template.
+        """
         return f"Search for subtitles matching '{query}'"
 
 
@@ -70,7 +79,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Series"},
+        tags={"catalog"},
     )
     async def get_series(
         page: int = Field(1, description="Page number"),
@@ -87,13 +96,17 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> str:
-        """Get all series managed by Bazarr."""
+        """
+        Get all series managed by Bazarr.
+
+        Returns a list of series with their IDs and monitoring status.
+        """
         client = Api(bazarr_base_url, bazarr_api_key, bazarr_verify_ssl)
         return str(client.get_series(page, page_size))
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def get_series_subtitles(
         series_id: int = Field(..., description="Series ID"),
@@ -115,7 +128,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def get_episode_subtitles(
         episode_id: int = Field(..., description="Episode ID"),
@@ -137,7 +150,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def search_series_subtitles(
         series_id: int = Field(..., description="Series ID"),
@@ -160,7 +173,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def download_series_subtitle(
         episode_id: int = Field(..., description="Episode ID"),
@@ -185,7 +198,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Movies"},
+        tags={"catalog"},
     )
     async def get_movies(
         page: int = Field(1, description="Page number"),
@@ -208,7 +221,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def get_movie_subtitles(
         movie_id: int = Field(..., description="Movie ID"),
@@ -230,7 +243,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def search_movie_subtitles(
         movie_id: int = Field(..., description="Movie ID"),
@@ -252,7 +265,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Subtitles"},
+        tags={"catalog"},
     )
     async def download_movie_subtitle(
         movie_id: int = Field(..., description="Movie ID"),
@@ -277,7 +290,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history(
         page: int = Field(1, description="Page number"),
@@ -300,7 +313,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_status(
         bazarr_base_url: str = Field(
@@ -321,7 +334,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_health(
         bazarr_base_url: str = Field(
@@ -342,7 +355,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Wanted"},
+        tags={"catalog"},
     )
     async def get_wanted_series(
         page: int = Field(1, description="Page number"),
@@ -365,7 +378,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["bazarr_base_url", "bazarr_api_key", "bazarr_verify_ssl"],
-        tags={"Wanted"},
+        tags={"catalog"},
     )
     async def get_wanted_movies(
         page: int = Field(1, description="Page number"),

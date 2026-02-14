@@ -1,6 +1,6 @@
 ---
 name: prowlarr-indexer
-description: "Generated skill for Indexer operations. Contains 11 tools."
+description: "Generated skill for Indexer operations. Contains 27 tools."
 ---
 
 ### Overview
@@ -72,6 +72,174 @@ This skill handles operations related to Indexer.
   - **Parameters**:
     - `name` (str)
     - `data` (Dict)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexer_categories`: No description
+  - **Parameters**:
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexerproxy_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `put_indexerproxy_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `delete_indexerproxy_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexerproxy`: No description
+  - **Parameters**:
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `post_indexerproxy`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexerproxy_schema`: No description
+  - **Parameters**:
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `post_indexerproxy_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `post_indexerproxy_testall`: No description
+  - **Parameters**:
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `post_indexerproxy_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexerstats`: No description
+  - **Parameters**:
+    - `startDate` (str)
+    - `endDate` (str)
+    - `indexers` (str)
+    - `protocols` (str)
+    - `tags` (str)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexerstatus`: No description
+  - **Parameters**:
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexer_id_newznab`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `t` (str)
+    - `q` (str)
+    - `cat` (str)
+    - `imdbid` (str)
+    - `tmdbid` (int)
+    - `extended` (str)
+    - `limit` (int)
+    - `offset` (int)
+    - `minage` (int)
+    - `maxage` (int)
+    - `minsize` (int)
+    - `maxsize` (int)
+    - `rid` (int)
+    - `tvmazeid` (int)
+    - `traktid` (int)
+    - `tvdbid` (int)
+    - `doubanid` (int)
+    - `season` (int)
+    - `ep` (str)
+    - `album` (str)
+    - `artist` (str)
+    - `label` (str)
+    - `track` (str)
+    - `year` (int)
+    - `genre` (str)
+    - `author` (str)
+    - `title` (str)
+    - `publisher` (str)
+    - `configured` (str)
+    - `source` (str)
+    - `host` (str)
+    - `server` (str)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_id_api`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `t` (str)
+    - `q` (str)
+    - `cat` (str)
+    - `imdbid` (str)
+    - `tmdbid` (int)
+    - `extended` (str)
+    - `limit` (int)
+    - `offset` (int)
+    - `minage` (int)
+    - `maxage` (int)
+    - `minsize` (int)
+    - `maxsize` (int)
+    - `rid` (int)
+    - `tvmazeid` (int)
+    - `traktid` (int)
+    - `tvdbid` (int)
+    - `doubanid` (int)
+    - `season` (int)
+    - `ep` (str)
+    - `album` (str)
+    - `artist` (str)
+    - `label` (str)
+    - `track` (str)
+    - `year` (int)
+    - `genre` (str)
+    - `author` (str)
+    - `title` (str)
+    - `publisher` (str)
+    - `configured` (str)
+    - `source` (str)
+    - `host` (str)
+    - `server` (str)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_indexer_id_download`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `link` (str)
+    - `file` (str)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
+- `get_id_download`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `link` (str)
+    - `file` (str)
     - `prowlarr_base_url` (str)
     - `prowlarr_api_key` (Optional[str])
     - `prowlarr_verify` (bool)

@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Arr Supervisor MCP Server.
+
+This module implements a supervisor MCP server that acts as a proxy for
+multiple individual Arr MCP servers (Sonarr, Radarr, etc.). It manages
+multi-server configurations, authentication, and request routing.
+"""
+
 import os
 import argparse
 import sys
@@ -25,7 +31,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)

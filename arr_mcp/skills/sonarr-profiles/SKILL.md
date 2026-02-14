@@ -1,0 +1,344 @@
+---
+name: sonarr-profiles
+description: "Generated skill for Profiles operations. Contains 52 tools."
+---
+
+### Overview
+This skill handles operations related to Profiles.
+
+### Available Tools
+- `get_customfilter`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_customfilter`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_customfilter_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_customfilter_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_customfilter_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_customformat`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_customformat`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_customformat_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_customformat_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_customformat_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_customformat_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_customformat_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_customformat_schema`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_wanted_cutoff`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `includeSeries` (bool)
+    - `includeEpisodeFile` (bool)
+    - `includeImages` (bool)
+    - `monitored` (bool)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_wanted_cutoff_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_delayprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_delayprofile`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_delayprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_delayprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_delayprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_delayprofile_reorder_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `after` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_language`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_language_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_languageprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_languageprofile`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_languageprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_languageprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_languageprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_languageprofile_schema`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_config_mediamanagement`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_config_mediamanagement_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_config_mediamanagement_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_config_naming`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_config_naming_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_config_naming_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_config_naming_examples`: No description
+  - **Parameters**:
+    - `renameEpisodes` (bool)
+    - `replaceIllegalCharacters` (bool)
+    - `colonReplacementFormat` (int)
+    - `customColonReplacementFormat` (str)
+    - `multiEpisodeStyle` (int)
+    - `standardEpisodeFormat` (str)
+    - `dailyEpisodeFormat` (str)
+    - `animeEpisodeFormat` (str)
+    - `seriesFolderFormat` (str)
+    - `seasonFolderFormat` (str)
+    - `specialsFolderFormat` (str)
+    - `id` (int)
+    - `resourceName` (str)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_qualitydefinition_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_qualitydefinition_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_qualitydefinition`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_qualitydefinition_update`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_qualitydefinition_limits`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_qualityprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_qualityprofile`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_qualityprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_qualityprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_qualityprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_qualityprofile_schema`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `post_releaseprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_releaseprofile`: No description
+  - **Parameters**:
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `delete_releaseprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `put_releaseprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+- `get_releaseprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `sonarr_base_url` (str)
+    - `sonarr_api_key` (Optional[str])
+    - `sonarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

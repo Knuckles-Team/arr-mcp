@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Radarr MCP Server.
+
+This module implements an MCP server for Radarr, providing tools to manage
+movie collections and lookups. It handles authentication, middleware,
+and API interactions.
+"""
+
 import os
 import argparse
 import sys
@@ -27,7 +33,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -72,7 +78,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def lookup_movie(
         term: str = Field(default=..., description="Search term for the movie"),
@@ -95,7 +101,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def add_movie(
         term: str = Field(default=..., description="Search term for the movie"),
@@ -134,7 +140,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AlternativeTitle"},
+        tags={"catalog"},
     )
     async def get_alttitle(
         movieId: int = Field(default=None, description="movieId"),
@@ -150,7 +156,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get alternative titles for a movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -158,7 +164,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AlternativeTitle"},
+        tags={"catalog"},
     )
     async def get_alttitle_id(
         id: int = Field(default=..., description="id"),
@@ -173,7 +179,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get details for a specific alternative title by ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -181,7 +187,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ApiInfo"},
+        tags={"system"},
     )
     async def get_api(
         radarr_base_url: str = Field(
@@ -195,7 +201,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the base API information for Radarr."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -203,7 +209,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -218,7 +224,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform a login operation."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -226,7 +232,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_login(
         radarr_base_url: str = Field(
@@ -240,7 +246,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Check the current login status."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -248,7 +254,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def get_logout(
         radarr_base_url: str = Field(
@@ -262,7 +268,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform a logout operation."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -270,7 +276,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def post_autotagging(
         data: Dict = Field(default=..., description="data"),
@@ -285,7 +291,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new auto-tagging configuration."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -293,7 +299,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def get_autotagging(
         radarr_base_url: str = Field(
@@ -307,7 +313,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all auto-tagging configurations."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -315,7 +321,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def put_autotagging_id(
         id: str = Field(default=..., description="id"),
@@ -331,7 +337,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing auto-tagging configuration by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -339,7 +345,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def delete_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -354,7 +360,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get details for an auto-tagging configuration by ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -362,7 +368,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def get_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -377,7 +383,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the schema for auto-tagging configurations."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -385,7 +391,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def get_autotagging_schema(
         radarr_base_url: str = Field(
@@ -399,7 +405,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the current system backup information."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -407,7 +413,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def get_system_backup(
         radarr_base_url: str = Field(
@@ -421,7 +427,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a system backup by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -429,7 +435,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -444,7 +450,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Restore Radarr from a specific backup ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -452,7 +458,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -467,7 +473,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Upload and restore a Radarr backup archive."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -475,7 +481,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_upload(
         radarr_base_url: str = Field(
@@ -489,7 +495,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve a paginated list of items in the blocklist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -497,7 +503,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def get_blocklist(
         page: int = Field(default=None, description="page"),
@@ -517,7 +523,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Remove an item from the blocklist by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -532,7 +538,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def get_blocklist_movie(
         movieId: int = Field(default=None, description="movieId"),
@@ -547,7 +553,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk removal of items from the blocklist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -555,7 +561,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def delete_blocklist_id(
         id: int = Field(default=..., description="id"),
@@ -570,7 +576,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve calendar events for a given time range."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -578,7 +584,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def delete_blocklist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -593,7 +599,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve a specific calendar event by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -601,7 +607,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Calendar"},
+        tags={"operations"},
     )
     async def get_calendar(
         start: str = Field(default=None, description="start"),
@@ -619,7 +625,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the calendar feed in iCal format."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -629,7 +635,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CalendarFeed"},
+        tags={"operations"},
     )
     async def get_feed_v3_calendar_radarrics(
         pastDays: int = Field(default=None, description="pastDays"),
@@ -648,7 +654,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the status of a specific command by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -662,7 +668,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Collection"},
+        tags={"catalog"},
     )
     async def get_collection(
         tmdbId: int = Field(default=None, description="tmdbId"),
@@ -677,7 +683,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get information for a movie collection."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -685,7 +691,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Collection"},
+        tags={"catalog"},
     )
     async def put_collection(
         data: Dict = Field(default=..., description="data"),
@@ -700,7 +706,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Cancel a specific command by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -708,7 +714,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Collection"},
+        tags={"catalog"},
     )
     async def put_collection_id(
         id: str = Field(default=..., description="id"),
@@ -724,7 +730,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Execute a command in Radarr."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -732,7 +738,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Collection"},
+        tags={"catalog"},
     )
     async def get_collection_id(
         id: int = Field(default=..., description="id"),
@@ -747,7 +753,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all currently running or recently finished commands."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -755,7 +761,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -770,7 +776,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific custom filter by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -778,7 +784,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command(
         radarr_base_url: str = Field(
@@ -792,7 +798,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing custom filter by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -800,7 +806,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -815,7 +821,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a custom filter by its ID."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -823,7 +829,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -838,7 +844,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined custom filters."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -846,7 +852,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Credit"},
+        tags={"catalog"},
     )
     async def get_credit(
         movieId: int = Field(default=None, description="movieId"),
@@ -862,7 +868,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get credit."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -870,7 +876,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Credit"},
+        tags={"catalog"},
     )
     async def get_credit_id(
         id: int = Field(default=..., description="id"),
@@ -885,7 +891,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific credit."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -893,7 +899,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter(
         radarr_base_url: str = Field(
@@ -907,7 +913,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get customfilter."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -915,7 +921,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def post_customfilter(
         data: Dict = Field(default=..., description="data"),
@@ -930,7 +936,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new customfilter."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -938,7 +944,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def put_customfilter_id(
         id: str = Field(default=..., description="id"),
@@ -954,7 +960,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update customfilter id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -962,7 +968,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def delete_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -977,7 +983,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete customfilter id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -985,7 +991,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -1000,7 +1006,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific customfilter."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1008,7 +1014,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat(
         radarr_base_url: str = Field(
@@ -1022,7 +1028,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get customformat."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1030,7 +1036,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def post_customformat(
         data: Dict = Field(default=..., description="data"),
@@ -1045,7 +1051,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new customformat."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1053,7 +1059,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def put_customformat_id(
         id: str = Field(default=..., description="id"),
@@ -1069,7 +1075,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update customformat id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1077,7 +1083,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def delete_customformat_id(
         id: int = Field(default=..., description="id"),
@@ -1092,7 +1098,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete customformat id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1100,7 +1106,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat_id(
         id: int = Field(default=..., description="id"),
@@ -1115,7 +1121,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific customformat."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1123,7 +1129,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def put_customformat_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1138,7 +1144,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update customformat bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1146,7 +1152,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def delete_customformat_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1161,7 +1167,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete customformat bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1169,7 +1175,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat_schema(
         radarr_base_url: str = Field(
@@ -1183,7 +1189,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get customformat schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1191,7 +1197,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Cutoff"},
+        tags={"profiles"},
     )
     async def get_wanted_cutoff(
         page: int = Field(default=None, description="page"),
@@ -1210,7 +1216,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get wanted cutoff."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1224,7 +1230,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def post_delayprofile(
         data: Dict = Field(default=..., description="data"),
@@ -1239,7 +1245,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new delayprofile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1247,7 +1253,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def get_delayprofile(
         radarr_base_url: str = Field(
@@ -1261,7 +1267,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get delayprofile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1269,7 +1275,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def delete_delayprofile_id(
         id: int = Field(default=..., description="id"),
@@ -1284,7 +1290,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete delayprofile id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1292,7 +1298,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def put_delayprofile_id(
         id: str = Field(default=..., description="id"),
@@ -1308,7 +1314,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update delayprofile id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1316,7 +1322,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def get_delayprofile_id(
         id: int = Field(default=..., description="id"),
@@ -1331,7 +1337,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific delayprofile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1339,7 +1345,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def put_delayprofile_reorder_id(
         id: int = Field(default=..., description="id"),
@@ -1355,7 +1361,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update delayprofile reorder id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1363,7 +1369,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DiskSpace"},
+        tags={"system"},
     )
     async def get_diskspace(
         radarr_base_url: str = Field(
@@ -1377,7 +1383,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get diskspace."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1385,7 +1391,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient(
         radarr_base_url: str = Field(
@@ -1399,7 +1405,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get downloadclient."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1407,7 +1413,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient(
         data: Dict = Field(default=..., description="data"),
@@ -1423,7 +1429,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new downloadclient."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1431,7 +1437,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1448,7 +1454,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update downloadclient id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1456,7 +1462,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1471,7 +1477,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete downloadclient id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1479,7 +1485,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1494,7 +1500,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific downloadclient."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1502,7 +1508,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1517,7 +1523,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update downloadclient bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1525,7 +1531,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1540,7 +1546,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete downloadclient bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1548,7 +1554,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_schema(
         radarr_base_url: str = Field(
@@ -1562,7 +1568,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get downloadclient schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1570,7 +1576,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_test(
         data: Dict = Field(default=..., description="data"),
@@ -1586,7 +1592,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test downloadclient."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1594,7 +1600,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_testall(
         radarr_base_url: str = Field(
@@ -1608,7 +1614,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new downloadclient testall."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1616,7 +1622,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_action_name(
         name: str = Field(default=..., description="name"),
@@ -1632,7 +1638,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new downloadclient action name."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1640,7 +1646,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient(
         radarr_base_url: str = Field(
@@ -1654,7 +1660,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config downloadclient."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1662,7 +1668,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def put_config_downloadclient_id(
         id: str = Field(default=..., description="id"),
@@ -1678,7 +1684,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config downloadclient id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1686,7 +1692,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1701,7 +1707,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config downloadclient."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1709,7 +1715,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ExtraFile"},
+        tags={"catalog"},
     )
     async def get_extrafile(
         movieId: int = Field(default=None, description="movieId"),
@@ -1724,7 +1730,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get extrafile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1732,7 +1738,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1751,7 +1757,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get filesystem."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1763,7 +1769,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1778,7 +1784,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get filesystem type."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1786,7 +1792,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_mediafiles(
         path: str = Field(default=None, description="path"),
@@ -1801,7 +1807,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get filesystem mediafiles."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1809,7 +1815,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Health"},
+        tags={"system"},
     )
     async def get_health(
         radarr_base_url: str = Field(
@@ -1823,7 +1829,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get health."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1831,7 +1837,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history(
         page: int = Field(default=None, description="page"),
@@ -1855,7 +1861,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1874,7 +1880,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_since(
         date: str = Field(default=None, description="date"),
@@ -1891,7 +1897,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history since."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1901,7 +1907,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_movie(
         movieId: int = Field(default=None, description="movieId"),
@@ -1918,7 +1924,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get history movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1928,7 +1934,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def post_history_failed_id(
         id: int = Field(default=..., description="id"),
@@ -1943,7 +1949,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new history failed id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1951,7 +1957,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host(
         radarr_base_url: str = Field(
@@ -1965,7 +1971,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config host."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1973,7 +1979,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -1989,7 +1995,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config host id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -1997,7 +2003,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -2012,7 +2018,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config host."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2020,7 +2026,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist(
         radarr_base_url: str = Field(
@@ -2034,7 +2040,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get importlist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2042,7 +2048,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist(
         data: Dict = Field(default=..., description="data"),
@@ -2058,7 +2064,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new importlist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2066,7 +2072,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def put_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2083,7 +2089,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update importlist id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2091,7 +2097,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def delete_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2106,7 +2112,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete importlist id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2114,7 +2120,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2129,7 +2135,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific importlist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2137,7 +2143,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def put_importlist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2152,7 +2158,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update importlist bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2160,7 +2166,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def delete_importlist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2175,7 +2181,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete importlist bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2183,7 +2189,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist_schema(
         radarr_base_url: str = Field(
@@ -2197,7 +2203,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get importlist schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2205,7 +2211,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_test(
         data: Dict = Field(default=..., description="data"),
@@ -2221,7 +2227,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test importlist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2229,7 +2235,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_testall(
         radarr_base_url: str = Field(
@@ -2243,7 +2249,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new importlist testall."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2251,7 +2257,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_action_name(
         name: str = Field(default=..., description="name"),
@@ -2267,7 +2273,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new importlist action name."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2275,7 +2281,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListConfig"},
+        tags={"downloads"},
     )
     async def get_config_importlist(
         radarr_base_url: str = Field(
@@ -2289,7 +2295,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config importlist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2297,7 +2303,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListConfig"},
+        tags={"downloads"},
     )
     async def put_config_importlist_id(
         id: str = Field(default=..., description="id"),
@@ -2313,7 +2319,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config importlist id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2321,7 +2327,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListConfig"},
+        tags={"downloads"},
     )
     async def get_config_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2336,7 +2342,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config importlist."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2344,7 +2350,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_exclusions(
         radarr_base_url: str = Field(
@@ -2358,7 +2364,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get exclusions."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2366,7 +2372,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def post_exclusions(
         data: Dict = Field(default=..., description="data"),
@@ -2381,7 +2387,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new exclusions."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2389,7 +2395,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_exclusions_paged(
         page: int = Field(default=None, description="page"),
@@ -2407,7 +2413,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get exclusions paged."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2417,7 +2423,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def put_exclusions_id(
         id: str = Field(default=..., description="id"),
@@ -2433,7 +2439,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update exclusions id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2441,7 +2447,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def delete_exclusions_id(
         id: int = Field(default=..., description="id"),
@@ -2456,7 +2462,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete exclusions id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2464,7 +2470,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_exclusions_id(
         id: int = Field(default=..., description="id"),
@@ -2479,7 +2485,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific exclusions."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2487,7 +2493,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def post_exclusions_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2502,7 +2508,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new exclusions bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2510,7 +2516,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def delete_exclusions_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2525,7 +2531,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete exclusions bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2533,7 +2539,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListMovies"},
+        tags={"catalog"},
     )
     async def get_importlist_movie(
         includeRecommendations: bool = Field(
@@ -2552,7 +2558,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get importlist movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2564,7 +2570,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ImportListMovies"},
+        tags={"catalog"},
     )
     async def post_importlist_movie(
         data: Dict = Field(default=..., description="data"),
@@ -2579,7 +2585,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new importlist movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2587,7 +2593,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer(
         radarr_base_url: str = Field(
@@ -2601,7 +2607,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2609,7 +2615,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer(
         data: Dict = Field(default=..., description="data"),
@@ -2625,7 +2631,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2633,7 +2639,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2650,7 +2656,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update indexer id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2658,7 +2664,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2673,7 +2679,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete indexer id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2681,7 +2687,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2696,7 +2702,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific indexer."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2704,7 +2710,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2719,7 +2725,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update indexer bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2727,7 +2733,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2742,7 +2748,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete indexer bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2750,7 +2756,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_schema(
         radarr_base_url: str = Field(
@@ -2764,7 +2770,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexer schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2772,7 +2778,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_test(
         data: Dict = Field(default=..., description="data"),
@@ -2788,7 +2794,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test indexer."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2796,7 +2802,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_testall(
         radarr_base_url: str = Field(
@@ -2810,7 +2816,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer testall."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2818,7 +2824,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_action_name(
         name: str = Field(default=..., description="name"),
@@ -2834,7 +2840,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer action name."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2842,7 +2848,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def get_config_indexer(
         radarr_base_url: str = Field(
@@ -2856,7 +2862,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config indexer."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2864,7 +2870,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def put_config_indexer_id(
         id: str = Field(default=..., description="id"),
@@ -2880,7 +2886,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config indexer id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2888,7 +2894,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def get_config_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2903,7 +2909,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config indexer."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2911,7 +2917,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"IndexerFlag"},
+        tags={"indexer"},
     )
     async def get_indexerflag(
         radarr_base_url: str = Field(
@@ -2925,7 +2931,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get indexerflag."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2933,7 +2939,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Language"},
+        tags={"profiles"},
     )
     async def get_language(
         radarr_base_url: str = Field(
@@ -2947,7 +2953,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get language."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2955,7 +2961,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Language"},
+        tags={"profiles"},
     )
     async def get_language_id(
         id: int = Field(default=..., description="id"),
@@ -2970,7 +2976,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific language."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -2978,7 +2984,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Localization"},
+        tags={"system"},
     )
     async def get_localization(
         radarr_base_url: str = Field(
@@ -2992,7 +2998,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get localization."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3000,7 +3006,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Localization"},
+        tags={"system"},
     )
     async def get_localization_language(
         radarr_base_url: str = Field(
@@ -3014,7 +3020,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get localization language."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3022,7 +3028,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Log"},
+        tags={"system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -3041,7 +3047,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3055,7 +3061,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file(
         radarr_base_url: str = Field(
@@ -3069,7 +3075,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3077,7 +3083,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3092,7 +3098,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file filename."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3100,7 +3106,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ManualImport"},
+        tags={"downloads"},
     )
     async def get_manualimport(
         folder: str = Field(default=None, description="folder"),
@@ -3120,7 +3126,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get manualimport."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3133,7 +3139,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ManualImport"},
+        tags={"downloads"},
     )
     async def post_manualimport(
         data: Dict = Field(default=..., description="data"),
@@ -3148,7 +3154,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new manualimport."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3156,7 +3162,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MediaCover"},
+        tags={"catalog"},
     )
     async def get_mediacover_movie_id_filename(
         movieId: int = Field(default=..., description="movieId"),
@@ -3172,7 +3178,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific mediacover movie filename."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3182,7 +3188,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def get_config_mediamanagement(
         radarr_base_url: str = Field(
@@ -3196,7 +3202,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config mediamanagement."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3204,7 +3210,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def put_config_mediamanagement_id(
         id: str = Field(default=..., description="id"),
@@ -3220,7 +3226,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config mediamanagement id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3228,7 +3234,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def get_config_mediamanagement_id(
         id: int = Field(default=..., description="id"),
@@ -3243,7 +3249,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config mediamanagement."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3251,7 +3257,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata(
         radarr_base_url: str = Field(
@@ -3265,7 +3271,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3273,7 +3279,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3289,7 +3295,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new metadata."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3297,7 +3303,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def put_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3314,7 +3320,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update metadata id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3322,7 +3328,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3337,7 +3343,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete metadata id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3345,7 +3351,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3360,7 +3366,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific metadata."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3368,7 +3374,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata_schema(
         radarr_base_url: str = Field(
@@ -3382,7 +3388,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get metadata schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3390,7 +3396,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3406,7 +3412,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test metadata."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3414,7 +3420,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_testall(
         radarr_base_url: str = Field(
@@ -3428,7 +3434,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new metadata testall."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3436,7 +3442,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3452,7 +3458,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new metadata action name."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3460,7 +3466,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MetadataConfig"},
+        tags={"profiles"},
     )
     async def get_config_metadata(
         radarr_base_url: str = Field(
@@ -3474,7 +3480,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config metadata."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3482,7 +3488,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MetadataConfig"},
+        tags={"profiles"},
     )
     async def put_config_metadata_id(
         id: str = Field(default=..., description="id"),
@@ -3498,7 +3504,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config metadata id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3506,7 +3512,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MetadataConfig"},
+        tags={"profiles"},
     )
     async def get_config_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3521,7 +3527,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config metadata."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3529,7 +3535,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Missing"},
+        tags={"catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3548,7 +3554,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get wanted missing."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3562,7 +3568,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def get_movie(
         tmdbId: int = Field(default=None, description="tmdbId"),
@@ -3581,7 +3587,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3591,7 +3597,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def post_movie(
         data: Dict = Field(default=..., description="data"),
@@ -3606,7 +3612,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3614,7 +3620,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def put_movie_id(
         id: str = Field(default=..., description="id"),
@@ -3631,7 +3637,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update movie id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3639,7 +3645,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def delete_movie_id(
         id: int = Field(default=..., description="id"),
@@ -3658,7 +3664,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete movie id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3668,7 +3674,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Movie"},
+        tags={"catalog"},
     )
     async def get_movie_id(
         id: int = Field(default=..., description="id"),
@@ -3683,7 +3689,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3691,7 +3697,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieEditor"},
+        tags={"catalog"},
     )
     async def put_movie_editor(
         data: Dict = Field(default=..., description="data"),
@@ -3706,7 +3712,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update movie editor."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3714,7 +3720,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieEditor"},
+        tags={"catalog"},
     )
     async def delete_movie_editor(
         data: Dict = Field(default=..., description="data"),
@@ -3729,7 +3735,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete movie editor."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3737,7 +3743,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def get_moviefile(
         movieId: List = Field(default=None, description="movieId"),
@@ -3753,7 +3759,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get moviefile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3761,7 +3767,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def put_moviefile_id(
         id: str = Field(default=..., description="id"),
@@ -3777,7 +3783,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update moviefile id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3785,7 +3791,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def delete_moviefile_id(
         id: int = Field(default=..., description="id"),
@@ -3800,7 +3806,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete moviefile id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3808,7 +3814,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def get_moviefile_id(
         id: int = Field(default=..., description="id"),
@@ -3823,7 +3829,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific moviefile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3831,7 +3837,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def put_moviefile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -3846,7 +3852,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update moviefile editor."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3854,7 +3860,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def delete_moviefile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -3869,7 +3875,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete moviefile bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3877,7 +3883,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFile"},
+        tags={"catalog"},
     )
     async def put_moviefile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -3892,7 +3898,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update moviefile bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3900,7 +3906,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieFolder"},
+        tags={"catalog"},
     )
     async def get_movie_id_folder(
         id: int = Field(default=..., description="id"),
@@ -3915,7 +3921,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific movie folder."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3923,7 +3929,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieImport"},
+        tags={"catalog"},
     )
     async def post_movie_import(
         data: Dict = Field(default=..., description="data"),
@@ -3938,7 +3944,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new movie import."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3946,7 +3952,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieLookup"},
+        tags={"catalog"},
     )
     async def get_movie_lookup_tmdb(
         tmdbId: int = Field(default=None, description="tmdbId"),
@@ -3961,7 +3967,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get movie lookup tmdb."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3969,7 +3975,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieLookup"},
+        tags={"catalog"},
     )
     async def get_movie_lookup_imdb(
         imdbId: str = Field(default=None, description="imdbId"),
@@ -3984,7 +3990,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get movie lookup imdb."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -3992,7 +3998,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"MovieLookup"},
+        tags={"catalog"},
     )
     async def get_movie_lookup(
         term: str = Field(default=None, description="term"),
@@ -4007,7 +4013,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get movie lookup."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4015,7 +4021,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming(
         radarr_base_url: str = Field(
@@ -4029,7 +4035,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config naming."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4037,7 +4043,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def put_config_naming_id(
         id: str = Field(default=..., description="id"),
@@ -4053,7 +4059,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update config naming id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4061,7 +4067,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming_id(
         id: int = Field(default=..., description="id"),
@@ -4076,7 +4082,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific config naming."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4084,7 +4090,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming_examples(
         renameMovies: bool = Field(default=None, description="renameMovies"),
@@ -4111,7 +4117,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get config naming examples."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4127,7 +4133,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification(
         radarr_base_url: str = Field(
@@ -4141,7 +4147,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get notification."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4149,7 +4155,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification(
         data: Dict = Field(default=..., description="data"),
@@ -4165,7 +4171,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4173,7 +4179,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def put_notification_id(
         id: int = Field(default=..., description="id"),
@@ -4190,7 +4196,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update notification id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4198,7 +4204,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def delete_notification_id(
         id: int = Field(default=..., description="id"),
@@ -4213,7 +4219,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete notification id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4221,7 +4227,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_id(
         id: int = Field(default=..., description="id"),
@@ -4236,7 +4242,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific notification."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4244,7 +4250,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_schema(
         radarr_base_url: str = Field(
@@ -4258,7 +4264,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get notification schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4266,7 +4272,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_test(
         data: Dict = Field(default=..., description="data"),
@@ -4282,7 +4288,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test notification."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4290,7 +4296,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_testall(
         radarr_base_url: str = Field(
@@ -4304,7 +4310,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification testall."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4312,7 +4318,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_action_name(
         name: str = Field(default=..., description="name"),
@@ -4328,7 +4334,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification action name."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4336,7 +4342,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Parse"},
+        tags={"operations"},
     )
     async def get_parse(
         title: str = Field(default=None, description="title"),
@@ -4351,7 +4357,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get parse."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4359,7 +4365,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Ping"},
+        tags={"system"},
     )
     async def get_ping(
         radarr_base_url: str = Field(
@@ -4373,7 +4379,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get ping."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4381,7 +4387,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def put_qualitydefinition_id(
         id: str = Field(default=..., description="id"),
@@ -4397,7 +4403,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update qualitydefinition id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4405,7 +4411,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition_id(
         id: int = Field(default=..., description="id"),
@@ -4420,7 +4426,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific qualitydefinition."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4428,7 +4434,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition(
         radarr_base_url: str = Field(
@@ -4442,7 +4448,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get qualitydefinition."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4450,7 +4456,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def put_qualitydefinition_update(
         data: Dict = Field(default=..., description="data"),
@@ -4465,7 +4471,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update qualitydefinition update."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4473,7 +4479,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition_limits(
         radarr_base_url: str = Field(
@@ -4487,7 +4493,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get qualitydefinition limits."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4495,7 +4501,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def post_qualityprofile(
         data: Dict = Field(default=..., description="data"),
@@ -4510,7 +4516,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new qualityprofile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4518,7 +4524,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def get_qualityprofile(
         radarr_base_url: str = Field(
@@ -4532,7 +4538,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get qualityprofile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4540,7 +4546,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def delete_qualityprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4555,7 +4561,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete qualityprofile id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4563,7 +4569,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def put_qualityprofile_id(
         id: str = Field(default=..., description="id"),
@@ -4579,7 +4585,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update qualityprofile id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4587,7 +4593,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def get_qualityprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4602,7 +4608,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific qualityprofile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4610,7 +4616,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QualityProfileSchema"},
+        tags={"profiles"},
     )
     async def get_qualityprofile_schema(
         radarr_base_url: str = Field(
@@ -4624,7 +4630,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get qualityprofile schema."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4632,7 +4638,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def delete_queue_id(
         id: int = Field(default=..., description="id"),
@@ -4651,7 +4657,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete queue id."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4665,7 +4671,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def delete_queue_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4684,7 +4690,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete queue bulk."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4698,7 +4704,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def get_queue(
         page: int = Field(default=None, description="page"),
@@ -4725,7 +4731,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4745,7 +4751,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QueueAction"},
+        tags={"queue"},
     )
     async def post_queue_grab_id(
         id: int = Field(default=..., description="id"),
@@ -4760,7 +4766,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4768,7 +4774,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QueueAction"},
+        tags={"queue"},
     )
     async def post_queue_grab_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4783,7 +4789,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Grab queue item."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4791,7 +4797,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QueueDetails"},
+        tags={"queue"},
     )
     async def get_queue_details(
         movieId: int = Field(default=None, description="movieId"),
@@ -4807,7 +4813,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk grab queue items."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4815,7 +4821,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"QueueStatus"},
+        tags={"queue"},
     )
     async def get_queue_status(
         radarr_base_url: str = Field(
@@ -4829,7 +4835,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue details."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4837,7 +4843,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Release"},
+        tags={"downloads"},
     )
     async def post_release(
         data: Dict = Field(default=..., description="data"),
@@ -4852,7 +4858,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get queue status."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4860,7 +4866,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Release"},
+        tags={"downloads"},
     )
     async def get_release(
         movieId: int = Field(default=None, description="movieId"),
@@ -4875,7 +4881,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a release."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4883,7 +4889,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def post_releaseprofile(
         data: Dict = Field(default=..., description="data"),
@@ -4898,7 +4904,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get releases."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4906,7 +4912,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def get_releaseprofile(
         radarr_base_url: str = Field(
@@ -4920,7 +4926,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a release profile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4928,7 +4934,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def delete_releaseprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4943,7 +4949,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get release profiles."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4951,7 +4957,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def put_releaseprofile_id(
         id: str = Field(default=..., description="id"),
@@ -4967,7 +4973,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a release profile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4975,7 +4981,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def get_releaseprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4990,7 +4996,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update a release profile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -4998,7 +5004,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"ReleasePush"},
+        tags={"downloads"},
     )
     async def post_release_push(
         data: Dict = Field(default=..., description="data"),
@@ -5013,7 +5019,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific release profile."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5021,7 +5027,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def post_remotepathmapping(
         data: Dict = Field(default=..., description="data"),
@@ -5036,7 +5042,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Push release."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5044,7 +5050,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def get_remotepathmapping(
         radarr_base_url: str = Field(
@@ -5058,7 +5064,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add remote path mapping."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5066,7 +5072,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def delete_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -5081,7 +5087,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get remote path mappings."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5089,7 +5095,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def put_remotepathmapping_id(
         id: str = Field(default=..., description="id"),
@@ -5105,7 +5111,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete remote path mapping."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5113,7 +5119,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def get_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -5128,7 +5134,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update remote path mapping."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5136,7 +5142,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RenameMovie"},
+        tags={"catalog"},
     )
     async def get_rename(
         movieId: List = Field(default=None, description="movieId"),
@@ -5151,7 +5157,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific remote path mapping."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5159,7 +5165,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def post_rootfolder(
         data: Dict = Field(default=..., description="data"),
@@ -5174,7 +5180,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get rename suggestions."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5182,7 +5188,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def get_rootfolder(
         radarr_base_url: str = Field(
@@ -5196,7 +5202,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new root folder."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5204,7 +5210,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def delete_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -5219,7 +5225,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get root folders."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5227,7 +5233,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def get_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -5242,7 +5248,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a root folder."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5250,7 +5256,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -5265,7 +5271,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific root folder."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5273,7 +5279,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -5288,7 +5294,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get content path."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5296,7 +5302,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -5311,7 +5317,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get resource by path."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5319,7 +5325,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_status(
         radarr_base_url: str = Field(
@@ -5333,7 +5339,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system paths."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5341,7 +5347,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes(
         radarr_base_url: str = Field(
@@ -5355,7 +5361,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system routes."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5363,7 +5369,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes_duplicate(
         radarr_base_url: str = Field(
@@ -5377,7 +5383,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get duplicate system routes."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5385,7 +5391,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_shutdown(
         radarr_base_url: str = Field(
@@ -5399,7 +5405,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Trigger system shutdown."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5407,7 +5413,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_restart(
         radarr_base_url: str = Field(
@@ -5421,7 +5427,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Trigger system restart."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5429,7 +5435,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag(
         radarr_base_url: str = Field(
@@ -5443,7 +5449,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific system task."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5451,7 +5457,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -5466,7 +5472,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve logs for system tasks."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5474,7 +5480,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -5490,7 +5496,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve logs for a specific system task."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5498,7 +5504,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5513,7 +5519,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detail logs for a specific system task."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5521,7 +5527,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5536,7 +5542,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all movies in the collection."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5544,7 +5550,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail(
         radarr_base_url: str = Field(
@@ -5558,7 +5564,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Check if a movie exists in the collection."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5566,7 +5572,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -5581,7 +5587,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve information about a movie file."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5589,7 +5595,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task(
         radarr_base_url: str = Field(
@@ -5603,7 +5609,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all movie files for a specific movie."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5611,7 +5617,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -5626,7 +5632,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a movie file from Radarr."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5634,7 +5640,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -5650,7 +5656,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update metadata for multiple movie files."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5658,7 +5664,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -5673,7 +5679,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple movie files."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5681,7 +5687,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui(
         radarr_base_url: str = Field(
@@ -5695,7 +5701,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve information about movie import lists."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5703,7 +5709,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"Update"},
+        tags={"system"},
     )
     async def get_update(
         radarr_base_url: str = Field(
@@ -5717,7 +5723,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific import list."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5725,7 +5731,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update(
         radarr_base_url: str = Field(
@@ -5739,7 +5745,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined import lists."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )
@@ -5747,7 +5753,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),
@@ -5762,7 +5768,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Create a new import list."""
         client = Api(
             base_url=radarr_base_url, token=radarr_api_key, verify=radarr_verify
         )

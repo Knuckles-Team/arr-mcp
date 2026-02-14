@@ -1,0 +1,236 @@
+---
+name: chaptarr-downloads
+description: "Generated skill for Downloads operations. Contains 35 tools."
+---
+
+### Overview
+This skill handles operations related to Downloads.
+
+### Available Tools
+- `get_downloadclient`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_downloadclient`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_downloadclient_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_downloadclient_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_downloadclient_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_downloadclient_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_downloadclient_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_downloadclient_schema`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_downloadclient_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_downloadclient_testall`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_downloadclient_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_config_downloadclient`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_config_downloadclient_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_config_downloadclient_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_importlist`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_importlist`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_importlist_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_importlist_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_importlist_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_importlist_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_importlist_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_importlist_schema`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_importlist_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_importlist_testall`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_importlist_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_importlistexclusion`: No description
+  - **Parameters**:
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_importlistexclusion`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `put_importlistexclusion_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `delete_importlistexclusion_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_importlistexclusion_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_manualimport`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_manualimport`: No description
+  - **Parameters**:
+    - `folder` (str)
+    - `downloadId` (str)
+    - `authorId` (int)
+    - `filterExistingFiles` (bool)
+    - `replaceExistingFiles` (bool)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_release`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `get_release`: No description
+  - **Parameters**:
+    - `bookId` (int)
+    - `authorId` (int)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+- `post_release_push`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `chaptarr_base_url` (str)
+    - `chaptarr_api_key` (Optional[str])
+    - `chaptarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

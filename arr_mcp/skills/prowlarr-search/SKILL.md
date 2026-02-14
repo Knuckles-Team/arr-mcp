@@ -1,12 +1,18 @@
 ---
 name: prowlarr-search
-description: "Generated skill for Search operations. Contains 3 tools."
+description: "Generated skill for Search operations. Contains 4 tools."
 ---
 
 ### Overview
 This skill handles operations related to Search.
 
 ### Available Tools
+- `search`: Search for indexers using the search endpoint.
+  - **Parameters**:
+    - `query` (str)
+    - `prowlarr_base_url` (str)
+    - `prowlarr_api_key` (Optional[str])
+    - `prowlarr_verify` (bool)
 - `post_search`: No description
   - **Parameters**:
     - `data` (Dict)

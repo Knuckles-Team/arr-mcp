@@ -1,0 +1,279 @@
+---
+name: lidarr-catalog
+description: "Generated skill for Catalog operations. Contains 39 tools."
+---
+
+### Overview
+This skill handles operations related to Catalog.
+
+### Available Tools
+- `get_album`: No description
+  - **Parameters**:
+    - `artistId` (int)
+    - `albumIds` (List)
+    - `foreignAlbumId` (str)
+    - `includeAllArtistAlbums` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_album`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_album_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_album_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `deleteFiles` (bool)
+    - `addImportListExclusion` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_album_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_album_monitor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_album_lookup`: No description
+  - **Parameters**:
+    - `term` (str)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_albumstudio`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_artist_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_artist_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `moveFiles` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_artist_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `deleteFiles` (bool)
+    - `addImportListExclusion` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_artist`: No description
+  - **Parameters**:
+    - `mbId` (str)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_artist`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_artist_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_artist_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_artist_lookup`: No description
+  - **Parameters**:
+    - `term` (str)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_mediacover_artist_artist_id_filename`: No description
+  - **Parameters**:
+    - `artistId` (int)
+    - `filename` (str)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_mediacover_album_album_id_filename`: No description
+  - **Parameters**:
+    - `albumId` (int)
+    - `filename` (str)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_metadata_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_metadata`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_metadata`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceSave` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_metadata_schema`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_metadata_test`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `forceTest` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_metadata_testall`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_metadata_action_name`: No description
+  - **Parameters**:
+    - `name` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_wanted_missing`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `includeArtist` (bool)
+    - `monitored` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_wanted_missing_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_rename`: No description
+  - **Parameters**:
+    - `artistId` (int)
+    - `albumId` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_retag`: No description
+  - **Parameters**:
+    - `artistId` (int)
+    - `albumId` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_track`: No description
+  - **Parameters**:
+    - `artistId` (int)
+    - `albumId` (int)
+    - `albumReleaseId` (int)
+    - `trackIds` (List)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_track_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_trackfile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_trackfile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_trackfile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_trackfile`: No description
+  - **Parameters**:
+    - `artistId` (int)
+    - `trackFileIds` (List)
+    - `albumId` (List)
+    - `unmapped` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_trackfile_editor`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_trackfile_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

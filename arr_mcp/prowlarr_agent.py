@@ -39,7 +39,7 @@ from pydantic import ValidationError
 from pydantic_ai.ui import SSE_CONTENT_TYPE
 from pydantic_ai.ui.ag_ui import AGUIAdapter
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -105,7 +105,7 @@ APIINFO_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr ApiInfo Agent.\n"
         "Your goal is to manage api info resources.\n"
-        "You have access to tools specifically tagged with 'ApiInfo'.\n"
+        "You have access to tools specifically tagged with 'apiinfo'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -115,7 +115,7 @@ APPPROFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr AppProfile Agent.\n"
         "Your goal is to manage app profile resources.\n"
-        "You have access to tools specifically tagged with 'AppProfile'.\n"
+        "You have access to tools specifically tagged with 'appprofile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -125,7 +125,7 @@ APPLICATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Application Agent.\n"
         "Your goal is to manage application resources.\n"
-        "You have access to tools specifically tagged with 'Application'.\n"
+        "You have access to tools specifically tagged with 'application'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -135,7 +135,7 @@ AUTHENTICATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Authentication Agent.\n"
         "Your goal is to manage authentication resources.\n"
-        "You have access to tools specifically tagged with 'Authentication'.\n"
+        "You have access to tools specifically tagged with 'authentication'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -145,7 +145,7 @@ BACKUP_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Backup Agent.\n"
         "Your goal is to manage backup resources.\n"
-        "You have access to tools specifically tagged with 'Backup'.\n"
+        "You have access to tools specifically tagged with 'backup'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -155,7 +155,7 @@ COMMAND_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Command Agent.\n"
         "Your goal is to manage command resources.\n"
-        "You have access to tools specifically tagged with 'Command'.\n"
+        "You have access to tools specifically tagged with 'command'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -165,7 +165,7 @@ CUSTOMFILTER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr CustomFilter Agent.\n"
         "Your goal is to manage custom filter resources.\n"
-        "You have access to tools specifically tagged with 'CustomFilter'.\n"
+        "You have access to tools specifically tagged with 'customfilter'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -175,7 +175,7 @@ DEVELOPMENTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr DevelopmentConfig Agent.\n"
         "Your goal is to manage development config resources.\n"
-        "You have access to tools specifically tagged with 'DevelopmentConfig'.\n"
+        "You have access to tools specifically tagged with 'developmentconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -185,7 +185,7 @@ DOWNLOADCLIENT_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr DownloadClient Agent.\n"
         "Your goal is to manage download client resources.\n"
-        "You have access to tools specifically tagged with 'DownloadClient'.\n"
+        "You have access to tools specifically tagged with 'downloadclient'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -195,7 +195,7 @@ DOWNLOADCLIENTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr DownloadClientConfig Agent.\n"
         "Your goal is to manage download client config resources.\n"
-        "You have access to tools specifically tagged with 'DownloadClientConfig'.\n"
+        "You have access to tools specifically tagged with 'downloadclientconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -205,7 +205,7 @@ FILESYSTEM_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr FileSystem Agent.\n"
         "Your goal is to manage file system resources.\n"
-        "You have access to tools specifically tagged with 'FileSystem'.\n"
+        "You have access to tools specifically tagged with 'filesystem'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -215,7 +215,7 @@ HEALTH_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Health Agent.\n"
         "Your goal is to manage health resources.\n"
-        "You have access to tools specifically tagged with 'Health'.\n"
+        "You have access to tools specifically tagged with 'health'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -225,7 +225,7 @@ HISTORY_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr History Agent.\n"
         "Your goal is to manage history resources.\n"
-        "You have access to tools specifically tagged with 'History'.\n"
+        "You have access to tools specifically tagged with 'history'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -235,7 +235,7 @@ HOSTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr HostConfig Agent.\n"
         "Your goal is to manage host config resources.\n"
-        "You have access to tools specifically tagged with 'HostConfig'.\n"
+        "You have access to tools specifically tagged with 'hostconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -245,7 +245,7 @@ INDEXER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Indexer Agent.\n"
         "Your goal is to manage indexer resources.\n"
-        "You have access to tools specifically tagged with 'Indexer'.\n"
+        "You have access to tools specifically tagged with 'indexer'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -255,7 +255,7 @@ INDEXERDEFAULTCATEGORIES_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr IndexerDefaultCategories Agent.\n"
         "Your goal is to manage indexer default categories resources.\n"
-        "You have access to tools specifically tagged with 'IndexerDefaultCategories'.\n"
+        "You have access to tools specifically tagged with 'indexerdefaultcategories'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -265,7 +265,7 @@ INDEXERPROXY_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr IndexerProxy Agent.\n"
         "Your goal is to manage indexer proxy resources.\n"
-        "You have access to tools specifically tagged with 'IndexerProxy'.\n"
+        "You have access to tools specifically tagged with 'indexerproxy'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -275,7 +275,7 @@ INDEXERSTATS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr IndexerStats Agent.\n"
         "Your goal is to manage indexer stats resources.\n"
-        "You have access to tools specifically tagged with 'IndexerStats'.\n"
+        "You have access to tools specifically tagged with 'indexerstats'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -285,7 +285,7 @@ INDEXERSTATUS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr IndexerStatus Agent.\n"
         "Your goal is to manage indexer status resources.\n"
-        "You have access to tools specifically tagged with 'IndexerStatus'.\n"
+        "You have access to tools specifically tagged with 'indexerstatus'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -295,7 +295,7 @@ LOCALIZATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Localization Agent.\n"
         "Your goal is to manage localization resources.\n"
-        "You have access to tools specifically tagged with 'Localization'.\n"
+        "You have access to tools specifically tagged with 'localization'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -305,7 +305,7 @@ LOG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Log Agent.\n"
         "Your goal is to manage log resources.\n"
-        "You have access to tools specifically tagged with 'Log'.\n"
+        "You have access to tools specifically tagged with 'log'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -315,7 +315,7 @@ LOGFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr LogFile Agent.\n"
         "Your goal is to manage log file resources.\n"
-        "You have access to tools specifically tagged with 'LogFile'.\n"
+        "You have access to tools specifically tagged with 'logfile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -325,7 +325,7 @@ NEWZNAB_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Newznab Agent.\n"
         "Your goal is to manage newznab resources.\n"
-        "You have access to tools specifically tagged with 'Newznab'.\n"
+        "You have access to tools specifically tagged with 'newznab'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -335,7 +335,7 @@ NOTIFICATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Notification Agent.\n"
         "Your goal is to manage notification resources.\n"
-        "You have access to tools specifically tagged with 'Notification'.\n"
+        "You have access to tools specifically tagged with 'notification'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -345,7 +345,7 @@ PING_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Ping Agent.\n"
         "Your goal is to manage ping resources.\n"
-        "You have access to tools specifically tagged with 'Ping'.\n"
+        "You have access to tools specifically tagged with 'ping'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -355,7 +355,7 @@ SEARCH_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Search Agent.\n"
         "Your goal is to manage search resources.\n"
-        "You have access to tools specifically tagged with 'Search'.\n"
+        "You have access to tools specifically tagged with 'search'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -365,7 +365,7 @@ STATICRESOURCE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr StaticResource Agent.\n"
         "Your goal is to manage static resource resources.\n"
-        "You have access to tools specifically tagged with 'StaticResource'.\n"
+        "You have access to tools specifically tagged with 'staticresource'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -375,7 +375,7 @@ SYSTEM_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr System Agent.\n"
         "Your goal is to manage system resources.\n"
-        "You have access to tools specifically tagged with 'System'.\n"
+        "You have access to tools specifically tagged with 'system'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -385,7 +385,7 @@ TAG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Tag Agent.\n"
         "Your goal is to manage tag resources.\n"
-        "You have access to tools specifically tagged with 'Tag'.\n"
+        "You have access to tools specifically tagged with 'tag'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -395,7 +395,7 @@ TAGDETAILS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr TagDetails Agent.\n"
         "Your goal is to manage tag details resources.\n"
-        "You have access to tools specifically tagged with 'TagDetails'.\n"
+        "You have access to tools specifically tagged with 'tagdetails'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -405,7 +405,7 @@ TASK_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Task Agent.\n"
         "Your goal is to manage task resources.\n"
-        "You have access to tools specifically tagged with 'Task'.\n"
+        "You have access to tools specifically tagged with 'task'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -415,7 +415,7 @@ UICONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr UiConfig Agent.\n"
         "Your goal is to manage ui config resources.\n"
-        "You have access to tools specifically tagged with 'UiConfig'.\n"
+        "You have access to tools specifically tagged with 'uiconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -425,7 +425,7 @@ UPDATE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr Update Agent.\n"
         "Your goal is to manage update resources.\n"
-        "You have access to tools specifically tagged with 'Update'.\n"
+        "You have access to tools specifically tagged with 'update'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -435,7 +435,7 @@ UPDATELOGFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Prowlarr UpdateLogFile Agent.\n"
         "Your goal is to manage update log file resources.\n"
-        "You have access to tools specifically tagged with 'UpdateLogFile'.\n"
+        "You have access to tools specifically tagged with 'updatelogfile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -511,58 +511,58 @@ def create_agent(
         agent_toolsets.append(SkillsToolset(directories=[str(skills_directory)]))
 
     agent_defs = {
-        "ApiInfo": (APIINFO_AGENT_PROMPT, "Prowlarr_ApiInfo_Agent"),
-        "AppProfile": (APPPROFILE_AGENT_PROMPT, "Prowlarr_AppProfile_Agent"),
-        "Application": (APPLICATION_AGENT_PROMPT, "Prowlarr_Application_Agent"),
-        "Authentication": (
+        "apiinfo": (APIINFO_AGENT_PROMPT, "Prowlarr_ApiInfo_Agent"),
+        "appprofile": (APPPROFILE_AGENT_PROMPT, "Prowlarr_AppProfile_Agent"),
+        "application": (APPLICATION_AGENT_PROMPT, "Prowlarr_Application_Agent"),
+        "authentication": (
             AUTHENTICATION_AGENT_PROMPT,
             "Prowlarr_Authentication_Agent",
         ),
-        "Backup": (BACKUP_AGENT_PROMPT, "Prowlarr_Backup_Agent"),
-        "Command": (COMMAND_AGENT_PROMPT, "Prowlarr_Command_Agent"),
-        "CustomFilter": (CUSTOMFILTER_AGENT_PROMPT, "Prowlarr_CustomFilter_Agent"),
-        "DevelopmentConfig": (
+        "backup": (BACKUP_AGENT_PROMPT, "Prowlarr_Backup_Agent"),
+        "command": (COMMAND_AGENT_PROMPT, "Prowlarr_Command_Agent"),
+        "customfilter": (CUSTOMFILTER_AGENT_PROMPT, "Prowlarr_CustomFilter_Agent"),
+        "developmentconfig": (
             DEVELOPMENTCONFIG_AGENT_PROMPT,
             "Prowlarr_DevelopmentConfig_Agent",
         ),
-        "DownloadClient": (
+        "downloadclient": (
             DOWNLOADCLIENT_AGENT_PROMPT,
             "Prowlarr_DownloadClient_Agent",
         ),
-        "DownloadClientConfig": (
+        "downloadclientconfig": (
             DOWNLOADCLIENTCONFIG_AGENT_PROMPT,
             "Prowlarr_DownloadClientConfig_Agent",
         ),
-        "FileSystem": (FILESYSTEM_AGENT_PROMPT, "Prowlarr_FileSystem_Agent"),
-        "Health": (HEALTH_AGENT_PROMPT, "Prowlarr_Health_Agent"),
-        "History": (HISTORY_AGENT_PROMPT, "Prowlarr_History_Agent"),
-        "HostConfig": (HOSTCONFIG_AGENT_PROMPT, "Prowlarr_HostConfig_Agent"),
-        "Indexer": (INDEXER_AGENT_PROMPT, "Prowlarr_Indexer_Agent"),
-        "IndexerDefaultCategories": (
+        "filesystem": (FILESYSTEM_AGENT_PROMPT, "Prowlarr_FileSystem_Agent"),
+        "health": (HEALTH_AGENT_PROMPT, "Prowlarr_Health_Agent"),
+        "history": (HISTORY_AGENT_PROMPT, "Prowlarr_History_Agent"),
+        "hostconfig": (HOSTCONFIG_AGENT_PROMPT, "Prowlarr_HostConfig_Agent"),
+        "indexer": (INDEXER_AGENT_PROMPT, "Prowlarr_Indexer_Agent"),
+        "indexerdefaultcategories": (
             INDEXERDEFAULTCATEGORIES_AGENT_PROMPT,
             "Prowlarr_IndexerDefaultCategories_Agent",
         ),
-        "IndexerProxy": (INDEXERPROXY_AGENT_PROMPT, "Prowlarr_IndexerProxy_Agent"),
-        "IndexerStats": (INDEXERSTATS_AGENT_PROMPT, "Prowlarr_IndexerStats_Agent"),
-        "IndexerStatus": (INDEXERSTATUS_AGENT_PROMPT, "Prowlarr_IndexerStatus_Agent"),
-        "Localization": (LOCALIZATION_AGENT_PROMPT, "Prowlarr_Localization_Agent"),
-        "Log": (LOG_AGENT_PROMPT, "Prowlarr_Log_Agent"),
-        "LogFile": (LOGFILE_AGENT_PROMPT, "Prowlarr_LogFile_Agent"),
-        "Newznab": (NEWZNAB_AGENT_PROMPT, "Prowlarr_Newznab_Agent"),
-        "Notification": (NOTIFICATION_AGENT_PROMPT, "Prowlarr_Notification_Agent"),
-        "Ping": (PING_AGENT_PROMPT, "Prowlarr_Ping_Agent"),
-        "Search": (SEARCH_AGENT_PROMPT, "Prowlarr_Search_Agent"),
-        "StaticResource": (
+        "indexerproxy": (INDEXERPROXY_AGENT_PROMPT, "Prowlarr_IndexerProxy_Agent"),
+        "indexerstats": (INDEXERSTATS_AGENT_PROMPT, "Prowlarr_IndexerStats_Agent"),
+        "indexerstatus": (INDEXERSTATUS_AGENT_PROMPT, "Prowlarr_IndexerStatus_Agent"),
+        "localization": (LOCALIZATION_AGENT_PROMPT, "Prowlarr_Localization_Agent"),
+        "log": (LOG_AGENT_PROMPT, "Prowlarr_Log_Agent"),
+        "logfile": (LOGFILE_AGENT_PROMPT, "Prowlarr_LogFile_Agent"),
+        "newznab": (NEWZNAB_AGENT_PROMPT, "Prowlarr_Newznab_Agent"),
+        "notification": (NOTIFICATION_AGENT_PROMPT, "Prowlarr_Notification_Agent"),
+        "ping": (PING_AGENT_PROMPT, "Prowlarr_Ping_Agent"),
+        "search": (SEARCH_AGENT_PROMPT, "Prowlarr_Search_Agent"),
+        "staticresource": (
             STATICRESOURCE_AGENT_PROMPT,
             "Prowlarr_StaticResource_Agent",
         ),
-        "System": (SYSTEM_AGENT_PROMPT, "Prowlarr_System_Agent"),
-        "Tag": (TAG_AGENT_PROMPT, "Prowlarr_Tag_Agent"),
-        "TagDetails": (TAGDETAILS_AGENT_PROMPT, "Prowlarr_TagDetails_Agent"),
-        "Task": (TASK_AGENT_PROMPT, "Prowlarr_Task_Agent"),
-        "UiConfig": (UICONFIG_AGENT_PROMPT, "Prowlarr_UiConfig_Agent"),
-        "Update": (UPDATE_AGENT_PROMPT, "Prowlarr_Update_Agent"),
-        "UpdateLogFile": (UPDATELOGFILE_AGENT_PROMPT, "Prowlarr_UpdateLogFile_Agent"),
+        "system": (SYSTEM_AGENT_PROMPT, "Prowlarr_System_Agent"),
+        "tag": (TAG_AGENT_PROMPT, "Prowlarr_Tag_Agent"),
+        "tagdetails": (TAGDETAILS_AGENT_PROMPT, "Prowlarr_TagDetails_Agent"),
+        "task": (TASK_AGENT_PROMPT, "Prowlarr_Task_Agent"),
+        "uiconfig": (UICONFIG_AGENT_PROMPT, "Prowlarr_UiConfig_Agent"),
+        "update": (UPDATE_AGENT_PROMPT, "Prowlarr_Update_Agent"),
+        "updatelogfile": (UPDATELOGFILE_AGENT_PROMPT, "Prowlarr_UpdateLogFile_Agent"),
     }
 
     child_agents = {}
@@ -580,13 +580,39 @@ def create_agent(
             else:
                 pass
 
+        # Collect tool names for logging
+        all_tool_names = []
+        for ts in tag_toolsets:
+            try:
+                # Unwrap FilteredToolset
+                current_ts = ts
+                while hasattr(current_ts, "wrapped"):
+                    current_ts = current_ts.wrapped
+
+                # Check for .tools (e.g. SkillsToolset)
+                if hasattr(current_ts, "tools") and isinstance(current_ts.tools, dict):
+                    all_tool_names.extend(current_ts.tools.keys())
+                # Check for ._tools (some implementations might use private attr)
+                elif hasattr(current_ts, "_tools") and isinstance(
+                    current_ts._tools, dict
+                ):
+                    all_tool_names.extend(current_ts._tools.keys())
+                else:
+                    # Fallback for MCP or others where tools are not available sync
+                    all_tool_names.append(f"<{type(current_ts).__name__}>")
+            except Exception as e:
+                logger.info(f"Unable to retrieve toolset: {e}")
+                pass
+
+        tool_list_str = ", ".join(all_tool_names)
+        logger.info(f"Available tools for {agent_name} ({tag}): {tool_list_str}")
         agent = Agent(
-            name=agent_name,
-            system_prompt=system_prompt,
             model=model,
-            model_settings=settings,
+            system_prompt=system_prompt,
+            name=agent_name,
             toolsets=tag_toolsets,
             tool_timeout=DEFAULT_TOOL_TIMEOUT,
+            model_settings=settings,
         )
         child_agents[tag] = agent
 
@@ -600,64 +626,74 @@ def create_agent(
 
     @supervisor.tool
     async def assign_task_to_apiinfo_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to ApiInfo to the ApiInfo Agent."""
-        return (
-            await child_agents["ApiInfo"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to apiinfo to the ApiInfo Agent."""
+        try:
+            return (
+                await child_agents["apiinfo"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in apiinfo agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_appprofile_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to AppProfile to the AppProfile Agent."""
+        """Assign a task related to appprofile to the AppProfile Agent."""
         return (
-            await child_agents["AppProfile"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["appprofile"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_application_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Application to the Application Agent."""
-        return (
-            await child_agents["Application"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to application to the Application Agent."""
+        try:
+            return (
+                await child_agents["application"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+        except Exception as e:
+            logger.error(f"Error in application agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_authentication_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to Authentication to the Authentication Agent."""
+        """Assign a task related to authentication to the Authentication Agent."""
         return (
-            await child_agents["Authentication"].run(
+            await child_agents["authentication"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
 
     @supervisor.tool
     async def assign_task_to_backup_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Backup to the Backup Agent."""
+        """Assign a task related to backup to the Backup Agent."""
         return (
-            await child_agents["Backup"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["backup"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_command_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Command to the Command Agent."""
+        """Assign a task related to command to the Command Agent."""
         return (
-            await child_agents["Command"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["command"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_customfilter_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to CustomFilter to the CustomFilter Agent."""
+        """Assign a task related to customfilter to the CustomFilter Agent."""
         return (
-            await child_agents["CustomFilter"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["customfilter"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_developmentconfig_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to DevelopmentConfig to the DevelopmentConfig Agent."""
+        """Assign a task related to developmentconfig to the DevelopmentConfig Agent."""
         return (
-            await child_agents["DevelopmentConfig"].run(
+            await child_agents["developmentconfig"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
@@ -666,204 +702,216 @@ def create_agent(
     async def assign_task_to_downloadclient_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to DownloadClient to the DownloadClient Agent."""
-        return (
-            await child_agents["DownloadClient"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to downloadclient to the DownloadClient Agent."""
+        try:
+            return (
+                await child_agents["downloadclient"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+        except Exception as e:
+            logger.error(f"Error in downloadclient agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_downloadclientconfig_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to DownloadClientConfig to the DownloadClientConfig Agent."""
+        """Assign a task related to downloadclientconfig to the DownloadClientConfig Agent."""
         return (
-            await child_agents["DownloadClientConfig"].run(
+            await child_agents["downloadclientconfig"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
 
     @supervisor.tool
     async def assign_task_to_filesystem_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to FileSystem to the FileSystem Agent."""
+        """Assign a task related to filesystem to the FileSystem Agent."""
         return (
-            await child_agents["FileSystem"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["filesystem"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_health_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Health to the Health Agent."""
+        """Assign a task related to health to the Health Agent."""
         return (
-            await child_agents["Health"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["health"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_history_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to History to the History Agent."""
+        """Assign a task related to history to the History Agent."""
         return (
-            await child_agents["History"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["history"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_hostconfig_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to HostConfig to the HostConfig Agent."""
+        """Assign a task related to hostconfig to the HostConfig Agent."""
         return (
-            await child_agents["HostConfig"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["hostconfig"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_indexer_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Indexer to the Indexer Agent."""
-        return (
-            await child_agents["Indexer"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to indexer to the Indexer Agent."""
+        try:
+            return (
+                await child_agents["indexer"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in indexer agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_indexerdefaultcategories_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to IndexerDefaultCategories to the IndexerDefaultCategories Agent."""
+        """Assign a task related to indexerdefaultcategories to the IndexerDefaultCategories Agent."""
         return (
-            await child_agents["IndexerDefaultCategories"].run(
+            await child_agents["indexerdefaultcategories"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
 
     @supervisor.tool
     async def assign_task_to_indexerproxy_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to IndexerProxy to the IndexerProxy Agent."""
+        """Assign a task related to indexerproxy to the IndexerProxy Agent."""
         return (
-            await child_agents["IndexerProxy"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["indexerproxy"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_indexerstats_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to IndexerStats to the IndexerStats Agent."""
+        """Assign a task related to indexerstats to the IndexerStats Agent."""
         return (
-            await child_agents["IndexerStats"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["indexerstats"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_indexerstatus_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to IndexerStatus to the IndexerStatus Agent."""
+        """Assign a task related to indexerstatus to the IndexerStatus Agent."""
         return (
-            await child_agents["IndexerStatus"].run(
+            await child_agents["indexerstatus"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
 
     @supervisor.tool
     async def assign_task_to_localization_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Localization to the Localization Agent."""
+        """Assign a task related to localization to the Localization Agent."""
         return (
-            await child_agents["Localization"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["localization"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_log_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Log to the Log Agent."""
+        """Assign a task related to log to the Log Agent."""
         return (
-            await child_agents["Log"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["log"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_logfile_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to LogFile to the LogFile Agent."""
+        """Assign a task related to logfile to the LogFile Agent."""
         return (
-            await child_agents["LogFile"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["logfile"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_newznab_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Newznab to the Newznab Agent."""
+        """Assign a task related to newznab to the Newznab Agent."""
         return (
-            await child_agents["Newznab"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["newznab"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_notification_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Notification to the Notification Agent."""
+        """Assign a task related to notification to the Notification Agent."""
         return (
-            await child_agents["Notification"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["notification"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_ping_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Ping to the Ping Agent."""
+        """Assign a task related to ping to the Ping Agent."""
         return (
-            await child_agents["Ping"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["ping"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_search_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Search to the Search Agent."""
+        """Assign a task related to search to the Search Agent."""
         return (
-            await child_agents["Search"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["search"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_staticresource_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to StaticResource to the StaticResource Agent."""
+        """Assign a task related to staticresource to the StaticResource Agent."""
         return (
-            await child_agents["StaticResource"].run(
+            await child_agents["staticresource"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
 
     @supervisor.tool
     async def assign_task_to_system_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to System to the System Agent."""
-        return (
-            await child_agents["System"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to system to the System Agent."""
+        try:
+            return (
+                await child_agents["system"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+        except Exception as e:
+            logger.error(f"Error in system agent: {e}", exc_info=True)
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_tag_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Tag to the Tag Agent."""
+        """Assign a task related to tag to the Tag Agent."""
         return (
-            await child_agents["Tag"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["tag"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_tagdetails_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to TagDetails to the TagDetails Agent."""
+        """Assign a task related to tagdetails to the TagDetails Agent."""
         return (
-            await child_agents["TagDetails"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["tagdetails"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_task_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Task to the Task Agent."""
+        """Assign a task related to task to the Task Agent."""
         return (
-            await child_agents["Task"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["task"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_uiconfig_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to UiConfig to the UiConfig Agent."""
+        """Assign a task related to uiconfig to the UiConfig Agent."""
         return (
-            await child_agents["UiConfig"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["uiconfig"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_update_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Update to the Update Agent."""
+        """Assign a task related to update to the Update Agent."""
         return (
-            await child_agents["Update"].run(task, usage=ctx.usage, deps=ctx.deps)
+            await child_agents["update"].run(task, usage=ctx.usage, deps=ctx.deps)
         ).output
 
     @supervisor.tool
     async def assign_task_to_updatelogfile_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to UpdateLogFile to the UpdateLogFile Agent."""
+        """Assign a task related to updatelogfile to the UpdateLogFile Agent."""
         return (
-            await child_agents["UpdateLogFile"].run(
+            await child_agents["updatelogfile"].run(
                 task, usage=ctx.usage, deps=ctx.deps
             )
         ).output
@@ -923,7 +971,6 @@ def create_agent_server(
         mcp_config=mcp_config,
         skills_directory=skills_directory,
         ssl_verify=ssl_verify,
-        timeout=DEFAULT_TIMEOUT,
     )
 
     if skills_directory and os.path.exists(skills_directory):

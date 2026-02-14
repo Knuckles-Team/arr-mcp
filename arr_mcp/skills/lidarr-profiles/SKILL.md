@@ -1,0 +1,356 @@
+---
+name: lidarr-profiles
+description: "Generated skill for Profiles operations. Contains 54 tools."
+---
+
+### Overview
+This skill handles operations related to Profiles.
+
+### Available Tools
+- `get_customfilter_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_customfilter_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_customfilter_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_customfilter`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_customfilter`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_customformat_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_customformat_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_customformat_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_customformat`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_customformat`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_customformat_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_customformat_bulk`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_customformat_schema`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_wanted_cutoff`: No description
+  - **Parameters**:
+    - `page` (int)
+    - `pageSize` (int)
+    - `sortKey` (str)
+    - `sortDirection` (str)
+    - `includeArtist` (bool)
+    - `monitored` (bool)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_wanted_cutoff_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_delayprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_delayprofile`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_delayprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_delayprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_delayprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_delayprofile_reorder_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `afterId` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_language_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_language`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_mediamanagement_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_config_mediamanagement_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_mediamanagement`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_metadataprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_metadataprofile`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_metadataprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_metadataprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_metadataprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_metadataprofile_schema`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_metadataprovider_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_config_metadataprovider_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_metadataprovider`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_naming_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_config_naming_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_naming`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_config_naming_examples`: No description
+  - **Parameters**:
+    - `renameTracks` (bool)
+    - `replaceIllegalCharacters` (bool)
+    - `colonReplacementFormat` (int)
+    - `standardTrackFormat` (str)
+    - `multiDiscTrackFormat` (str)
+    - `artistFolderFormat` (str)
+    - `includeArtistName` (bool)
+    - `includeAlbumTitle` (bool)
+    - `includeQuality` (bool)
+    - `replaceSpaces` (bool)
+    - `separator` (str)
+    - `numberStyle` (str)
+    - `id` (int)
+    - `resourceName` (str)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_qualitydefinition_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_qualitydefinition_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_qualitydefinition`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_qualitydefinition_update`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_qualityprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_qualityprofile`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_qualityprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_qualityprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_qualityprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_qualityprofile_schema`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_releaseprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `put_releaseprofile_id`: No description
+  - **Parameters**:
+    - `id` (str)
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `delete_releaseprofile_id`: No description
+  - **Parameters**:
+    - `id` (int)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `get_releaseprofile`: No description
+  - **Parameters**:
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+- `post_releaseprofile`: No description
+  - **Parameters**:
+    - `data` (Dict)
+    - `lidarr_base_url` (str)
+    - `lidarr_api_key` (Optional[str])
+    - `lidarr_verify` (bool)
+
+### Usage Instructions
+1. Review the tool available in this skill.
+2. Call the tool with the required parameters.
+
+### Error Handling
+- Ensure all required parameters are provided.
+- Check return values for error messages.

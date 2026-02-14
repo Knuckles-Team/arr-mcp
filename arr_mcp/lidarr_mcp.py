@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Lidarr MCP Server.
+
+This module implements an MCP server for Lidarr, providing tools to manage
+music collections, artists, and albums. It handles authentication, middleware,
+and API interactions.
+"""
+
 import os
 import argparse
 import sys
@@ -27,7 +33,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -67,7 +73,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Album"},
+        tags={"catalog"},
     )
     async def get_album(
         artistId: int = Field(default=None, description="artistId"),
@@ -87,7 +93,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get albums managed by Lidarr, with optional filters for artist, IDs, and path."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -100,7 +106,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Album"},
+        tags={"catalog"},
     )
     async def post_album(
         data: Dict = Field(default=..., description="data"),
@@ -115,7 +121,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new album to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -123,7 +129,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Album"},
+        tags={"catalog"},
     )
     async def put_album_id(
         id: str = Field(default=..., description="id"),
@@ -139,7 +145,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing album by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -147,7 +153,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Album"},
+        tags={"catalog"},
     )
     async def delete_album_id(
         id: int = Field(default=..., description="id"),
@@ -166,7 +172,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an album by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -178,7 +184,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Album"},
+        tags={"catalog"},
     )
     async def get_album_id(
         id: int = Field(default=..., description="id"),
@@ -193,7 +199,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get information for a specific album by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -201,7 +207,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Album"},
+        tags={"catalog"},
     )
     async def put_album_monitor(
         data: Dict = Field(default=..., description="data"),
@@ -216,7 +222,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update monitor status for albums."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -224,7 +230,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AlbumLookup"},
+        tags={"catalog"},
     )
     async def get_album_lookup(
         term: str = Field(default=None, description="term"),
@@ -239,7 +245,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Search for albums matching a term."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -247,7 +253,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AlbumStudio"},
+        tags={"catalog"},
     )
     async def post_albumstudio(
         data: Dict = Field(default=..., description="data"),
@@ -262,7 +268,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new album studio configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -270,7 +276,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ApiInfo"},
+        tags={"system"},
     )
     async def get_api(
         lidarr_base_url: str = Field(
@@ -284,7 +290,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the Lidarr API status and core configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -292,7 +298,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Artist"},
+        tags={"catalog"},
     )
     async def get_artist_id(
         id: int = Field(default=..., description="id"),
@@ -307,7 +313,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get details for a specific artist by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -315,7 +321,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Artist"},
+        tags={"catalog"},
     )
     async def put_artist_id(
         id: str = Field(default=..., description="id"),
@@ -332,7 +338,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing artist configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -340,7 +346,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Artist"},
+        tags={"catalog"},
     )
     async def delete_artist_id(
         id: int = Field(default=..., description="id"),
@@ -359,7 +365,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an artist from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -371,7 +377,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Artist"},
+        tags={"catalog"},
     )
     async def get_artist(
         mbId: str = Field(default=None, description="mbId"),
@@ -386,7 +392,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get all managed artists, or filter by MusicBrainz ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -394,7 +400,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Artist"},
+        tags={"catalog"},
     )
     async def post_artist(
         data: Dict = Field(default=..., description="data"),
@@ -409,7 +415,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new artist to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -417,7 +423,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ArtistEditor"},
+        tags={"catalog"},
     )
     async def put_artist_editor(
         data: Dict = Field(default=..., description="data"),
@@ -432,7 +438,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update artist settings."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -440,7 +446,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ArtistEditor"},
+        tags={"catalog"},
     )
     async def delete_artist_editor(
         data: Dict = Field(default=..., description="data"),
@@ -455,7 +461,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete artists."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -463,7 +469,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ArtistLookup"},
+        tags={"catalog"},
     )
     async def get_artist_lookup(
         term: str = Field(default=None, description="term"),
@@ -478,7 +484,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Search for artists matching a term."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -486,7 +492,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -501,7 +507,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform a login operation."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -509,7 +515,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_login(
         lidarr_base_url: str = Field(
@@ -523,7 +529,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Check the current login status."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -531,7 +537,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Authentication"},
+        tags={"system"},
     )
     async def get_logout(
         lidarr_base_url: str = Field(
@@ -545,7 +551,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform a logout operation."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -553,7 +559,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def get_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -568,7 +574,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get details for an auto-tagging configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -576,7 +582,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def put_autotagging_id(
         id: str = Field(default=..., description="id"),
@@ -592,7 +598,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an auto-tagging configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -600,7 +606,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def delete_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -615,7 +621,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an auto-tagging configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -623,7 +629,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def post_autotagging(
         data: Dict = Field(default=..., description="data"),
@@ -638,7 +644,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new auto-tagging configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -646,7 +652,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def get_autotagging(
         lidarr_base_url: str = Field(
@@ -660,7 +666,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get all auto-tagging configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -668,7 +674,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"AutoTagging"},
+        tags={"operations"},
     )
     async def get_autotagging_schema(
         lidarr_base_url: str = Field(
@@ -682,7 +688,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the schema for auto-tagging configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -690,7 +696,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def get_system_backup(
         lidarr_base_url: str = Field(
@@ -704,7 +710,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the current system backup information."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -712,7 +718,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -727,7 +733,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a system backup by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -735,7 +741,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -750,7 +756,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Restore Lidarr from a specific backup ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -758,7 +764,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Backup"},
+        tags={"system"},
     )
     async def post_system_backup_restore_upload(
         lidarr_base_url: str = Field(
@@ -772,7 +778,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Upload and restore a Lidarr backup archive."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -780,7 +786,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def get_blocklist(
         page: int = Field(default=None, description="page"),
@@ -798,7 +804,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve a paginated list of items in the blocklist."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -808,7 +814,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def delete_blocklist_id(
         id: int = Field(default=..., description="id"),
@@ -823,7 +829,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Remove an item from the blocklist by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -831,7 +837,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Blocklist"},
+        tags={"queue"},
     )
     async def delete_blocklist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -846,7 +852,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk removal of items from the blocklist."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -854,7 +860,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Calendar"},
+        tags={"operations"},
     )
     async def get_calendar(
         start: str = Field(default=None, description="start"),
@@ -873,7 +879,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve calendar events for a given time range."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -887,7 +893,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Calendar"},
+        tags={"operations"},
     )
     async def get_calendar_id(
         id: int = Field(default=..., description="id"),
@@ -902,7 +908,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve a specific calendar event by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -910,7 +916,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CalendarFeed"},
+        tags={"operations"},
     )
     async def get_feed_v1_calendar_lidarrics(
         pastDays: int = Field(default=None, description="pastDays"),
@@ -928,7 +934,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the calendar feed in iCal format."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -938,7 +944,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -953,7 +959,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the status of a specific command by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -961,7 +967,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -976,7 +982,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Cancel a specific command by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -984,7 +990,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -999,7 +1005,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Execute a command in Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1007,7 +1013,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Command"},
+        tags={"operations"},
     )
     async def get_command(
         lidarr_base_url: str = Field(
@@ -1021,7 +1027,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all currently running or recently finished commands."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1029,7 +1035,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -1044,7 +1050,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific custom filter by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1052,7 +1058,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def put_customfilter_id(
         id: str = Field(default=..., description="id"),
@@ -1068,7 +1074,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing custom filter by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1076,7 +1082,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def delete_customfilter_id(
         id: int = Field(default=..., description="id"),
@@ -1091,7 +1097,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a custom filter by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1099,7 +1105,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def get_customfilter(
         lidarr_base_url: str = Field(
@@ -1113,7 +1119,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined custom filters."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1121,7 +1127,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFilter"},
+        tags={"profiles"},
     )
     async def post_customfilter(
         data: Dict = Field(default=..., description="data"),
@@ -1136,7 +1142,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Create a new custom filter."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1144,7 +1150,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat_id(
         id: int = Field(default=..., description="id"),
@@ -1159,7 +1165,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve a specific custom format by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1167,7 +1173,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def put_customformat_id(
         id: str = Field(default=..., description="id"),
@@ -1183,7 +1189,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing custom format by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1191,7 +1197,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def delete_customformat_id(
         id: int = Field(default=..., description="id"),
@@ -1206,7 +1212,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined custom formats."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1214,7 +1220,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat(
         lidarr_base_url: str = Field(
@@ -1228,7 +1234,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Create a new custom format."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1236,7 +1242,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def post_customformat(
         data: Dict = Field(default=..., description="data"),
@@ -1251,7 +1257,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple custom formats."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1259,7 +1265,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def put_customformat_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1274,7 +1280,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple custom formats."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1282,7 +1288,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def delete_customformat_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1297,7 +1303,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for custom formats."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1305,7 +1311,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"CustomFormat"},
+        tags={"profiles"},
     )
     async def get_customformat_schema(
         lidarr_base_url: str = Field(
@@ -1319,7 +1325,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific delay profile by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1327,7 +1333,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Cutoff"},
+        tags={"profiles"},
     )
     async def get_wanted_cutoff(
         page: int = Field(default=None, description="page"),
@@ -1347,7 +1353,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing delay profile by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1362,7 +1368,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Cutoff"},
+        tags={"profiles"},
     )
     async def get_wanted_cutoff_id(
         id: int = Field(default=..., description="id"),
@@ -1377,7 +1383,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a delay profile by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1385,7 +1391,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def post_delayprofile(
         data: Dict = Field(default=..., description="data"),
@@ -1400,7 +1406,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new delay profile."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1408,7 +1414,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def get_delayprofile(
         lidarr_base_url: str = Field(
@@ -1422,7 +1428,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined delay profiles."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1430,7 +1436,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def delete_delayprofile_id(
         id: int = Field(default=..., description="id"),
@@ -1445,7 +1451,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve information about available disk space."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1453,7 +1459,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def put_delayprofile_id(
         id: str = Field(default=..., description="id"),
@@ -1469,7 +1475,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific download client by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1477,7 +1483,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def get_delayprofile_id(
         id: int = Field(default=..., description="id"),
@@ -1492,7 +1498,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing download client configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1500,7 +1506,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DelayProfile"},
+        tags={"profiles"},
     )
     async def put_delayprofile_reorder_id(
         id: int = Field(default=..., description="id"),
@@ -1516,7 +1522,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a download client from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1524,7 +1530,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DiskSpace"},
+        tags={"system"},
     )
     async def get_diskspace(
         lidarr_base_url: str = Field(
@@ -1538,7 +1544,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all configured download clients."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1546,7 +1552,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1561,7 +1567,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new download client to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1569,7 +1575,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1586,7 +1592,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple download clients."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1594,7 +1600,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1609,7 +1615,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple download clients."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1617,7 +1623,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient(
         lidarr_base_url: str = Field(
@@ -1631,7 +1637,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for download clients."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1639,7 +1645,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient(
         data: Dict = Field(default=..., description="data"),
@@ -1655,7 +1661,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test a download client configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1663,7 +1669,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def put_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1678,7 +1684,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all configured download clients."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1686,7 +1692,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def delete_downloadclient_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1701,7 +1707,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform an action on a download client."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1709,7 +1715,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def get_downloadclient_schema(
         lidarr_base_url: str = Field(
@@ -1723,7 +1729,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve download client configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1731,7 +1737,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_test(
         data: Dict = Field(default=..., description="data"),
@@ -1747,7 +1753,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update download client configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1755,7 +1761,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_testall(
         lidarr_base_url: str = Field(
@@ -1769,7 +1775,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all download client configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1777,7 +1783,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClient"},
+        tags={"downloads"},
     )
     async def post_downloadclient_action_name(
         name: str = Field(default=..., description="name"),
@@ -1793,7 +1799,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Browse the local filesystem."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1801,7 +1807,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient_id(
         id: int = Field(default=..., description="id"),
@@ -1816,7 +1822,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get information about a specific filesystem path."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1824,7 +1830,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def put_config_downloadclient_id(
         id: str = Field(default=..., description="id"),
@@ -1840,7 +1846,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current health status of Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1848,7 +1854,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"DownloadClientConfig"},
+        tags={"downloads"},
     )
     async def get_config_downloadclient(
         lidarr_base_url: str = Field(
@@ -1862,7 +1868,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the schema for health status information."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1870,7 +1876,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1889,7 +1895,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve Lidarr activity history."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1901,7 +1907,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1916,7 +1922,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve activity history for a specific artist."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1924,7 +1930,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"FileSystem"},
+        tags={"system"},
     )
     async def get_filesystem_mediafiles(
         path: str = Field(default=None, description="path"),
@@ -1939,7 +1945,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a history item by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1947,7 +1953,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Health"},
+        tags={"system"},
     )
     async def get_health(
         lidarr_base_url: str = Field(
@@ -1961,7 +1967,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get the current health status of the Lidarr instance."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -1969,7 +1975,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history(
         page: int = Field(default=None, description="page"),
@@ -1995,7 +2001,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Mark a history item as failed."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2016,7 +2022,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_since(
         date: str = Field(default=None, description="date"),
@@ -2035,7 +2041,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve host configuration settings by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2049,7 +2055,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def get_history_artist(
         artistId: int = Field(default=None, description="artistId"),
@@ -2069,7 +2075,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update host configuration settings by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2084,7 +2090,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"History"},
+        tags={"history"},
     )
     async def post_history_failed_id(
         id: int = Field(default=..., description="id"),
@@ -2099,7 +2105,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all host configuration settings."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2107,7 +2113,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -2122,7 +2128,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific indexer by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2130,7 +2136,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -2146,7 +2152,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing indexer configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2154,7 +2160,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"HostConfig"},
+        tags={"system"},
     )
     async def get_config_host(
         lidarr_base_url: str = Field(
@@ -2168,7 +2174,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete an indexer from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2176,7 +2182,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2191,7 +2197,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all configured indexers."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2199,7 +2205,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def put_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2216,7 +2222,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new indexer to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2224,7 +2230,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def delete_importlist_id(
         id: int = Field(default=..., description="id"),
@@ -2239,7 +2245,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple indexer configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2247,7 +2253,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist(
         lidarr_base_url: str = Field(
@@ -2261,7 +2267,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple indexers."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2269,7 +2275,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist(
         data: Dict = Field(default=..., description="data"),
@@ -2285,7 +2291,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for indexers."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2293,7 +2299,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def put_importlist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2308,7 +2314,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test an indexer configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2316,7 +2322,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def delete_importlist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2331,7 +2337,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all configured indexers."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2339,7 +2345,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def get_importlist_schema(
         lidarr_base_url: str = Field(
@@ -2353,7 +2359,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform an action on an indexer."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2361,7 +2367,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_test(
         data: Dict = Field(default=..., description="data"),
@@ -2377,7 +2383,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve indexer configuration details by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2385,7 +2391,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_testall(
         lidarr_base_url: str = Field(
@@ -2399,7 +2405,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update indexer configuration details by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2407,7 +2413,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportList"},
+        tags={"downloads"},
     )
     async def post_importlist_action_name(
         name: str = Field(default=..., description="name"),
@@ -2423,7 +2429,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all indexer configuration settings."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2431,7 +2437,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_importlistexclusion_id(
         id: int = Field(default=..., description="id"),
@@ -2446,7 +2452,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific metadata profile by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2454,7 +2460,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def put_importlistexclusion_id(
         id: str = Field(default=..., description="id"),
@@ -2470,7 +2476,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing metadata profile configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2478,7 +2484,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def delete_importlistexclusion_id(
         id: int = Field(default=..., description="id"),
@@ -2493,7 +2499,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a metadata profile from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2501,7 +2507,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def get_importlistexclusion(
         lidarr_base_url: str = Field(
@@ -2515,7 +2521,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined metadata profiles."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2523,7 +2529,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ImportListExclusion"},
+        tags={"downloads"},
     )
     async def post_importlistexclusion(
         data: Dict = Field(default=..., description="data"),
@@ -2538,7 +2544,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Create a new metadata profile."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2546,7 +2552,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2561,7 +2567,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for metadata profiles."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2569,7 +2575,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2586,7 +2592,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve naming configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2594,7 +2600,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2609,7 +2615,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update naming configuration by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2617,7 +2623,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer(
         lidarr_base_url: str = Field(
@@ -2631,7 +2637,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all naming configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2639,7 +2645,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer(
         data: Dict = Field(default=..., description="data"),
@@ -2655,7 +2661,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific notification by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2663,7 +2669,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def put_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2678,7 +2684,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing notification configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2686,7 +2692,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def delete_indexer_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -2701,7 +2707,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a notification from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2709,7 +2715,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def get_indexer_schema(
         lidarr_base_url: str = Field(
@@ -2723,7 +2729,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all configured notifications."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2731,7 +2737,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_test(
         data: Dict = Field(default=..., description="data"),
@@ -2747,7 +2753,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new notification to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2755,7 +2761,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_testall(
         lidarr_base_url: str = Field(
@@ -2769,7 +2775,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple notification configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2777,7 +2783,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Indexer"},
+        tags={"indexer"},
     )
     async def post_indexer_action_name(
         name: str = Field(default=..., description="name"),
@@ -2793,7 +2799,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple notifications."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2801,7 +2807,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def get_config_indexer_id(
         id: int = Field(default=..., description="id"),
@@ -2816,7 +2822,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for notifications."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2824,7 +2830,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def put_config_indexer_id(
         id: str = Field(default=..., description="id"),
@@ -2840,7 +2846,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test a notification configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2848,7 +2854,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"IndexerConfig"},
+        tags={"indexer"},
     )
     async def get_config_indexer(
         lidarr_base_url: str = Field(
@@ -2862,7 +2868,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Test all configured notifications."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2870,7 +2876,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"IndexerFlag"},
+        tags={"indexer"},
     )
     async def get_indexerflag(
         lidarr_base_url: str = Field(
@@ -2884,7 +2890,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform an action on a notification."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2892,7 +2898,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Language"},
+        tags={"profiles"},
     )
     async def get_language_id(
         id: int = Field(default=..., description="id"),
@@ -2907,7 +2913,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Parse artist information from a string."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2915,7 +2921,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Language"},
+        tags={"profiles"},
     )
     async def get_language(
         lidarr_base_url: str = Field(
@@ -2929,7 +2935,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Parse album information from a string."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2937,7 +2943,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Localization"},
+        tags={"system"},
     )
     async def get_localization(
         lidarr_base_url: str = Field(
@@ -2951,7 +2957,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Parse track information from a string."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2959,7 +2965,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Log"},
+        tags={"system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -2978,7 +2984,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve information about a specific file path."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -2992,7 +2998,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file(
         lidarr_base_url: str = Field(
@@ -3006,7 +3012,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific quality definition by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3014,7 +3020,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"LogFile"},
+        tags={"system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3029,7 +3035,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing quality definition configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3037,7 +3043,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ManualImport"},
+        tags={"downloads"},
     )
     async def post_manualimport(
         data: Dict = Field(default=..., description="data"),
@@ -3052,7 +3058,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined quality definitions."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3060,7 +3066,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ManualImport"},
+        tags={"downloads"},
     )
     async def get_manualimport(
         folder: str = Field(default=None, description="folder"),
@@ -3083,7 +3089,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple quality definitions."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3097,7 +3103,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MediaCover"},
+        tags={"catalog"},
     )
     async def get_mediacover_artist_artist_id_filename(
         artistId: int = Field(default=..., description="artistId"),
@@ -3113,7 +3119,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for quality definitions."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3123,7 +3129,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MediaCover"},
+        tags={"catalog"},
     )
     async def get_mediacover_album_album_id_filename(
         albumId: int = Field(default=..., description="albumId"),
@@ -3139,7 +3145,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific quality profile by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3149,7 +3155,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def get_config_mediamanagement_id(
         id: int = Field(default=..., description="id"),
@@ -3164,7 +3170,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing quality profile configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3172,7 +3178,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def put_config_mediamanagement_id(
         id: str = Field(default=..., description="id"),
@@ -3188,7 +3194,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a quality profile from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3196,7 +3202,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MediaManagementConfig"},
+        tags={"profiles"},
     )
     async def get_config_mediamanagement(
         lidarr_base_url: str = Field(
@@ -3210,7 +3216,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined quality profiles."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3218,7 +3224,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3233,7 +3239,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Create a new quality profile."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3241,7 +3247,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def put_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3258,7 +3264,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the configuration schema for quality profiles."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3266,7 +3272,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3281,7 +3287,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3289,7 +3295,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata(
         lidarr_base_url: str = Field(
@@ -3303,7 +3309,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed information about the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3311,7 +3317,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3327,7 +3333,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the status of the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3335,7 +3341,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def get_metadata_schema(
         lidarr_base_url: str = Field(
@@ -3349,7 +3355,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the schema for the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3357,7 +3363,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3373,7 +3379,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Manually grab an item from the queue by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3381,7 +3387,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_testall(
         lidarr_base_url: str = Field(
@@ -3395,7 +3401,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Remove an item from the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3403,7 +3409,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Metadata"},
+        tags={"catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3419,7 +3425,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk removal of items from the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3427,7 +3433,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def post_metadataprofile(
         data: Dict = Field(default=..., description="data"),
@@ -3442,7 +3448,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Perform an action on the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3450,7 +3456,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def get_metadataprofile(
         lidarr_base_url: str = Field(
@@ -3464,7 +3470,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve available releases."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3472,7 +3478,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def delete_metadataprofile_id(
         id: int = Field(default=..., description="id"),
@@ -3487,7 +3493,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Manually grab a specific release."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3495,7 +3501,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def put_metadataprofile_id(
         id: str = Field(default=..., description="id"),
@@ -3511,7 +3517,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for pushed releases."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3519,7 +3525,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProfile"},
+        tags={"profiles"},
     )
     async def get_metadataprofile_id(
         id: int = Field(default=..., description="id"),
@@ -3534,7 +3540,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Push a new release for processing."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3542,7 +3548,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProfileSchema"},
+        tags={"profiles"},
     )
     async def get_metadataprofile_schema(
         lidarr_base_url: str = Field(
@@ -3556,7 +3562,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve remote path mapping configurations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3564,7 +3570,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProviderConfig"},
+        tags={"profiles"},
     )
     async def get_config_metadataprovider_id(
         id: int = Field(default=..., description="id"),
@@ -3579,7 +3585,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve file rename information."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3587,7 +3593,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProviderConfig"},
+        tags={"profiles"},
     )
     async def put_config_metadataprovider_id(
         id: str = Field(default=..., description="id"),
@@ -3603,7 +3609,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Execute a file rename operation."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3611,7 +3617,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"MetadataProviderConfig"},
+        tags={"profiles"},
     )
     async def get_config_metadataprovider(
         lidarr_base_url: str = Field(
@@ -3625,7 +3631,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve rename information for a specific artist."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3633,7 +3639,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Missing"},
+        tags={"catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3653,7 +3659,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific restriction by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3668,7 +3674,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Missing"},
+        tags={"catalog"},
     )
     async def get_wanted_missing_id(
         id: int = Field(default=..., description="id"),
@@ -3683,7 +3689,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing restriction configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3691,7 +3697,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming_id(
         id: int = Field(default=..., description="id"),
@@ -3706,7 +3712,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a restriction from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3714,7 +3720,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def put_config_naming_id(
         id: str = Field(default=..., description="id"),
@@ -3730,7 +3736,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined restrictions."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3738,7 +3744,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming(
         lidarr_base_url: str = Field(
@@ -3752,7 +3758,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new restriction configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3760,7 +3766,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"NamingConfig"},
+        tags={"profiles"},
     )
     async def get_config_naming_examples(
         renameTracks: bool = Field(default=None, description="renameTracks"),
@@ -3796,7 +3802,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific root folder by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3819,7 +3825,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_id(
         id: int = Field(default=..., description="id"),
@@ -3834,7 +3840,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a root folder from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3842,7 +3848,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def put_notification_id(
         id: int = Field(default=..., description="id"),
@@ -3859,7 +3865,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all configured root folders."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3867,7 +3873,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def delete_notification_id(
         id: int = Field(default=..., description="id"),
@@ -3882,7 +3888,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new root folder to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3890,7 +3896,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification(
         lidarr_base_url: str = Field(
@@ -3904,7 +3910,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific tag by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3912,7 +3918,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification(
         data: Dict = Field(default=..., description="data"),
@@ -3928,7 +3934,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing tag."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3936,7 +3942,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def get_notification_schema(
         lidarr_base_url: str = Field(
@@ -3950,7 +3956,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a tag from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3958,7 +3964,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_test(
         data: Dict = Field(default=..., description="data"),
@@ -3974,7 +3980,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all defined tags."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -3982,7 +3988,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_testall(
         lidarr_base_url: str = Field(
@@ -3996,7 +4002,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new tag to Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4004,7 +4010,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Notification"},
+        tags={"config"},
     )
     async def post_notification_action_name(
         name: str = Field(default=..., description="name"),
@@ -4020,7 +4026,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific tag by ID, including its usage."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4028,7 +4034,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Parse"},
+        tags={"operations"},
     )
     async def get_parse(
         title: str = Field(default=None, description="title"),
@@ -4043,7 +4049,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for all tags, including their usage."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4051,7 +4057,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Ping"},
+        tags={"system"},
     )
     async def get_ping(
         lidarr_base_url: str = Field(
@@ -4065,7 +4071,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific track by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4073,7 +4079,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def put_qualitydefinition_id(
         id: str = Field(default=..., description="id"),
@@ -4089,7 +4095,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing track by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4097,7 +4103,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition_id(
         id: int = Field(default=..., description="id"),
@@ -4112,7 +4118,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all tracks for a specific artist or album."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4120,7 +4126,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def get_qualitydefinition(
         lidarr_base_url: str = Field(
@@ -4134,7 +4140,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update the monitoring status of multiple tracks."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4142,7 +4148,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityDefinition"},
+        tags={"profiles"},
     )
     async def put_qualitydefinition_update(
         data: Dict = Field(default=..., description="data"),
@@ -4157,7 +4163,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update the monitoring status of multiple tracks."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4165,7 +4171,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def post_qualityprofile(
         data: Dict = Field(default=..., description="data"),
@@ -4180,7 +4186,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific track file by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4188,7 +4194,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def get_qualityprofile(
         lidarr_base_url: str = Field(
@@ -4202,7 +4208,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a track file from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4210,7 +4216,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def delete_qualityprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4225,7 +4231,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update metadata for a specific track file."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4233,7 +4239,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def put_qualityprofile_id(
         id: str = Field(default=..., description="id"),
@@ -4249,7 +4255,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all track files for a specific artist or album."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4257,7 +4263,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityProfile"},
+        tags={"profiles"},
     )
     async def get_qualityprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4272,7 +4278,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update multiple track files."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4280,7 +4286,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QualityProfileSchema"},
+        tags={"profiles"},
     )
     async def get_qualityprofile_schema(
         lidarr_base_url: str = Field(
@@ -4294,7 +4300,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete multiple track files."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4302,7 +4308,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def delete_queue_id(
         id: int = Field(default=..., description="id"),
@@ -4321,7 +4327,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve tracks that are missing from the collection."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4335,7 +4341,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def delete_queue_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4354,7 +4360,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve tracks that have not reached their quality cutoff."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4368,7 +4374,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Queue"},
+        tags={"queue"},
     )
     async def get_queue(
         page: int = Field(default=None, description="page"),
@@ -4394,7 +4400,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Search for tracks matching a specific term."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4413,7 +4419,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QueueAction"},
+        tags={"queue"},
     )
     async def post_queue_grab_id(
         id: int = Field(default=..., description="id"),
@@ -4428,7 +4434,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed info for a missing track by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4436,7 +4442,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QueueAction"},
+        tags={"queue"},
     )
     async def post_queue_grab_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4451,7 +4457,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed info for a wanted cutoff track by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4459,7 +4465,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QueueDetails"},
+        tags={"queue"},
     )
     async def get_queue_details(
         artistId: int = Field(default=None, description="artistId"),
@@ -4477,7 +4483,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve Prowlarr configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4490,7 +4496,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"QueueStatus"},
+        tags={"queue"},
     )
     async def get_queue_status(
         lidarr_base_url: str = Field(
@@ -4504,7 +4510,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update Prowlarr configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4512,7 +4518,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Release"},
+        tags={"downloads"},
     )
     async def post_release(
         data: Dict = Field(default=..., description="data"),
@@ -4527,7 +4533,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details of a single Prowlarr configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4535,7 +4541,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Release"},
+        tags={"downloads"},
     )
     async def get_release(
         albumId: int = Field(default=None, description="albumId"),
@@ -4551,7 +4557,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific remote path mapping by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4559,7 +4565,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def get_releaseprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4574,7 +4580,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing remote path mapping."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4582,7 +4588,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def put_releaseprofile_id(
         id: str = Field(default=..., description="id"),
@@ -4598,7 +4604,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all configured remote path mappings."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4606,7 +4612,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def delete_releaseprofile_id(
         id: int = Field(default=..., description="id"),
@@ -4621,7 +4627,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific search by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4629,7 +4635,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def get_releaseprofile(
         lidarr_base_url: str = Field(
@@ -4643,7 +4649,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all recent search operations."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4651,7 +4657,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ReleaseProfile"},
+        tags={"profiles"},
     )
     async def post_releaseprofile(
         data: Dict = Field(default=..., description="data"),
@@ -4666,7 +4672,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific artist by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4674,7 +4680,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"ReleasePush"},
+        tags={"downloads"},
     )
     async def post_release_push(
         data: Dict = Field(default=..., description="data"),
@@ -4689,7 +4695,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing artist configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4697,7 +4703,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def get_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -4712,7 +4718,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all artists in the collection."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4720,7 +4726,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def delete_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -4735,7 +4741,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current system status of Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4743,7 +4749,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def put_remotepathmapping_id(
         id: str = Field(default=..., description="id"),
@@ -4759,7 +4765,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific update by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4767,7 +4773,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def post_remotepathmapping(
         data: Dict = Field(default=..., description="data"),
@@ -4782,7 +4788,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all available system updates."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4790,7 +4796,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RemotePathMapping"},
+        tags={"config"},
     )
     async def get_remotepathmapping(
         lidarr_base_url: str = Field(
@@ -4804,7 +4810,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current health status of Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4812,7 +4818,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RenameTrack"},
+        tags={"catalog"},
     )
     async def get_rename(
         artistId: int = Field(default=None, description="artistId"),
@@ -4828,7 +4834,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve Lidarr system logs."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4836,7 +4842,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RetagTrack"},
+        tags={"catalog"},
     )
     async def get_retag(
         artistId: int = Field(default=None, description="artistId"),
@@ -4852,7 +4858,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve list of Lidarr log files."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4860,7 +4866,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def get_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -4875,7 +4881,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific log file by ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4883,7 +4889,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def put_rootfolder_id(
         id: str = Field(default=..., description="id"),
@@ -4899,7 +4905,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve contents of a specific log file."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4907,7 +4913,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def delete_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -4922,7 +4928,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete rootfolder id."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4930,7 +4936,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def post_rootfolder(
         data: Dict = Field(default=..., description="data"),
@@ -4945,7 +4951,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Add a new rootfolder."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4953,7 +4959,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"RootFolder"},
+        tags={"config"},
     )
     async def get_rootfolder(
         lidarr_base_url: str = Field(
@@ -4967,7 +4973,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get rootfolder."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4975,7 +4981,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Search"},
+        tags={"search"},
     )
     async def get_search(
         term: str = Field(default=None, description="term"),
@@ -4990,7 +4996,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get search."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -4998,7 +5004,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -5013,7 +5019,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get content path."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5021,7 +5027,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -5036,7 +5042,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get ."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5044,7 +5050,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"StaticResource"},
+        tags={"system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -5059,7 +5065,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get path."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5067,7 +5073,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_status(
         lidarr_base_url: str = Field(
@@ -5081,7 +5087,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system status."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5089,7 +5095,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes(
         lidarr_base_url: str = Field(
@@ -5103,7 +5109,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get system routes."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5111,7 +5117,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def get_system_routes_duplicate(
         lidarr_base_url: str = Field(
@@ -5125,7 +5131,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5133,7 +5139,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_shutdown(
         lidarr_base_url: str = Field(
@@ -5147,7 +5153,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed entries in the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5155,7 +5161,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"System"},
+        tags={"system"},
     )
     async def post_system_restart(
         lidarr_base_url: str = Field(
@@ -5169,7 +5175,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve status information for the download queue."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5177,7 +5183,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5192,7 +5198,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve the current system status of Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5200,7 +5206,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -5216,7 +5222,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve available system routes."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5224,7 +5230,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5239,7 +5245,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve duplicate system routes."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5247,7 +5253,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def get_tag(
         lidarr_base_url: str = Field(
@@ -5261,7 +5267,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all system backups."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5269,7 +5275,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Tag"},
+        tags={"system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -5284,7 +5290,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a system backup by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5292,7 +5298,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -5307,7 +5313,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Restore from a specific system backup."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5315,7 +5321,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TagDetails"},
+        tags={"system"},
     )
     async def get_tag_detail(
         lidarr_base_url: str = Field(
@@ -5329,7 +5335,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed usage information for a specific tag."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5337,7 +5343,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task(
         lidarr_base_url: str = Field(
@@ -5351,7 +5357,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve detailed usage information for all tags."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5359,7 +5365,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Task"},
+        tags={"system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -5374,7 +5380,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific track by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5382,7 +5388,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Track"},
+        tags={"catalog"},
     )
     async def get_track(
         artistId: int = Field(default=None, description="artistId"),
@@ -5400,7 +5406,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update an existing track configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5413,7 +5419,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Track"},
+        tags={"catalog"},
     )
     async def get_track_id(
         id: int = Field(default=..., description="id"),
@@ -5428,7 +5434,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve all tracks for a specific artist or album."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5436,7 +5442,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TrackFile"},
+        tags={"catalog"},
     )
     async def get_trackfile_id(
         id: int = Field(default=..., description="id"),
@@ -5451,7 +5457,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk update the monitoring status for multiple tracks."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5459,7 +5465,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TrackFile"},
+        tags={"catalog"},
     )
     async def put_trackfile_id(
         id: str = Field(default=..., description="id"),
@@ -5475,7 +5481,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Retrieve details for a specific track file by its ID."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5483,7 +5489,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TrackFile"},
+        tags={"catalog"},
     )
     async def delete_trackfile_id(
         id: int = Field(default=..., description="id"),
@@ -5498,7 +5504,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Delete a specific track file from Lidarr."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5506,7 +5512,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TrackFile"},
+        tags={"catalog"},
     )
     async def get_trackfile(
         artistId: int = Field(default=None, description="artistId"),
@@ -5524,7 +5530,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get track files."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5537,7 +5543,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TrackFile"},
+        tags={"catalog"},
     )
     async def put_trackfile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -5552,7 +5558,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update track file editor."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5560,7 +5566,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"TrackFile"},
+        tags={"catalog"},
     )
     async def delete_trackfile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -5575,7 +5581,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Bulk delete track files."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5583,7 +5589,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -5599,7 +5605,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Update UI configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5607,7 +5613,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -5622,7 +5628,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get specific UI configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5630,7 +5636,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"UiConfig"},
+        tags={"system"},
     )
     async def get_config_ui(
         lidarr_base_url: str = Field(
@@ -5644,7 +5650,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get UI configuration."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5652,7 +5658,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"Update"},
+        tags={"system"},
     )
     async def get_update(
         lidarr_base_url: str = Field(
@@ -5666,7 +5672,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get available updates."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5674,7 +5680,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update(
         lidarr_base_url: str = Field(
@@ -5688,7 +5694,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file update."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )
@@ -5696,7 +5702,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"UpdateLogFile"},
+        tags={"system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),
@@ -5711,7 +5717,7 @@ def register_tools(mcp: FastMCP):
             description="Verify SSL",
         ),
     ) -> Dict:
-        """No description"""
+        """Get log file update content."""
         client = Api(
             base_url=lidarr_base_url, token=lidarr_api_key, verify=lidarr_verify
         )

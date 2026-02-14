@@ -39,7 +39,7 @@ from pydantic import ValidationError
 from pydantic_ai.ui import SSE_CONTENT_TYPE
 from pydantic_ai.ui.ag_ui import AGUIAdapter
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -105,7 +105,7 @@ APIINFO_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ApiInfo Agent.\n"
         "Your goal is to manage api info resources.\n"
-        "You have access to tools specifically tagged with 'ApiInfo'.\n"
+        "You have access to tools specifically tagged with 'apiinfo'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -115,7 +115,7 @@ AUTHENTICATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Authentication Agent.\n"
         "Your goal is to manage authentication resources.\n"
-        "You have access to tools specifically tagged with 'Authentication'.\n"
+        "You have access to tools specifically tagged with 'authentication'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -125,7 +125,7 @@ AUTOTAGGING_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr AutoTagging Agent.\n"
         "Your goal is to manage auto tagging resources.\n"
-        "You have access to tools specifically tagged with 'AutoTagging'.\n"
+        "You have access to tools specifically tagged with 'autotagging'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -135,7 +135,7 @@ BACKUP_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Backup Agent.\n"
         "Your goal is to manage backup resources.\n"
-        "You have access to tools specifically tagged with 'Backup'.\n"
+        "You have access to tools specifically tagged with 'backup'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -145,7 +145,7 @@ BLOCKLIST_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Blocklist Agent.\n"
         "Your goal is to manage blocklist resources.\n"
-        "You have access to tools specifically tagged with 'Blocklist'.\n"
+        "You have access to tools specifically tagged with 'blocklist'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -155,7 +155,7 @@ CALENDAR_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Calendar Agent.\n"
         "Your goal is to manage calendar resources.\n"
-        "You have access to tools specifically tagged with 'Calendar'.\n"
+        "You have access to tools specifically tagged with 'calendar'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -165,7 +165,7 @@ CALENDARFEED_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr CalendarFeed Agent.\n"
         "Your goal is to manage calendar feed resources.\n"
-        "You have access to tools specifically tagged with 'CalendarFeed'.\n"
+        "You have access to tools specifically tagged with 'calendarfeed'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -175,7 +175,7 @@ COMMAND_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Command Agent.\n"
         "Your goal is to manage command resources.\n"
-        "You have access to tools specifically tagged with 'Command'.\n"
+        "You have access to tools specifically tagged with 'command'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -185,7 +185,7 @@ CUSTOMFILTER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr CustomFilter Agent.\n"
         "Your goal is to manage custom filter resources.\n"
-        "You have access to tools specifically tagged with 'CustomFilter'.\n"
+        "You have access to tools specifically tagged with 'customfilter'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -195,7 +195,7 @@ CUSTOMFORMAT_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr CustomFormat Agent.\n"
         "Your goal is to manage custom format resources.\n"
-        "You have access to tools specifically tagged with 'CustomFormat'.\n"
+        "You have access to tools specifically tagged with 'customformat'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -205,7 +205,7 @@ CUTOFF_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Cutoff Agent.\n"
         "Your goal is to manage cutoff resources.\n"
-        "You have access to tools specifically tagged with 'Cutoff'.\n"
+        "You have access to tools specifically tagged with 'cutoff'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -215,7 +215,7 @@ DELAYPROFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr DelayProfile Agent.\n"
         "Your goal is to manage delay profile resources.\n"
-        "You have access to tools specifically tagged with 'DelayProfile'.\n"
+        "You have access to tools specifically tagged with 'delayprofile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -225,7 +225,7 @@ DISKSPACE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr DiskSpace Agent.\n"
         "Your goal is to manage disk space resources.\n"
-        "You have access to tools specifically tagged with 'DiskSpace'.\n"
+        "You have access to tools specifically tagged with 'diskspace'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -235,7 +235,7 @@ DOWNLOADCLIENT_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr DownloadClient Agent.\n"
         "Your goal is to manage download client resources.\n"
-        "You have access to tools specifically tagged with 'DownloadClient'.\n"
+        "You have access to tools specifically tagged with 'downloadclient'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -245,7 +245,7 @@ DOWNLOADCLIENTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr DownloadClientConfig Agent.\n"
         "Your goal is to manage download client config resources.\n"
-        "You have access to tools specifically tagged with 'DownloadClientConfig'.\n"
+        "You have access to tools specifically tagged with 'downloadclientconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -255,7 +255,7 @@ EPISODE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Episode Agent.\n"
         "Your goal is to manage episode resources.\n"
-        "You have access to tools specifically tagged with 'Episode'.\n"
+        "You have access to tools specifically tagged with 'episode'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -265,7 +265,7 @@ EPISODEFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr EpisodeFile Agent.\n"
         "Your goal is to manage episode file resources.\n"
-        "You have access to tools specifically tagged with 'EpisodeFile'.\n"
+        "You have access to tools specifically tagged with 'episodefile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -275,7 +275,7 @@ FILESYSTEM_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr FileSystem Agent.\n"
         "Your goal is to manage file system resources.\n"
-        "You have access to tools specifically tagged with 'FileSystem'.\n"
+        "You have access to tools specifically tagged with 'filesystem'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -285,7 +285,7 @@ HEALTH_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Health Agent.\n"
         "Your goal is to manage health resources.\n"
-        "You have access to tools specifically tagged with 'Health'.\n"
+        "You have access to tools specifically tagged with 'health'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -295,7 +295,7 @@ HISTORY_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr History Agent.\n"
         "Your goal is to manage history resources.\n"
-        "You have access to tools specifically tagged with 'History'.\n"
+        "You have access to tools specifically tagged with 'history'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -305,7 +305,7 @@ HOSTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr HostConfig Agent.\n"
         "Your goal is to manage host config resources.\n"
-        "You have access to tools specifically tagged with 'HostConfig'.\n"
+        "You have access to tools specifically tagged with 'hostconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -315,7 +315,7 @@ IMPORTLIST_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ImportList Agent.\n"
         "Your goal is to manage import list resources.\n"
-        "You have access to tools specifically tagged with 'ImportList'.\n"
+        "You have access to tools specifically tagged with 'importlist'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -325,7 +325,7 @@ IMPORTLISTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ImportListConfig Agent.\n"
         "Your goal is to manage import list config resources.\n"
-        "You have access to tools specifically tagged with 'ImportListConfig'.\n"
+        "You have access to tools specifically tagged with 'importlistconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -335,7 +335,7 @@ IMPORTLISTEXCLUSION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ImportListExclusion Agent.\n"
         "Your goal is to manage import list exclusion resources.\n"
-        "You have access to tools specifically tagged with 'ImportListExclusion'.\n"
+        "You have access to tools specifically tagged with 'importlistexclusion'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -345,7 +345,7 @@ INDEXER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Indexer Agent.\n"
         "Your goal is to manage indexer resources.\n"
-        "You have access to tools specifically tagged with 'Indexer'.\n"
+        "You have access to tools specifically tagged with 'indexer'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -355,7 +355,7 @@ INDEXERCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr IndexerConfig Agent.\n"
         "Your goal is to manage indexer config resources.\n"
-        "You have access to tools specifically tagged with 'IndexerConfig'.\n"
+        "You have access to tools specifically tagged with 'indexerconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -365,7 +365,7 @@ INDEXERFLAG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr IndexerFlag Agent.\n"
         "Your goal is to manage indexer flag resources.\n"
-        "You have access to tools specifically tagged with 'IndexerFlag'.\n"
+        "You have access to tools specifically tagged with 'indexerflag'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -375,7 +375,7 @@ LANGUAGE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Language Agent.\n"
         "Your goal is to manage language resources.\n"
-        "You have access to tools specifically tagged with 'Language'.\n"
+        "You have access to tools specifically tagged with 'language'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -385,7 +385,7 @@ LANGUAGEPROFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr LanguageProfile Agent.\n"
         "Your goal is to manage language profile resources.\n"
-        "You have access to tools specifically tagged with 'LanguageProfile'.\n"
+        "You have access to tools specifically tagged with 'languageprofile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -395,7 +395,7 @@ LANGUAGEPROFILESCHEMA_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr LanguageProfileSchema Agent.\n"
         "Your goal is to manage language profile schema resources.\n"
-        "You have access to tools specifically tagged with 'LanguageProfileSchema'.\n"
+        "You have access to tools specifically tagged with 'languageprofileschema'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -405,7 +405,7 @@ LOCALIZATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Localization Agent.\n"
         "Your goal is to manage localization resources.\n"
-        "You have access to tools specifically tagged with 'Localization'.\n"
+        "You have access to tools specifically tagged with 'localization'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -415,7 +415,7 @@ LOG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Log Agent.\n"
         "Your goal is to manage log resources.\n"
-        "You have access to tools specifically tagged with 'Log'.\n"
+        "You have access to tools specifically tagged with 'log'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -425,7 +425,7 @@ LOGFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr LogFile Agent.\n"
         "Your goal is to manage log file resources.\n"
-        "You have access to tools specifically tagged with 'LogFile'.\n"
+        "You have access to tools specifically tagged with 'logfile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -435,7 +435,7 @@ MANUALIMPORT_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ManualImport Agent.\n"
         "Your goal is to manage manual import resources.\n"
-        "You have access to tools specifically tagged with 'ManualImport'.\n"
+        "You have access to tools specifically tagged with 'manualimport'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -445,7 +445,7 @@ MEDIACOVER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr MediaCover Agent.\n"
         "Your goal is to manage media cover resources.\n"
-        "You have access to tools specifically tagged with 'MediaCover'.\n"
+        "You have access to tools specifically tagged with 'mediacover'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -455,7 +455,7 @@ MEDIAMANAGEMENTCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr MediaManagementConfig Agent.\n"
         "Your goal is to manage media management config resources.\n"
-        "You have access to tools specifically tagged with 'MediaManagementConfig'.\n"
+        "You have access to tools specifically tagged with 'mediamanagementconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -465,7 +465,7 @@ METADATA_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Metadata Agent.\n"
         "Your goal is to manage metadata resources.\n"
-        "You have access to tools specifically tagged with 'Metadata'.\n"
+        "You have access to tools specifically tagged with 'metadata'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -475,7 +475,7 @@ MISSING_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Missing Agent.\n"
         "Your goal is to manage missing resources.\n"
-        "You have access to tools specifically tagged with 'Missing'.\n"
+        "You have access to tools specifically tagged with 'missing'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -485,7 +485,7 @@ NAMINGCONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr NamingConfig Agent.\n"
         "Your goal is to manage naming config resources.\n"
-        "You have access to tools specifically tagged with 'NamingConfig'.\n"
+        "You have access to tools specifically tagged with 'namingconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -495,7 +495,7 @@ NOTIFICATION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Notification Agent.\n"
         "Your goal is to manage notification resources.\n"
-        "You have access to tools specifically tagged with 'Notification'.\n"
+        "You have access to tools specifically tagged with 'notification'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -505,7 +505,7 @@ PARSE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Parse Agent.\n"
         "Your goal is to manage parse resources.\n"
-        "You have access to tools specifically tagged with 'Parse'.\n"
+        "You have access to tools specifically tagged with 'parse'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -515,7 +515,7 @@ PING_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Ping Agent.\n"
         "Your goal is to manage ping resources.\n"
-        "You have access to tools specifically tagged with 'Ping'.\n"
+        "You have access to tools specifically tagged with 'ping'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -525,7 +525,7 @@ QUALITYDEFINITION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr QualityDefinition Agent.\n"
         "Your goal is to manage quality definition resources.\n"
-        "You have access to tools specifically tagged with 'QualityDefinition'.\n"
+        "You have access to tools specifically tagged with 'qualitydefinition'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -535,7 +535,7 @@ QUALITYPROFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr QualityProfile Agent.\n"
         "Your goal is to manage quality profile resources.\n"
-        "You have access to tools specifically tagged with 'QualityProfile'.\n"
+        "You have access to tools specifically tagged with 'qualityprofile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -545,7 +545,7 @@ QUALITYPROFILESCHEMA_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr QualityProfileSchema Agent.\n"
         "Your goal is to manage quality profile schema resources.\n"
-        "You have access to tools specifically tagged with 'QualityProfileSchema'.\n"
+        "You have access to tools specifically tagged with 'qualityprofileschema'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -555,7 +555,7 @@ QUEUE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Queue Agent.\n"
         "Your goal is to manage queue resources.\n"
-        "You have access to tools specifically tagged with 'Queue'.\n"
+        "You have access to tools specifically tagged with 'queue'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -565,7 +565,7 @@ QUEUEACTION_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr QueueAction Agent.\n"
         "Your goal is to manage queue action resources.\n"
-        "You have access to tools specifically tagged with 'QueueAction'.\n"
+        "You have access to tools specifically tagged with 'queueaction'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -575,7 +575,7 @@ QUEUEDETAILS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr QueueDetails Agent.\n"
         "Your goal is to manage queue details resources.\n"
-        "You have access to tools specifically tagged with 'QueueDetails'.\n"
+        "You have access to tools specifically tagged with 'queuedetails'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -585,7 +585,7 @@ QUEUESTATUS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr QueueStatus Agent.\n"
         "Your goal is to manage queue status resources.\n"
-        "You have access to tools specifically tagged with 'QueueStatus'.\n"
+        "You have access to tools specifically tagged with 'queuestatus'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -595,7 +595,7 @@ RELEASE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Release Agent.\n"
         "Your goal is to manage release resources.\n"
-        "You have access to tools specifically tagged with 'Release'.\n"
+        "You have access to tools specifically tagged with 'release'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -605,7 +605,7 @@ RELEASEPROFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ReleaseProfile Agent.\n"
         "Your goal is to manage release profile resources.\n"
-        "You have access to tools specifically tagged with 'ReleaseProfile'.\n"
+        "You have access to tools specifically tagged with 'releaseprofile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -615,7 +615,7 @@ RELEASEPUSH_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr ReleasePush Agent.\n"
         "Your goal is to manage release push resources.\n"
-        "You have access to tools specifically tagged with 'ReleasePush'.\n"
+        "You have access to tools specifically tagged with 'releasepush'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -625,7 +625,7 @@ REMOTEPATHMAPPING_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr RemotePathMapping Agent.\n"
         "Your goal is to manage remote path mapping resources.\n"
-        "You have access to tools specifically tagged with 'RemotePathMapping'.\n"
+        "You have access to tools specifically tagged with 'remotepathmapping'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -635,7 +635,7 @@ RENAMEEPISODE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr RenameEpisode Agent.\n"
         "Your goal is to manage rename episode resources.\n"
-        "You have access to tools specifically tagged with 'RenameEpisode'.\n"
+        "You have access to tools specifically tagged with 'renameepisode'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -645,7 +645,7 @@ ROOTFOLDER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr RootFolder Agent.\n"
         "Your goal is to manage root folder resources.\n"
-        "You have access to tools specifically tagged with 'RootFolder'.\n"
+        "You have access to tools specifically tagged with 'rootfolder'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -655,7 +655,7 @@ SEASONPASS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr SeasonPass Agent.\n"
         "Your goal is to manage season pass resources.\n"
-        "You have access to tools specifically tagged with 'SeasonPass'.\n"
+        "You have access to tools specifically tagged with 'seasonpass'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -665,7 +665,7 @@ SERIES_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Series Agent.\n"
         "Your goal is to manage series resources.\n"
-        "You have access to tools specifically tagged with 'Series'.\n"
+        "You have access to tools specifically tagged with 'series'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -675,7 +675,7 @@ SERIESEDITOR_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr SeriesEditor Agent.\n"
         "Your goal is to manage series editor resources.\n"
-        "You have access to tools specifically tagged with 'SeriesEditor'.\n"
+        "You have access to tools specifically tagged with 'serieseditor'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -685,7 +685,7 @@ SERIESFOLDER_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr SeriesFolder Agent.\n"
         "Your goal is to manage series folder resources.\n"
-        "You have access to tools specifically tagged with 'SeriesFolder'.\n"
+        "You have access to tools specifically tagged with 'seriesfolder'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -695,7 +695,7 @@ SERIESIMPORT_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr SeriesImport Agent.\n"
         "Your goal is to manage series import resources.\n"
-        "You have access to tools specifically tagged with 'SeriesImport'.\n"
+        "You have access to tools specifically tagged with 'seriesimport'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -705,7 +705,7 @@ SERIESLOOKUP_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr SeriesLookup Agent.\n"
         "Your goal is to manage series lookup resources.\n"
-        "You have access to tools specifically tagged with 'SeriesLookup'.\n"
+        "You have access to tools specifically tagged with 'serieslookup'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -715,7 +715,7 @@ STATICRESOURCE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr StaticResource Agent.\n"
         "Your goal is to manage static resource resources.\n"
-        "You have access to tools specifically tagged with 'StaticResource'.\n"
+        "You have access to tools specifically tagged with 'staticresource'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -725,7 +725,7 @@ SYSTEM_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr System Agent.\n"
         "Your goal is to manage system resources.\n"
-        "You have access to tools specifically tagged with 'System'.\n"
+        "You have access to tools specifically tagged with 'system'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -735,7 +735,7 @@ TAG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Tag Agent.\n"
         "Your goal is to manage tag resources.\n"
-        "You have access to tools specifically tagged with 'Tag'.\n"
+        "You have access to tools specifically tagged with 'tag'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -745,7 +745,7 @@ TAGDETAILS_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr TagDetails Agent.\n"
         "Your goal is to manage tag details resources.\n"
-        "You have access to tools specifically tagged with 'TagDetails'.\n"
+        "You have access to tools specifically tagged with 'tagdetails'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -755,7 +755,7 @@ TASK_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Task Agent.\n"
         "Your goal is to manage task resources.\n"
-        "You have access to tools specifically tagged with 'Task'.\n"
+        "You have access to tools specifically tagged with 'task'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -765,7 +765,7 @@ UICONFIG_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr UiConfig Agent.\n"
         "Your goal is to manage ui config resources.\n"
-        "You have access to tools specifically tagged with 'UiConfig'.\n"
+        "You have access to tools specifically tagged with 'uiconfig'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -775,7 +775,7 @@ UPDATE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr Update Agent.\n"
         "Your goal is to manage update resources.\n"
-        "You have access to tools specifically tagged with 'Update'.\n"
+        "You have access to tools specifically tagged with 'update'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -785,7 +785,7 @@ UPDATELOGFILE_AGENT_PROMPT = os.environ.get(
     default=(
         "You are the Sonarr UpdateLogFile Agent.\n"
         "Your goal is to manage update log file resources.\n"
-        "You have access to tools specifically tagged with 'UpdateLogFile'.\n"
+        "You have access to tools specifically tagged with 'updatelogfile'.\n"
         "Use these tools to fulfill the user's request."
     ),
 )
@@ -861,102 +861,102 @@ def create_agent(
         agent_toolsets.append(SkillsToolset(directories=[str(skills_directory)]))
 
     agent_defs = {
-        "ApiInfo": (APIINFO_AGENT_PROMPT, "Sonarr_ApiInfo_Agent"),
-        "Authentication": (AUTHENTICATION_AGENT_PROMPT, "Sonarr_Authentication_Agent"),
-        "AutoTagging": (AUTOTAGGING_AGENT_PROMPT, "Sonarr_AutoTagging_Agent"),
-        "Backup": (BACKUP_AGENT_PROMPT, "Sonarr_Backup_Agent"),
-        "Blocklist": (BLOCKLIST_AGENT_PROMPT, "Sonarr_Blocklist_Agent"),
-        "Calendar": (CALENDAR_AGENT_PROMPT, "Sonarr_Calendar_Agent"),
-        "CalendarFeed": (CALENDARFEED_AGENT_PROMPT, "Sonarr_CalendarFeed_Agent"),
-        "Command": (COMMAND_AGENT_PROMPT, "Sonarr_Command_Agent"),
-        "CustomFilter": (CUSTOMFILTER_AGENT_PROMPT, "Sonarr_CustomFilter_Agent"),
-        "CustomFormat": (CUSTOMFORMAT_AGENT_PROMPT, "Sonarr_CustomFormat_Agent"),
-        "Cutoff": (CUTOFF_AGENT_PROMPT, "Sonarr_Cutoff_Agent"),
-        "DelayProfile": (DELAYPROFILE_AGENT_PROMPT, "Sonarr_DelayProfile_Agent"),
-        "DiskSpace": (DISKSPACE_AGENT_PROMPT, "Sonarr_DiskSpace_Agent"),
-        "DownloadClient": (DOWNLOADCLIENT_AGENT_PROMPT, "Sonarr_DownloadClient_Agent"),
-        "DownloadClientConfig": (
+        "apiinfo": (APIINFO_AGENT_PROMPT, "Sonarr_ApiInfo_Agent"),
+        "authentication": (AUTHENTICATION_AGENT_PROMPT, "Sonarr_Authentication_Agent"),
+        "autotagging": (AUTOTAGGING_AGENT_PROMPT, "Sonarr_AutoTagging_Agent"),
+        "backup": (BACKUP_AGENT_PROMPT, "Sonarr_Backup_Agent"),
+        "blocklist": (BLOCKLIST_AGENT_PROMPT, "Sonarr_Blocklist_Agent"),
+        "calendar": (CALENDAR_AGENT_PROMPT, "Sonarr_Calendar_Agent"),
+        "calendarfeed": (CALENDARFEED_AGENT_PROMPT, "Sonarr_CalendarFeed_Agent"),
+        "command": (COMMAND_AGENT_PROMPT, "Sonarr_Command_Agent"),
+        "customfilter": (CUSTOMFILTER_AGENT_PROMPT, "Sonarr_CustomFilter_Agent"),
+        "customformat": (CUSTOMFORMAT_AGENT_PROMPT, "Sonarr_CustomFormat_Agent"),
+        "cutoff": (CUTOFF_AGENT_PROMPT, "Sonarr_Cutoff_Agent"),
+        "delayprofile": (DELAYPROFILE_AGENT_PROMPT, "Sonarr_DelayProfile_Agent"),
+        "diskspace": (DISKSPACE_AGENT_PROMPT, "Sonarr_DiskSpace_Agent"),
+        "downloadclient": (DOWNLOADCLIENT_AGENT_PROMPT, "Sonarr_DownloadClient_Agent"),
+        "downloadclientconfig": (
             DOWNLOADCLIENTCONFIG_AGENT_PROMPT,
             "Sonarr_DownloadClientConfig_Agent",
         ),
-        "Episode": (EPISODE_AGENT_PROMPT, "Sonarr_Episode_Agent"),
-        "EpisodeFile": (EPISODEFILE_AGENT_PROMPT, "Sonarr_EpisodeFile_Agent"),
-        "FileSystem": (FILESYSTEM_AGENT_PROMPT, "Sonarr_FileSystem_Agent"),
-        "Health": (HEALTH_AGENT_PROMPT, "Sonarr_Health_Agent"),
-        "History": (HISTORY_AGENT_PROMPT, "Sonarr_History_Agent"),
-        "HostConfig": (HOSTCONFIG_AGENT_PROMPT, "Sonarr_HostConfig_Agent"),
-        "ImportList": (IMPORTLIST_AGENT_PROMPT, "Sonarr_ImportList_Agent"),
-        "ImportListConfig": (
+        "episode": (EPISODE_AGENT_PROMPT, "Sonarr_Episode_Agent"),
+        "episodefile": (EPISODEFILE_AGENT_PROMPT, "Sonarr_EpisodeFile_Agent"),
+        "filesystem": (FILESYSTEM_AGENT_PROMPT, "Sonarr_FileSystem_Agent"),
+        "health": (HEALTH_AGENT_PROMPT, "Sonarr_Health_Agent"),
+        "history": (HISTORY_AGENT_PROMPT, "Sonarr_History_Agent"),
+        "hostconfig": (HOSTCONFIG_AGENT_PROMPT, "Sonarr_HostConfig_Agent"),
+        "importlist": (IMPORTLIST_AGENT_PROMPT, "Sonarr_ImportList_Agent"),
+        "importlistconfig": (
             IMPORTLISTCONFIG_AGENT_PROMPT,
             "Sonarr_ImportListConfig_Agent",
         ),
-        "ImportListExclusion": (
+        "importlistexclusion": (
             IMPORTLISTEXCLUSION_AGENT_PROMPT,
             "Sonarr_ImportListExclusion_Agent",
         ),
-        "Indexer": (INDEXER_AGENT_PROMPT, "Sonarr_Indexer_Agent"),
-        "IndexerConfig": (INDEXERCONFIG_AGENT_PROMPT, "Sonarr_IndexerConfig_Agent"),
-        "IndexerFlag": (INDEXERFLAG_AGENT_PROMPT, "Sonarr_IndexerFlag_Agent"),
-        "Language": (LANGUAGE_AGENT_PROMPT, "Sonarr_Language_Agent"),
-        "LanguageProfile": (
+        "indexer": (INDEXER_AGENT_PROMPT, "Sonarr_Indexer_Agent"),
+        "indexerconfig": (INDEXERCONFIG_AGENT_PROMPT, "Sonarr_IndexerConfig_Agent"),
+        "indexerflag": (INDEXERFLAG_AGENT_PROMPT, "Sonarr_IndexerFlag_Agent"),
+        "language": (LANGUAGE_AGENT_PROMPT, "Sonarr_Language_Agent"),
+        "languageprofile": (
             LANGUAGEPROFILE_AGENT_PROMPT,
             "Sonarr_LanguageProfile_Agent",
         ),
-        "LanguageProfileSchema": (
+        "languageprofileschema": (
             LANGUAGEPROFILESCHEMA_AGENT_PROMPT,
             "Sonarr_LanguageProfileSchema_Agent",
         ),
-        "Localization": (LOCALIZATION_AGENT_PROMPT, "Sonarr_Localization_Agent"),
-        "Log": (LOG_AGENT_PROMPT, "Sonarr_Log_Agent"),
-        "LogFile": (LOGFILE_AGENT_PROMPT, "Sonarr_LogFile_Agent"),
-        "ManualImport": (MANUALIMPORT_AGENT_PROMPT, "Sonarr_ManualImport_Agent"),
-        "MediaCover": (MEDIACOVER_AGENT_PROMPT, "Sonarr_MediaCover_Agent"),
-        "MediaManagementConfig": (
+        "localization": (LOCALIZATION_AGENT_PROMPT, "Sonarr_Localization_Agent"),
+        "log": (LOG_AGENT_PROMPT, "Sonarr_Log_Agent"),
+        "logfile": (LOGFILE_AGENT_PROMPT, "Sonarr_LogFile_Agent"),
+        "manualimport": (MANUALIMPORT_AGENT_PROMPT, "Sonarr_ManualImport_Agent"),
+        "mediacover": (MEDIACOVER_AGENT_PROMPT, "Sonarr_MediaCover_Agent"),
+        "mediamanagementconfig": (
             MEDIAMANAGEMENTCONFIG_AGENT_PROMPT,
             "Sonarr_MediaManagementConfig_Agent",
         ),
-        "Metadata": (METADATA_AGENT_PROMPT, "Sonarr_Metadata_Agent"),
-        "Missing": (MISSING_AGENT_PROMPT, "Sonarr_Missing_Agent"),
-        "NamingConfig": (NAMINGCONFIG_AGENT_PROMPT, "Sonarr_NamingConfig_Agent"),
-        "Notification": (NOTIFICATION_AGENT_PROMPT, "Sonarr_Notification_Agent"),
-        "Parse": (PARSE_AGENT_PROMPT, "Sonarr_Parse_Agent"),
-        "Ping": (PING_AGENT_PROMPT, "Sonarr_Ping_Agent"),
-        "QualityDefinition": (
+        "metadata": (METADATA_AGENT_PROMPT, "Sonarr_Metadata_Agent"),
+        "missing": (MISSING_AGENT_PROMPT, "Sonarr_Missing_Agent"),
+        "namingconfig": (NAMINGCONFIG_AGENT_PROMPT, "Sonarr_NamingConfig_Agent"),
+        "notification": (NOTIFICATION_AGENT_PROMPT, "Sonarr_Notification_Agent"),
+        "parse": (PARSE_AGENT_PROMPT, "Sonarr_Parse_Agent"),
+        "ping": (PING_AGENT_PROMPT, "Sonarr_Ping_Agent"),
+        "qualitydefinition": (
             QUALITYDEFINITION_AGENT_PROMPT,
             "Sonarr_QualityDefinition_Agent",
         ),
-        "QualityProfile": (QUALITYPROFILE_AGENT_PROMPT, "Sonarr_QualityProfile_Agent"),
-        "QualityProfileSchema": (
+        "qualityprofile": (QUALITYPROFILE_AGENT_PROMPT, "Sonarr_QualityProfile_Agent"),
+        "qualityprofileschema": (
             QUALITYPROFILESCHEMA_AGENT_PROMPT,
             "Sonarr_QualityProfileSchema_Agent",
         ),
-        "Queue": (QUEUE_AGENT_PROMPT, "Sonarr_Queue_Agent"),
-        "QueueAction": (QUEUEACTION_AGENT_PROMPT, "Sonarr_QueueAction_Agent"),
-        "QueueDetails": (QUEUEDETAILS_AGENT_PROMPT, "Sonarr_QueueDetails_Agent"),
-        "QueueStatus": (QUEUESTATUS_AGENT_PROMPT, "Sonarr_QueueStatus_Agent"),
-        "Release": (RELEASE_AGENT_PROMPT, "Sonarr_Release_Agent"),
-        "ReleaseProfile": (RELEASEPROFILE_AGENT_PROMPT, "Sonarr_ReleaseProfile_Agent"),
-        "ReleasePush": (RELEASEPUSH_AGENT_PROMPT, "Sonarr_ReleasePush_Agent"),
-        "RemotePathMapping": (
+        "queue": (QUEUE_AGENT_PROMPT, "Sonarr_Queue_Agent"),
+        "queueaction": (QUEUEACTION_AGENT_PROMPT, "Sonarr_QueueAction_Agent"),
+        "queuedetails": (QUEUEDETAILS_AGENT_PROMPT, "Sonarr_QueueDetails_Agent"),
+        "queuestatus": (QUEUESTATUS_AGENT_PROMPT, "Sonarr_QueueStatus_Agent"),
+        "release": (RELEASE_AGENT_PROMPT, "Sonarr_Release_Agent"),
+        "releaseprofile": (RELEASEPROFILE_AGENT_PROMPT, "Sonarr_ReleaseProfile_Agent"),
+        "releasepush": (RELEASEPUSH_AGENT_PROMPT, "Sonarr_ReleasePush_Agent"),
+        "remotepathmapping": (
             REMOTEPATHMAPPING_AGENT_PROMPT,
             "Sonarr_RemotePathMapping_Agent",
         ),
-        "RenameEpisode": (RENAMEEPISODE_AGENT_PROMPT, "Sonarr_RenameEpisode_Agent"),
-        "RootFolder": (ROOTFOLDER_AGENT_PROMPT, "Sonarr_RootFolder_Agent"),
-        "SeasonPass": (SEASONPASS_AGENT_PROMPT, "Sonarr_SeasonPass_Agent"),
-        "Series": (SERIES_AGENT_PROMPT, "Sonarr_Series_Agent"),
-        "SeriesEditor": (SERIESEDITOR_AGENT_PROMPT, "Sonarr_SeriesEditor_Agent"),
-        "SeriesFolder": (SERIESFOLDER_AGENT_PROMPT, "Sonarr_SeriesFolder_Agent"),
-        "SeriesImport": (SERIESIMPORT_AGENT_PROMPT, "Sonarr_SeriesImport_Agent"),
-        "SeriesLookup": (SERIESLOOKUP_AGENT_PROMPT, "Sonarr_SeriesLookup_Agent"),
-        "StaticResource": (STATICRESOURCE_AGENT_PROMPT, "Sonarr_StaticResource_Agent"),
-        "System": (SYSTEM_AGENT_PROMPT, "Sonarr_System_Agent"),
-        "Tag": (TAG_AGENT_PROMPT, "Sonarr_Tag_Agent"),
-        "TagDetails": (TAGDETAILS_AGENT_PROMPT, "Sonarr_TagDetails_Agent"),
-        "Task": (TASK_AGENT_PROMPT, "Sonarr_Task_Agent"),
-        "UiConfig": (UICONFIG_AGENT_PROMPT, "Sonarr_UiConfig_Agent"),
-        "Update": (UPDATE_AGENT_PROMPT, "Sonarr_Update_Agent"),
-        "UpdateLogFile": (UPDATELOGFILE_AGENT_PROMPT, "Sonarr_UpdateLogFile_Agent"),
+        "renameepisode": (RENAMEEPISODE_AGENT_PROMPT, "Sonarr_RenameEpisode_Agent"),
+        "rootfolder": (ROOTFOLDER_AGENT_PROMPT, "Sonarr_RootFolder_Agent"),
+        "seasonpass": (SEASONPASS_AGENT_PROMPT, "Sonarr_SeasonPass_Agent"),
+        "series": (SERIES_AGENT_PROMPT, "Sonarr_Series_Agent"),
+        "serieseditor": (SERIESEDITOR_AGENT_PROMPT, "Sonarr_SeriesEditor_Agent"),
+        "seriesfolder": (SERIESFOLDER_AGENT_PROMPT, "Sonarr_SeriesFolder_Agent"),
+        "seriesimport": (SERIESIMPORT_AGENT_PROMPT, "Sonarr_SeriesImport_Agent"),
+        "serieslookup": (SERIESLOOKUP_AGENT_PROMPT, "Sonarr_SeriesLookup_Agent"),
+        "staticresource": (STATICRESOURCE_AGENT_PROMPT, "Sonarr_StaticResource_Agent"),
+        "system": (SYSTEM_AGENT_PROMPT, "Sonarr_System_Agent"),
+        "tag": (TAG_AGENT_PROMPT, "Sonarr_Tag_Agent"),
+        "tagdetails": (TAGDETAILS_AGENT_PROMPT, "Sonarr_TagDetails_Agent"),
+        "task": (TASK_AGENT_PROMPT, "Sonarr_Task_Agent"),
+        "uiconfig": (UICONFIG_AGENT_PROMPT, "Sonarr_UiConfig_Agent"),
+        "update": (UPDATE_AGENT_PROMPT, "Sonarr_Update_Agent"),
+        "updatelogfile": (UPDATELOGFILE_AGENT_PROMPT, "Sonarr_UpdateLogFile_Agent"),
     }
 
     child_agents = {}
@@ -974,13 +974,39 @@ def create_agent(
             else:
                 pass
 
+        # Collect tool names for logging
+        all_tool_names = []
+        for ts in tag_toolsets:
+            try:
+                # Unwrap FilteredToolset
+                current_ts = ts
+                while hasattr(current_ts, "wrapped"):
+                    current_ts = current_ts.wrapped
+
+                # Check for .tools (e.g. SkillsToolset)
+                if hasattr(current_ts, "tools") and isinstance(current_ts.tools, dict):
+                    all_tool_names.extend(current_ts.tools.keys())
+                # Check for ._tools (some implementations might use private attr)
+                elif hasattr(current_ts, "_tools") and isinstance(
+                    current_ts._tools, dict
+                ):
+                    all_tool_names.extend(current_ts._tools.keys())
+                else:
+                    # Fallback for MCP or others where tools are not available sync
+                    all_tool_names.append(f"<{type(current_ts).__name__}>")
+            except Exception as e:
+                logger.info(f"Unable to retrieve toolset: {e}")
+                pass
+
+        tool_list_str = ", ".join(all_tool_names)
+        logger.info(f"Available tools for {agent_name} ({tag}): {tool_list_str}")
         agent = Agent(
-            name=agent_name,
-            system_prompt=system_prompt,
             model=model,
-            model_settings=settings,
+            system_prompt=system_prompt,
+            name=agent_name,
             toolsets=tag_toolsets,
             tool_timeout=DEFAULT_TOOL_TIMEOUT,
+            model_settings=settings,
         )
         child_agents[tag] = agent
 
@@ -994,554 +1020,1162 @@ def create_agent(
 
     @supervisor.tool
     async def assign_task_to_apiinfo_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to ApiInfo to the ApiInfo Agent."""
-        return (
-            await child_agents["ApiInfo"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to apiinfo to the ApiInfo Agent."""
+        try:
+
+            return (
+                await child_agents["apiinfo"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in apiinfo agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_authentication_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to Authentication to the Authentication Agent."""
-        return (
-            await child_agents["Authentication"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to authentication to the Authentication Agent."""
+        try:
+
+            return (
+                await child_agents["authentication"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in authentication agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_autotagging_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to AutoTagging to the AutoTagging Agent."""
-        return (
-            await child_agents["AutoTagging"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to autotagging to the AutoTagging Agent."""
+        try:
+
+            return (
+                await child_agents["autotagging"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in autotagging agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_backup_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Backup to the Backup Agent."""
-        return (
-            await child_agents["Backup"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to backup to the Backup Agent."""
+        try:
+
+            return (
+                await child_agents["backup"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in backup agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_blocklist_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Blocklist to the Blocklist Agent."""
-        return (
-            await child_agents["Blocklist"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to blocklist to the Blocklist Agent."""
+        try:
+
+            return (
+                await child_agents["blocklist"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in blocklist agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_calendar_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Calendar to the Calendar Agent."""
-        return (
-            await child_agents["Calendar"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to calendar to the Calendar Agent."""
+        try:
+
+            return (
+                await child_agents["calendar"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in calendar agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_calendarfeed_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to CalendarFeed to the CalendarFeed Agent."""
-        return (
-            await child_agents["CalendarFeed"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to calendarfeed to the CalendarFeed Agent."""
+        try:
+
+            return (
+                await child_agents["calendarfeed"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in calendarfeed agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_command_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Command to the Command Agent."""
-        return (
-            await child_agents["Command"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to command to the Command Agent."""
+        try:
+
+            return (
+                await child_agents["command"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in command agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_customfilter_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to CustomFilter to the CustomFilter Agent."""
-        return (
-            await child_agents["CustomFilter"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to customfilter to the CustomFilter Agent."""
+        try:
+
+            return (
+                await child_agents["customfilter"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in customfilter agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_customformat_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to CustomFormat to the CustomFormat Agent."""
-        return (
-            await child_agents["CustomFormat"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to customformat to the CustomFormat Agent."""
+        try:
+
+            return (
+                await child_agents["customformat"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in customformat agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_cutoff_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Cutoff to the Cutoff Agent."""
-        return (
-            await child_agents["Cutoff"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to cutoff to the Cutoff Agent."""
+        try:
+
+            return (
+                await child_agents["cutoff"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in cutoff agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_delayprofile_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to DelayProfile to the DelayProfile Agent."""
-        return (
-            await child_agents["DelayProfile"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to delayprofile to the DelayProfile Agent."""
+        try:
+
+            return (
+                await child_agents["delayprofile"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in delayprofile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_diskspace_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to DiskSpace to the DiskSpace Agent."""
-        return (
-            await child_agents["DiskSpace"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to diskspace to the DiskSpace Agent."""
+        try:
+
+            return (
+                await child_agents["diskspace"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in diskspace agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_downloadclient_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to DownloadClient to the DownloadClient Agent."""
-        return (
-            await child_agents["DownloadClient"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to downloadclient to the DownloadClient Agent."""
+        try:
+
+            return (
+                await child_agents["downloadclient"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in downloadclient agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_downloadclientconfig_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to DownloadClientConfig to the DownloadClientConfig Agent."""
-        return (
-            await child_agents["DownloadClientConfig"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to downloadclientconfig to the DownloadClientConfig Agent."""
+        try:
+
+            return (
+                await child_agents["downloadclientconfig"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in downloadclientconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_episode_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Episode to the Episode Agent."""
-        return (
-            await child_agents["Episode"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to episode to the Episode Agent."""
+        try:
+
+            return (
+                await child_agents["episode"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in episode agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_episodefile_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to EpisodeFile to the EpisodeFile Agent."""
-        return (
-            await child_agents["EpisodeFile"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to episodefile to the EpisodeFile Agent."""
+        try:
+
+            return (
+                await child_agents["episodefile"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in episodefile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_filesystem_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to FileSystem to the FileSystem Agent."""
-        return (
-            await child_agents["FileSystem"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to filesystem to the FileSystem Agent."""
+        try:
+
+            return (
+                await child_agents["filesystem"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in filesystem agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_health_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Health to the Health Agent."""
-        return (
-            await child_agents["Health"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to health to the Health Agent."""
+        try:
+
+            return (
+                await child_agents["health"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in health agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_history_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to History to the History Agent."""
-        return (
-            await child_agents["History"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to history to the History Agent."""
+        try:
+
+            return (
+                await child_agents["history"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in history agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_hostconfig_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to HostConfig to the HostConfig Agent."""
-        return (
-            await child_agents["HostConfig"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to hostconfig to the HostConfig Agent."""
+        try:
+
+            return (
+                await child_agents["hostconfig"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in hostconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_importlist_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to ImportList to the ImportList Agent."""
-        return (
-            await child_agents["ImportList"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to importlist to the ImportList Agent."""
+        try:
+
+            return (
+                await child_agents["importlist"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in importlist agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_importlistconfig_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to ImportListConfig to the ImportListConfig Agent."""
-        return (
-            await child_agents["ImportListConfig"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to importlistconfig to the ImportListConfig Agent."""
+        try:
+
+            return (
+                await child_agents["importlistconfig"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in importlistconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_importlistexclusion_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to ImportListExclusion to the ImportListExclusion Agent."""
-        return (
-            await child_agents["ImportListExclusion"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to importlistexclusion to the ImportListExclusion Agent."""
+        try:
+
+            return (
+                await child_agents["importlistexclusion"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in importlistexclusion agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_indexer_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Indexer to the Indexer Agent."""
-        return (
-            await child_agents["Indexer"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to indexer to the Indexer Agent."""
+        try:
+
+            return (
+                await child_agents["indexer"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in indexer agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_indexerconfig_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to IndexerConfig to the IndexerConfig Agent."""
-        return (
-            await child_agents["IndexerConfig"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to indexerconfig to the IndexerConfig Agent."""
+        try:
+
+            return (
+                await child_agents["indexerconfig"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in indexerconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_indexerflag_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to IndexerFlag to the IndexerFlag Agent."""
-        return (
-            await child_agents["IndexerFlag"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to indexerflag to the IndexerFlag Agent."""
+        try:
+
+            return (
+                await child_agents["indexerflag"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in indexerflag agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_language_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Language to the Language Agent."""
-        return (
-            await child_agents["Language"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to language to the Language Agent."""
+        try:
+
+            return (
+                await child_agents["language"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in language agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_languageprofile_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to LanguageProfile to the LanguageProfile Agent."""
-        return (
-            await child_agents["LanguageProfile"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to languageprofile to the LanguageProfile Agent."""
+        try:
+
+            return (
+                await child_agents["languageprofile"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in languageprofile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_languageprofileschema_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to LanguageProfileSchema to the LanguageProfileSchema Agent."""
-        return (
-            await child_agents["LanguageProfileSchema"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to languageprofileschema to the LanguageProfileSchema Agent."""
+        try:
+
+            return (
+                await child_agents["languageprofileschema"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in languageprofileschema agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_localization_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Localization to the Localization Agent."""
-        return (
-            await child_agents["Localization"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to localization to the Localization Agent."""
+        try:
+
+            return (
+                await child_agents["localization"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in localization agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_log_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Log to the Log Agent."""
-        return (
-            await child_agents["Log"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to log to the Log Agent."""
+        try:
+
+            return (
+                await child_agents["log"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in log agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_logfile_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to LogFile to the LogFile Agent."""
-        return (
-            await child_agents["LogFile"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to logfile to the LogFile Agent."""
+        try:
+
+            return (
+                await child_agents["logfile"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in logfile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_manualimport_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to ManualImport to the ManualImport Agent."""
-        return (
-            await child_agents["ManualImport"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to manualimport to the ManualImport Agent."""
+        try:
+
+            return (
+                await child_agents["manualimport"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in manualimport agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_mediacover_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to MediaCover to the MediaCover Agent."""
-        return (
-            await child_agents["MediaCover"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to mediacover to the MediaCover Agent."""
+        try:
+
+            return (
+                await child_agents["mediacover"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in mediacover agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_mediamanagementconfig_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to MediaManagementConfig to the MediaManagementConfig Agent."""
-        return (
-            await child_agents["MediaManagementConfig"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to mediamanagementconfig to the MediaManagementConfig Agent."""
+        try:
+
+            return (
+                await child_agents["mediamanagementconfig"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in mediamanagementconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_metadata_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Metadata to the Metadata Agent."""
-        return (
-            await child_agents["Metadata"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to metadata to the Metadata Agent."""
+        try:
+
+            return (
+                await child_agents["metadata"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in metadata agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_missing_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Missing to the Missing Agent."""
-        return (
-            await child_agents["Missing"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to missing to the Missing Agent."""
+        try:
+
+            return (
+                await child_agents["missing"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in missing agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_namingconfig_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to NamingConfig to the NamingConfig Agent."""
-        return (
-            await child_agents["NamingConfig"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to namingconfig to the NamingConfig Agent."""
+        try:
+
+            return (
+                await child_agents["namingconfig"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in namingconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_notification_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Notification to the Notification Agent."""
-        return (
-            await child_agents["Notification"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to notification to the Notification Agent."""
+        try:
+
+            return (
+                await child_agents["notification"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in notification agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_parse_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Parse to the Parse Agent."""
-        return (
-            await child_agents["Parse"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to parse to the Parse Agent."""
+        try:
+
+            return (
+                await child_agents["parse"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in parse agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_ping_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Ping to the Ping Agent."""
-        return (
-            await child_agents["Ping"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to ping to the Ping Agent."""
+        try:
+
+            return (
+                await child_agents["ping"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in ping agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_qualitydefinition_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to QualityDefinition to the QualityDefinition Agent."""
-        return (
-            await child_agents["QualityDefinition"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to qualitydefinition to the QualityDefinition Agent."""
+        try:
+
+            return (
+                await child_agents["qualitydefinition"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in qualitydefinition agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_qualityprofile_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to QualityProfile to the QualityProfile Agent."""
-        return (
-            await child_agents["QualityProfile"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to qualityprofile to the QualityProfile Agent."""
+        try:
+
+            return (
+                await child_agents["qualityprofile"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in qualityprofile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_qualityprofileschema_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to QualityProfileSchema to the QualityProfileSchema Agent."""
-        return (
-            await child_agents["QualityProfileSchema"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to qualityprofileschema to the QualityProfileSchema Agent."""
+        try:
+
+            return (
+                await child_agents["qualityprofileschema"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in qualityprofileschema agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_queue_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Queue to the Queue Agent."""
-        return (
-            await child_agents["Queue"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to queue to the Queue Agent."""
+        try:
+
+            return (
+                await child_agents["queue"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in queue agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_queueaction_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to QueueAction to the QueueAction Agent."""
-        return (
-            await child_agents["QueueAction"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to queueaction to the QueueAction Agent."""
+        try:
+
+            return (
+                await child_agents["queueaction"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in queueaction agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_queuedetails_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to QueueDetails to the QueueDetails Agent."""
-        return (
-            await child_agents["QueueDetails"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to queuedetails to the QueueDetails Agent."""
+        try:
+
+            return (
+                await child_agents["queuedetails"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in queuedetails agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_queuestatus_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to QueueStatus to the QueueStatus Agent."""
-        return (
-            await child_agents["QueueStatus"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to queuestatus to the QueueStatus Agent."""
+        try:
+
+            return (
+                await child_agents["queuestatus"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in queuestatus agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_release_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Release to the Release Agent."""
-        return (
-            await child_agents["Release"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to release to the Release Agent."""
+        try:
+
+            return (
+                await child_agents["release"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in release agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_releaseprofile_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to ReleaseProfile to the ReleaseProfile Agent."""
-        return (
-            await child_agents["ReleaseProfile"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to releaseprofile to the ReleaseProfile Agent."""
+        try:
+
+            return (
+                await child_agents["releaseprofile"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in releaseprofile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_releasepush_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to ReleasePush to the ReleasePush Agent."""
-        return (
-            await child_agents["ReleasePush"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to releasepush to the ReleasePush Agent."""
+        try:
+
+            return (
+                await child_agents["releasepush"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in releasepush agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_remotepathmapping_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to RemotePathMapping to the RemotePathMapping Agent."""
-        return (
-            await child_agents["RemotePathMapping"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to remotepathmapping to the RemotePathMapping Agent."""
+        try:
+
+            return (
+                await child_agents["remotepathmapping"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in remotepathmapping agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_renameepisode_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to RenameEpisode to the RenameEpisode Agent."""
-        return (
-            await child_agents["RenameEpisode"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to renameepisode to the RenameEpisode Agent."""
+        try:
+
+            return (
+                await child_agents["renameepisode"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in renameepisode agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_rootfolder_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to RootFolder to the RootFolder Agent."""
-        return (
-            await child_agents["RootFolder"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to rootfolder to the RootFolder Agent."""
+        try:
+
+            return (
+                await child_agents["rootfolder"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in rootfolder agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_seasonpass_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to SeasonPass to the SeasonPass Agent."""
-        return (
-            await child_agents["SeasonPass"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to seasonpass to the SeasonPass Agent."""
+        try:
+
+            return (
+                await child_agents["seasonpass"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in seasonpass agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_series_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Series to the Series Agent."""
-        return (
-            await child_agents["Series"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to series to the Series Agent."""
+        try:
+
+            return (
+                await child_agents["series"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in series agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_serieseditor_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to SeriesEditor to the SeriesEditor Agent."""
-        return (
-            await child_agents["SeriesEditor"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to serieseditor to the SeriesEditor Agent."""
+        try:
+
+            return (
+                await child_agents["serieseditor"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in serieseditor agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_seriesfolder_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to SeriesFolder to the SeriesFolder Agent."""
-        return (
-            await child_agents["SeriesFolder"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to seriesfolder to the SeriesFolder Agent."""
+        try:
+
+            return (
+                await child_agents["seriesfolder"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in seriesfolder agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_seriesimport_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to SeriesImport to the SeriesImport Agent."""
-        return (
-            await child_agents["SeriesImport"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to seriesimport to the SeriesImport Agent."""
+        try:
+
+            return (
+                await child_agents["seriesimport"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in seriesimport agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_serieslookup_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to SeriesLookup to the SeriesLookup Agent."""
-        return (
-            await child_agents["SeriesLookup"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to serieslookup to the SeriesLookup Agent."""
+        try:
+
+            return (
+                await child_agents["serieslookup"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in serieslookup agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_staticresource_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to StaticResource to the StaticResource Agent."""
-        return (
-            await child_agents["StaticResource"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to staticresource to the StaticResource Agent."""
+        try:
+
+            return (
+                await child_agents["staticresource"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in staticresource agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_system_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to System to the System Agent."""
-        return (
-            await child_agents["System"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to system to the System Agent."""
+        try:
+
+            return (
+                await child_agents["system"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in system agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_tag_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Tag to the Tag Agent."""
-        return (
-            await child_agents["Tag"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to tag to the Tag Agent."""
+        try:
+
+            return (
+                await child_agents["tag"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in tag agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_tagdetails_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to TagDetails to the TagDetails Agent."""
-        return (
-            await child_agents["TagDetails"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to tagdetails to the TagDetails Agent."""
+        try:
+
+            return (
+                await child_agents["tagdetails"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in tagdetails agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_task_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Task to the Task Agent."""
-        return (
-            await child_agents["Task"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to task to the Task Agent."""
+        try:
+
+            return (
+                await child_agents["task"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in task agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_uiconfig_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to UiConfig to the UiConfig Agent."""
-        return (
-            await child_agents["UiConfig"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to uiconfig to the UiConfig Agent."""
+        try:
+
+            return (
+                await child_agents["uiconfig"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in uiconfig agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_update_agent(ctx: RunContext[Any], task: str) -> str:
-        """Assign a task related to Update to the Update Agent."""
-        return (
-            await child_agents["Update"].run(task, usage=ctx.usage, deps=ctx.deps)
-        ).output
+        """Assign a task related to update to the Update Agent."""
+        try:
+
+            return (
+                await child_agents["update"].run(task, usage=ctx.usage, deps=ctx.deps)
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in update agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     @supervisor.tool
     async def assign_task_to_updatelogfile_agent(
         ctx: RunContext[Any], task: str
     ) -> str:
-        """Assign a task related to UpdateLogFile to the UpdateLogFile Agent."""
-        return (
-            await child_agents["UpdateLogFile"].run(
-                task, usage=ctx.usage, deps=ctx.deps
-            )
-        ).output
+        """Assign a task related to updatelogfile to the UpdateLogFile Agent."""
+        try:
+
+            return (
+                await child_agents["updatelogfile"].run(
+                    task, usage=ctx.usage, deps=ctx.deps
+                )
+            ).output
+
+        except Exception as e:
+
+            logger.error(f"Error in updatelogfile agent: {e}", exc_info=True)
+
+            return f"Error executing task: {e}"
 
     return supervisor
 
@@ -1598,7 +2232,6 @@ def create_agent_server(
         mcp_config=mcp_config,
         skills_directory=skills_directory,
         ssl_verify=ssl_verify,
-        timeout=DEFAULT_TIMEOUT,
     )
 
     if skills_directory and os.path.exists(skills_directory):
