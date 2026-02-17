@@ -18,7 +18,6 @@ from arr_mcp.utils import (
     to_list,
     to_dict,
     get_mcp_config_path,
-    get_skills_path,
     load_skills_from_directory,
     create_model,
     prune_large_messages,
@@ -38,7 +37,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.10"
+__version__ = "0.2.11"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -59,7 +58,7 @@ DEFAULT_LLM_BASE_URL = os.getenv("LLM_BASE_URL", "http://host.docker.internal:12
 DEFAULT_LLM_API_KEY = os.getenv("LLM_API_KEY", "ollama")
 DEFAULT_MCP_URL = os.getenv("MCP_URL", None)
 DEFAULT_MCP_CONFIG = os.getenv("MCP_CONFIG", get_mcp_config_path())
-DEFAULT_SKILLS_DIRECTORY = os.getenv("SKILLS_DIRECTORY", get_skills_path())
+DEFAULT_CUSTOM_SKILLS_DIRECTORY = os.getenv("CUSTOM_SKILLS_DIRECTORY", None)
 DEFAULT_ENABLE_WEB_UI = to_boolean(os.getenv("ENABLE_WEB_UI", "False"))
 DEFAULT_SSL_VERIFY = to_boolean(os.getenv("SSL_VERIFY", "True"))
 
@@ -112,7 +111,7 @@ def create_agent(
     api_key: Optional[str] = DEFAULT_LLM_API_KEY,
     mcp_url: str = DEFAULT_MCP_URL,
     mcp_config: str = DEFAULT_MCP_CONFIG,
-    skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
+    custom_skills_directory: Optional[str] = DEFAULT_CUSTOM_SKILLS_DIRECTORY,
     ssl_verify: bool = DEFAULT_SSL_VERIFY,
 ) -> Agent:
     """
@@ -153,7 +152,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Lidarr Agent initialized.")
@@ -168,7 +167,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Sonarr Agent initialized.")
@@ -183,7 +182,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Radarr Agent initialized.")
@@ -198,7 +197,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Prowlarr Agent initialized.")
@@ -213,7 +212,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Chaptarr Agent initialized.")
@@ -228,7 +227,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Seerr Agent initialized.")
@@ -243,7 +242,7 @@ def create_agent(
             api_key=api_key,
             mcp_url=mcp_url,
             mcp_config=mcp_config,
-            skills_directory=skills_directory,
+            custom_skills_directory=custom_skills_directory,
             ssl_verify=ssl_verify,
         )
         logger.info("Bazarr Agent initialized.")
@@ -401,7 +400,7 @@ def create_agent_server(
     api_key: Optional[str] = DEFAULT_LLM_API_KEY,
     mcp_url: str = DEFAULT_MCP_URL,
     mcp_config: str = DEFAULT_MCP_CONFIG,
-    skills_directory: Optional[str] = DEFAULT_SKILLS_DIRECTORY,
+    custom_skills_directory: Optional[str] = DEFAULT_CUSTOM_SKILLS_DIRECTORY,
     debug: Optional[bool] = DEFAULT_DEBUG,
     host: Optional[str] = DEFAULT_HOST,
     port: Optional[int] = DEFAULT_PORT,
@@ -423,14 +422,14 @@ def create_agent_server(
         api_key=api_key,
         mcp_url=mcp_url,
         mcp_config=mcp_config,
-        skills_directory=skills_directory,
+        custom_skills_directory=custom_skills_directory,
         ssl_verify=ssl_verify,
     )
 
     skills = []
-    if skills_directory and os.path.exists(skills_directory):
-        skills = load_skills_from_directory(skills_directory)
-        logger.info(f"Loaded {len(skills)} skills from {skills_directory}")
+    if custom_skills_directory and os.path.exists(custom_skills_directory):
+        skills = load_skills_from_directory(custom_skills_directory)
+        logger.info(f"Loaded {len(skills)} skills from {custom_skills_directory}")
 
     a2a_app = agent.to_a2a(
         name=AGENT_NAME,
@@ -537,9 +536,9 @@ def agent_server():
         "--mcp-config", default=DEFAULT_MCP_CONFIG, help="MCP Server Config"
     )
     parser.add_argument(
-        "--skills-directory",
-        default=DEFAULT_SKILLS_DIRECTORY,
-        help="Directory containing agent skills",
+        "--custom-skills-directory",
+        default=DEFAULT_CUSTOM_SKILLS_DIRECTORY,
+        help="Directory containing additional custom agent skills",
     )
 
     parser.add_argument(
@@ -589,7 +588,7 @@ def agent_server():
         api_key=args.api_key,
         mcp_url=args.mcp_url,
         mcp_config=args.mcp_config,
-        skills_directory=args.skills_directory,
+        custom_skills_directory=args.custom_skills_directory,
         debug=args.debug,
         host=args.host,
         port=args.port,
@@ -612,12 +611,12 @@ def usage():
         "--api-key             [ LLM API Key ]\n"
         "--mcp-url             [ MCP Server URL ]\n"
         "--mcp-config          [ MCP Server Config ]\n"
-        "--skills-directory    [ Directory containing agent skills ]\n"
+        "--custom-skills-directory    [ Directory containing additional custom agent skills ]\n"
         "--web                 [ Enable Pydantic AI Web UI ]\n"
         "\n"
         "Examples:\n"
         "  [Simple]  arr-agent \n"
-        '  [Complex] arr-agent --host "value" --port "value" --debug "value" --reload --provider "value" --model-id "value" --base-url "value" --api-key "value" --mcp-url "value" --mcp-config "value" --skills-directory "value" --web\n'
+        '  [Complex] arr-agent --host "value" --port "value" --debug "value" --reload --provider "value" --model-id "value" --base-url "value" --api-key "value" --mcp-url "value" --mcp-config "value" --custom-skills-directory "value" --web\n'
     )
 
 
