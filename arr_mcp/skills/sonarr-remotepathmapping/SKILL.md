@@ -1,0 +1,12 @@
+---
+name: Sonarr Remotepathmapping
+description: Skills related to remotepathmapping in Sonarr.
+---
+
+# Sonarr Remotepathmapping Skill
+
+This skill provides tools for managing remotepathmapping within Sonarr.
+
+## Capabilities
+
+- Access remotepathmapping resources
