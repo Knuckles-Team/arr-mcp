@@ -31,7 +31,7 @@ from arr_mcp.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.12"
+__version__ = "0.2.13"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)

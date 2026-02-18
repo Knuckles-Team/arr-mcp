@@ -11,6 +11,7 @@ from typing import Optional, Any, List
 from contextlib import asynccontextmanager
 
 from pydantic_ai import Agent, ModelSettings, RunContext
+from pydantic_ai_skills import SkillsToolset
 from arr_mcp.utils import (
     to_integer,
     to_boolean,
@@ -18,6 +19,7 @@ from arr_mcp.utils import (
     to_list,
     to_dict,
     get_mcp_config_path,
+    get_skills_path,
     load_skills_from_directory,
     create_model,
     prune_large_messages,
@@ -37,7 +39,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.12"
+__version__ = "0.2.13"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -249,11 +251,35 @@ def create_agent(
     except Exception as e:
         logger.error(f"Failed to initialize Bazarr Agent: {e}")
 
+    supervisor_skills = []
+    supervisor_skills_directories = [get_skills_path()]
+    arr_tags = ["lidarr", "sonarr", "radarr", "prowlarr", "chaptarr", "seerr", "bazarr"]
+    for tag in arr_tags:
+        skill_dir_name = f"arr-mcp-{tag}"
+
+        # Check custom skills directory
+        if custom_skills_directory:
+            skill_dir_path = os.path.join(custom_skills_directory, skill_dir_name)
+            if os.path.exists(skill_dir_path):
+                supervisor_skills_directories.append(skill_dir_path)
+
+        # Check default skills directory
+        default_skill_path = os.path.join(get_skills_path(), skill_dir_name)
+        if os.path.exists(default_skill_path):
+            supervisor_skills_directories.append(default_skill_path)
+
+    if custom_skills_directory:
+        supervisor_skills_directories.append(custom_skills_directory)
+
+    supervisor_skills.append(SkillsToolset(directories=supervisor_skills_directories))
+    logger.info(f"Loaded supervisor skills from: {supervisor_skills_directories}")
+
     supervisor = Agent(
         name=AGENT_NAME,
         system_prompt=SUPERVISOR_SYSTEM_PROMPT,
         model=model,
         model_settings=settings,
+        toolsets=supervisor_skills,
         deps_type=Any,
     )
 
