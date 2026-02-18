@@ -1,19 +1,20 @@
+#!/usr/bin/python
+# coding: utf-8
+
 import os
 import httpx
-import json
 import pickle
+import yaml
 import logging
-from typing import Union, Optional
 from pathlib import Path
+from typing import Union, List, Any, Optional
+import json
 from importlib.resources import files, as_file
-
 from pydantic_ai.models.openai import OpenAIChatModel
-from pydantic_ai.models.anthropic import AnthropicModel
 from pydantic_ai.models.google import GoogleModel
 from pydantic_ai.models.huggingface import HuggingFaceModel
 from pydantic_ai.models.groq import GroqModel
 from pydantic_ai.models.mistral import MistralModel
-
 from fasta2a import Skill
 
 try:
@@ -38,11 +39,16 @@ except ImportError:
     MistralProvider = None
 
 try:
+    from pydantic_ai.models.anthropic import AnthropicModel
     from anthropic import AsyncAnthropic
     from pydantic_ai.providers.anthropic import AnthropicProvider
 except ImportError:
+    AnthropicModel = None
     AsyncAnthropic = None
     AnthropicProvider = None
+
+
+logger = logging.getLogger(__name__)
 
 
 def to_integer(string: Union[str, int] = None) -> int:
@@ -105,7 +111,7 @@ def to_dict(string: Union[str, dict] = None) -> dict:
         raise ValueError(f"Cannot convert '{string}' to dict")
 
 
-def prune_large_messages(messages: list, max_length: int = 5000) -> list:
+def prune_large_messages(messages: list[Any], max_length: int = 5000) -> list[Any]:
     """
     Summarize large tool outputs in the message history to save context window.
     Keeps the most recent tool outputs intact if they are the very last message,
@@ -144,14 +150,14 @@ def prune_large_messages(messages: list, max_length: int = 5000) -> list:
     return pruned_messages
 
 
-def save_model(model: any, file_name: str = "model", file_path: str = ".") -> str:
+def save_model(model: Any, file_name: str = "model", file_path: str = ".") -> str:
     pickle_file = os.path.join(file_path, f"{file_name}.pkl")
     with open(pickle_file, "wb") as file:
         pickle.dump(model, file)
     return pickle_file
 
 
-def load_model(file: str) -> any:
+def load_model(file: str) -> Any:
     with open(file, "rb") as model_file:
         model = pickle.load(model_file)
     return model
@@ -170,8 +176,6 @@ def retrieve_package_name() -> str:
             return top
 
     try:
-        from pathlib import Path
-
         file_path = Path(__file__).resolve()
         for parent in file_path.parents:
             if (
@@ -187,7 +191,6 @@ def retrieve_package_name() -> str:
 
 
 def get_skills_path() -> str:
-
     skills_dir = files(retrieve_package_name()) / "skills"
     with as_file(skills_dir) as path:
         skills_path = str(path)
@@ -195,16 +198,13 @@ def get_skills_path() -> str:
 
 
 def get_mcp_config_path() -> str:
-
     mcp_config_file = files(retrieve_package_name()) / "mcp_config.json"
     with as_file(mcp_config_file) as path:
         mcp_config_path = str(path)
     return mcp_config_path
 
 
-def load_skills_from_directory(directory: str) -> list:
-    import yaml
-
+def load_skills_from_directory(directory: str) -> List[Skill]:
     skills = []
     base_path = Path(directory)
 
@@ -366,7 +366,7 @@ def create_model(
     return OpenAIChatModel(model_name=model_id, provider="openai")
 
 
-def extract_tool_tags(tool_def: any) -> list:
+def extract_tool_tags(tool_def: Any) -> List[str]:
     """
     Extracts tags from a tool definition object.
 
@@ -416,7 +416,7 @@ def extract_tool_tags(tool_def: any) -> list:
     return []
 
 
-def tool_in_tag(tool_def: any, tag: str) -> bool:
+def tool_in_tag(tool_def: Any, tag: str) -> bool:
     """
     Checks if a tool belongs to a specific tag.
     """
@@ -427,14 +427,8 @@ def tool_in_tag(tool_def: any, tag: str) -> bool:
         return False
 
 
-def get_logger(name: str) -> logging.Logger:
-    logger = logging.getLogger(name)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
+def filter_tools_by_tag(tools: List[Any], tag: str) -> List[Any]:
+    """
+    Filters a list of tools for a given tag.
+    """
+    return [t for t in tools if tool_in_tag(t, tag)]
