@@ -39,7 +39,7 @@ from arr_mcp.chaptarr_agent import create_agent as create_chaptarr_agent
 from arr_mcp.seerr_agent import create_agent as create_seerr_agent
 from arr_mcp.bazarr_agent import create_agent as create_bazarr_agent
 
-__version__ = "0.2.13"
+__version__ = "0.2.14"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -251,6 +251,54 @@ def create_agent(
     except Exception as e:
         logger.error(f"Failed to initialize Bazarr Agent: {e}")
 
+    # 1. Identify Universal Skills
+    # Universal skills are those in the skills directory that do NOT start with the package prefixes
+    package_prefixes = [
+        "lidarr-",
+        "sonarr-",
+        "radarr-",
+        "prowlarr-",
+        "chaptarr-",
+        "seerr-",
+        "bazarr-",
+    ]
+    skills_path = get_skills_path()
+    universal_skill_dirs = []
+
+    if os.path.exists(skills_path):
+        for item in os.listdir(skills_path):
+            item_path = os.path.join(skills_path, item)
+            if os.path.isdir(item_path):
+                if not any(item.startswith(prefix) for prefix in package_prefixes):
+                    universal_skill_dirs.append(item_path)
+                    logger.info(f"Identified universal skill: {item}")
+
+    # Create Custom Agent if custom_skills_directory is provided
+    if custom_skills_directory:
+        custom_agent_tag = "custom_agent"
+        custom_agent_name = "Custom_Agent"
+        custom_agent_prompt = (
+            "You are the Custom Agent.\n"
+            "Your goal is to handle custom tasks or general tasks not covered by other specialists.\n"
+            "You have access to valid custom skills and universal skills."
+        )
+
+        custom_agent_skills_dirs = list(universal_skill_dirs)
+        custom_agent_skills_dirs.append(custom_skills_directory)
+
+        custom_toolsets = []
+        custom_toolsets.append(SkillsToolset(directories=custom_agent_skills_dirs))
+
+        custom_agent = Agent(
+            name=custom_agent_name,
+            system_prompt=custom_agent_prompt,
+            model=model,
+            model_settings=settings,
+            toolsets=custom_toolsets,
+            tool_timeout=DEFAULT_TOOL_TIMEOUT,
+        )
+        child_agents[custom_agent_tag] = custom_agent
+
     supervisor_skills = []
     supervisor_skills_directories = [get_skills_path()]
     arr_tags = ["lidarr", "sonarr", "radarr", "prowlarr", "chaptarr", "seerr", "bazarr"]
@@ -394,6 +442,17 @@ def create_agent(
         except Exception as e:
             logger.error(f"Error in bazarr agent: {e}", exc_info=True)
             return f"Error executing task: {e}"
+
+    if "custom_agent" in child_agents:
+
+        @supervisor.tool
+        async def assign_task_to_custom_agent(ctx: RunContext[Any], task: str) -> str:
+            """Assign a task to the Custom Agent."""
+            return (
+                await child_agents["custom_agent"]
+                .run(task, usage=ctx.usage, deps=ctx.deps)
+                .output
+            )
 
     return supervisor
 
