@@ -80,7 +80,10 @@ class Api:
         if response.status_code == 204:
             return {"status": "success"}
         try:
-            return response.json()
+            result = response.json()
+            if isinstance(result, list):
+                return {"result": result}
+            return result
         except Exception:
             return {"status": "success", "text": response.text}
 

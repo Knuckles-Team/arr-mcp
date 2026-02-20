@@ -311,8 +311,8 @@ services:
       - "PROWLARR_MCP_URL=${PROWLARR_MCP_URL:-http://prowlarr-mcp:8062/mcp}"
       - "RADARR_MCP_URL=${RADARR_MCP_URL:-http://radarr-mcp:8063/mcp}"
       - "SONARR_MCP_URL=${SONARR_MCP_URL:-http://sonarr-mcp:8064/mcp}"
-      - "BAZARR_MCP_URL=${BAZARR_MCP_URL:-http://sonarr-mcp:8065/mcp}"
-      - "SEERR_MCP_URL=${SEERR_MCP_URL:-http://sonarr-mcp:8066/mcp}"
+      - "BAZARR_MCP_URL=${BAZARR_MCP_URL:-http://bazarr-mcp:8065/mcp}"
+      - "SEERR_MCP_URL=${SEERR_MCP_URL:-http://seerr-mcp:8066/mcp}"
     ports:
       - "8099:8099"
     healthcheck:

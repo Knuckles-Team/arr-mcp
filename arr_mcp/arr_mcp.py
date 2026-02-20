@@ -80,11 +80,11 @@ mcp_config = {
             "transport": "streamable-http",
         },
         "seerr": {
-            "url": os.getenv("SEERR_MCP_URL", "http://localhost:8065/mcp"),
+            "url": os.getenv("SEERR_MCP_URL", "http://localhost:8066/mcp"),
             "transport": "streamable-http",
         },
         "bazarr": {
-            "url": os.getenv("BAZARR_MCP_URL", "http://localhost:8066/mcp"),
+            "url": os.getenv("BAZARR_MCP_URL", "http://localhost:8065/mcp"),
             "transport": "streamable-http",
         },
     }
