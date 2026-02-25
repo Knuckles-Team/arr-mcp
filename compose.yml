@@ -7,7 +7,6 @@ services:
     container_name: chaptarr-mcp
     hostname: chaptarr-mcp
     command: [ "chaptarr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -45,7 +44,6 @@ services:
     container_name: lidarr-mcp
     hostname: lidarr-mcp
     command: [ "lidarr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -83,7 +81,6 @@ services:
     container_name: prowlarr-mcp
     hostname: prowlarr-mcp
     command: [ "prowlarr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -121,7 +118,6 @@ services:
     container_name: radarr-mcp
     hostname: radarr-mcp
     command: [ "radarr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -159,7 +155,6 @@ services:
     container_name: sonarr-mcp
     hostname: sonarr-mcp
     command: [ "sonarr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -197,7 +192,6 @@ services:
     container_name: bazarr-mcp
     hostname: bazarr-mcp
     command: [ "bazarr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -235,7 +229,6 @@ services:
     container_name: seerr-mcp
     hostname: seerr-mcp
     command: [ "seerr-mcp" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -288,7 +281,6 @@ services:
         condition: service_healthy
       seerr-mcp:
         condition: service_healthy
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
@@ -330,7 +322,6 @@ services:
     container_name: arr-agent
     hostname: arr-agent
     command: [ "arr-agent" ]
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
