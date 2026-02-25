@@ -1,6 +1,7 @@
 ---
-name: Sonarr Language
+name: sonarr-language
 description: Skills related to language in Sonarr.
+tags: [sonarr-language]
 ---
 
 # Sonarr Language Skill

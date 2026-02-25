@@ -1,6 +1,7 @@
 ---
-name: Radarr Qualitydefinition
+name: radarr-qualitydefinition
 description: Skills related to qualitydefinition in Radarr.
+tags: [radarr-qualitydefinition]
 ---
 
 # Radarr Qualitydefinition Skill

@@ -1,6 +1,7 @@
 ---
 name: lidarr-indexer
 description: "Generated skill for Indexer operations. Contains 15 tools."
+tags: [lidarr-indexer]
 ---
 
 ### Overview

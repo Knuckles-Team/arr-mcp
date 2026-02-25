@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Filesystem
+name: prowlarr-filesystem
 description: Skills related to filesystem in Prowlarr.
+tags: [prowlarr-filesystem]
 ---
 
 # Prowlarr Filesystem Skill

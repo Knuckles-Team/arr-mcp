@@ -1,6 +1,7 @@
 ---
-name: Sonarr Releasepush
+name: sonarr-releasepush
 description: Skills related to releasepush in Sonarr.
+tags: [sonarr-releasepush]
 ---
 
 # Sonarr Releasepush Skill

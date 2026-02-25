@@ -1,6 +1,7 @@
 ---
 name: chaptarr-system
 description: "Generated skill for System operations. Contains 47 tools."
+tags: [chaptarr-system]
 ---
 
 ### Overview

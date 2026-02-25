@@ -1,6 +1,7 @@
 ---
-name: Radarr Indexerconfig
+name: radarr-indexerconfig
 description: Skills related to indexerconfig in Radarr.
+tags: [radarr-indexerconfig]
 ---
 
 # Radarr Indexerconfig Skill

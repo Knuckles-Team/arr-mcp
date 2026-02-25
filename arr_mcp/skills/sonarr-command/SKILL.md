@@ -1,6 +1,7 @@
 ---
-name: Sonarr Command
+name: sonarr-command
 description: Skills related to command in Sonarr.
+tags: [sonarr-command]
 ---
 
 # Sonarr Command Skill

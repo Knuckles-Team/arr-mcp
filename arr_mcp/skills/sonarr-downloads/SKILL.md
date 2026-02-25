@@ -1,6 +1,7 @@
 ---
 name: sonarr-downloads
 description: "Generated skill for Downloads operations. Contains 40 tools."
+tags: [sonarr-downloads]
 ---
 
 ### Overview

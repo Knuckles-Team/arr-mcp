@@ -1,6 +1,7 @@
 ---
 name: sonarr-operations
 description: "Generated skill for Operations operations. Contains 14 tools."
+tags: [sonarr-operations]
 ---
 
 ### Overview

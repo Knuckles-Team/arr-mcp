@@ -1,6 +1,7 @@
 ---
-name: Radarr Manualimport
+name: radarr-manualimport
 description: Skills related to manualimport in Radarr.
+tags: [radarr-manualimport]
 ---
 
 # Radarr Manualimport Skill

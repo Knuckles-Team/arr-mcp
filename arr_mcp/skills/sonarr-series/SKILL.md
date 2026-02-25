@@ -1,6 +1,7 @@
 ---
-name: Sonarr Series
+name: sonarr-series
 description: Skills related to series in Sonarr.
+tags: [sonarr-series]
 ---
 
 # Sonarr Series Skill

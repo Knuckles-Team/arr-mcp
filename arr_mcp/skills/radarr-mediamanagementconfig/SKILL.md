@@ -1,6 +1,7 @@
 ---
-name: Radarr Mediamanagementconfig
+name: radarr-mediamanagementconfig
 description: Skills related to mediamanagementconfig in Radarr.
+tags: [radarr-mediamanagementconfig]
 ---
 
 # Radarr Mediamanagementconfig Skill

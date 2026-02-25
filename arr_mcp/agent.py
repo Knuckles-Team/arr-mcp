@@ -12,7 +12,7 @@ from agent_utilities import (
 from agent_utilities.agent_utilities import create_agent_parser, get_mcp_config_path
 from agent_utilities.base_utilities import to_integer, to_boolean
 
-__version__ = "0.1.17"
+__version__ = "0.2.15"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -39,11 +39,15 @@ DEFAULT_AGENT_SYSTEM_PROMPT = os.getenv(
     supervisor_meta.get("content") or build_system_prompt_from_workspace(),
 )
 
+from arr_mcp.mcp import mcp_config
+
+active_mcp_servers = mcp_config.get("mcpServers", {})
+
 # Prepare child agent definitions from IDENTITY.md sections
 CHILD_AGENT_DEFS = {
     tag: (data["content"], data["name"])
     for tag, data in identities.items()
-    if tag not in ["supervisor", "default"]
+    if tag not in ["supervisor", "default"] and tag in active_mcp_servers
 }
 
 DEFAULT_HOST = os.getenv("HOST", "0.0.0.0")
@@ -85,7 +89,7 @@ def agent_server():
         ssl_verify=not args.insecure,
         name=DEFAULT_AGENT_NAME,
         system_prompt=DEFAULT_AGENT_SYSTEM_PROMPT,
-        agent_defs=CHILD_AGENT_DEFS if CHILD_AGENT_DEFS else None,
+        agent_definitions=CHILD_AGENT_DEFS if CHILD_AGENT_DEFS else None,
     )
 
 

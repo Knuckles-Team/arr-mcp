@@ -1,6 +1,7 @@
 ---
-name: Radarr Renamemovie
+name: radarr-renamemovie
 description: Skills related to renamemovie in Radarr.
+tags: [radarr-renamemovie]
 ---
 
 # Radarr Renamemovie Skill

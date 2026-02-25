@@ -1,6 +1,7 @@
 ---
 name: chaptarr-operations
 description: "Generated skill for Operations operations. Contains 8 tools."
+tags: [chaptarr-operations]
 ---
 
 ### Overview

@@ -1,6 +1,7 @@
 ---
 name: radarr-indexer
 description: "Generated skill for Indexer operations. Contains 15 tools."
+tags: [radarr-indexer]
 ---
 
 ### Overview

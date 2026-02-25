@@ -1,6 +1,7 @@
 ---
 name: sonarr-catalog
 description: "Generated skill for Catalog operations. Contains 37 tools."
+tags: [sonarr-catalog]
 ---
 
 ### Overview

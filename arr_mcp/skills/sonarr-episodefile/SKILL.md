@@ -1,6 +1,7 @@
 ---
-name: Sonarr Episodefile
+name: sonarr-episodefile
 description: Skills related to episodefile in Sonarr.
+tags: [sonarr-episodefile]
 ---
 
 # Sonarr Episodefile Skill

@@ -1,6 +1,7 @@
 ---
-name: Radarr Namingconfig
+name: radarr-namingconfig
 description: Skills related to namingconfig in Radarr.
+tags: [radarr-namingconfig]
 ---
 
 # Radarr Namingconfig Skill

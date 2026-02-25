@@ -1,6 +1,7 @@
 ---
-name: Sonarr Log
+name: sonarr-log
 description: Skills related to log in Sonarr.
+tags: [sonarr-log]
 ---
 
 # Sonarr Log Skill

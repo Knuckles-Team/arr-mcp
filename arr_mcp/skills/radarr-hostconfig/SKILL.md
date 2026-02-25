@@ -1,6 +1,7 @@
 ---
-name: Radarr Hostconfig
+name: radarr-hostconfig
 description: Skills related to hostconfig in Radarr.
+tags: [radarr-hostconfig]
 ---
 
 # Radarr Hostconfig Skill

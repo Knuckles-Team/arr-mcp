@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Newznab
+name: prowlarr-newznab
 description: Skills related to newznab in Prowlarr.
+tags: [prowlarr-newznab]
 ---
 
 # Prowlarr Newznab Skill

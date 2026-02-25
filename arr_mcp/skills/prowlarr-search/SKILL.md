@@ -1,6 +1,7 @@
 ---
 name: prowlarr-search
 description: "Generated skill for Search operations. Contains 4 tools."
+tags: [prowlarr-search]
 ---
 
 ### Overview

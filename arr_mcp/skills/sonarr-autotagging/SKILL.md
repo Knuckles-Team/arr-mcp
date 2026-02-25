@@ -1,6 +1,7 @@
 ---
-name: Sonarr Autotagging
+name: sonarr-autotagging
 description: Skills related to autotagging in Sonarr.
+tags: [sonarr-autotagging]
 ---
 
 # Sonarr Autotagging Skill

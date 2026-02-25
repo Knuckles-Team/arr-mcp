@@ -1,6 +1,7 @@
 ---
-name: Sonarr Releaseprofile
+name: sonarr-releaseprofile
 description: Skills related to releaseprofile in Sonarr.
+tags: [sonarr-releaseprofile]
 ---
 
 # Sonarr Releaseprofile Skill

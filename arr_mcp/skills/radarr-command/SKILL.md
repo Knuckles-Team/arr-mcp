@@ -1,6 +1,7 @@
 ---
-name: Radarr Command
+name: radarr-command
 description: Skills related to command in Radarr.
+tags: [radarr-command]
 ---
 
 # Radarr Command Skill

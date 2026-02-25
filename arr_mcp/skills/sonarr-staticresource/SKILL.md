@@ -1,6 +1,7 @@
 ---
-name: Sonarr Staticresource
+name: sonarr-staticresource
 description: Skills related to staticresource in Sonarr.
+tags: [sonarr-staticresource]
 ---
 
 # Sonarr Staticresource Skill

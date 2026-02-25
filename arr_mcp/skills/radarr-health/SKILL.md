@@ -1,6 +1,7 @@
 ---
-name: Radarr Health
+name: radarr-health
 description: Skills related to health in Radarr.
+tags: [radarr-health]
 ---
 
 # Radarr Health Skill

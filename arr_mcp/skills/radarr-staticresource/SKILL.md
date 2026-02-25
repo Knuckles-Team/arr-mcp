@@ -1,6 +1,7 @@
 ---
-name: Radarr Staticresource
+name: radarr-staticresource
 description: Skills related to staticresource in Radarr.
+tags: [radarr-staticresource]
 ---
 
 # Radarr Staticresource Skill

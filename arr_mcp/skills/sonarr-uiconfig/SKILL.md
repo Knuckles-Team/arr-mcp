@@ -1,6 +1,7 @@
 ---
-name: Sonarr Uiconfig
+name: sonarr-uiconfig
 description: Skills related to uiconfig in Sonarr.
+tags: [sonarr-uiconfig]
 ---
 
 # Sonarr Uiconfig Skill

@@ -1,6 +1,7 @@
 ---
 name: chaptarr-catalog
 description: "Generated skill for Catalog operations. Contains 42 tools."
+tags: [chaptarr-catalog]
 ---
 
 ### Overview

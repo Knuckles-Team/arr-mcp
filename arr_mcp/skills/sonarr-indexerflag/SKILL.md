@@ -1,6 +1,7 @@
 ---
-name: Sonarr Indexerflag
+name: sonarr-indexerflag
 description: Skills related to indexerflag in Sonarr.
+tags: [sonarr-indexerflag]
 ---
 
 # Sonarr Indexerflag Skill

@@ -1,6 +1,7 @@
 ---
-name: Radarr Customfilter
+name: radarr-customfilter
 description: Skills related to customfilter in Radarr.
+tags: [radarr-customfilter]
 ---
 
 # Radarr Customfilter Skill

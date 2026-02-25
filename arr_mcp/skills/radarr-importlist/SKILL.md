@@ -1,6 +1,7 @@
 ---
-name: Radarr Importlist
+name: radarr-importlist
 description: Skills related to importlist in Radarr.
+tags: [radarr-importlist]
 ---
 
 # Radarr Importlist Skill

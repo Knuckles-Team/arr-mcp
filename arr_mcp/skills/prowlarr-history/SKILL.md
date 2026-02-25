@@ -1,6 +1,7 @@
 ---
 name: prowlarr-history
 description: "Generated skill for History operations. Contains 3 tools."
+tags: [prowlarr-history]
 ---
 
 ### Overview

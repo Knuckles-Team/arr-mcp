@@ -1,6 +1,7 @@
 ---
 name: bazarr-catalog
 description: "Generated skill for Catalog operations. Contains 11 tools."
+tags: [bazarr-catalog]
 ---
 
 ### Overview

@@ -1,6 +1,7 @@
 ---
 name: chaptarr-search
 description: "Generated skill for Search operations. Contains 1 tools."
+tags: [chaptarr-search]
 ---
 
 ### Overview

@@ -1,6 +1,7 @@
 ---
 name: lidarr-history
 description: "Generated skill for History operations. Contains 4 tools."
+tags: [lidarr-history]
 ---
 
 ### Overview

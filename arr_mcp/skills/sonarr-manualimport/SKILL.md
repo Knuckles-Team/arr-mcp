@@ -1,6 +1,7 @@
 ---
-name: Sonarr Manualimport
+name: sonarr-manualimport
 description: Skills related to manualimport in Sonarr.
+tags: [sonarr-manualimport]
 ---
 
 # Sonarr Manualimport Skill

@@ -1,6 +1,7 @@
 ---
-name: Radarr Downloadclient
+name: radarr-downloadclient
 description: Skills related to downloadclient in Radarr.
+tags: [radarr-downloadclient]
 ---
 
 # Radarr Downloadclient Skill

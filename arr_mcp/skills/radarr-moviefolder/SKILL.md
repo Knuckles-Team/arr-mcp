@@ -1,6 +1,7 @@
 ---
-name: Radarr Moviefolder
+name: radarr-moviefolder
 description: Skills related to moviefolder in Radarr.
+tags: [radarr-moviefolder]
 ---
 
 # Radarr Moviefolder Skill

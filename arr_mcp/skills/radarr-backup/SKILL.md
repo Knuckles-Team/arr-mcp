@@ -1,6 +1,7 @@
 ---
-name: Radarr Backup
+name: radarr-backup
 description: Skills related to backup in Radarr.
+tags: [radarr-backup]
 ---
 
 # Radarr Backup Skill

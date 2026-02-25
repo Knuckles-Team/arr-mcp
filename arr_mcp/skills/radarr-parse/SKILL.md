@@ -1,6 +1,7 @@
 ---
-name: Radarr Parse
+name: radarr-parse
 description: Skills related to parse in Radarr.
+tags: [radarr-parse]
 ---
 
 # Radarr Parse Skill

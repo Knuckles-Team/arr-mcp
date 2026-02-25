@@ -1,6 +1,7 @@
 ---
-name: Radarr Update
+name: radarr-update
 description: Skills related to update in Radarr.
+tags: [radarr-update]
 ---
 
 # Radarr Update Skill

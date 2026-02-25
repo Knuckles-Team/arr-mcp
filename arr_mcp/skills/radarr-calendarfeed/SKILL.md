@@ -1,6 +1,7 @@
 ---
-name: Radarr Calendarfeed
+name: radarr-calendarfeed
 description: Skills related to calendarfeed in Radarr.
+tags: [radarr-calendarfeed]
 ---
 
 # Radarr Calendarfeed Skill

@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Health
+name: prowlarr-health
 description: Skills related to health in Prowlarr.
+tags: [prowlarr-health]
 ---
 
 # Prowlarr Health Skill

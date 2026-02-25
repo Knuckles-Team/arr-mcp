@@ -1,6 +1,7 @@
 ---
-name: Radarr Extrafile
+name: radarr-extrafile
 description: Skills related to extrafile in Radarr.
+tags: [radarr-extrafile]
 ---
 
 # Radarr Extrafile Skill

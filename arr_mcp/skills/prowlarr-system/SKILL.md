@@ -1,6 +1,7 @@
 ---
 name: prowlarr-system
 description: "Generated skill for System operations. Contains 63 tools."
+tags: [prowlarr-system]
 ---
 
 ### Overview

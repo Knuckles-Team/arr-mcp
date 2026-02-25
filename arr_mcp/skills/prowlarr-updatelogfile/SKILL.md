@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Updatelogfile
+name: prowlarr-updatelogfile
 description: Skills related to updatelogfile in Prowlarr.
+tags: [prowlarr-updatelogfile]
 ---
 
 # Prowlarr Updatelogfile Skill

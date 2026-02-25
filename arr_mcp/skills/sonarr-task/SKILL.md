@@ -1,6 +1,7 @@
 ---
-name: Sonarr Task
+name: sonarr-task
 description: Skills related to task in Sonarr.
+tags: [sonarr-task]
 ---
 
 # Sonarr Task Skill

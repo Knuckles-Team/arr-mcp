@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Indexerstatus
+name: prowlarr-indexerstatus
 description: Skills related to indexerstatus in Prowlarr.
+tags: [prowlarr-indexerstatus]
 ---
 
 # Prowlarr Indexerstatus Skill

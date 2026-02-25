@@ -1,6 +1,7 @@
 ---
-name: Radarr Releasepush
+name: radarr-releasepush
 description: Skills related to releasepush in Radarr.
+tags: [radarr-releasepush]
 ---
 
 # Radarr Releasepush Skill

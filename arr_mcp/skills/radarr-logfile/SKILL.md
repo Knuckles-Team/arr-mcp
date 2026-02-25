@@ -1,6 +1,7 @@
 ---
-name: Radarr Logfile
+name: radarr-logfile
 description: Skills related to logfile in Radarr.
+tags: [radarr-logfile]
 ---
 
 # Radarr Logfile Skill

@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Staticresource
+name: prowlarr-staticresource
 description: Skills related to staticresource in Prowlarr.
+tags: [prowlarr-staticresource]
 ---
 
 # Prowlarr Staticresource Skill

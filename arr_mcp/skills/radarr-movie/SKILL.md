@@ -1,6 +1,7 @@
 ---
-name: Radarr Movie
+name: radarr-movie
 description: Skills related to movie in Radarr.
+tags: [radarr-movie]
 ---
 
 # Radarr Movie Skill

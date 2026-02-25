@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Indexerproxy
+name: prowlarr-indexerproxy
 description: Skills related to indexerproxy in Prowlarr.
+tags: [prowlarr-indexerproxy]
 ---
 
 # Prowlarr Indexerproxy Skill

@@ -1,6 +1,7 @@
 ---
-name: Sonarr Cutoff
+name: sonarr-cutoff
 description: Skills related to cutoff in Sonarr.
+tags: [sonarr-cutoff]
 ---
 
 # Sonarr Cutoff Skill

@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Ping
+name: prowlarr-ping
 description: Skills related to ping in Prowlarr.
+tags: [prowlarr-ping]
 ---
 
 # Prowlarr Ping Skill

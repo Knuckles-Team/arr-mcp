@@ -1,6 +1,7 @@
 ---
-name: Sonarr Qualitydefinition
+name: sonarr-qualitydefinition
 description: Skills related to qualitydefinition in Sonarr.
+tags: [sonarr-qualitydefinition]
 ---
 
 # Sonarr Qualitydefinition Skill

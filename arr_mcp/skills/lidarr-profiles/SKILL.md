@@ -1,6 +1,7 @@
 ---
 name: lidarr-profiles
 description: "Generated skill for Profiles operations. Contains 54 tools."
+tags: [lidarr-profiles]
 ---
 
 ### Overview

@@ -1,6 +1,7 @@
 ---
-name: Sonarr Mediamanagementconfig
+name: sonarr-mediamanagementconfig
 description: Skills related to mediamanagementconfig in Sonarr.
+tags: [sonarr-mediamanagementconfig]
 ---
 
 # Sonarr Mediamanagementconfig Skill

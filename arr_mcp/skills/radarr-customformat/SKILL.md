@@ -1,6 +1,7 @@
 ---
-name: Radarr Customformat
+name: radarr-customformat
 description: Skills related to customformat in Radarr.
+tags: [radarr-customformat]
 ---
 
 # Radarr Customformat Skill

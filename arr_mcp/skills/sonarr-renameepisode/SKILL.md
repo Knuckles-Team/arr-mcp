@@ -1,6 +1,7 @@
 ---
-name: Sonarr Renameepisode
+name: sonarr-renameepisode
 description: Skills related to renameepisode in Sonarr.
+tags: [sonarr-renameepisode]
 ---
 
 # Sonarr Renameepisode Skill

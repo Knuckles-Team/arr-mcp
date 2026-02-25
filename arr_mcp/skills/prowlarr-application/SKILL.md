@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Application
+name: prowlarr-application
 description: Skills related to application in Prowlarr.
+tags: [prowlarr-application]
 ---
 
 # Prowlarr Application Skill

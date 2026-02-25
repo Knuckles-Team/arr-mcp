@@ -1,6 +1,7 @@
 ---
 name: chaptarr-downloads
 description: "Generated skill for Downloads operations. Contains 35 tools."
+tags: [chaptarr-downloads]
 ---
 
 ### Overview

@@ -1,6 +1,7 @@
 ---
-name: Sonarr Rootfolder
+name: sonarr-rootfolder
 description: Skills related to rootfolder in Sonarr.
+tags: [sonarr-rootfolder]
 ---
 
 # Sonarr Rootfolder Skill

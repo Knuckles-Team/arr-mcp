@@ -1,6 +1,7 @@
 ---
 name: bazarr-system
 description: "Generated skill for System operations. Contains 2 tools."
+tags: [bazarr-system]
 ---
 
 ### Overview

@@ -1,6 +1,7 @@
 ---
-name: Sonarr Ping
+name: sonarr-ping
 description: Skills related to ping in Sonarr.
+tags: [sonarr-ping]
 ---
 
 # Sonarr Ping Skill

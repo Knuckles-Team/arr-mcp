@@ -1,6 +1,7 @@
 ---
 name: lidarr-system
 description: "Generated skill for System operations. Contains 44 tools."
+tags: [lidarr-system]
 ---
 
 ### Overview

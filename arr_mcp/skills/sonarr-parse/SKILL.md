@@ -1,6 +1,7 @@
 ---
-name: Sonarr Parse
+name: sonarr-parse
 description: Skills related to parse in Sonarr.
+tags: [sonarr-parse]
 ---
 
 # Sonarr Parse Skill

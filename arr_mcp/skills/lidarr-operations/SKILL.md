@@ -1,6 +1,7 @@
 ---
 name: lidarr-operations
 description: "Generated skill for Operations operations. Contains 14 tools."
+tags: [lidarr-operations]
 ---
 
 ### Overview

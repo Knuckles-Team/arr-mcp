@@ -1,6 +1,7 @@
 ---
-name: Sonarr Seasonpass
+name: sonarr-seasonpass
 description: Skills related to seasonpass in Sonarr.
+tags: [sonarr-seasonpass]
 ---
 
 # Sonarr Seasonpass Skill

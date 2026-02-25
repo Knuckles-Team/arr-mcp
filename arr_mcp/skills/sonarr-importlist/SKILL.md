@@ -1,6 +1,7 @@
 ---
-name: Sonarr Importlist
+name: sonarr-importlist
 description: Skills related to importlist in Sonarr.
+tags: [sonarr-importlist]
 ---
 
 # Sonarr Importlist Skill

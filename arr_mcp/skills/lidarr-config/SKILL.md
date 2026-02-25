@@ -1,6 +1,7 @@
 ---
 name: lidarr-config
 description: "Generated skill for Config operations. Contains 19 tools."
+tags: [lidarr-config]
 ---
 
 ### Overview

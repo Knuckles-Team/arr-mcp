@@ -1,6 +1,7 @@
 ---
-name: Sonarr Filesystem
+name: sonarr-filesystem
 description: Skills related to filesystem in Sonarr.
+tags: [sonarr-filesystem]
 ---
 
 # Sonarr Filesystem Skill

@@ -1,6 +1,7 @@
 ---
 name: chaptarr-history
 description: "Generated skill for History operations. Contains 4 tools."
+tags: [chaptarr-history]
 ---
 
 ### Overview

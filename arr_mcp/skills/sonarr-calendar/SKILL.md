@@ -1,6 +1,7 @@
 ---
-name: Sonarr Calendar
+name: sonarr-calendar
 description: Skills related to calendar in Sonarr.
+tags: [sonarr-calendar]
 ---
 
 # Sonarr Calendar Skill

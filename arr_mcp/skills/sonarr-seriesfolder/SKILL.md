@@ -1,6 +1,7 @@
 ---
-name: Sonarr Seriesfolder
+name: sonarr-seriesfolder
 description: Skills related to seriesfolder in Sonarr.
+tags: [sonarr-seriesfolder]
 ---
 
 # Sonarr Seriesfolder Skill

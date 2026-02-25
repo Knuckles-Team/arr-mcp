@@ -1,6 +1,7 @@
 ---
-name: Radarr Authentication
+name: radarr-authentication
 description: Skills related to authentication in Radarr.
+tags: [radarr-authentication]
 ---
 
 # Radarr Authentication Skill

@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Customfilter
+name: prowlarr-customfilter
 description: Skills related to customfilter in Prowlarr.
+tags: [prowlarr-customfilter]
 ---
 
 # Prowlarr Customfilter Skill

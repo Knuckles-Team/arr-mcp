@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Indexerdefaultcategories
+name: prowlarr-indexerdefaultcategories
 description: Skills related to indexerdefaultcategories in Prowlarr.
+tags: [prowlarr-indexerdefaultcategories]
 ---
 
 # Prowlarr Indexerdefaultcategories Skill

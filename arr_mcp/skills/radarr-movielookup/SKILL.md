@@ -1,6 +1,7 @@
 ---
-name: Radarr Movielookup
+name: radarr-movielookup
 description: Skills related to movielookup in Radarr.
+tags: [radarr-movielookup]
 ---
 
 # Radarr Movielookup Skill

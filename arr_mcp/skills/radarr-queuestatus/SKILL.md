@@ -1,6 +1,7 @@
 ---
-name: Radarr Queuestatus
+name: radarr-queuestatus
 description: Skills related to queuestatus in Radarr.
+tags: [radarr-queuestatus]
 ---
 
 # Radarr Queuestatus Skill

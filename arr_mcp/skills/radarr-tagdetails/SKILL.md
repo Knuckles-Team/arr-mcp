@@ -1,6 +1,7 @@
 ---
-name: Radarr Tagdetails
+name: radarr-tagdetails
 description: Skills related to tagdetails in Radarr.
+tags: [radarr-tagdetails]
 ---
 
 # Radarr Tagdetails Skill

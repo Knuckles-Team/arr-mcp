@@ -1,6 +1,7 @@
 ---
-name: Sonarr Blocklist
+name: sonarr-blocklist
 description: Skills related to blocklist in Sonarr.
+tags: [sonarr-blocklist]
 ---
 
 # Sonarr Blocklist Skill

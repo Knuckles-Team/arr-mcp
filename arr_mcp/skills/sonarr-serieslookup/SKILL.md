@@ -1,6 +1,7 @@
 ---
-name: Sonarr Serieslookup
+name: sonarr-serieslookup
 description: Skills related to serieslookup in Sonarr.
+tags: [sonarr-serieslookup]
 ---
 
 # Sonarr Serieslookup Skill

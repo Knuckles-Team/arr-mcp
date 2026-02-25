@@ -1,6 +1,7 @@
 ---
-name: Sonarr Mediacover
+name: sonarr-mediacover
 description: Skills related to mediacover in Sonarr.
+tags: [sonarr-mediacover]
 ---
 
 # Sonarr Mediacover Skill

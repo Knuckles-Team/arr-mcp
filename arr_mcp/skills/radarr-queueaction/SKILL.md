@@ -1,6 +1,7 @@
 ---
-name: Radarr Queueaction
+name: radarr-queueaction
 description: Skills related to queueaction in Radarr.
+tags: [radarr-queueaction]
 ---
 
 # Radarr Queueaction Skill

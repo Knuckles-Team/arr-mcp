@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Notification
+name: prowlarr-notification
 description: Skills related to notification in Prowlarr.
+tags: [prowlarr-notification]
 ---
 
 # Prowlarr Notification Skill

@@ -1,6 +1,7 @@
 ---
-name: Sonarr Health
+name: sonarr-health
 description: Skills related to health in Sonarr.
+tags: [sonarr-health]
 ---
 
 # Sonarr Health Skill

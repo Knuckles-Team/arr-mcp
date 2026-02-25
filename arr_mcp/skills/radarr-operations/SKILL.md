@@ -1,6 +1,7 @@
 ---
 name: radarr-operations
 description: "Generated skill for Operations operations. Contains 13 tools."
+tags: [radarr-operations]
 ---
 
 ### Overview

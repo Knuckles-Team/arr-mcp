@@ -1,6 +1,7 @@
 ---
-name: Sonarr Update
+name: sonarr-update
 description: Skills related to update in Sonarr.
+tags: [sonarr-update]
 ---
 
 # Sonarr Update Skill

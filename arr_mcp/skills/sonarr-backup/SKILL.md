@@ -1,6 +1,7 @@
 ---
-name: Sonarr Backup
+name: sonarr-backup
 description: Skills related to backup in Sonarr.
+tags: [sonarr-backup]
 ---
 
 # Sonarr Backup Skill

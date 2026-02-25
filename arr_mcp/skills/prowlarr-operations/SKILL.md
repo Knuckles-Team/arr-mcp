@@ -1,6 +1,7 @@
 ---
 name: prowlarr-operations
 description: "Generated skill for Operations operations. Contains 4 tools."
+tags: [prowlarr-operations]
 ---
 
 ### Overview

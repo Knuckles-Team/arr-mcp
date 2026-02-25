@@ -1,6 +1,7 @@
 ---
-name: Sonarr Missing
+name: sonarr-missing
 description: Skills related to missing in Sonarr.
+tags: [sonarr-missing]
 ---
 
 # Sonarr Missing Skill

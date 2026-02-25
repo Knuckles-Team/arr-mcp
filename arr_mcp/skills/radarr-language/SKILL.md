@@ -1,6 +1,7 @@
 ---
-name: Radarr Language
+name: radarr-language
 description: Skills related to language in Radarr.
+tags: [radarr-language]
 ---
 
 # Radarr Language Skill

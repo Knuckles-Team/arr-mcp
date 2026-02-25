@@ -1,6 +1,7 @@
 ---
 name: chaptarr-queue
 description: "Generated skill for Queue operations. Contains 10 tools."
+tags: [chaptarr-queue]
 ---
 
 ### Overview

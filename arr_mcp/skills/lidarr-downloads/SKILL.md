@@ -1,6 +1,7 @@
 ---
 name: lidarr-downloads
 description: "Generated skill for Downloads operations. Contains 35 tools."
+tags: [lidarr-downloads]
 ---
 
 ### Overview

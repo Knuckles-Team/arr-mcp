@@ -1,6 +1,7 @@
 ---
-name: Radarr Autotagging
+name: radarr-autotagging
 description: Skills related to autotagging in Radarr.
+tags: [radarr-autotagging]
 ---
 
 # Radarr Autotagging Skill

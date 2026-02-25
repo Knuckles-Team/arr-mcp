@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Downloadclient
+name: prowlarr-downloadclient
 description: Skills related to downloadclient in Prowlarr.
+tags: [prowlarr-downloadclient]
 ---
 
 # Prowlarr Downloadclient Skill

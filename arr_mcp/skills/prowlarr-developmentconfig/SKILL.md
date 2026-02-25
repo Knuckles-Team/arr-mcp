@@ -1,6 +1,7 @@
 ---
-name: Prowlarr Developmentconfig
+name: prowlarr-developmentconfig
 description: Skills related to developmentconfig in Prowlarr.
+tags: [prowlarr-developmentconfig]
 ---
 
 # Prowlarr Developmentconfig Skill

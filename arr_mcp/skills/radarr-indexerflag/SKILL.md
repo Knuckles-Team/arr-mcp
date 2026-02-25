@@ -1,6 +1,7 @@
 ---
-name: Radarr Indexerflag
+name: radarr-indexerflag
 description: Skills related to indexerflag in Radarr.
+tags: [radarr-indexerflag]
 ---
 
 # Radarr Indexerflag Skill
