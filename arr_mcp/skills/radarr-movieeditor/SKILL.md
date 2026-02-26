@@ -1,7 +1,7 @@
 ---
 name: radarr-movieeditor
 description: Skills related to movieeditor in Radarr.
-tags: [radarr-movieeditor]
+tags: [radarr, movieeditor]
 ---
 
 # Radarr Movieeditor Skill

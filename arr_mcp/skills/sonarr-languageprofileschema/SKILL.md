@@ -1,7 +1,7 @@
 ---
 name: sonarr-languageprofileschema
 description: Skills related to languageprofileschema in Sonarr.
-tags: [sonarr-languageprofileschema]
+tags: [sonarr, languageprofileschema]
 ---
 
 # Sonarr Languageprofileschema Skill

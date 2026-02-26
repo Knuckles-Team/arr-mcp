@@ -1,7 +1,7 @@
 ---
 name: sonarr-customfilter
 description: Skills related to customfilter in Sonarr.
-tags: [sonarr-customfilter]
+tags: [sonarr, customfilter]
 ---
 
 # Sonarr Customfilter Skill

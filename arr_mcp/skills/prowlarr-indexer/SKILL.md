@@ -1,7 +1,7 @@
 ---
 name: prowlarr-indexer
 description: "Generated skill for Indexer operations. Contains 27 tools."
-tags: [prowlarr-indexer]
+tags: [prowlarr, indexer]
 ---
 
 ### Overview

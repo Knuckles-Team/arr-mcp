@@ -35,7 +35,7 @@ from agent_utilities.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.16"
+__version__ = "0.2.17"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -137,7 +137,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_author(
         chaptarr_base_url: str = Field(
@@ -159,7 +159,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_author(
         data: Dict = Field(default=..., description="data"),
@@ -182,7 +182,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_author_id(
         id: str = Field(default=..., description="id"),
@@ -207,7 +207,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_author_id(
         id: int = Field(default=..., description="id"),
@@ -238,7 +238,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_author_id(
         id: int = Field(default=..., description="id"),
@@ -261,7 +261,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_author_editor(
         data: Dict = Field(default=..., description="data"),
@@ -284,7 +284,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_author_editor(
         data: Dict = Field(default=..., description="data"),
@@ -307,7 +307,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_author_lookup(
         term: str = Field(default=None, description="term"),
@@ -494,7 +494,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_book(
         authorId: int = Field(default=None, description="authorId"),
@@ -527,7 +527,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_book(
         data: Dict = Field(default=..., description="data"),
@@ -550,7 +550,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_book_id_overview(
         id: int = Field(default=..., description="id"),
@@ -573,7 +573,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_book_id(
         id: str = Field(default=..., description="id"),
@@ -597,7 +597,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_book_id(
         id: int = Field(default=..., description="id"),
@@ -628,7 +628,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_book_id(
         id: int = Field(default=..., description="id"),
@@ -651,7 +651,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_book_monitor(
         data: Dict = Field(default=..., description="data"),
@@ -674,7 +674,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_book_editor(
         data: Dict = Field(default=..., description="data"),
@@ -697,7 +697,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_book_editor(
         data: Dict = Field(default=..., description="data"),
@@ -720,7 +720,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_bookfile(
         authorId: int = Field(default=None, description="authorId"),
@@ -748,7 +748,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_bookfile_id(
         id: str = Field(default=..., description="id"),
@@ -772,7 +772,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_bookfile_id(
         id: int = Field(default=..., description="id"),
@@ -795,7 +795,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_bookfile_id(
         id: int = Field(default=..., description="id"),
@@ -818,7 +818,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_bookfile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -841,7 +841,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_bookfile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -864,7 +864,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_book_lookup(
         term: str = Field(default=None, description="term"),
@@ -887,7 +887,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_bookshelf(
         data: Dict = Field(default=..., description="data"),
@@ -1947,7 +1947,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_edition(
         bookId: List = Field(default=None, description="bookId"),
@@ -3187,7 +3187,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_mediacover_author_author_id_filename(
         authorId: int = Field(default=..., description="authorId"),
@@ -3213,7 +3213,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_mediacover_book_book_id_filename(
         bookId: int = Field(default=..., description="bookId"),
@@ -3308,7 +3308,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_metadata(
         chaptarr_base_url: str = Field(
@@ -3330,7 +3330,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3354,7 +3354,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def put_metadata_id(
         id: str = Field(default=..., description="id"),
@@ -3379,7 +3379,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3402,7 +3402,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3425,7 +3425,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_metadata_schema(
         chaptarr_base_url: str = Field(
@@ -3447,7 +3447,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3471,7 +3471,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_metadata_testall(
         chaptarr_base_url: str = Field(
@@ -3493,7 +3493,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3723,7 +3723,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3758,7 +3758,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_wanted_missing_id(
         id: int = Field(default=..., description="id"),
@@ -3903,7 +3903,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_notification(
         chaptarr_base_url: str = Field(
@@ -3925,7 +3925,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def post_notification(
         data: Dict = Field(default=..., description="data"),
@@ -3949,7 +3949,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def put_notification_id(
         id: str = Field(default=..., description="id"),
@@ -3974,7 +3974,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def delete_notification_id(
         id: int = Field(default=..., description="id"),
@@ -3997,7 +3997,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_notification_id(
         id: int = Field(default=..., description="id"),
@@ -4020,7 +4020,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_notification_schema(
         chaptarr_base_url: str = Field(
@@ -4042,7 +4042,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def post_notification_test(
         data: Dict = Field(default=..., description="data"),
@@ -4066,7 +4066,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def post_notification_testall(
         chaptarr_base_url: str = Field(
@@ -4088,7 +4088,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def post_notification_action_name(
         name: str = Field(default=..., description="name"),
@@ -4775,7 +4775,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def post_remotepathmapping(
         data: Dict = Field(default=..., description="data"),
@@ -4798,7 +4798,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_remotepathmapping(
         chaptarr_base_url: str = Field(
@@ -4820,7 +4820,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def delete_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -4843,7 +4843,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def put_remotepathmapping_id(
         id: str = Field(default=..., description="id"),
@@ -4867,7 +4867,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_remotepathmapping_id(
         id: int = Field(default=..., description="id"),
@@ -4890,7 +4890,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_rename(
         authorId: int = Field(default=None, description="authorId"),
@@ -4914,7 +4914,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_retag(
         authorId: int = Field(default=None, description="authorId"),
@@ -4938,7 +4938,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def post_rootfolder(
         data: Dict = Field(default=..., description="data"),
@@ -4961,7 +4961,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_rootfolder(
         chaptarr_base_url: str = Field(
@@ -4983,7 +4983,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def put_rootfolder_id(
         id: str = Field(default=..., description="id"),
@@ -5007,7 +5007,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def delete_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -5030,7 +5030,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"config"},
+        tags={"chaptarr", "config"},
     )
     async def get_rootfolder_id(
         id: int = Field(default=..., description="id"),
@@ -5076,7 +5076,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["chaptarr_base_url", "chaptarr_api_key", "chaptarr_verify"],
-        tags={"catalog"},
+        tags={"chaptarr", "catalog"},
     )
     async def get_series(
         authorId: int = Field(default=None, description="authorId"),

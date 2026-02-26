@@ -1,7 +1,7 @@
 ---
 name: prowlarr-tag
 description: Skills related to tag in Prowlarr.
-tags: [prowlarr-tag]
+tags: [prowlarr, tag]
 ---
 
 # Prowlarr Tag Skill

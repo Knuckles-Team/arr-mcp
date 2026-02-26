@@ -1,7 +1,7 @@
 ---
 name: sonarr-importlistexclusion
 description: Skills related to importlistexclusion in Sonarr.
-tags: [sonarr-importlistexclusion]
+tags: [sonarr, importlistexclusion]
 ---
 
 # Sonarr Importlistexclusion Skill

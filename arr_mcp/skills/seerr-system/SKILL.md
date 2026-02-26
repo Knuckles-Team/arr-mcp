@@ -1,7 +1,7 @@
 ---
 name: seerr-system
 description: "Generated skill for System operations. Contains 5 tools."
-tags: [seerr-system]
+tags: [seerr, system]
 ---
 
 ### Overview

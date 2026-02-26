@@ -1,7 +1,7 @@
 ---
 name: radarr-updatelogfile
 description: Skills related to updatelogfile in Radarr.
-tags: [radarr-updatelogfile]
+tags: [radarr, updatelogfile]
 ---
 
 # Radarr Updatelogfile Skill

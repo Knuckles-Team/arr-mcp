@@ -1,7 +1,7 @@
 ---
 name: prowlarr-profiles
 description: "Generated skill for Profiles operations. Contains 5 tools."
-tags: [prowlarr-profiles]
+tags: [prowlarr, profiles]
 ---
 
 ### Overview

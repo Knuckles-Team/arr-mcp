@@ -1,7 +1,7 @@
 ---
 name: sonarr-history
 description: "Generated skill for History operations. Contains 4 tools."
-tags: [sonarr-history]
+tags: [sonarr, history]
 ---
 
 ### Overview

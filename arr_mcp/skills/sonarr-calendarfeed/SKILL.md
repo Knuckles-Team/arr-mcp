@@ -1,7 +1,7 @@
 ---
 name: sonarr-calendarfeed
 description: Skills related to calendarfeed in Sonarr.
-tags: [sonarr-calendarfeed]
+tags: [sonarr, calendarfeed]
 ---
 
 # Sonarr Calendarfeed Skill

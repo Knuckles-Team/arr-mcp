@@ -1,7 +1,7 @@
 ---
 name: radarr-localization
 description: Skills related to localization in Radarr.
-tags: [radarr-localization]
+tags: [radarr, localization]
 ---
 
 # Radarr Localization Skill

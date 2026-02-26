@@ -1,7 +1,7 @@
 ---
 name: prowlarr-logfile
 description: Skills related to logfile in Prowlarr.
-tags: [prowlarr-logfile]
+tags: [prowlarr, logfile]
 ---
 
 # Prowlarr Logfile Skill

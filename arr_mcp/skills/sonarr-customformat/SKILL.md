@@ -1,7 +1,7 @@
 ---
 name: sonarr-customformat
 description: Skills related to customformat in Sonarr.
-tags: [sonarr-customformat]
+tags: [sonarr, customformat]
 ---
 
 # Sonarr Customformat Skill

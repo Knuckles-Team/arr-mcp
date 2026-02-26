@@ -1,7 +1,7 @@
 ---
 name: prowlarr-localization
 description: Skills related to localization in Prowlarr.
-tags: [prowlarr-localization]
+tags: [prowlarr, localization]
 ---
 
 # Prowlarr Localization Skill

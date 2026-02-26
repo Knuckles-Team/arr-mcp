@@ -1,7 +1,7 @@
 ---
 name: sonarr-apiinfo
 description: Skills related to apiinfo in Sonarr.
-tags: [sonarr-apiinfo]
+tags: [sonarr, apiinfo]
 ---
 
 # Sonarr Apiinfo Skill

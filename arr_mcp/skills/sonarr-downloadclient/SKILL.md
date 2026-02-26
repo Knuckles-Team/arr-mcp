@@ -1,7 +1,7 @@
 ---
 name: sonarr-downloadclient
 description: Skills related to downloadclient in Sonarr.
-tags: [sonarr-downloadclient]
+tags: [sonarr, downloadclient]
 ---
 
 # Sonarr Downloadclient Skill

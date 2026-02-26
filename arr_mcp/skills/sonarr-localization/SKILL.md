@@ -1,7 +1,7 @@
 ---
 name: sonarr-localization
 description: Skills related to localization in Sonarr.
-tags: [sonarr-localization]
+tags: [sonarr, localization]
 ---
 
 # Sonarr Localization Skill

@@ -1,7 +1,7 @@
 ---
 name: seerr-search
 description: "Generated skill for Search operations. Contains 8 tools."
-tags: [seerr-search]
+tags: [seerr, search]
 ---
 
 ### Overview

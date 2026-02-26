@@ -1,7 +1,7 @@
 ---
 name: sonarr-system
 description: "Generated skill for System operations. Contains 46 tools."
-tags: [sonarr-system]
+tags: [sonarr, system]
 ---
 
 ### Overview

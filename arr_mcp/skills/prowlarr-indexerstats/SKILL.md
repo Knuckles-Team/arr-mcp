@@ -1,7 +1,7 @@
 ---
 name: prowlarr-indexerstats
 description: Skills related to indexerstats in Prowlarr.
-tags: [prowlarr-indexerstats]
+tags: [prowlarr, indexerstats]
 ---
 
 # Prowlarr Indexerstats Skill

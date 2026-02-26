@@ -1,7 +1,7 @@
 ---
 name: radarr-tag
 description: Skills related to tag in Radarr.
-tags: [radarr-tag]
+tags: [radarr, tag]
 ---
 
 # Radarr Tag Skill

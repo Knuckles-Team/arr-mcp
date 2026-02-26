@@ -1,7 +1,7 @@
 ---
 name: prowlarr-downloadclientconfig
 description: Skills related to downloadclientconfig in Prowlarr.
-tags: [prowlarr-downloadclientconfig]
+tags: [prowlarr, downloadclientconfig]
 ---
 
 # Prowlarr Downloadclientconfig Skill

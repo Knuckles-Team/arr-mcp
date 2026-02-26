@@ -1,7 +1,7 @@
 ---
 name: bazarr-history
 description: "Generated skill for History operations. Contains 1 tools."
-tags: [bazarr-history]
+tags: [bazarr, history]
 ---
 
 ### Overview

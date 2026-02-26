@@ -1,7 +1,7 @@
 ---
 name: sonarr-indexer
 description: "Generated skill for Indexer operations. Contains 15 tools."
-tags: [sonarr-indexer]
+tags: [sonarr, indexer]
 ---
 
 ### Overview

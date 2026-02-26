@@ -1,7 +1,7 @@
 ---
 name: sonarr-serieseditor
 description: Skills related to serieseditor in Sonarr.
-tags: [sonarr-serieseditor]
+tags: [sonarr, serieseditor]
 ---
 
 # Sonarr Serieseditor Skill

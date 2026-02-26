@@ -1,7 +1,7 @@
 ---
 name: radarr-importlistconfig
 description: Skills related to importlistconfig in Radarr.
-tags: [radarr-importlistconfig]
+tags: [radarr, importlistconfig]
 ---
 
 # Radarr Importlistconfig Skill

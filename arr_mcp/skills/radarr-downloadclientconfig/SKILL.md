@@ -1,7 +1,7 @@
 ---
 name: radarr-downloadclientconfig
 description: Skills related to downloadclientconfig in Radarr.
-tags: [radarr-downloadclientconfig]
+tags: [radarr, downloadclientconfig]
 ---
 
 # Radarr Downloadclientconfig Skill

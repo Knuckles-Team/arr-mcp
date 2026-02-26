@@ -1,7 +1,7 @@
 ---
 name: sonarr-importlistconfig
 description: Skills related to importlistconfig in Sonarr.
-tags: [sonarr-importlistconfig]
+tags: [sonarr, importlistconfig]
 ---
 
 # Sonarr Importlistconfig Skill

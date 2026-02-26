@@ -1,7 +1,7 @@
 ---
 name: sonarr-indexerconfig
 description: Skills related to indexerconfig in Sonarr.
-tags: [sonarr-indexerconfig]
+tags: [sonarr, indexerconfig]
 ---
 
 # Sonarr Indexerconfig Skill

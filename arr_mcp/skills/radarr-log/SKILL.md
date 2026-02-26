@@ -1,7 +1,7 @@
 ---
 name: radarr-log
 description: Skills related to log in Radarr.
-tags: [radarr-log]
+tags: [radarr, log]
 ---
 
 # Radarr Log Skill

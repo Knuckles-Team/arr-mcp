@@ -1,7 +1,7 @@
 ---
 name: sonarr-profiles
 description: "Generated skill for Profiles operations. Contains 52 tools."
-tags: [sonarr-profiles]
+tags: [sonarr, profiles]
 ---
 
 ### Overview

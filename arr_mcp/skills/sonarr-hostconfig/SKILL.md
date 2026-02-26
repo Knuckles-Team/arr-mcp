@@ -1,7 +1,7 @@
 ---
 name: sonarr-hostconfig
 description: Skills related to hostconfig in Sonarr.
-tags: [sonarr-hostconfig]
+tags: [sonarr, hostconfig]
 ---
 
 # Sonarr Hostconfig Skill

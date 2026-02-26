@@ -1,7 +1,7 @@
 ---
 name: radarr-queue
 description: "Generated skill for Queue operations. Contains 11 tools."
-tags: [radarr-queue]
+tags: [radarr, queue]
 ---
 
 ### Overview

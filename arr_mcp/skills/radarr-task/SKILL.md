@@ -1,7 +1,7 @@
 ---
 name: radarr-task
 description: Skills related to task in Radarr.
-tags: [radarr-task]
+tags: [radarr, task]
 ---
 
 # Radarr Task Skill

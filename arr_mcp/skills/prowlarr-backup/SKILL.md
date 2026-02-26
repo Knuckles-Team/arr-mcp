@@ -1,7 +1,7 @@
 ---
 name: prowlarr-backup
 description: Skills related to backup in Prowlarr.
-tags: [prowlarr-backup]
+tags: [prowlarr, backup]
 ---
 
 # Prowlarr Backup Skill

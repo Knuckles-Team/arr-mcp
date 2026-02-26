@@ -1,7 +1,7 @@
 ---
 name: sonarr-queuedetails
 description: Skills related to queuedetails in Sonarr.
-tags: [sonarr-queuedetails]
+tags: [sonarr, queuedetails]
 ---
 
 # Sonarr Queuedetails Skill

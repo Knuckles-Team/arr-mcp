@@ -1,7 +1,7 @@
 ---
 name: sonarr-release
 description: Skills related to release in Sonarr.
-tags: [sonarr-release]
+tags: [sonarr, release]
 ---
 
 # Sonarr Release Skill

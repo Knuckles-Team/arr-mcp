@@ -1,7 +1,7 @@
 ---
 name: radarr-movieimport
 description: Skills related to movieimport in Radarr.
-tags: [radarr-movieimport]
+tags: [radarr, movieimport]
 ---
 
 # Radarr Movieimport Skill

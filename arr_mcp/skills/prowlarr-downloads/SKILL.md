@@ -1,7 +1,7 @@
 ---
 name: prowlarr-downloads
 description: "Generated skill for Downloads operations. Contains 14 tools."
-tags: [prowlarr-downloads]
+tags: [prowlarr, downloads]
 ---
 
 ### Overview

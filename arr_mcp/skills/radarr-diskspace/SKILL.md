@@ -1,7 +1,7 @@
 ---
 name: radarr-diskspace
 description: Skills related to diskspace in Radarr.
-tags: [radarr-diskspace]
+tags: [radarr, diskspace]
 ---
 
 # Radarr Diskspace Skill

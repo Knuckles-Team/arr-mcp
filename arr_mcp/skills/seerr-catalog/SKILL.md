@@ -1,7 +1,7 @@
 ---
 name: seerr-catalog
 description: "Generated skill for Catalog operations. Contains 2 tools."
-tags: [seerr-catalog]
+tags: [seerr, catalog]
 ---
 
 ### Overview

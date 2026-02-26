@@ -1,7 +1,7 @@
 ---
 name: prowlarr-log
 description: Skills related to log in Prowlarr.
-tags: [prowlarr-log]
+tags: [prowlarr, log]
 ---
 
 # Prowlarr Log Skill

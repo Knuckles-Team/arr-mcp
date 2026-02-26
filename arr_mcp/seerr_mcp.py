@@ -36,7 +36,7 @@ from agent_utilities.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.16"
+__version__ = "0.2.17"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -56,7 +56,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"system"},
+        tags={"seerr", "system"},
     )
     async def get_status(
         seerr_base_url: str = Field(
@@ -78,7 +78,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"system"},
+        tags={"seerr", "system"},
     )
     async def get_status_appdata(
         seerr_base_url: str = Field(
@@ -100,7 +100,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"system"},
+        tags={"seerr", "system"},
     )
     async def get_auth_me(
         seerr_base_url: str = Field(
@@ -315,7 +315,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"catalog"},
+        tags={"seerr", "catalog"},
     )
     async def get_movie(
         movie_id: int = Field(..., description="movie_id (TMDB ID)"),
@@ -338,7 +338,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"catalog"},
+        tags={"seerr", "catalog"},
     )
     async def get_tv(
         tv_id: int = Field(..., description="tv_id (TMDB ID)"),
@@ -386,7 +386,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"system"},
+        tags={"seerr", "system"},
     )
     async def get_users(
         take: int = Field(default=20, description="take"),
@@ -411,7 +411,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["seerr_base_url", "seerr_api_key", "seerr_verify"],
-        tags={"system"},
+        tags={"seerr", "system"},
     )
     async def get_user_id(
         user_id: int = Field(..., description="user_id"),

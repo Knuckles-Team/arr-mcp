@@ -36,7 +36,7 @@ from agent_utilities.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.16"
+__version__ = "0.2.17"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -79,7 +79,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_api(
         prowlarr_base_url: str = Field(
@@ -101,7 +101,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_applications_id(
         id: int = Field(default=..., description="id"),
@@ -124,7 +124,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_applications_id(
         id: str = Field(default=..., description="id"),
@@ -149,7 +149,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def delete_applications_id(
         id: int = Field(default=..., description="id"),
@@ -172,7 +172,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_applications(
         prowlarr_base_url: str = Field(
@@ -194,7 +194,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_applications(
         data: Dict = Field(default=..., description="data"),
@@ -218,7 +218,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_applications_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -241,7 +241,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def delete_applications_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -264,7 +264,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_applications_schema(
         prowlarr_base_url: str = Field(
@@ -286,7 +286,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_applications_test(
         data: Dict = Field(default=..., description="data"),
@@ -310,7 +310,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_applications_testall(
         prowlarr_base_url: str = Field(
@@ -332,7 +332,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_applications_action_name(
         name: str = Field(default=..., description="name"),
@@ -356,7 +356,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_appprofile(
         data: Dict = Field(default=..., description="data"),
@@ -379,7 +379,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_appprofile(
         prowlarr_base_url: str = Field(
@@ -401,7 +401,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def delete_appprofile_id(
         id: int = Field(default=..., description="id"),
@@ -424,7 +424,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_appprofile_id(
         id: str = Field(default=..., description="id"),
@@ -448,7 +448,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_appprofile_id(
         id: int = Field(default=..., description="id"),
@@ -471,7 +471,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_appprofile_schema(
         prowlarr_base_url: str = Field(
@@ -493,7 +493,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -516,7 +516,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_login(
         prowlarr_base_url: str = Field(
@@ -538,7 +538,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_logout(
         prowlarr_base_url: str = Field(
@@ -560,7 +560,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_system_backup(
         prowlarr_base_url: str = Field(
@@ -582,7 +582,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -605,7 +605,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -628,7 +628,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_system_backup_restore_upload(
         prowlarr_base_url: str = Field(
@@ -856,7 +856,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_config_development_id(
         id: str = Field(default=..., description="id"),
@@ -880,7 +880,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_config_development_id(
         id: int = Field(default=..., description="id"),
@@ -903,7 +903,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_config_development(
         prowlarr_base_url: str = Field(
@@ -1249,7 +1249,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1280,7 +1280,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1303,7 +1303,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_health(
         prowlarr_base_url: str = Field(
@@ -1415,7 +1415,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -1438,7 +1438,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -1462,7 +1462,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_config_host(
         prowlarr_base_url: str = Field(
@@ -2025,7 +2025,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_localization(
         prowlarr_base_url: str = Field(
@@ -2047,7 +2047,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_localization_options(
         prowlarr_base_url: str = Field(
@@ -2069,7 +2069,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -2102,7 +2102,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_log_file(
         prowlarr_base_url: str = Field(
@@ -2124,7 +2124,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -2584,7 +2584,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_ping(
         prowlarr_base_url: str = Field(
@@ -2687,7 +2687,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -2710,7 +2710,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -2733,7 +2733,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -2756,7 +2756,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_system_status(
         prowlarr_base_url: str = Field(
@@ -2778,7 +2778,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_system_routes(
         prowlarr_base_url: str = Field(
@@ -2800,7 +2800,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_system_routes_duplicate(
         prowlarr_base_url: str = Field(
@@ -2822,7 +2822,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_system_shutdown(
         prowlarr_base_url: str = Field(
@@ -2844,7 +2844,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_system_restart(
         prowlarr_base_url: str = Field(
@@ -2866,7 +2866,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -2889,7 +2889,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -2913,7 +2913,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -2936,7 +2936,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_tag(
         prowlarr_base_url: str = Field(
@@ -2958,7 +2958,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -2981,7 +2981,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -3004,7 +3004,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_tag_detail(
         prowlarr_base_url: str = Field(
@@ -3026,7 +3026,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_system_task(
         prowlarr_base_url: str = Field(
@@ -3048,7 +3048,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -3071,7 +3071,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -3095,7 +3095,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -3118,7 +3118,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_config_ui(
         prowlarr_base_url: str = Field(
@@ -3140,7 +3140,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_update(
         prowlarr_base_url: str = Field(
@@ -3162,7 +3162,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_log_file_update(
         prowlarr_base_url: str = Field(
@@ -3184,7 +3184,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["prowlarr_base_url", "prowlarr_api_key", "prowlarr_verify"],
-        tags={"system"},
+        tags={"prowlarr", "system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),

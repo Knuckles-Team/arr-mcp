@@ -1,7 +1,7 @@
 ---
 name: prowlarr-command
 description: Skills related to command in Prowlarr.
-tags: [prowlarr-command]
+tags: [prowlarr, command]
 ---
 
 # Prowlarr Command Skill

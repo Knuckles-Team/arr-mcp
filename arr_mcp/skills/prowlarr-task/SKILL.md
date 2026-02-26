@@ -1,7 +1,7 @@
 ---
 name: prowlarr-task
 description: Skills related to task in Prowlarr.
-tags: [prowlarr-task]
+tags: [prowlarr, task]
 ---
 
 # Prowlarr Task Skill

@@ -1,7 +1,7 @@
 ---
 name: radarr-collection
 description: Skills related to collection in Radarr.
-tags: [radarr-collection]
+tags: [radarr, collection]
 ---
 
 # Radarr Collection Skill

@@ -1,7 +1,7 @@
 ---
 name: radarr-importlistmovies
 description: Skills related to importlistmovies in Radarr.
-tags: [radarr-importlistmovies]
+tags: [radarr, importlistmovies]
 ---
 
 # Radarr Importlistmovies Skill

@@ -1,7 +1,7 @@
 ---
 name: prowlarr-hostconfig
 description: Skills related to hostconfig in Prowlarr.
-tags: [prowlarr-hostconfig]
+tags: [prowlarr, hostconfig]
 ---
 
 # Prowlarr Hostconfig Skill

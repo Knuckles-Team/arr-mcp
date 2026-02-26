@@ -1,7 +1,7 @@
 ---
 name: sonarr-remotepathmapping
 description: Skills related to remotepathmapping in Sonarr.
-tags: [sonarr-remotepathmapping]
+tags: [sonarr, remotepathmapping]
 ---
 
 # Sonarr Remotepathmapping Skill

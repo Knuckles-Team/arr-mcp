@@ -1,7 +1,7 @@
 ---
 name: radarr-calendar
 description: Skills related to calendar in Radarr.
-tags: [radarr-calendar]
+tags: [radarr, calendar]
 ---
 
 # Radarr Calendar Skill

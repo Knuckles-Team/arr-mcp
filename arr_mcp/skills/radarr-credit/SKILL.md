@@ -1,7 +1,7 @@
 ---
 name: radarr-credit
 description: Skills related to credit in Radarr.
-tags: [radarr-credit]
+tags: [radarr, credit]
 ---
 
 # Radarr Credit Skill

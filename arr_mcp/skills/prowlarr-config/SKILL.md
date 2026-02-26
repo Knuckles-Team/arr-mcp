@@ -1,7 +1,7 @@
 ---
 name: prowlarr-config
 description: "Generated skill for Config operations. Contains 9 tools."
-tags: [prowlarr-config]
+tags: [prowlarr, config]
 ---
 
 ### Overview

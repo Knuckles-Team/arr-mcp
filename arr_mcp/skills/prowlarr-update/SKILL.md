@@ -1,7 +1,7 @@
 ---
 name: prowlarr-update
 description: Skills related to update in Prowlarr.
-tags: [prowlarr-update]
+tags: [prowlarr, update]
 ---
 
 # Prowlarr Update Skill

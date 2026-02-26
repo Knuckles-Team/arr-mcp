@@ -1,7 +1,7 @@
 ---
 name: lidarr-catalog
 description: "Generated skill for Catalog operations. Contains 39 tools."
-tags: [lidarr-catalog]
+tags: [lidarr, catalog]
 ---
 
 ### Overview

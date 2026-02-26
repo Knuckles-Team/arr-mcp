@@ -36,7 +36,7 @@ from agent_utilities.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.16"
+__version__ = "0.2.17"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -63,7 +63,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def lookup_series(
         term: str = Field(default=..., description="Search term for the series"),
@@ -86,7 +86,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def add_series(
         term: str = Field(default=..., description="Search term for the series"),
@@ -125,7 +125,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_api(
         sonarr_base_url: str = Field(
@@ -147,7 +147,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -170,7 +170,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_login(
         sonarr_base_url: str = Field(
@@ -192,7 +192,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_logout(
         sonarr_base_url: str = Field(
@@ -214,7 +214,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def post_autotagging(
         data: Dict = Field(default=..., description="data"),
@@ -237,7 +237,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_autotagging(
         sonarr_base_url: str = Field(
@@ -259,7 +259,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def put_autotagging_id(
         id: str = Field(default=..., description="id"),
@@ -283,7 +283,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def delete_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -306,7 +306,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -329,7 +329,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_autotagging_schema(
         sonarr_base_url: str = Field(
@@ -351,7 +351,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_system_backup(
         sonarr_base_url: str = Field(
@@ -373,7 +373,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -396,7 +396,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -419,7 +419,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def post_system_backup_restore_upload(
         sonarr_base_url: str = Field(
@@ -441,7 +441,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def get_blocklist(
         page: int = Field(default=None, description="page"),
@@ -476,7 +476,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def delete_blocklist_id(
         id: int = Field(default=..., description="id"),
@@ -499,7 +499,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def delete_blocklist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -522,7 +522,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_calendar(
         start: str = Field(default=None, description="start"),
@@ -563,7 +563,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_calendar_id(
         id: int = Field(default=..., description="id"),
@@ -586,7 +586,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_feed_v3_calendar_sonarrics(
         pastDays: int = Field(default=None, description="pastDays"),
@@ -621,7 +621,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -644,7 +644,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_command(
         sonarr_base_url: str = Field(
@@ -666,7 +666,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -689,7 +689,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -1213,7 +1213,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_diskspace(
         sonarr_base_url: str = Field(
@@ -1559,7 +1559,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_episode(
         seriesId: int = Field(default=None, description="seriesId"),
@@ -1598,7 +1598,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_episode_id(
         id: int = Field(default=..., description="id"),
@@ -1622,7 +1622,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_episode_id(
         id: int = Field(default=..., description="id"),
@@ -1645,7 +1645,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_episode_monitor(
         data: Dict = Field(default=..., description="data"),
@@ -1669,7 +1669,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_episodefile(
         seriesId: int = Field(default=None, description="seriesId"),
@@ -1693,7 +1693,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_episodefile_id(
         id: str = Field(default=..., description="id"),
@@ -1717,7 +1717,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def delete_episodefile_id(
         id: int = Field(default=..., description="id"),
@@ -1740,7 +1740,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_episodefile_id(
         id: int = Field(default=..., description="id"),
@@ -1763,7 +1763,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_episodefile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -1786,7 +1786,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def delete_episodefile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1809,7 +1809,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_episodefile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -1832,7 +1832,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1863,7 +1863,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1886,7 +1886,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_filesystem_mediafiles(
         path: str = Field(default=None, description="path"),
@@ -1909,7 +1909,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_health(
         sonarr_base_url: str = Field(
@@ -2065,7 +2065,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_config_host(
         sonarr_base_url: str = Field(
@@ -2087,7 +2087,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -2111,7 +2111,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -3152,7 +3152,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_localization(
         sonarr_base_url: str = Field(
@@ -3174,7 +3174,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_localization_language(
         sonarr_base_url: str = Field(
@@ -3196,7 +3196,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_localization_id(
         id: int = Field(default=..., description="id"),
@@ -3219,7 +3219,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -3252,7 +3252,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_log_file(
         sonarr_base_url: str = Field(
@@ -3274,7 +3274,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3355,7 +3355,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_mediacover_series_id_filename(
         seriesId: int = Field(default=..., description="seriesId"),
@@ -3450,7 +3450,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_metadata(
         sonarr_base_url: str = Field(
@@ -3472,7 +3472,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3496,7 +3496,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3521,7 +3521,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3544,7 +3544,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3567,7 +3567,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_metadata_schema(
         sonarr_base_url: str = Field(
@@ -3589,7 +3589,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3613,7 +3613,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_metadata_testall(
         sonarr_base_url: str = Field(
@@ -3635,7 +3635,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3659,7 +3659,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3696,7 +3696,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_wanted_missing_id(
         id: int = Field(default=..., description="id"),
@@ -4056,7 +4056,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"operations"},
+        tags={"sonarr", "operations"},
     )
     async def get_parse(
         title: str = Field(default=None, description="title"),
@@ -4080,7 +4080,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_ping(
         sonarr_base_url: str = Field(
@@ -4353,7 +4353,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def delete_queue_id(
         id: int = Field(default=..., description="id"),
@@ -4386,7 +4386,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def delete_queue_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4419,7 +4419,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def get_queue(
         page: int = Field(default=None, description="page"),
@@ -4468,7 +4468,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def post_queue_grab_id(
         id: int = Field(default=..., description="id"),
@@ -4491,7 +4491,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def post_queue_grab_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4514,7 +4514,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def get_queue_details(
         seriesId: int = Field(default=None, description="seriesId"),
@@ -4545,7 +4545,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"queue"},
+        tags={"sonarr", "queue"},
     )
     async def get_queue_status(
         sonarr_base_url: str = Field(
@@ -4870,7 +4870,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_rename(
         seriesId: int = Field(default=None, description="seriesId"),
@@ -4985,7 +4985,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_seasonpass(
         data: Dict = Field(default=..., description="data"),
@@ -5008,7 +5008,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_series(
         tvdbId: int = Field(default=None, description="tvdbId"),
@@ -5034,7 +5034,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_series(
         data: Dict = Field(default=..., description="data"),
@@ -5057,7 +5057,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_series_id(
         id: int = Field(default=..., description="id"),
@@ -5083,7 +5083,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_series_id(
         id: str = Field(default=..., description="id"),
@@ -5108,7 +5108,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def delete_series_id(
         id: int = Field(default=..., description="id"),
@@ -5139,7 +5139,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def put_series_editor(
         data: Dict = Field(default=..., description="data"),
@@ -5162,7 +5162,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def delete_series_editor(
         data: Dict = Field(default=..., description="data"),
@@ -5185,7 +5185,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_series_id_folder(
         id: int = Field(default=..., description="id"),
@@ -5208,7 +5208,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def post_series_import(
         data: Dict = Field(default=..., description="data"),
@@ -5231,7 +5231,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"catalog"},
+        tags={"sonarr", "catalog"},
     )
     async def get_series_lookup(
         term: str = Field(default=None, description="term"),
@@ -5254,7 +5254,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -5277,7 +5277,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -5300,7 +5300,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -5323,7 +5323,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_system_status(
         sonarr_base_url: str = Field(
@@ -5345,7 +5345,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_system_routes(
         sonarr_base_url: str = Field(
@@ -5367,7 +5367,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_system_routes_duplicate(
         sonarr_base_url: str = Field(
@@ -5389,7 +5389,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def post_system_shutdown(
         sonarr_base_url: str = Field(
@@ -5411,7 +5411,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def post_system_restart(
         sonarr_base_url: str = Field(
@@ -5433,7 +5433,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_tag(
         sonarr_base_url: str = Field(
@@ -5455,7 +5455,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -5478,7 +5478,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -5502,7 +5502,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5525,7 +5525,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5548,7 +5548,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_tag_detail(
         sonarr_base_url: str = Field(
@@ -5570,7 +5570,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -5593,7 +5593,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_system_task(
         sonarr_base_url: str = Field(
@@ -5615,7 +5615,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -5638,7 +5638,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -5662,7 +5662,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -5685,7 +5685,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_config_ui(
         sonarr_base_url: str = Field(
@@ -5707,7 +5707,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_update(
         sonarr_base_url: str = Field(
@@ -5729,7 +5729,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_log_file_update(
         sonarr_base_url: str = Field(
@@ -5751,7 +5751,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["sonarr_base_url", "sonarr_api_key", "sonarr_verify"],
-        tags={"system"},
+        tags={"sonarr", "system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),

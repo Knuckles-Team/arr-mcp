@@ -1,7 +1,7 @@
 ---
 name: radarr-queuedetails
 description: Skills related to queuedetails in Radarr.
-tags: [radarr-queuedetails]
+tags: [radarr, queuedetails]
 ---
 
 # Radarr Queuedetails Skill

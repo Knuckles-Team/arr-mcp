@@ -1,7 +1,7 @@
 ---
 name: radarr-uiconfig
 description: Skills related to uiconfig in Radarr.
-tags: [radarr-uiconfig]
+tags: [radarr, uiconfig]
 ---
 
 # Radarr Uiconfig Skill

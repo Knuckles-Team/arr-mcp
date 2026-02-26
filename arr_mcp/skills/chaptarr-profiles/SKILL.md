@@ -1,7 +1,7 @@
 ---
 name: chaptarr-profiles
 description: "Generated skill for Profiles operations. Contains 52 tools."
-tags: [chaptarr-profiles]
+tags: [chaptarr, profiles]
 ---
 
 ### Overview

@@ -1,7 +1,7 @@
 ---
 name: radarr-downloads
 description: "Generated skill for Downloads operations. Contains 41 tools."
-tags: [radarr-downloads]
+tags: [radarr, downloads]
 ---
 
 ### Overview

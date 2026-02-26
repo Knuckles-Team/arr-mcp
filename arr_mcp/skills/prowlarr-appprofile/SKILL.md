@@ -1,7 +1,7 @@
 ---
 name: prowlarr-appprofile
 description: Skills related to appprofile in Prowlarr.
-tags: [prowlarr-appprofile]
+tags: [prowlarr, appprofile]
 ---
 
 # Prowlarr Appprofile Skill

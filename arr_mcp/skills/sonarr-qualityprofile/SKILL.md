@@ -1,7 +1,7 @@
 ---
 name: sonarr-qualityprofile
 description: Skills related to qualityprofile in Sonarr.
-tags: [sonarr-qualityprofile]
+tags: [sonarr, qualityprofile]
 ---
 
 # Sonarr Qualityprofile Skill

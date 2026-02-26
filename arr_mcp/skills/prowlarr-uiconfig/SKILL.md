@@ -1,7 +1,7 @@
 ---
 name: prowlarr-uiconfig
 description: Skills related to uiconfig in Prowlarr.
-tags: [prowlarr-uiconfig]
+tags: [prowlarr, uiconfig]
 ---
 
 # Prowlarr Uiconfig Skill

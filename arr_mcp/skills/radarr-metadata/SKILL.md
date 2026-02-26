@@ -1,7 +1,7 @@
 ---
 name: radarr-metadata
 description: Skills related to metadata in Radarr.
-tags: [radarr-metadata]
+tags: [radarr, metadata]
 ---
 
 # Radarr Metadata Skill

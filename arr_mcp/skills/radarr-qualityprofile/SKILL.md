@@ -1,7 +1,7 @@
 ---
 name: radarr-qualityprofile
 description: Skills related to qualityprofile in Radarr.
-tags: [radarr-qualityprofile]
+tags: [radarr, qualityprofile]
 ---
 
 # Radarr Qualityprofile Skill

@@ -1,7 +1,7 @@
 ---
 name: radarr-catalog
 description: "Generated skill for Catalog operations. Contains 44 tools."
-tags: [radarr-catalog]
+tags: [radarr, catalog]
 ---
 
 ### Overview

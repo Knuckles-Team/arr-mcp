@@ -1,7 +1,7 @@
 ---
 name: sonarr-notification
 description: Skills related to notification in Sonarr.
-tags: [sonarr-notification]
+tags: [sonarr, notification]
 ---
 
 # Sonarr Notification Skill

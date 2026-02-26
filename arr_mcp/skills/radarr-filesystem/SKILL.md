@@ -1,7 +1,7 @@
 ---
 name: radarr-filesystem
 description: Skills related to filesystem in Radarr.
-tags: [radarr-filesystem]
+tags: [radarr, filesystem]
 ---
 
 # Radarr Filesystem Skill

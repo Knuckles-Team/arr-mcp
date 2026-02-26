@@ -1,7 +1,7 @@
 ---
 name: sonarr-tag
 description: Skills related to tag in Sonarr.
-tags: [sonarr-tag]
+tags: [sonarr, tag]
 ---
 
 # Sonarr Tag Skill

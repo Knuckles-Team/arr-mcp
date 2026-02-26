@@ -1,7 +1,7 @@
 ---
 name: radarr-apiinfo
 description: Skills related to apiinfo in Radarr.
-tags: [radarr-apiinfo]
+tags: [radarr, apiinfo]
 ---
 
 # Radarr Apiinfo Skill

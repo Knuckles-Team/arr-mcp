@@ -1,7 +1,7 @@
 ---
 name: radarr-system
 description: "Generated skill for System operations. Contains 45 tools."
-tags: [radarr-system]
+tags: [radarr, system]
 ---
 
 ### Overview

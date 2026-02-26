@@ -1,7 +1,7 @@
 ---
 name: sonarr-episode
 description: Skills related to episode in Sonarr.
-tags: [sonarr-episode]
+tags: [sonarr, episode]
 ---
 
 # Sonarr Episode Skill

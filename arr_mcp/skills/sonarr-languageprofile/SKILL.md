@@ -1,7 +1,7 @@
 ---
 name: sonarr-languageprofile
 description: Skills related to languageprofile in Sonarr.
-tags: [sonarr-languageprofile]
+tags: [sonarr, languageprofile]
 ---
 
 # Sonarr Languageprofile Skill

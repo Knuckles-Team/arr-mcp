@@ -1,7 +1,7 @@
 ---
 name: radarr-moviefile
 description: Skills related to moviefile in Radarr.
-tags: [radarr-moviefile]
+tags: [radarr, moviefile]
 ---
 
 # Radarr Moviefile Skill

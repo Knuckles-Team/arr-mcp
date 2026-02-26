@@ -1,7 +1,7 @@
 ---
 name: sonarr-authentication
 description: Skills related to authentication in Sonarr.
-tags: [sonarr-authentication]
+tags: [sonarr, authentication]
 ---
 
 # Sonarr Authentication Skill

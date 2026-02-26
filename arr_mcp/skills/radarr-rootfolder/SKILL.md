@@ -1,7 +1,7 @@
 ---
 name: radarr-rootfolder
 description: Skills related to rootfolder in Radarr.
-tags: [radarr-rootfolder]
+tags: [radarr, rootfolder]
 ---
 
 # Radarr Rootfolder Skill

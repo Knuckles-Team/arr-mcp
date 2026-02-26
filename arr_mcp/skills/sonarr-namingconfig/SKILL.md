@@ -1,7 +1,7 @@
 ---
 name: sonarr-namingconfig
 description: Skills related to namingconfig in Sonarr.
-tags: [sonarr-namingconfig]
+tags: [sonarr, namingconfig]
 ---
 
 # Sonarr Namingconfig Skill

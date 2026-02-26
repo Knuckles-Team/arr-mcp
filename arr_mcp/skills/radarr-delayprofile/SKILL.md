@@ -1,7 +1,7 @@
 ---
 name: radarr-delayprofile
 description: Skills related to delayprofile in Radarr.
-tags: [radarr-delayprofile]
+tags: [radarr, delayprofile]
 ---
 
 # Radarr Delayprofile Skill

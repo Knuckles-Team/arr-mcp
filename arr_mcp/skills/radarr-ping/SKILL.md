@@ -1,7 +1,7 @@
 ---
 name: radarr-ping
 description: Skills related to ping in Radarr.
-tags: [radarr-ping]
+tags: [radarr, ping]
 ---
 
 # Radarr Ping Skill

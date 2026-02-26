@@ -1,7 +1,7 @@
 ---
 name: sonarr-delayprofile
 description: Skills related to delayprofile in Sonarr.
-tags: [sonarr-delayprofile]
+tags: [sonarr, delayprofile]
 ---
 
 # Sonarr Delayprofile Skill

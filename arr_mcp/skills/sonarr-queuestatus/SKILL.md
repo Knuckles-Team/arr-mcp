@@ -1,7 +1,7 @@
 ---
 name: sonarr-queuestatus
 description: Skills related to queuestatus in Sonarr.
-tags: [sonarr-queuestatus]
+tags: [sonarr, queuestatus]
 ---
 
 # Sonarr Queuestatus Skill

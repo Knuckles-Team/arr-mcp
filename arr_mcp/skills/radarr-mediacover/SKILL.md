@@ -1,7 +1,7 @@
 ---
 name: radarr-mediacover
 description: Skills related to mediacover in Radarr.
-tags: [radarr-mediacover]
+tags: [radarr, mediacover]
 ---
 
 # Radarr Mediacover Skill

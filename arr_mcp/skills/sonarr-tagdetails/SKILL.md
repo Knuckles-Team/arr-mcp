@@ -1,7 +1,7 @@
 ---
 name: sonarr-tagdetails
 description: Skills related to tagdetails in Sonarr.
-tags: [sonarr-tagdetails]
+tags: [sonarr, tagdetails]
 ---
 
 # Sonarr Tagdetails Skill

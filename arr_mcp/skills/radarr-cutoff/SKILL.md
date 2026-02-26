@@ -1,7 +1,7 @@
 ---
 name: radarr-cutoff
 description: Skills related to cutoff in Radarr.
-tags: [radarr-cutoff]
+tags: [radarr, cutoff]
 ---
 
 # Radarr Cutoff Skill

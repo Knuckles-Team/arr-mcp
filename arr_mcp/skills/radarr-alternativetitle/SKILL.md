@@ -1,7 +1,7 @@
 ---
 name: radarr-alternativetitle
 description: Skills related to alternativetitle in Radarr.
-tags: [radarr-alternativetitle]
+tags: [radarr, alternativetitle]
 ---
 
 # Radarr Alternativetitle Skill

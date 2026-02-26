@@ -1,7 +1,7 @@
 ---
 name: radarr-config
 description: "Generated skill for Config operations. Contains 18 tools."
-tags: [radarr-config]
+tags: [radarr, config]
 ---
 
 ### Overview

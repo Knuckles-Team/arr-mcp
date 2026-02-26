@@ -1,7 +1,7 @@
 ---
 name: chaptarr-config
 description: "Generated skill for Config operations. Contains 19 tools."
-tags: [chaptarr-config]
+tags: [chaptarr, config]
 ---
 
 ### Overview

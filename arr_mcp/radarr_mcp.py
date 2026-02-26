@@ -36,7 +36,7 @@ from agent_utilities.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.16"
+__version__ = "0.2.17"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -61,7 +61,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def lookup_movie(
         term: str = Field(default=..., description="Search term for the movie"),
@@ -84,7 +84,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def add_movie(
         term: str = Field(default=..., description="Search term for the movie"),
@@ -123,7 +123,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_alttitle(
         movieId: int = Field(default=None, description="movieId"),
@@ -147,7 +147,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_alttitle_id(
         id: int = Field(default=..., description="id"),
@@ -170,7 +170,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_api(
         radarr_base_url: str = Field(
@@ -192,7 +192,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -215,7 +215,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_login(
         radarr_base_url: str = Field(
@@ -237,7 +237,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_logout(
         radarr_base_url: str = Field(
@@ -259,7 +259,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def post_autotagging(
         data: Dict = Field(default=..., description="data"),
@@ -282,7 +282,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_autotagging(
         radarr_base_url: str = Field(
@@ -304,7 +304,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def put_autotagging_id(
         id: str = Field(default=..., description="id"),
@@ -328,7 +328,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def delete_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -351,7 +351,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -374,7 +374,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_autotagging_schema(
         radarr_base_url: str = Field(
@@ -396,7 +396,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_system_backup(
         radarr_base_url: str = Field(
@@ -418,7 +418,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -441,7 +441,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -464,7 +464,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def post_system_backup_restore_upload(
         radarr_base_url: str = Field(
@@ -486,7 +486,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def get_blocklist(
         page: int = Field(default=None, description="page"),
@@ -521,7 +521,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def get_blocklist_movie(
         movieId: int = Field(default=None, description="movieId"),
@@ -544,7 +544,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def delete_blocklist_id(
         id: int = Field(default=..., description="id"),
@@ -567,7 +567,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def delete_blocklist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -590,7 +590,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_calendar(
         start: str = Field(default=None, description="start"),
@@ -618,7 +618,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_feed_v3_calendar_radarrics(
         pastDays: int = Field(default=None, description="pastDays"),
@@ -651,7 +651,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_collection(
         tmdbId: int = Field(default=None, description="tmdbId"),
@@ -674,7 +674,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_collection(
         data: Dict = Field(default=..., description="data"),
@@ -697,7 +697,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_collection_id(
         id: str = Field(default=..., description="id"),
@@ -721,7 +721,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_collection_id(
         id: int = Field(default=..., description="id"),
@@ -744,7 +744,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -767,7 +767,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_command(
         radarr_base_url: str = Field(
@@ -789,7 +789,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -812,7 +812,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -835,7 +835,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_credit(
         movieId: int = Field(default=None, description="movieId"),
@@ -859,7 +859,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_credit_id(
         id: int = Field(default=..., description="id"),
@@ -1352,7 +1352,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_diskspace(
         radarr_base_url: str = Field(
@@ -1698,7 +1698,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_extrafile(
         movieId: int = Field(default=None, description="movieId"),
@@ -1721,7 +1721,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1752,7 +1752,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1775,7 +1775,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_filesystem_mediafiles(
         path: str = Field(default=None, description="path"),
@@ -1798,7 +1798,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_health(
         radarr_base_url: str = Field(
@@ -1940,7 +1940,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_config_host(
         radarr_base_url: str = Field(
@@ -1962,7 +1962,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -1986,7 +1986,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -2522,7 +2522,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_importlist_movie(
         includeRecommendations: bool = Field(
@@ -2553,7 +2553,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_importlist_movie(
         data: Dict = Field(default=..., description="data"),
@@ -2967,7 +2967,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_localization(
         radarr_base_url: str = Field(
@@ -2989,7 +2989,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_localization_language(
         radarr_base_url: str = Field(
@@ -3011,7 +3011,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -3044,7 +3044,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_log_file(
         radarr_base_url: str = Field(
@@ -3066,7 +3066,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3145,7 +3145,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_mediacover_movie_id_filename(
         movieId: int = Field(default=..., description="movieId"),
@@ -3240,7 +3240,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_metadata(
         radarr_base_url: str = Field(
@@ -3262,7 +3262,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3286,7 +3286,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3311,7 +3311,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3334,7 +3334,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3357,7 +3357,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_metadata_schema(
         radarr_base_url: str = Field(
@@ -3379,7 +3379,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3403,7 +3403,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_metadata_testall(
         radarr_base_url: str = Field(
@@ -3425,7 +3425,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3518,7 +3518,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3551,7 +3551,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_movie(
         tmdbId: int = Field(default=None, description="tmdbId"),
@@ -3580,7 +3580,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_movie(
         data: Dict = Field(default=..., description="data"),
@@ -3603,7 +3603,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_movie_id(
         id: str = Field(default=..., description="id"),
@@ -3628,7 +3628,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def delete_movie_id(
         id: int = Field(default=..., description="id"),
@@ -3657,7 +3657,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_movie_id(
         id: int = Field(default=..., description="id"),
@@ -3680,7 +3680,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_movie_editor(
         data: Dict = Field(default=..., description="data"),
@@ -3703,7 +3703,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def delete_movie_editor(
         data: Dict = Field(default=..., description="data"),
@@ -3726,7 +3726,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_moviefile(
         movieId: List = Field(default=None, description="movieId"),
@@ -3750,7 +3750,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_moviefile_id(
         id: str = Field(default=..., description="id"),
@@ -3774,7 +3774,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def delete_moviefile_id(
         id: int = Field(default=..., description="id"),
@@ -3797,7 +3797,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_moviefile_id(
         id: int = Field(default=..., description="id"),
@@ -3820,7 +3820,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_moviefile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -3843,7 +3843,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def delete_moviefile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -3866,7 +3866,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def put_moviefile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -3889,7 +3889,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_movie_id_folder(
         id: int = Field(default=..., description="id"),
@@ -3912,7 +3912,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def post_movie_import(
         data: Dict = Field(default=..., description="data"),
@@ -3935,7 +3935,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_movie_lookup_tmdb(
         tmdbId: int = Field(default=None, description="tmdbId"),
@@ -3958,7 +3958,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_movie_lookup_imdb(
         imdbId: str = Field(default=None, description="imdbId"),
@@ -3981,7 +3981,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_movie_lookup(
         term: str = Field(default=None, description="term"),
@@ -4325,7 +4325,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"operations"},
+        tags={"radarr", "operations"},
     )
     async def get_parse(
         title: str = Field(default=None, description="title"),
@@ -4348,7 +4348,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_ping(
         radarr_base_url: str = Field(
@@ -4621,7 +4621,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def delete_queue_id(
         id: int = Field(default=..., description="id"),
@@ -4654,7 +4654,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def delete_queue_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4687,7 +4687,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def get_queue(
         page: int = Field(default=None, description="page"),
@@ -4734,7 +4734,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def post_queue_grab_id(
         id: int = Field(default=..., description="id"),
@@ -4757,7 +4757,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def post_queue_grab_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4780,7 +4780,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def get_queue_details(
         movieId: int = Field(default=None, description="movieId"),
@@ -4804,7 +4804,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"queue"},
+        tags={"radarr", "queue"},
     )
     async def get_queue_status(
         radarr_base_url: str = Field(
@@ -5125,7 +5125,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"catalog"},
+        tags={"radarr", "catalog"},
     )
     async def get_rename(
         movieId: List = Field(default=None, description="movieId"),
@@ -5239,7 +5239,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -5262,7 +5262,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -5285,7 +5285,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -5308,7 +5308,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_system_status(
         radarr_base_url: str = Field(
@@ -5330,7 +5330,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_system_routes(
         radarr_base_url: str = Field(
@@ -5352,7 +5352,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_system_routes_duplicate(
         radarr_base_url: str = Field(
@@ -5374,7 +5374,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def post_system_shutdown(
         radarr_base_url: str = Field(
@@ -5396,7 +5396,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def post_system_restart(
         radarr_base_url: str = Field(
@@ -5418,7 +5418,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_tag(
         radarr_base_url: str = Field(
@@ -5440,7 +5440,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -5463,7 +5463,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -5487,7 +5487,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5510,7 +5510,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5533,7 +5533,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_tag_detail(
         radarr_base_url: str = Field(
@@ -5555,7 +5555,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -5578,7 +5578,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_system_task(
         radarr_base_url: str = Field(
@@ -5600,7 +5600,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -5623,7 +5623,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -5647,7 +5647,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -5670,7 +5670,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_config_ui(
         radarr_base_url: str = Field(
@@ -5692,7 +5692,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_update(
         radarr_base_url: str = Field(
@@ -5714,7 +5714,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_log_file_update(
         radarr_base_url: str = Field(
@@ -5736,7 +5736,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["radarr_base_url", "radarr_api_key", "radarr_verify"],
-        tags={"system"},
+        tags={"radarr", "system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),

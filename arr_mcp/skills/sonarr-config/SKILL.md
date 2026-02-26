@@ -1,7 +1,7 @@
 ---
 name: sonarr-config
 description: "Generated skill for Config operations. Contains 18 tools."
-tags: [sonarr-config]
+tags: [sonarr, config]
 ---
 
 ### Overview

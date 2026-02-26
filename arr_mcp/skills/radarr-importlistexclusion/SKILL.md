@@ -1,7 +1,7 @@
 ---
 name: radarr-importlistexclusion
 description: Skills related to importlistexclusion in Radarr.
-tags: [radarr-importlistexclusion]
+tags: [radarr, importlistexclusion]
 ---
 
 # Radarr Importlistexclusion Skill

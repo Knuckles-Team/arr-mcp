@@ -1,7 +1,7 @@
 ---
 name: radarr-remotepathmapping
 description: Skills related to remotepathmapping in Radarr.
-tags: [radarr-remotepathmapping]
+tags: [radarr, remotepathmapping]
 ---
 
 # Radarr Remotepathmapping Skill

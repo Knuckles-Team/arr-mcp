@@ -36,7 +36,7 @@ from agent_utilities.middlewares import (
     JWTClaimsLoggingMiddleware,
 )
 
-__version__ = "0.2.16"
+__version__ = "0.2.17"
 
 logger = get_logger(name="TokenMiddleware")
 logger.setLevel(logging.DEBUG)
@@ -56,7 +56,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_album(
         artistId: int = Field(default=None, description="artistId"),
@@ -89,7 +89,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_album(
         data: Dict = Field(default=..., description="data"),
@@ -112,7 +112,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_album_id(
         id: str = Field(default=..., description="id"),
@@ -136,7 +136,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def delete_album_id(
         id: int = Field(default=..., description="id"),
@@ -167,7 +167,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_album_id(
         id: int = Field(default=..., description="id"),
@@ -190,7 +190,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_album_monitor(
         data: Dict = Field(default=..., description="data"),
@@ -213,7 +213,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_album_lookup(
         term: str = Field(default=None, description="term"),
@@ -236,7 +236,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_albumstudio(
         data: Dict = Field(default=..., description="data"),
@@ -259,7 +259,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_api(
         lidarr_base_url: str = Field(
@@ -281,7 +281,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_artist_id(
         id: int = Field(default=..., description="id"),
@@ -304,7 +304,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_artist_id(
         id: str = Field(default=..., description="id"),
@@ -329,7 +329,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def delete_artist_id(
         id: int = Field(default=..., description="id"),
@@ -360,7 +360,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_artist(
         mbId: str = Field(default=None, description="mbId"),
@@ -383,7 +383,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_artist(
         data: Dict = Field(default=..., description="data"),
@@ -406,7 +406,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_artist_editor(
         data: Dict = Field(default=..., description="data"),
@@ -429,7 +429,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def delete_artist_editor(
         data: Dict = Field(default=..., description="data"),
@@ -452,7 +452,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_artist_lookup(
         term: str = Field(default=None, description="term"),
@@ -475,7 +475,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def post_login(
         returnUrl: str = Field(default=None, description="returnUrl"),
@@ -498,7 +498,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_login(
         lidarr_base_url: str = Field(
@@ -520,7 +520,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_logout(
         lidarr_base_url: str = Field(
@@ -542,7 +542,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -565,7 +565,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def put_autotagging_id(
         id: str = Field(default=..., description="id"),
@@ -589,7 +589,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def delete_autotagging_id(
         id: int = Field(default=..., description="id"),
@@ -612,7 +612,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def post_autotagging(
         data: Dict = Field(default=..., description="data"),
@@ -635,7 +635,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_autotagging(
         lidarr_base_url: str = Field(
@@ -657,7 +657,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_autotagging_schema(
         lidarr_base_url: str = Field(
@@ -679,7 +679,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_system_backup(
         lidarr_base_url: str = Field(
@@ -701,7 +701,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def delete_system_backup_id(
         id: int = Field(default=..., description="id"),
@@ -724,7 +724,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def post_system_backup_restore_id(
         id: int = Field(default=..., description="id"),
@@ -747,7 +747,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def post_system_backup_restore_upload(
         lidarr_base_url: str = Field(
@@ -769,7 +769,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def get_blocklist(
         page: int = Field(default=None, description="page"),
@@ -797,7 +797,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def delete_blocklist_id(
         id: int = Field(default=..., description="id"),
@@ -820,7 +820,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def delete_blocklist_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -843,7 +843,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_calendar(
         start: str = Field(default=None, description="start"),
@@ -876,7 +876,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_calendar_id(
         id: int = Field(default=..., description="id"),
@@ -899,7 +899,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_feed_v1_calendar_lidarrics(
         pastDays: int = Field(default=None, description="pastDays"),
@@ -927,7 +927,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_command_id(
         id: int = Field(default=..., description="id"),
@@ -950,7 +950,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def delete_command_id(
         id: int = Field(default=..., description="id"),
@@ -973,7 +973,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def post_command(
         data: Dict = Field(default=..., description="data"),
@@ -996,7 +996,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_command(
         lidarr_base_url: str = Field(
@@ -1513,7 +1513,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_diskspace(
         lidarr_base_url: str = Field(
@@ -1859,7 +1859,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_filesystem(
         path: str = Field(default=None, description="path"),
@@ -1890,7 +1890,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_filesystem_type(
         path: str = Field(default=None, description="path"),
@@ -1913,7 +1913,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_filesystem_mediafiles(
         path: str = Field(default=None, description="path"),
@@ -1936,7 +1936,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_health(
         lidarr_base_url: str = Field(
@@ -2096,7 +2096,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_config_host_id(
         id: int = Field(default=..., description="id"),
@@ -2119,7 +2119,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def put_config_host_id(
         id: str = Field(default=..., description="id"),
@@ -2143,7 +2143,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_config_host(
         lidarr_base_url: str = Field(
@@ -2926,7 +2926,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_localization(
         lidarr_base_url: str = Field(
@@ -2948,7 +2948,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_log(
         page: int = Field(default=None, description="page"),
@@ -2981,7 +2981,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_log_file(
         lidarr_base_url: str = Field(
@@ -3003,7 +3003,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_log_file_filename(
         filename: str = Field(default=..., description="filename"),
@@ -3086,7 +3086,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_mediacover_artist_artist_id_filename(
         artistId: int = Field(default=..., description="artistId"),
@@ -3112,7 +3112,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_mediacover_album_album_id_filename(
         albumId: int = Field(default=..., description="albumId"),
@@ -3207,7 +3207,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3230,7 +3230,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3255,7 +3255,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def delete_metadata_id(
         id: int = Field(default=..., description="id"),
@@ -3278,7 +3278,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_metadata(
         lidarr_base_url: str = Field(
@@ -3300,7 +3300,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_metadata(
         data: Dict = Field(default=..., description="data"),
@@ -3324,7 +3324,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_metadata_schema(
         lidarr_base_url: str = Field(
@@ -3346,7 +3346,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_metadata_test(
         data: Dict = Field(default=..., description="data"),
@@ -3370,7 +3370,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_metadata_testall(
         lidarr_base_url: str = Field(
@@ -3392,7 +3392,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def post_metadata_action_name(
         name: str = Field(default=..., description="name"),
@@ -3622,7 +3622,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_wanted_missing(
         page: int = Field(default=None, description="page"),
@@ -3657,7 +3657,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_wanted_missing_id(
         id: int = Field(default=..., description="id"),
@@ -4017,7 +4017,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"operations"},
+        tags={"lidarr", "operations"},
     )
     async def get_parse(
         title: str = Field(default=None, description="title"),
@@ -4040,7 +4040,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_ping(
         lidarr_base_url: str = Field(
@@ -4291,7 +4291,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def delete_queue_id(
         id: int = Field(default=..., description="id"),
@@ -4324,7 +4324,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def delete_queue_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4357,7 +4357,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def get_queue(
         page: int = Field(default=None, description="page"),
@@ -4402,7 +4402,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def post_queue_grab_id(
         id: int = Field(default=..., description="id"),
@@ -4425,7 +4425,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def post_queue_grab_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -4448,7 +4448,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def get_queue_details(
         artistId: int = Field(default=None, description="artistId"),
@@ -4479,7 +4479,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"queue"},
+        tags={"lidarr", "queue"},
     )
     async def get_queue_status(
         lidarr_base_url: str = Field(
@@ -4801,7 +4801,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_rename(
         artistId: int = Field(default=None, description="artistId"),
@@ -4825,7 +4825,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_retag(
         artistId: int = Field(default=None, description="artistId"),
@@ -4987,7 +4987,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_content_path(
         path: str = Field(default=..., description="path"),
@@ -5010,7 +5010,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_(
         path: str = Field(default=..., description="path"),
@@ -5033,7 +5033,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_path(
         path: str = Field(default=..., description="path"),
@@ -5056,7 +5056,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_system_status(
         lidarr_base_url: str = Field(
@@ -5078,7 +5078,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_system_routes(
         lidarr_base_url: str = Field(
@@ -5100,7 +5100,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_system_routes_duplicate(
         lidarr_base_url: str = Field(
@@ -5122,7 +5122,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def post_system_shutdown(
         lidarr_base_url: str = Field(
@@ -5144,7 +5144,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def post_system_restart(
         lidarr_base_url: str = Field(
@@ -5166,7 +5166,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5189,7 +5189,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def put_tag_id(
         id: str = Field(default=..., description="id"),
@@ -5213,7 +5213,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def delete_tag_id(
         id: int = Field(default=..., description="id"),
@@ -5236,7 +5236,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_tag(
         lidarr_base_url: str = Field(
@@ -5258,7 +5258,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def post_tag(
         data: Dict = Field(default=..., description="data"),
@@ -5281,7 +5281,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_tag_detail_id(
         id: int = Field(default=..., description="id"),
@@ -5304,7 +5304,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_tag_detail(
         lidarr_base_url: str = Field(
@@ -5326,7 +5326,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_system_task(
         lidarr_base_url: str = Field(
@@ -5348,7 +5348,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_system_task_id(
         id: int = Field(default=..., description="id"),
@@ -5371,7 +5371,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_track(
         artistId: int = Field(default=None, description="artistId"),
@@ -5402,7 +5402,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_track_id(
         id: int = Field(default=..., description="id"),
@@ -5425,7 +5425,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_trackfile_id(
         id: int = Field(default=..., description="id"),
@@ -5448,7 +5448,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_trackfile_id(
         id: str = Field(default=..., description="id"),
@@ -5472,7 +5472,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def delete_trackfile_id(
         id: int = Field(default=..., description="id"),
@@ -5495,7 +5495,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def get_trackfile(
         artistId: int = Field(default=None, description="artistId"),
@@ -5526,7 +5526,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def put_trackfile_editor(
         data: Dict = Field(default=..., description="data"),
@@ -5549,7 +5549,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"catalog"},
+        tags={"lidarr", "catalog"},
     )
     async def delete_trackfile_bulk(
         data: Dict = Field(default=..., description="data"),
@@ -5572,7 +5572,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def put_config_ui_id(
         id: str = Field(default=..., description="id"),
@@ -5596,7 +5596,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_config_ui_id(
         id: int = Field(default=..., description="id"),
@@ -5619,7 +5619,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_config_ui(
         lidarr_base_url: str = Field(
@@ -5641,7 +5641,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_update(
         lidarr_base_url: str = Field(
@@ -5663,7 +5663,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_log_file_update(
         lidarr_base_url: str = Field(
@@ -5685,7 +5685,7 @@ def register_tools(mcp: FastMCP):
 
     @mcp.tool(
         exclude_args=["lidarr_base_url", "lidarr_api_key", "lidarr_verify"],
-        tags={"system"},
+        tags={"lidarr", "system"},
     )
     async def get_log_file_update_filename(
         filename: str = Field(default=..., description="filename"),

@@ -1,7 +1,7 @@
 ---
 name: radarr-release
 description: Skills related to release in Radarr.
-tags: [radarr-release]
+tags: [radarr, release]
 ---
 
 # Radarr Release Skill

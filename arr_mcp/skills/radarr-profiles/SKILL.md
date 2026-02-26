@@ -1,7 +1,7 @@
 ---
 name: radarr-profiles
 description: "Generated skill for Profiles operations. Contains 48 tools."
-tags: [radarr-profiles]
+tags: [radarr, profiles]
 ---
 
 ### Overview

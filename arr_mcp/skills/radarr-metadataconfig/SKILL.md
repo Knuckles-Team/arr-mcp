@@ -1,7 +1,7 @@
 ---
 name: radarr-metadataconfig
 description: Skills related to metadataconfig in Radarr.
-tags: [radarr-metadataconfig]
+tags: [radarr, metadataconfig]
 ---
 
 # Radarr Metadataconfig Skill

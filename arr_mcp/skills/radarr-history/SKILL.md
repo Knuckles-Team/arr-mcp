@@ -1,7 +1,7 @@
 ---
 name: radarr-history
 description: "Generated skill for History operations. Contains 4 tools."
-tags: [radarr-history]
+tags: [radarr, history]
 ---
 
 ### Overview

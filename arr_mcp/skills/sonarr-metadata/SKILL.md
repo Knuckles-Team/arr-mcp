@@ -1,7 +1,7 @@
 ---
 name: sonarr-metadata
 description: Skills related to metadata in Sonarr.
-tags: [sonarr-metadata]
+tags: [sonarr, metadata]
 ---
 
 # Sonarr Metadata Skill

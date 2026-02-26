@@ -1,7 +1,7 @@
 ---
 name: prowlarr-apiinfo
 description: Skills related to apiinfo in Prowlarr.
-tags: [prowlarr-apiinfo]
+tags: [prowlarr, apiinfo]
 ---
 
 # Prowlarr Apiinfo Skill

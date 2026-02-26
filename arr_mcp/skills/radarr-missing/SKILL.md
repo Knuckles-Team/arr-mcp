@@ -1,7 +1,7 @@
 ---
 name: radarr-missing
 description: Skills related to missing in Radarr.
-tags: [radarr-missing]
+tags: [radarr, missing]
 ---
 
 # Radarr Missing Skill

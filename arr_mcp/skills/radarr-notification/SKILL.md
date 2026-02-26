@@ -1,7 +1,7 @@
 ---
 name: radarr-notification
 description: Skills related to notification in Radarr.
-tags: [radarr-notification]
+tags: [radarr, notification]
 ---
 
 # Radarr Notification Skill

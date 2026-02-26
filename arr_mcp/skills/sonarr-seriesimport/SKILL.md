@@ -1,7 +1,7 @@
 ---
 name: sonarr-seriesimport
 description: Skills related to seriesimport in Sonarr.
-tags: [sonarr-seriesimport]
+tags: [sonarr, seriesimport]
 ---
 
 # Sonarr Seriesimport Skill

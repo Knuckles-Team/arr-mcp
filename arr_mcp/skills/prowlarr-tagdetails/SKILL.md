@@ -1,7 +1,7 @@
 ---
 name: prowlarr-tagdetails
 description: Skills related to tagdetails in Prowlarr.
-tags: [prowlarr-tagdetails]
+tags: [prowlarr, tagdetails]
 ---
 
 # Prowlarr Tagdetails Skill
