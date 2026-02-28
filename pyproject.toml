@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arr-mcp"
-version = "0.2.21"
+version = "0.2.22"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 authors = [{ name = "Genius", email = "genius@example.com" }]
@@ -26,15 +26,15 @@ dependencies = [
 
 [project.optional-dependencies]
 mcp = [
-    "agent-utilities[mcp]>=0.2.7",
+    "agent-utilities[mcp]>=0.2.8",
 ]
 
 agent = [
-    "agent-utilities[agent,logfire]>=0.2.7",
+    "agent-utilities[agent,logfire]>=0.2.8",
 ]
 
 all = [
-    "agent-utilities[mcp,agent,logfire]>=0.2.7",
+    "agent-utilities[mcp,agent,logfire]>=0.2.8",
 ]
 
 [project.scripts]
