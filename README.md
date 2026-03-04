@@ -21,7 +21,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
 
-*Version: 0.2.25*
+*Version: 0.2.26*
 
 ## Overview
 
@@ -29,32 +29,35 @@ Arr Stack MCP Server + A2A Server
 
 It includes a Model Context Protocol (MCP) server and an out of the box Agent2Agent (A2A) agent.
 
-This server acts as a unified proxy for the entire Arr stack, providing a single entry point for AI agents to interact with your media management services.
+This server is a consolidated MCP server for the entire Arr stack, providing a single entry point for AI agents to interact with your media management services. Each service's tools can be enabled or disabled independently via environment variables.
 
 This repository is actively maintained - Contributions are welcome!
 
 ### Supports:
-- **Radarr**: Movie collection management
-- **Sonarr**: TV series management
-- **Lidarr**: Music collection management
-- **Prowlarr**: Indexer management
-- **Chaptarr**: Book/Audiobook management
-- Unified proxy architecture
+- **Sonarr**: TV series management (`SONARRTOOL`)
+- **Radarr**: Movie collection management (`RADARRTOOL`)
+- **Lidarr**: Music collection management (`LIDARRTOOL`)
+- **Prowlarr**: Indexer management (`PROWLARRTOOL`)
+- **Bazarr**: Subtitle management (`BAZARRTOOL`)
+- **Seerr**: Media request management (`SEERRTOOL`)
+- **Chaptarr**: Book/Audiobook management (`CHAPTARRTOOL`)
 - Centralized authentication
 
 ## MCP
 
 ### MCP Tools
 
-Since this is a proxy server, it exposes all tools available from the connected Arr services.
+All tools are registered directly in a single consolidated server. Enable or disable each service via environment variables.
 
-| Service     | Description                                      | Tag(s)   |
-|:------------|:-------------------------------------------------|:---------|
-| `radarr`    | Tools for managing movies (add, search, monitor) | `movies` |
-| `sonarr`    | Tools for managing TV shows (add, search, monitor)| `tv`     |
-| `lidarr`    | Tools for managing music (add, search, monitor)  | `music`  |
-| `prowlarr`  | Tools for managing indexers                      | `indexers`|
-| `chaptarr`  | Tools for managing books and audiobooks          | `books`  |
+| Service     | Description                                      | Env Variable   | Default |
+|:------------|:-------------------------------------------------|:---------------|:--------|
+| `sonarr`    | Tools for managing TV shows (add, search, monitor)| `SONARRTOOL`  | `True`  |
+| `radarr`    | Tools for managing movies (add, search, monitor) | `RADARRTOOL`   | `True`  |
+| `lidarr`    | Tools for managing music (add, search, monitor)  | `LIDARRTOOL`   | `True`  |
+| `prowlarr`  | Tools for managing indexers                      | `PROWLARRTOOL` | `True`  |
+| `bazarr`    | Tools for managing subtitles                     | `BAZARRTOOL`   | `True`  |
+| `seerr`     | Tools for managing media requests                | `SEERRTOOL`    | `True`  |
+| `chaptarr`  | Tools for managing books and audiobooks          | `CHAPTARRTOOL` | `True`  |
 
 
 ### Using as an MCP Server
@@ -171,6 +174,7 @@ sequenceDiagram
 |            | --base-url        | LLM Base URL (for OpenAI compatible providers)                         |
 |            | --api-key         | LLM API Key                                                            |
 |            | --mcp-url         | MCP Server URL (default: http://localhost:8000/mcp)                    |
+|            | --mcp-config      | Path to mcp_config.json                                                |
 |            | --web             | Enable Pydantic AI Web UI                                              | False (Env: ENABLE_WEB_UI) |
 
 ### Agentic AI
@@ -221,18 +225,36 @@ The Arr MCP server can be deployed using Docker, with configurable authenticatio
 ```bash
 docker pull knucklessg1/arr-mcp:latest
 
+# Run with all services enabled (default)
 docker run -d \
   --name arr-mcp \
   -p 8004:8004 \
   -e HOST=0.0.0.0 \
   -e PORT=8004 \
-  -e TRANSPORT=http \
+  -e TRANSPORT=streamable-http \
   -e AUTH_TYPE=none \
-  -e CHAPTARR_MCP_URL=http://localhost:8060/mcp \
-  -e LIDARR_MCP_URL=http://localhost:8061/mcp \
-  -e PROWLARR_MCP_URL=http://localhost:8062/mcp \
-  -e RADARR_MCP_URL=http://localhost:8063/mcp \
-  -e SONARR_MCP_URL=http://localhost:8064/mcp \
+  -e SONARR_BASE_URL=http://sonarr:8989 \
+  -e SONARR_API_KEY=your-sonarr-key \
+  -e RADARR_BASE_URL=http://radarr:7878 \
+  -e RADARR_API_KEY=your-radarr-key \
+  knucklessg1/arr-mcp:latest
+
+# Run with only Sonarr and Radarr enabled
+docker run -d \
+  --name arr-mcp \
+  -p 8004:8004 \
+  -e TRANSPORT=streamable-http \
+  -e SONARR_BASE_URL=http://sonarr:8989 \
+  -e SONARR_API_KEY=your-sonarr-key \
+  -e RADARR_BASE_URL=http://radarr:7878 \
+  -e RADARR_API_KEY=your-radarr-key \
+  -e SONARRTOOL=True \
+  -e RADARRTOOL=True \
+  -e LIDARRTOOL=False \
+  -e PROWLARRTOOL=False \
+  -e BAZARRTOOL=False \
+  -e SEERRTOOL=False \
+  -e CHAPTARRTOOL=False \
   knucklessg1/arr-mcp:latest
 ```
 
@@ -247,35 +269,52 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=8004
-      - TRANSPORT=http
+      - TRANSPORT=streamable-http
       - AUTH_TYPE=none
-      - CHAPTARR_MCP_URL=http://chaptarr:8060/mcp
-      - LIDARR_MCP_URL=http://lidarr:8061/mcp
-      - PROWLARR_MCP_URL=http://prowlarr:8062/mcp
-      - RADARR_MCP_URL=http://radarr:8063/mcp
-      - SONARR_MCP_URL=http://sonarr:8064/mcp
+      # Service API Connections
+      - SONARR_BASE_URL=http://sonarr:8989
+      - SONARR_API_KEY=${SONARR_API_KEY}
+      - RADARR_BASE_URL=http://radarr:7878
+      - RADARR_API_KEY=${RADARR_API_KEY}
+      - LIDARR_BASE_URL=http://lidarr:8686
+      - LIDARR_API_KEY=${LIDARR_API_KEY}
+      - PROWLARR_BASE_URL=http://prowlarr:9696
+      - PROWLARR_API_KEY=${PROWLARR_API_KEY}
+      - BAZARR_BASE_URL=http://bazarr:6767
+      - BAZARR_API_KEY=${BAZARR_API_KEY}
+      # Tool Tag Flags (all default to True)
+      - SONARRTOOL=True
+      - RADARRTOOL=True
+      - LIDARRTOOL=True
+      - PROWLARRTOOL=True
+      - BAZARRTOOL=True
+      - SEERRTOOL=True
+      - CHAPTARRTOOL=True
     ports:
       - 8004:8004
 ```
 
-#### Configure `mcp.json` for AI Integration
+#### Configure `mcp_config.json` for AI Integration
 
 ```json
 {
   "mcpServers": {
-    "arr": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--with",
-        "arr-mcp",
-        "arr-mcp"
-      ],
+    "arr-mcp": {
+      "command": "arr-mcp",
+      "args": ["--transport", "stdio"],
       "env": {
-        "RADARR_MCP_URL": "http://localhost:8063/mcp",
-        "SONARR_MCP_URL": "http://localhost:8064/mcp"
-      },
-      "timeout": 300000
+        "SONARR_BASE_URL": "http://sonarr:8989",
+        "SONARR_API_KEY": "your-sonarr-key",
+        "RADARR_BASE_URL": "http://radarr:7878",
+        "RADARR_API_KEY": "your-radarr-key",
+        "SONARRTOOL": "True",
+        "RADARRTOOL": "True",
+        "LIDARRTOOL": "False",
+        "PROWLARRTOOL": "False",
+        "BAZARRTOOL": "False",
+        "SEERRTOOL": "False",
+        "CHAPTARRTOOL": "False"
+      }
     }
   }
 }
