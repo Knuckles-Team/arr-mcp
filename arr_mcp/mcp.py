@@ -36,7 +36,7 @@ from arr_mcp.bazarr_api import Api as BazarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
 from arr_mcp.chaptarr_api import Api as ChaptarrApi
 
-__version__ = "0.2.28"
+__version__ = "0.2.29"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
