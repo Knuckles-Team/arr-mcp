@@ -15,25 +15,18 @@ import logging
 import json
 import inspect
 from pathlib import Path
-from typing import Optional, List, Dict, Union, Any
+from typing import Optional, List, Dict, Any
 
-import requests
+from dotenv import load_dotenv
 from pydantic import Field
-from eunomia_mcp.middleware import EunomiaMcpMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from fastmcp import FastMCP
-from fastmcp.server.auth.oidc_proxy import OIDCProxy
-from fastmcp.server.auth import OAuthProxy, RemoteAuthProvider
-from fastmcp.server.auth.providers.jwt import JWTVerifier, StaticTokenVerifier
-from fastmcp.server.middleware.logging import LoggingMiddleware
-from fastmcp.server.middleware.timing import TimingMiddleware
-from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
-from fastmcp.server.middleware.error_handling import ErrorHandlingMiddleware
 from fastmcp.utilities.logging import get_logger
 from agent_utilities.base_utilities import to_boolean
-from agent_utilities.mcp_utilities import create_mcp_parser, config
-from agent_utilities.middlewares import UserTokenMiddleware, JWTClaimsLoggingMiddleware
+from agent_utilities.mcp_utilities import (
+    create_mcp_server,
+)
 
 from arr_mcp.sonarr_api import Api as SonarrApi
 from arr_mcp.radarr_api import Api as RadarrApi
@@ -43,7 +36,7 @@ from arr_mcp.bazarr_api import Api as BazarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
 from arr_mcp.chaptarr_api import Api as ChaptarrApi
 
-__version__ = "0.2.26"
+__version__ = "0.2.27"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
@@ -160,7 +153,9 @@ async def {tool_name}(
         return None
 
 
-def register_dynamic_tools(mcp: FastMCP) -> List[str]:
+def register_dynamic_tools(
+    mcp: FastMCP, filter_tags: Optional[List[str]] = None
+) -> List[str]:
     """Read configuration, evaluate env vars, and dynamically register allowed tools."""
     tool_config = load_tool_config()
     registered_tags = set()
@@ -172,13 +167,7 @@ def register_dynamic_tools(mcp: FastMCP) -> List[str]:
         api_class = API_CLASSES[service]
 
         for method_name, tag in methods.items():
-            # e.g., tag="sonarr-catalog" -> env_var="SONARR_CATALOGTOOL"
-            parts = tag.split("-", 1)
-            cat = parts[1] if len(parts) > 1 else "system"
-            env_var = f"{service.upper()}_{cat.upper()}TOOL"
-
-            # Check gating flag
-            if not to_boolean(str(os.environ.get(env_var, "True"))):
+            if filter_tags and tag not in filter_tags:
                 continue
 
             wrapper_func = _generate_dynamic_tool(service, method_name, tag, api_class)
@@ -189,209 +178,351 @@ def register_dynamic_tools(mcp: FastMCP) -> List[str]:
     return sorted(list(registered_tags))
 
 
-mcp = FastMCP("Arr")
-
-
-@mcp.custom_route("/health", methods=["GET"])
-async def health_check(request: Request) -> JSONResponse:
-    return JSONResponse({"status": "OK"})
-
-
 def mcp_server():
-    print(f"arr-mcp v{__version__}")
-    parser = create_mcp_parser()
+    load_dotenv(Path(__file__).parent.parent / ".env")
 
-    args = parser.parse_args()
-
-    if hasattr(args, "help") and args.help:
-        parser.print_help()
-        sys.exit(0)
-
-    if args.port < 0 or args.port > 65535:
-        print(f"Error: Port {args.port} is out of valid range (0-65535).")
-        sys.exit(1)
-
-    config["enable_delegation"] = args.enable_delegation
-    config["audience"] = args.audience or config["audience"]
-    config["delegated_scopes"] = args.delegated_scopes or config["delegated_scopes"]
-    config["oidc_config_url"] = args.oidc_config_url or config["oidc_config_url"]
-    config["oidc_client_id"] = args.oidc_client_id or config["oidc_client_id"]
-    config["oidc_client_secret"] = (
-        args.oidc_client_secret or config["oidc_client_secret"]
+    args, mcp, middlewares = create_mcp_server(
+        name="Arr",
+        version=__version__,
+        instructions="Arr Stack MCP Server — Dynamic unified server for Sonarr, Radarr, Lidarr, Prowlarr, Bazarr, Seerr, and Chaptarr.",
     )
 
-    if config["enable_delegation"]:
-        if args.auth_type != "oidc-proxy":
-            logger.error("Token delegation requires auth-type=oidc-proxy")
-            sys.exit(1)
-        if not config["audience"]:
-            logger.error("audience is required for delegation")
-            sys.exit(1)
-        if not all(
-            [
-                config["oidc_config_url"],
-                config["oidc_client_id"],
-                config["oidc_client_secret"],
-            ]
-        ):
-            logger.error("Delegation requires complete OIDC configuration")
-            sys.exit(1)
+    @mcp.custom_route("/health", methods=["GET"])
+    async def health_check(request: Request) -> JSONResponse:
+        return JSONResponse({"status": "OK"})
 
-        try:
-            oidc_config_resp = requests.get(config["oidc_config_url"])
-            oidc_config_resp.raise_for_status()
-            oidc_config = oidc_config_resp.json()
-            config["token_endpoint"] = oidc_config.get("token_endpoint")
-            if not config["token_endpoint"]:
-                raise ValueError("No token_endpoint found in OIDC configuration")
-        except Exception as e:
-            logger.error(f"Failed to fetch OIDC configuration: {e}")
-            sys.exit(1)
+    # Dynamic Registration of API Tools with Explicit Toggles
+    registered_tags = []
 
-    auth = None
-    allowed_uris = (
-        args.allowed_client_redirect_uris.split(",")
-        if args.allowed_client_redirect_uris
-        else None
+    DEFAULT_BAZARR_CATALOGTOOL = to_boolean(os.getenv("BAZARR_CATALOGTOOL", "True"))
+    if DEFAULT_BAZARR_CATALOGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["bazarr-catalog"])
+        )
+
+    DEFAULT_BAZARR_HISTORYTOOL = to_boolean(os.getenv("BAZARR_HISTORYTOOL", "True"))
+    if DEFAULT_BAZARR_HISTORYTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["bazarr-history"])
+        )
+
+    DEFAULT_BAZARR_SYSTEMTOOL = to_boolean(os.getenv("BAZARR_SYSTEMTOOL", "True"))
+    if DEFAULT_BAZARR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["bazarr-system"])
+        )
+
+    DEFAULT_CHAPTARR_CONFIGTOOL = to_boolean(os.getenv("CHAPTARR_CONFIGTOOL", "True"))
+    if DEFAULT_CHAPTARR_CONFIGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-config"])
+        )
+
+    DEFAULT_CHAPTARR_DOWNLOADSTOOL = to_boolean(
+        os.getenv("CHAPTARR_DOWNLOADSTOOL", "True")
     )
-
-    # Set auth dynamically here if args specify it
-    if args.auth_type == "static":
-        auth = StaticTokenVerifier(
-            tokens={
-                "test-token": {"client_id": "test-user", "scopes": ["read", "write"]},
-                "admin-token": {"client_id": "admin", "scopes": ["admin"]},
-            }
-        )
-    elif args.auth_type == "jwt":
-        jwks_uri = args.token_jwks_uri or os.getenv("FASTMCP_SERVER_AUTH_JWT_JWKS_URI")
-        issuer = args.token_issuer or os.getenv("FASTMCP_SERVER_AUTH_JWT_ISSUER")
-        audience = args.token_audience or os.getenv("FASTMCP_SERVER_AUTH_JWT_AUDIENCE")
-        algorithm = args.token_algorithm
-        secret_or_key = args.token_secret or args.token_public_key
-
-        if not (jwks_uri or secret_or_key):
-            logger.error(
-                "JWT auth requires either --token-jwks-uri or --token-secret/--token-public-key"
-            )
-            sys.exit(1)
-        if not (issuer and audience):
-            logger.error("JWT requires --token-issuer and --token-audience")
-            sys.exit(1)
-
-        public_key = secret_or_key
-        if args.token_public_key and os.path.isfile(args.token_public_key):
-            try:
-                with open(args.token_public_key, "r") as f:
-                    public_key = f.read()
-            except Exception as e:
-                logger.error(f"Failed to read public key file: {e}")
-                sys.exit(1)
-
-        required_scopes = (
-            [s.strip() for s in args.required_scopes.split(",") if s.strip()]
-            if args.required_scopes
-            else None
+    if DEFAULT_CHAPTARR_DOWNLOADSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-downloads"])
         )
 
-        try:
-            auth = JWTVerifier(
-                jwks_uri=jwks_uri,
-                public_key=public_key,
-                issuer=issuer,
-                audience=audience,
-                algorithm=(
-                    algorithm if algorithm and algorithm.startswith("HS") else None
-                ),
-                required_scopes=required_scopes,
-            )
-        except Exception as e:
-            logger.error(f"Failed to initialize JWTVerifier: {e}")
-            sys.exit(1)
-    elif args.auth_type == "oauth-proxy":
-        token_verifier = JWTVerifier(
-            jwks_uri=args.token_jwks_uri,
-            issuer=args.token_issuer,
-            audience=args.token_audience,
-        )
-        auth = OAuthProxy(
-            upstream_authorization_endpoint=args.oauth_upstream_auth_endpoint,
-            upstream_token_endpoint=args.oauth_upstream_token_endpoint,
-            upstream_client_id=args.oauth_upstream_client_id,
-            upstream_client_secret=args.oauth_upstream_client_secret,
-            token_verifier=token_verifier,
-            base_url=args.oauth_base_url,
-            allowed_client_redirect_uris=allowed_uris,
-        )
-    elif args.auth_type == "oidc-proxy":
-        auth = OIDCProxy(
-            config_url=args.oidc_config_url,
-            client_id=args.oidc_client_id,
-            client_secret=args.oidc_client_secret,
-            base_url=args.oidc_base_url,
-            allowed_client_redirect_uris=allowed_uris,
-        )
-    elif args.auth_type == "remote-oauth":
-        auth_servers = [url.strip() for url in args.remote_auth_servers.split(",")]
-        token_verifier = JWTVerifier(
-            jwks_uri=args.token_jwks_uri,
-            issuer=args.token_issuer,
-            audience=args.token_audience,
-        )
-        auth = RemoteAuthProvider(
-            token_verifier=token_verifier,
-            authorization_servers=auth_servers,
-            base_url=args.remote_base_url,
+    DEFAULT_CHAPTARR_HISTORYTOOL = to_boolean(os.getenv("CHAPTARR_HISTORYTOOL", "True"))
+    if DEFAULT_CHAPTARR_HISTORYTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-history"])
         )
 
-    middlewares: List[
-        Union[
-            UserTokenMiddleware,
-            ErrorHandlingMiddleware,
-            RateLimitingMiddleware,
-            TimingMiddleware,
-            LoggingMiddleware,
-            JWTClaimsLoggingMiddleware,
-            EunomiaMcpMiddleware,
-        ]
-    ] = [
-        ErrorHandlingMiddleware(include_traceback=True, transform_errors=True),
-        RateLimitingMiddleware(max_requests_per_second=10.0, burst_capacity=20),
-        TimingMiddleware(),
-        LoggingMiddleware(),
-        JWTClaimsLoggingMiddleware(),
-    ]
-    if config["enable_delegation"] or args.auth_type == "jwt":
-        middlewares.insert(0, UserTokenMiddleware(config=config))
+    DEFAULT_CHAPTARR_INDEXERTOOL = to_boolean(os.getenv("CHAPTARR_INDEXERTOOL", "True"))
+    if DEFAULT_CHAPTARR_INDEXERTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-indexer"])
+        )
 
-    if args.eunomia_type in ["embedded", "remote"]:
-        try:
-            from eunomia_mcp import create_eunomia_middleware
+    DEFAULT_CHAPTARR_OPERATIONSTOOL = to_boolean(
+        os.getenv("CHAPTARR_OPERATIONSTOOL", "True")
+    )
+    if DEFAULT_CHAPTARR_OPERATIONSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-operations"])
+        )
 
-            policy_file = args.eunomia_policy_file or "mcp_policies.json"
-            eunomia_endpoint = (
-                args.eunomia_remote_url if args.eunomia_type == "remote" else None
-            )
-            middlewares.append(
-                create_eunomia_middleware(
-                    policy_file=policy_file, eunomia_endpoint=eunomia_endpoint
-                )
-            )
-        except Exception as e:
-            logger.error("Failed to load Eunomia middleware", extra={"error": str(e)})
-            sys.exit(1)
+    DEFAULT_CHAPTARR_PROFILESTOOL = to_boolean(
+        os.getenv("CHAPTARR_PROFILESTOOL", "True")
+    )
+    if DEFAULT_CHAPTARR_PROFILESTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-profiles"])
+        )
 
-    if auth:
-        mcp._local_provider.auth = auth
+    DEFAULT_CHAPTARR_QUEUETOOL = to_boolean(os.getenv("CHAPTARR_QUEUETOOL", "True"))
+    if DEFAULT_CHAPTARR_QUEUETOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-queue"])
+        )
 
-    # Dynamic Registration of API Tools
-    registered_tags = register_dynamic_tools(mcp)
+    DEFAULT_CHAPTARR_SEARCHTOOL = to_boolean(os.getenv("CHAPTARR_SEARCHTOOL", "True"))
+    if DEFAULT_CHAPTARR_SEARCHTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-search"])
+        )
+
+    DEFAULT_CHAPTARR_SYSTEMTOOL = to_boolean(os.getenv("CHAPTARR_SYSTEMTOOL", "True"))
+    if DEFAULT_CHAPTARR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["chaptarr-system"])
+        )
+
+    DEFAULT_LIDARR_CATALOGTOOL = to_boolean(os.getenv("LIDARR_CATALOGTOOL", "True"))
+    if DEFAULT_LIDARR_CATALOGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-catalog"])
+        )
+
+    DEFAULT_LIDARR_CONFIGTOOL = to_boolean(os.getenv("LIDARR_CONFIGTOOL", "True"))
+    if DEFAULT_LIDARR_CONFIGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-config"])
+        )
+
+    DEFAULT_LIDARR_DOWNLOADSTOOL = to_boolean(os.getenv("LIDARR_DOWNLOADSTOOL", "True"))
+    if DEFAULT_LIDARR_DOWNLOADSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-downloads"])
+        )
+
+    DEFAULT_LIDARR_HISTORYTOOL = to_boolean(os.getenv("LIDARR_HISTORYTOOL", "True"))
+    if DEFAULT_LIDARR_HISTORYTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-history"])
+        )
+
+    DEFAULT_LIDARR_INDEXERTOOL = to_boolean(os.getenv("LIDARR_INDEXERTOOL", "True"))
+    if DEFAULT_LIDARR_INDEXERTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-indexer"])
+        )
+
+    DEFAULT_LIDARR_OPERATIONSTOOL = to_boolean(
+        os.getenv("LIDARR_OPERATIONSTOOL", "True")
+    )
+    if DEFAULT_LIDARR_OPERATIONSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-operations"])
+        )
+
+    DEFAULT_LIDARR_PROFILESTOOL = to_boolean(os.getenv("LIDARR_PROFILESTOOL", "True"))
+    if DEFAULT_LIDARR_PROFILESTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-profiles"])
+        )
+
+    DEFAULT_LIDARR_QUEUETOOL = to_boolean(os.getenv("LIDARR_QUEUETOOL", "True"))
+    if DEFAULT_LIDARR_QUEUETOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-queue"])
+        )
+
+    DEFAULT_LIDARR_SEARCHTOOL = to_boolean(os.getenv("LIDARR_SEARCHTOOL", "True"))
+    if DEFAULT_LIDARR_SEARCHTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-search"])
+        )
+
+    DEFAULT_LIDARR_SYSTEMTOOL = to_boolean(os.getenv("LIDARR_SYSTEMTOOL", "True"))
+    if DEFAULT_LIDARR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["lidarr-system"])
+        )
+
+    DEFAULT_PROWLARR_CONFIGTOOL = to_boolean(os.getenv("PROWLARR_CONFIGTOOL", "True"))
+    if DEFAULT_PROWLARR_CONFIGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-config"])
+        )
+
+    DEFAULT_PROWLARR_DOWNLOADSTOOL = to_boolean(
+        os.getenv("PROWLARR_DOWNLOADSTOOL", "True")
+    )
+    if DEFAULT_PROWLARR_DOWNLOADSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-downloads"])
+        )
+
+    DEFAULT_PROWLARR_HISTORYTOOL = to_boolean(os.getenv("PROWLARR_HISTORYTOOL", "True"))
+    if DEFAULT_PROWLARR_HISTORYTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-history"])
+        )
+
+    DEFAULT_PROWLARR_INDEXERTOOL = to_boolean(os.getenv("PROWLARR_INDEXERTOOL", "True"))
+    if DEFAULT_PROWLARR_INDEXERTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-indexer"])
+        )
+
+    DEFAULT_PROWLARR_OPERATIONSTOOL = to_boolean(
+        os.getenv("PROWLARR_OPERATIONSTOOL", "True")
+    )
+    if DEFAULT_PROWLARR_OPERATIONSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-operations"])
+        )
+
+    DEFAULT_PROWLARR_PROFILESTOOL = to_boolean(
+        os.getenv("PROWLARR_PROFILESTOOL", "True")
+    )
+    if DEFAULT_PROWLARR_PROFILESTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-profiles"])
+        )
+
+    DEFAULT_PROWLARR_SEARCHTOOL = to_boolean(os.getenv("PROWLARR_SEARCHTOOL", "True"))
+    if DEFAULT_PROWLARR_SEARCHTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-search"])
+        )
+
+    DEFAULT_PROWLARR_SYSTEMTOOL = to_boolean(os.getenv("PROWLARR_SYSTEMTOOL", "True"))
+    if DEFAULT_PROWLARR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["prowlarr-system"])
+        )
+
+    DEFAULT_RADARR_CATALOGTOOL = to_boolean(os.getenv("RADARR_CATALOGTOOL", "True"))
+    if DEFAULT_RADARR_CATALOGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-catalog"])
+        )
+
+    DEFAULT_RADARR_CONFIGTOOL = to_boolean(os.getenv("RADARR_CONFIGTOOL", "True"))
+    if DEFAULT_RADARR_CONFIGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-config"])
+        )
+
+    DEFAULT_RADARR_DOWNLOADSTOOL = to_boolean(os.getenv("RADARR_DOWNLOADSTOOL", "True"))
+    if DEFAULT_RADARR_DOWNLOADSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-downloads"])
+        )
+
+    DEFAULT_RADARR_HISTORYTOOL = to_boolean(os.getenv("RADARR_HISTORYTOOL", "True"))
+    if DEFAULT_RADARR_HISTORYTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-history"])
+        )
+
+    DEFAULT_RADARR_INDEXERTOOL = to_boolean(os.getenv("RADARR_INDEXERTOOL", "True"))
+    if DEFAULT_RADARR_INDEXERTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-indexer"])
+        )
+
+    DEFAULT_RADARR_OPERATIONSTOOL = to_boolean(
+        os.getenv("RADARR_OPERATIONSTOOL", "True")
+    )
+    if DEFAULT_RADARR_OPERATIONSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-operations"])
+        )
+
+    DEFAULT_RADARR_PROFILESTOOL = to_boolean(os.getenv("RADARR_PROFILESTOOL", "True"))
+    if DEFAULT_RADARR_PROFILESTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-profiles"])
+        )
+
+    DEFAULT_RADARR_QUEUETOOL = to_boolean(os.getenv("RADARR_QUEUETOOL", "True"))
+    if DEFAULT_RADARR_QUEUETOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-queue"])
+        )
+
+    DEFAULT_RADARR_SYSTEMTOOL = to_boolean(os.getenv("RADARR_SYSTEMTOOL", "True"))
+    if DEFAULT_RADARR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["radarr-system"])
+        )
+
+    DEFAULT_SEERR_CATALOGTOOL = to_boolean(os.getenv("SEERR_CATALOGTOOL", "True"))
+    if DEFAULT_SEERR_CATALOGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["seerr-catalog"])
+        )
+
+    DEFAULT_SEERR_SEARCHTOOL = to_boolean(os.getenv("SEERR_SEARCHTOOL", "True"))
+    if DEFAULT_SEERR_SEARCHTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["seerr-search"])
+        )
+
+    DEFAULT_SEERR_SYSTEMTOOL = to_boolean(os.getenv("SEERR_SYSTEMTOOL", "True"))
+    if DEFAULT_SEERR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["seerr-system"])
+        )
+
+    DEFAULT_SONARR_CATALOGTOOL = to_boolean(os.getenv("SONARR_CATALOGTOOL", "True"))
+    if DEFAULT_SONARR_CATALOGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-catalog"])
+        )
+
+    DEFAULT_SONARR_CONFIGTOOL = to_boolean(os.getenv("SONARR_CONFIGTOOL", "True"))
+    if DEFAULT_SONARR_CONFIGTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-config"])
+        )
+
+    DEFAULT_SONARR_DOWNLOADSTOOL = to_boolean(os.getenv("SONARR_DOWNLOADSTOOL", "True"))
+    if DEFAULT_SONARR_DOWNLOADSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-downloads"])
+        )
+
+    DEFAULT_SONARR_HISTORYTOOL = to_boolean(os.getenv("SONARR_HISTORYTOOL", "True"))
+    if DEFAULT_SONARR_HISTORYTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-history"])
+        )
+
+    DEFAULT_SONARR_INDEXERTOOL = to_boolean(os.getenv("SONARR_INDEXERTOOL", "True"))
+    if DEFAULT_SONARR_INDEXERTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-indexer"])
+        )
+
+    DEFAULT_SONARR_OPERATIONSTOOL = to_boolean(
+        os.getenv("SONARR_OPERATIONSTOOL", "True")
+    )
+    if DEFAULT_SONARR_OPERATIONSTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-operations"])
+        )
+
+    DEFAULT_SONARR_PROFILESTOOL = to_boolean(os.getenv("SONARR_PROFILESTOOL", "True"))
+    if DEFAULT_SONARR_PROFILESTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-profiles"])
+        )
+
+    DEFAULT_SONARR_QUEUETOOL = to_boolean(os.getenv("SONARR_QUEUETOOL", "True"))
+    if DEFAULT_SONARR_QUEUETOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-queue"])
+        )
+
+    DEFAULT_SONARR_SYSTEMTOOL = to_boolean(os.getenv("SONARR_SYSTEMTOOL", "True"))
+    if DEFAULT_SONARR_SYSTEMTOOL:
+        registered_tags.extend(
+            register_dynamic_tools(mcp, filter_tags=["sonarr-system"])
+        )
 
     for mw in middlewares:
         mcp.add_middleware(mw)
 
     print(f"Arr MCP v{__version__}")
-    print("\\nStarting Arr MCP Server (Optimized Runtime Generation)")
+    print("\nStarting Arr MCP Server (Optimized Runtime Generation)")
     print(f"  Transport: {args.transport.upper()}")
     print(f"  Auth: {args.auth_type}")
     print(f"  Dynamic Tags Loaded: {len(registered_tags)}")
