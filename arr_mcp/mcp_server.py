@@ -36,7 +36,7 @@ from arr_mcp.bazarr_api import Api as BazarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
 from arr_mcp.chaptarr_api import Api as ChaptarrApi
 
-__version__ = "0.2.46"
+__version__ = "0.2.47"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
@@ -178,7 +178,8 @@ def register_dynamic_tools(
     return sorted(list(registered_tags))
 
 
-def mcp_server():
+def get_mcp_instance() -> tuple[Any, Any, Any, Any]:
+    """Initialize and return the MCP instance, args, and middlewares."""
     load_dotenv(Path(__file__).parent.parent / ".env")
 
     args, mcp, middlewares = create_mcp_server(
@@ -520,12 +521,16 @@ def mcp_server():
 
     for mw in middlewares:
         mcp.add_middleware(mw)
+    return mcp, args, middlewares, registered_tags
 
-    print(f"Arr MCP v{__version__}")
-    print("\nStarting Arr MCP Server (Optimized Runtime Generation)")
-    print(f"  Transport: {args.transport.upper()}")
-    print(f"  Auth: {args.auth_type}")
-    print(f"  Dynamic Tags Loaded: {len(registered_tags)}")
+
+def mcp_server() -> None:
+    mcp, args, middlewares, registered_tags = get_mcp_instance()
+    print(f"{args.name or 'arr-mcp'} MCP v{__version__}", file=sys.stderr)
+    print("\nStarting MCP Server", file=sys.stderr)
+    print(f"  Transport: {args.transport.upper()}", file=sys.stderr)
+    print(f"  Auth: {args.auth_type}", file=sys.stderr)
+    print(f"  Dynamic Tags Loaded: {len(set(registered_tags))}", file=sys.stderr)
 
     if args.transport == "stdio":
         mcp.run(transport="stdio")
