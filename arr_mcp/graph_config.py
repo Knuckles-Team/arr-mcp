@@ -4,7 +4,6 @@ This is the only file needed to enable graph mode for this agent.
 Provides TAG_PROMPTS and TAG_ENV_VARS for create_graph_agent_server().
 """
 
-                                                                       
 TAG_PROMPTS: dict[str, str] = {
     "bazarr_catalog": (
         "You are a Arr Suite Bazarr Catalog specialist. Help users manage and interact with Bazarr Catalog functionality using the available tools."
@@ -162,7 +161,6 @@ TAG_PROMPTS: dict[str, str] = {
 }
 
 
-                                                                        
 TAG_ENV_VARS: dict[str, str] = {
     "bazarr_catalog": "BAZARR_CATALOGTOOL",
     "bazarr_history": "BAZARR_HISTORYTOOL",
