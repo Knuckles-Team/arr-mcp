@@ -36,7 +36,7 @@ from arr_mcp.bazarr_api import Api as BazarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
 from arr_mcp.chaptarr_api import Api as ChaptarrApi
 
-__version__ = "0.2.48"
+__version__ = "0.2.49"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
@@ -73,29 +73,27 @@ def _generate_dynamic_tool(
     sig = inspect.signature(method)
     docstring = method.__doc__ or f"Call {service} {method_name}"
 
-    # Analyze parameters (skip `self`)
     params_code = []
     call_args = []
 
     for name, param in list(sig.parameters.items())[1:]:
-        # Get type annotation string safely
+
         if param.annotation is inspect.Parameter.empty:
             type_str = "Any"
         else:
             try:
-                # Basic representation of common types (Dict, List, int, str, bool, Optional, Any)
+
                 type_str = str(param.annotation).replace("typing.", "")
-                # Clean up <class 'int'> -> int
+
                 if "class" in type_str:
                     type_str = param.annotation.__name__
             except Exception:
                 type_str = "Any"
 
-        # Handle defaults via pydantic Field
         if param.default is inspect.Parameter.empty:
             field_def = f"Field(..., description='{name}')"
         else:
-            # We must repr the default so strings get quotes, None gets None, etc.
+
             field_def = f"Field(default={repr(param.default)}, description='{name}')"
 
         params_code.append(f"    {name}: {type_str} = {field_def}")
@@ -108,17 +106,14 @@ def _generate_dynamic_tool(
 
     svc_upper = service.upper()
 
-    # Prefix tool names to ensure global uniqueness (e.g. lidarr_get_series)
     tool_name = f"{service}_{method_name}"
 
-    # We compile the function exactly as if a human wrote it
-    # We add the required base_url, api_key, and verify fields
     func_source = f'''
 async def {tool_name}(
 {params_str}
     {service}_base_url: str = Field(default=os.environ.get("{svc_upper}_BASE_URL", None), description="Base URL"),
     {service}_api_key: Optional[str] = Field(default=os.environ.get("{svc_upper}_API_KEY", None), description="API Key"),
-    {service}_verify: bool = Field(default=to_boolean(os.environ.get("{svc_upper}_VERIFY", "False")), description="Verify SSL")
+    {service}_verify: bool = Field(default=to_boolean(os.environ.get("{svc_upper}_SSL_VERIFY", "False")), description="Verify SSL")
 ) -> Dict:
     """{docstring}"""
     # Initialize the specific API client
@@ -131,7 +126,6 @@ async def {tool_name}(
     return client.{method_name}({call_args_str})
 '''
 
-    # Required globals for the exec environment
     local_env = {}
     global_env = {
         "os": os,
@@ -192,7 +186,6 @@ def get_mcp_instance() -> tuple[Any, Any, Any, Any]:
     async def health_check(request: Request) -> JSONResponse:
         return JSONResponse({"status": "OK"})
 
-    # Dynamic Registration of API Tools with Explicit Toggles
     registered_tags = []
 
     DEFAULT_BAZARR_CATALOGTOOL = to_boolean(os.getenv("BAZARR_CATALOGTOOL", "True"))

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "arr": {
+      "command": "arr-mcp",
+      "args": ["--transport", "stdio"],
+      "env": {
+        "ARR_URL": "${ARR_URL:-http://localhost:8080}",
+        "ARR_TOKEN": "${ARR_TOKEN}"
+      }
+    }
+  }
+}

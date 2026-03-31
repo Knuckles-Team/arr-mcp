@@ -227,7 +227,7 @@ class Generator:
             f.write("\n".join(content))
 
     def write_mcp_file(self):
-        filename = f"{self.service_name}_mcp.py"
+        filename = f"{self.service_name}_mcp_server.py"
         filepath = os.path.join(self.output_dir, filename)
         service_upper = self.service_name.upper()
 
@@ -279,7 +279,7 @@ class Generator:
                 f'    {self.service_name}_api_key: Optional[str] = Field(default=os.environ.get("{service_upper}_API_KEY", None), description="API Key"),'
             )
             sig_lines.append(
-                f'    {self.service_name}_verify: bool = Field(default=to_boolean(os.environ.get("{service_upper}_VERIFY", "False")), description="Verify SSL"),'
+                f'    {self.service_name}_verify: bool = Field(default=to_boolean(os.environ.get("{service_upper}_SSL_VERIFY", "False")), description="Verify SSL"),'
             )
 
             sig_lines.append(") -> Dict:")
@@ -321,7 +321,6 @@ from pydantic_ai.mcp import MCPServerSSE, MCPServerStreamableHTTP
 from fastapi import FastAPI
 
 # Requires arr_mcp.{self.service_name}_mcp to be running or accessible?
-# Actually, the agent usually CONNECTS to the MCP server.
 # For simplicity, we just created tools files.
 # Usage: python -m arr_mcp.{self.service_name}_mcp
 
