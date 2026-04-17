@@ -5,6 +5,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     try:
         from requests.exceptions import RequestsDependencyWarning
+
         warnings.filterwarnings("ignore", category=RequestsDependencyWarning)
     except ImportError:
         pass
@@ -51,7 +52,7 @@ from arr_mcp.bazarr_api import Api as BazarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
 from arr_mcp.chaptarr_api import Api as ChaptarrApi
 
-__version__ = "0.2.54"
+__version__ = "0.2.55"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
