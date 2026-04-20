@@ -34,6 +34,7 @@ all = [
 
 [project.scripts]
 arr-mcp = "arr_mcp.mcp_server:mcp_server"
+arr-agent = "arr_mcp.agent_server:agent_server"
 
 [tool.setuptools.packages.find]
 where = ["."]
