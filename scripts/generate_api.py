@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from typing import Dict
+from typing import Any, Dict
 
 TYPE_MAPPING = {
     "string": "str",
@@ -47,9 +47,9 @@ class Generator:
         self.spec = load_json(spec_path)
         self.output_dir = output_dir
         self.service_name = service_name
-        self.api_methods = []
-        self.mcp_tools = []
-        self.agent_config = {}
+        self.api_methods: list[Any] = []
+        self.mcp_tools: list[Any] = []
+        self.agent_config: dict[str, Any] = {}
 
     def run(self):
         print(f"Generating code for {self.service_name}...")
@@ -142,7 +142,7 @@ class Generator:
             "    def __init__(",
             "        self,",
             "        base_url: str,",
-            "        token: Optional[str] = None,",
+            "        token: Optional[str] | None = None,",
             "        verify: bool = False,",
             "    ):",
             "        self.base_url = base_url",
@@ -162,8 +162,8 @@ class Generator:
             "        self,",
             "        method: str,",
             "        endpoint: str,",
-            "        params: Dict = None,",
-            "        data: Dict = None,",
+            "        params: Dict | None = None,",
+            "        data: Dict | None = None,",
             "    ) -> Any:",
             "        url = urljoin(self.base_url, endpoint)",
             "        response = self._session.request(method=method, url=url, params=params, json=data)",
@@ -208,7 +208,7 @@ class Generator:
                     )
                 endpoint_str = f'f"{target_endpoint}"'
 
-            content.append("        params = {}")
+            content.append("        params: dict[str, Any] = {}")
             for p in query_params:
                 content.append(
                     f"        if {p['name']} is not None: params['{p['orig_name']}'] = {p['name']}"

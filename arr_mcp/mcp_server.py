@@ -25,32 +25,32 @@ Environment Variables:
     <SERVICE>_<CATEGORY>TOOL (e.g. SONARR_CATALOGTOOL)
 """
 
+import inspect
+import json
+import logging
 import os
 import sys
-import logging
-import json
-import inspect
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Any, Optional
 
-from dotenv import load_dotenv
-from pydantic import Field
-from starlette.requests import Request
-from starlette.responses import JSONResponse
-from fastmcp import FastMCP
-from fastmcp.utilities.logging import get_logger
 from agent_utilities.base_utilities import to_boolean
 from agent_utilities.mcp_utilities import (
     create_mcp_server,
 )
+from dotenv import load_dotenv
+from fastmcp import FastMCP
+from fastmcp.utilities.logging import get_logger
+from pydantic import Field
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
-from arr_mcp.sonarr_api import Api as SonarrApi
-from arr_mcp.radarr_api import Api as RadarrApi
+from arr_mcp.bazarr_api import Api as BazarrApi
+from arr_mcp.chaptarr_api import Api as ChaptarrApi
 from arr_mcp.lidarr_api import Api as LidarrApi
 from arr_mcp.prowlarr_api import Api as ProwlarrApi
-from arr_mcp.bazarr_api import Api as BazarrApi
+from arr_mcp.radarr_api import Api as RadarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
-from arr_mcp.chaptarr_api import Api as ChaptarrApi
+from arr_mcp.sonarr_api import Api as SonarrApi
 
 __version__ = "0.2.55"
 
@@ -68,19 +68,19 @@ API_CLASSES = {
 }
 
 
-def load_tool_config() -> Dict[str, Dict[str, str]]:
+def load_tool_config() -> dict[str, dict[str, str]]:
     """Load the tool methods to tag mapping."""
     config_path = Path(__file__).parent / "tool_tags.json"
     if not config_path.exists():
         logger.error(f"Missing {config_path}")
         return {}
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, encoding="utf-8") as f:
         return json.load(f)
 
 
 def _generate_dynamic_tool(
     service: str, method_name: str, tag: str, api_class: type
-) -> Optional[Any]:
+) -> Any | None:
     """
     Dynamically compile a wrapper function for an API method using exec().
     This allows FastMCP/Pydantic to perfectly parse standard python signatures.
@@ -93,12 +93,10 @@ def _generate_dynamic_tool(
     call_args = []
 
     for name, param in list(sig.parameters.items())[1:]:
-
         if param.annotation is inspect.Parameter.empty:
             type_str = "Any"
         else:
             try:
-
                 type_str = str(param.annotation).replace("typing.", "")
 
                 if "class" in type_str:
@@ -109,7 +107,6 @@ def _generate_dynamic_tool(
         if param.default is inspect.Parameter.empty:
             field_def = f"Field(..., description='{name}')"
         else:
-
             field_def = f"Field(default={repr(param.default)}, description='{name}')"
 
         params_code.append(f"    {name}: {type_str} = {field_def}")
@@ -140,13 +137,13 @@ async def {tool_name}(
     return client.{method_name}({call_args_str})
 '''
 
-    local_env = {}
+    local_env: dict[str, Any] = {}
     global_env = {
         "os": os,
         "Field": Field,
         "Optional": Optional,
-        "Dict": Dict,
-        "List": List,
+        "Dict": dict,
+        "List": list,
         "Any": Any,
         "to_boolean": to_boolean,
         "api_class": api_class,
@@ -162,8 +159,8 @@ async def {tool_name}(
 
 
 def register_dynamic_tools(
-    mcp: FastMCP, filter_tags: Optional[List[str]] = None
-) -> List[str]:
+    mcp: FastMCP, filter_tags: list[str] | None = None
+) -> list[str]:
     """Read configuration, evaluate env vars, and dynamically register allowed tools."""
     tool_config = load_tool_config()
     registered_tags = set()

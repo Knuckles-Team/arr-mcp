@@ -5,9 +5,10 @@ This module provides a class to interact with the Overseerr/Jellyseerr (Seerr) A
 for managing media requests.
 """
 
-import requests
-from typing import Dict, List, Optional, Any
+from typing import Any
 from urllib.parse import urljoin
+
+import requests
 import urllib3
 
 
@@ -22,7 +23,7 @@ class Api:
     def __init__(
         self,
         base_url: str,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         verify: bool = False,
     ):
         """
@@ -48,8 +49,8 @@ class Api:
         self,
         method: str,
         endpoint: str,
-        params: Dict = None,
-        data: Dict = None,
+        params: dict[str, Any] | None = None,
+        data: dict[str, Any] | None = None,
     ) -> Any:
         """
         Generic request method for the Seerr API.
@@ -108,8 +109,8 @@ class Api:
         self,
         username: str,
         password: str,
-        hostname: Optional[str] = None,
-        email: Optional[str] = None,
+        hostname: str | None = None,
+        email: str | None = None,
     ) -> Any:
         """Sign in using a Jellyfin username and password"""
         data = {"username": username, "password": password}
@@ -131,14 +132,18 @@ class Api:
         self,
         media_type: str,
         media_id: int,
-        seasons: List[int] = None,
+        seasons: list[int] | None = None,
         is4k: bool = False,
-        server_id: int = None,
-        profile_id: int = None,
-        root_folder: str = None,
+        server_id: int | None = None,
+        profile_id: int | None = None,
+        root_folder: str | None = None,
     ) -> Any:
         """Create a new request"""
-        data = {"mediaType": media_type, "mediaId": media_id, "is4k": is4k}
+        data: dict[str, Any] = {
+            "mediaType": media_type,
+            "mediaId": media_id,
+            "is4k": is4k,
+        }
         if seasons:
             data["seasons"] = seasons
         if server_id:
@@ -151,7 +156,11 @@ class Api:
         return self.request("POST", "/api/v1/request", data=data)
 
     def get_request(
-        self, take: int = 20, skip: int = 0, filter: str = None, sort: str = "added"
+        self,
+        take: int = 20,
+        skip: int = 0,
+        filter: str | None = None,
+        sort: str = "added",
     ) -> Any:
         """Get all requests"""
         params = {"take": take, "skip": skip, "sort": sort}
@@ -167,13 +176,13 @@ class Api:
         self,
         request_id: int,
         media_type: str,
-        seasons: List[int] = None,
-        server_id: int = None,
-        profile_id: int = None,
-        root_folder: str = None,
+        seasons: list[int] | None = None,
+        server_id: int | None = None,
+        profile_id: int | None = None,
+        root_folder: str | None = None,
     ) -> Any:
         """Update a request"""
-        data = {"mediaType": media_type}
+        data: dict[str, Any] = {"mediaType": media_type}
         if seasons:
             data["seasons"] = seasons
         if server_id:

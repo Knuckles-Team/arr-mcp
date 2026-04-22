@@ -4,9 +4,10 @@ Bazarr API Client.
 This module provides a class to interact with the Bazarr API for managing subtitles.
 """
 
-import requests
-from typing import Dict, Optional, Any
+from typing import Any
 from urllib.parse import urljoin
+
+import requests
 import urllib3
 
 
@@ -21,7 +22,7 @@ class Api:
     def __init__(
         self,
         base_url: str,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         verify: bool = False,
     ):
         """
@@ -47,8 +48,8 @@ class Api:
         self,
         method: str,
         endpoint: str,
-        params: Dict = None,
-        data: Dict = None,
+        params: dict[str, Any] | None = None,
+        data: dict[str, Any] | None = None,
     ) -> Any:
         """
         Generic request method for the Bazarr API.
@@ -100,7 +101,7 @@ class Api:
         return self.request("GET", f"/api/episodes/{episode_id}")
 
     def search_series_subtitles(
-        self, series_id: int, episode_id: Optional[int] = None
+        self, series_id: int, episode_id: int | None = None
     ) -> Any:
         """Search for subtitles for a series or episode."""
         if episode_id:
@@ -199,7 +200,7 @@ class Api:
         """Get Bazarr settings."""
         return self.request("GET", "/api/system/settings")
 
-    def update_settings(self, settings_data: Dict) -> Any:
+    def update_settings(self, settings_data: dict) -> Any:
         """Update Bazarr settings."""
         return self.request("POST", "/api/system/settings", data=settings_data)
 
