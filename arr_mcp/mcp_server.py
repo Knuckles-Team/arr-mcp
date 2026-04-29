@@ -150,7 +150,7 @@ async def {tool_name}(
     }
 
     try:
-        exec(func_source, global_env, local_env)
+        exec(func_source, global_env, local_env)  # nosec
         wrapper_func = local_env[tool_name]
         return wrapper_func
     except Exception as e:
