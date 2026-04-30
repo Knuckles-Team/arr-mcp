@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arr-mcp"
-version = "0.2.55"
+version = "0.3.0"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
@@ -18,9 +18,9 @@ email = "genius@example.com"
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-utilities[mcp]>=0.2.31",]
-agent = [ "agent-utilities[agent,logfire]>=0.2.31",]
-all = [ "agent-utilities[mcp,agent,logfire]>=0.2.31",]
+mcp = [ "agent-utilities[mcp]>=0.2.42",]
+agent = [ "agent-utilities[agent,logfire]>=0.2.42",]
+all = [ "agent-utilities[mcp,agent,logfire]>=0.2.42",]
 test = [ "pytest", "pytest-asyncio",]
 
 [project.scripts]

@@ -52,7 +52,7 @@ from arr_mcp.radarr_api import Api as RadarrApi
 from arr_mcp.seerr_api import Api as SeerrApi
 from arr_mcp.sonarr_api import Api as SonarrApi
 
-__version__ = "0.2.55"
+__version__ = "0.3.0"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
