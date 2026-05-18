@@ -1,0 +1,69 @@
+# Tasks: Code Enhancement: arr-mcp
+
+Generated: 2026-05-12T14:14:40.973561+00:00
+Skipped informational: 5
+
+- [ ] [P] **T001** [Dependency Audit] Minor update: urllib3 2.6.3 (installed) -> 2.7.0
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T002** [Dependency Audit] Minor update: requests 2.33.1 (installed) -> 2.34.0
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T003** [Codebase Optimization] 1 functions exceed 200 lines (actionable refactoring targets): get_mcp_instance
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T004** [Codebase Optimization] Monolithic: mcp_server.py (551L) — 1 functions with high complexity (worst: get_
+  - Priority: P1-High | Effort: Large
+- [ ] [P] **T005** [Codebase Optimization] Monolithic: prowlarr_api.py (1211L) — 2 functions with high complexity (worst: A
+  - Priority: P1-High | Effort: Large
+- [ ] [P] **T006** [Codebase Optimization] Needs attention: radarr_api.py (1919L) — God class: Api (241 methods) — consider
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T007** [Codebase Optimization] Needs attention: lidarr_api.py (1941L) — God class: Api (237 methods) — consider
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T008** [Codebase Optimization] Needs attention: chaptarr_api.py (1881L) — God class: Api (235 methods) — consid
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T009** [Codebase Optimization] High code duplication ratio: 25.0%
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T010** [Codebase Optimization] 8 functions with nesting depth >4
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T011** [Security Analysis] 1 HIGH severity vulnerabilities found
+  - Priority: P1-High | Effort: Medium
+- [ ] [P] **T012** [Security Analysis] eval/exec usage detected: 2 instances
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T013** [Test Coverage] Test suite lacks intent diversity (only one type)
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T014** [Test Coverage] 27 potential doc-test drift items
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T015** [Documentation & Governance] README.md missing sections: installation
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T016** [Documentation & Governance] README missing: Has a Table of Contents
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T017** [Documentation & Governance] README missing: References /docs directory material
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T018** [Architecture & Design Patterns] SRP: 6 modules exceed 500 lines (god modules)
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T019** [Architecture & Design Patterns] SRP: 7 classes have >15 methods
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T020** [Architecture & Design Patterns] No discernible layer architecture (no domain/service/adapter separation)
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T021** [Concept Traceability] Low traceability ratio: 0% concepts fully traced
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T022** [Concept Traceability] 6 test functions missing concept markers
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T023** [Concept Traceability] 154 significant functions (>10 lines) missing concept markers in docstrings
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T024** [Linting & Formatting] Total lint findings: 0 (high/error: 0, medium/warning: 0, low: 0)
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T025** [Pre-Commit Compliance] 2 hook(s) may be outdated: ruff-pre-commit, uv-pre-commit
+  - Priority: P2-Medium | Effort: Small
+- [ ] [P] **T026** [Directory Organization] 1 rogue/throwaway scripts detected (fix_*, validate_*, patch_*, etc.): scripts/v
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T027** [Changelog Audit] CHANGELOG.md exists but could not be parsed — check format compliance
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T028** [Changelog Audit] No changelog entries within the last 30 days
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T029** [Changelog Audit] keepachangelog not installed — pip install 'universal-skills[code-enhancer]'
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T030** [Pytest Quality] 4 tests have no assertions
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T031** [Environment Variables] Undocumented env vars: ALLOWED_CLIENT_REDIRECT_URIS, ARR_HOST, EUNOMIA_POLICY_FI
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T032** [Environment Variables] 54 Python env vars not in .env.example: BAZARR_CATALOGTOOL, BAZARR_HISTORYTOOL,
+  - Priority: P3-Low | Effort: Medium

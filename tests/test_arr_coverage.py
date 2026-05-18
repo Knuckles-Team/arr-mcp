@@ -5,13 +5,13 @@ import requests
 import asyncio
 import os
 from typing import Any
-from arr_mcp.sonarr_api import Api as SonarrApi
-from arr_mcp.radarr_api import Api as RadarrApi
-from arr_mcp.lidarr_api import Api as LidarrApi
-from arr_mcp.prowlarr_api import Api as ProwlarrApi
-from arr_mcp.bazarr_api import Api as BazarrApi
-from arr_mcp.seerr_api import Api as SeerrApi
-from arr_mcp.chaptarr_api import Api as ChaptarrApi
+from arr_mcp.api.api_client_sonarr import Api as SonarrApi
+from arr_mcp.api.api_client_radarr import Api as RadarrApi
+from arr_mcp.api.api_client_lidarr import Api as LidarrApi
+from arr_mcp.api.api_client_prowlarr import Api as ProwlarrApi
+from arr_mcp.api.api_client_bazarr import Api as BazarrApi
+from arr_mcp.api.api_client_seerr import Api as SeerrApi
+from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
 
 @pytest.fixture
 def mock_session():

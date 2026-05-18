@@ -23,9 +23,7 @@ def mock_session():
         yield session
 
 def test_arr_apis_brute_force(mock_session):
-    _ = mock_session
-    from arr_mcp import radarr_api, sonarr_api, lidarr_api, prowlarr_api, bazarr_api, seerr_api, chaptarr_api
-
+    from arr_mcp.api import api_client_radarr as radarr_api, api_client_sonarr as sonarr_api, api_client_lidarr as lidarr_api, api_client_prowlarr as prowlarr_api, api_client_bazarr as bazarr_api, api_client_seerr as seerr_api, api_client_chaptarr as chaptarr_api
     def create_api(mod):
         try:
             return mod.Api(base_url="http://test", token="test")
