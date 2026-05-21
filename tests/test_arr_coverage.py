@@ -1,17 +1,18 @@
-import pytest
-from unittest.mock import patch, MagicMock
-import inspect
-import requests
 import asyncio
-import os
+import inspect
 from typing import Any
-from arr_mcp.api.api_client_sonarr import Api as SonarrApi
-from arr_mcp.api.api_client_radarr import Api as RadarrApi
+from unittest.mock import MagicMock, patch
+
+import pytest
+
+from arr_mcp.api.api_client_bazarr import Api as BazarrApi
+from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
 from arr_mcp.api.api_client_lidarr import Api as LidarrApi
 from arr_mcp.api.api_client_prowlarr import Api as ProwlarrApi
-from arr_mcp.api.api_client_bazarr import Api as BazarrApi
+from arr_mcp.api.api_client_radarr import Api as RadarrApi
 from arr_mcp.api.api_client_seerr import Api as SeerrApi
-from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
+from arr_mcp.api.api_client_sonarr import Api as SonarrApi
+
 
 @pytest.fixture
 def mock_session():
@@ -31,9 +32,18 @@ def mock_session():
 
         yield session
 
+
 def test_apis_brute_force(mock_session):
     _ = mock_session
-    apis = [SonarrApi, RadarrApi, LidarrApi, ProwlarrApi, BazarrApi, SeerrApi, ChaptarrApi]
+    apis = [
+        SonarrApi,
+        RadarrApi,
+        LidarrApi,
+        ProwlarrApi,
+        BazarrApi,
+        SeerrApi,
+        ChaptarrApi,
+    ]
     for api_class in apis:
         print(f"Testing API: {api_class.__name__}")
         # Detect if it uses 'token' or 'api_key'
@@ -74,7 +84,10 @@ def test_apis_brute_force(mock_session):
                 # Positionals
                 pos_args = []
                 for param in sig.parameters.values():
-                    if param.default == inspect.Parameter.empty and param.kind in (inspect.Parameter.POSITIONAL_OR_KEYWORD, inspect.Parameter.POSITIONAL_ONLY):
+                    if param.default == inspect.Parameter.empty and param.kind in (
+                        inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                        inspect.Parameter.POSITIONAL_ONLY,
+                    ):
                         pos_args.append(kwargs.get(param.name, "test"))
                         if param.name in kwargs:
                             del kwargs[param.name]
@@ -82,10 +95,12 @@ def test_apis_brute_force(mock_session):
             except Exception as e:
                 print(f"Failed calling {name}: {e}")
 
+
 def test_mcp_server_coverage(mock_session):
     _ = mock_session
-    from arr_mcp.mcp_server import get_mcp_instance
     from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
+
+    from arr_mcp.mcp_server import get_mcp_instance
 
     async def mock_on_request(self, context, call_next):
         return await call_next(context)
@@ -93,20 +108,31 @@ def test_mcp_server_coverage(mock_session):
     with patch.object(RateLimitingMiddleware, "on_request", mock_on_request):
         # Enable all tool categories via env
         env = {
-            "SONARR_BASE_URL": "http://test.com", "SONARR_API_KEY": "mock",
-            "RADARR_BASE_URL": "http://test.com", "RADARR_API_KEY": "mock",
-            "LIDARR_BASE_URL": "http://test.com", "LIDARR_API_KEY": "mock",
-            "PROWLARR_BASE_URL": "http://test.com", "PROWLARR_API_KEY": "mock",
-            "BAZARR_BASE_URL": "http://test.com", "BAZARR_API_KEY": "mock",
-            "SEERR_BASE_URL": "http://test.com", "SEERR_API_KEY": "mock",
-            "CHAPTARR_BASE_URL": "http://test.com", "CHAPTARR_API_KEY": "mock",
+            "SONARR_BASE_URL": "http://test.com",
+            "SONARR_API_KEY": "mock",
+            "RADARR_BASE_URL": "http://test.com",
+            "RADARR_API_KEY": "mock",
+            "LIDARR_BASE_URL": "http://test.com",
+            "LIDARR_API_KEY": "mock",
+            "PROWLARR_BASE_URL": "http://test.com",
+            "PROWLARR_API_KEY": "mock",
+            "BAZARR_BASE_URL": "http://test.com",
+            "BAZARR_API_KEY": "mock",
+            "SEERR_BASE_URL": "http://test.com",
+            "SEERR_API_KEY": "mock",
+            "CHAPTARR_BASE_URL": "http://test.com",
+            "CHAPTARR_API_KEY": "mock",
         }
         with patch.dict("os.environ", env):
             mcp_data = get_mcp_instance()
             mcp = mcp_data[0] if isinstance(mcp_data, tuple) else mcp_data
 
             async def run_tools():
-                tool_objs = await mcp.list_tools() if inspect.iscoroutinefunction(mcp.list_tools) else mcp.list_tools()
+                tool_objs = (
+                    await mcp.list_tools()
+                    if inspect.iscoroutinefunction(mcp.list_tools)
+                    else mcp.list_tools()
+                )
 
                 # Sample some tools since there are HUNDREDS
                 # But we want 80% coverage, so maybe we SHOULD call them all?
@@ -116,13 +142,19 @@ def test_mcp_server_coverage(mock_session):
                     print(f"Testing MCP tool: {tool_name}")
                     try:
                         target_params: dict[str, Any] = {}
-                        if hasattr(tool, "parameters") and hasattr(tool.parameters, "properties"):
+                        if hasattr(tool, "parameters") and hasattr(
+                            tool.parameters, "properties"
+                        ):
                             for p in tool.parameters.properties:
                                 # Guess value based on name
-                                if "id" in p.lower(): target_params[p] = 123
-                                elif "url" in p.lower(): target_params[p] = "http://test.com"
-                                elif "enabled" in p.lower(): target_params[p] = True
-                                else: target_params[p] = "test"
+                                if "id" in p.lower():
+                                    target_params[p] = 123
+                                elif "url" in p.lower():
+                                    target_params[p] = "http://test.com"
+                                elif "enabled" in p.lower():
+                                    target_params[p] = True
+                                else:
+                                    target_params[p] = "test"
 
                         await mcp.call_tool(tool_name, target_params)
                     except Exception as e:

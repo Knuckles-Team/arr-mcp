@@ -370,8 +370,6 @@ uv pip install arr-mcp
         "arr-mcp"
       ],
       "env": {
-        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
-        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
         "BAZARR_CATALOGTOOL": "True",
         "BAZARR_HISTORYTOOL": "True",
         "BAZARR_SYSTEMTOOL": "True",
@@ -384,7 +382,6 @@ uv pip install arr-mcp
         "CHAPTARR_QUEUETOOL": "True",
         "CHAPTARR_SEARCHTOOL": "True",
         "CHAPTARR_SYSTEMTOOL": "True",
-        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
         "LIDARR_CATALOGTOOL": "True",
         "LIDARR_CONFIGTOOL": "True",
         "LIDARR_DOWNLOADSTOOL": "True",
@@ -448,8 +445,6 @@ uv pip install arr-mcp
         "8000"
       ],
       "env": {
-        "AGENT_DESCRIPTION": "<YOUR_AGENT_DESCRIPTION>",
-        "AGENT_SYSTEM_PROMPT": "<YOUR_AGENT_SYSTEM_PROMPT>",
         "BAZARR_CATALOGTOOL": "True",
         "BAZARR_HISTORYTOOL": "True",
         "BAZARR_SYSTEMTOOL": "True",
@@ -462,7 +457,6 @@ uv pip install arr-mcp
         "CHAPTARR_QUEUETOOL": "True",
         "CHAPTARR_SEARCHTOOL": "True",
         "CHAPTARR_SYSTEMTOOL": "True",
-        "DEFAULT_AGENT_NAME": "<YOUR_DEFAULT_AGENT_NAME>",
         "LIDARR_CATALOGTOOL": "True",
         "LIDARR_CONFIGTOOL": "True",
         "LIDARR_DOWNLOADSTOOL": "True",

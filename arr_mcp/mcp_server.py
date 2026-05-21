@@ -18,172 +18,106 @@ warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
 Arr MCP Server — Consolidated & Optimized.
 
 This module implements a dynamic unified MCP server for the entire Arr stack.
-It uses metaprogramming to dynamically generate FastMCP tool wrappers at runtime
-by reading the API method signatures and `tool_tags.json`.
-
-Environment Variables:
-    <SERVICE>_<CATEGORY>TOOL (e.g. SONARR_CATALOGTOOL)
+It collapses hundreds of individual tools into 7 high-level, service-specific
+action-routed tools.
 """
 
-import inspect
+import importlib
 import json
 import logging
 import os
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from agent_utilities.base_utilities import to_boolean
 from agent_utilities.mcp_utilities import (
     create_mcp_server,
 )
 from dotenv import load_dotenv
-from fastmcp import FastMCP
+from fastmcp import Context
 from fastmcp.utilities.logging import get_logger
 from pydantic import Field
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from arr_mcp.api.api_client_bazarr import Api as BazarrApi
-from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
-from arr_mcp.api.api_client_lidarr import Api as LidarrApi
-from arr_mcp.api.api_client_prowlarr import Api as ProwlarrApi
-from arr_mcp.api.api_client_radarr import Api as RadarrApi
-from arr_mcp.api.api_client_seerr import Api as SeerrApi
-from arr_mcp.api.api_client_sonarr import Api as SonarrApi
-
-__version__ = "0.12.0"
+__version__ = "0.12.1"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
 
-API_CLASSES = {
-    "sonarr": SonarrApi,
-    "radarr": RadarrApi,
-    "lidarr": LidarrApi,
-    "prowlarr": ProwlarrApi,
-    "bazarr": BazarrApi,
-    "seerr": SeerrApi,
-    "chaptarr": ChaptarrApi,
-}
 
+def execute_arr_action(
+    service_name: str,
+    base_url: str | None,
+    api_key: str | None,
+    verify: bool,
+    action: str,
+    params_json: str,
+    auth_kw: str,
+) -> Any:
+    """Instantiate the API client and dynamically dispatch the requested action."""
+    if not base_url:
+        raise ValueError(
+            "Base URL must be provided (either via environment variable or parameters)."
+        )
 
-def load_tool_config() -> dict[str, dict[str, str]]:
-    """Load the tool methods to tag mapping."""
-    config_path = Path(__file__).parent / "tool_tags.json"
-    if not config_path.exists():
-        logger.error(f"Missing {config_path}")
-        return {}
-    with open(config_path, encoding="utf-8") as f:
-        return json.load(f)
-
-
-def _generate_dynamic_tool(
-    service: str, method_name: str, tag: str, api_class: type
-) -> Any | None:
-    """
-    Dynamically compile a wrapper function for an API method using exec().
-    This allows FastMCP/Pydantic to perfectly parse standard python signatures.
-    """
-    method = getattr(api_class, method_name)
-    sig = inspect.signature(method)
-    docstring = method.__doc__ or f"Call {service} {method_name}"
-
-    params_code = []
-    call_args = []
-
-    for name, param in list(sig.parameters.items())[1:]:
-        if param.annotation is inspect.Parameter.empty:
-            type_str = "Any"
-        else:
-            try:
-                type_str = str(param.annotation).replace("typing.", "")
-
-                if "class" in type_str:
-                    type_str = param.annotation.__name__
-            except Exception:
-                type_str = "Any"
-
-        if param.default is inspect.Parameter.empty:
-            field_def = f"Field(..., description='{name}')"
-        else:
-            field_def = f"Field(default={repr(param.default)}, description='{name}')"
-
-        params_code.append(f"    {name}: {type_str} = {field_def}")
-        call_args.append(f"{name}={name}")
-
-    params_str = ", ".join(params_code)
-    call_args_str = ", ".join(call_args)
-    params_str += ", "
-    svc_upper = service.upper()
-
-    tool_name = f"{service}_{method_name}"
-
-    func_source = f'''
-async def {tool_name}(
-{params_str}
-    {service}_base_url: str = Field(default=os.environ.get("{svc_upper}_BASE_URL", None), description="Base URL"),
-    {service}_api_key: Optional[str] = Field(default=os.environ.get("{svc_upper}_API_KEY", None), description="API Key"),
-    {service}_verify: bool = Field(default=to_boolean(os.environ.get("{svc_upper}_SSL_VERIFY", "False")), description="Verify SSL")
-) -> Dict:
-    """{docstring}"""
-    # Initialize the specific API client
-    client = api_class(
-        base_url={service}_base_url,
-        token={service}_api_key,
-        verify={service}_verify
-    )
-    # Execute the underlying method
-    return client.{method_name}({call_args_str})
-'''
-
-    local_env: dict[str, Any] = {}
-    global_env = {
-        "os": os,
-        "Field": Field,
-        "Optional": Optional,
-        "Dict": dict,
-        "List": list,
-        "Any": Any,
-        "to_boolean": to_boolean,
-        "api_class": api_class,
+    _SERVICE_MODULES = {
+        "sonarr": "arr_mcp.api.api_client_sonarr",
+        "radarr": "arr_mcp.api.api_client_radarr",
+        "lidarr": "arr_mcp.api.api_client_lidarr",
+        "prowlarr": "arr_mcp.api.api_client_prowlarr",
+        "bazarr": "arr_mcp.api.api_client_bazarr",
+        "seerr": "arr_mcp.api.api_client_seerr",
+        "chaptarr": "arr_mcp.api.api_client_chaptarr",
     }
 
+    module_path = _SERVICE_MODULES.get(service_name)
+    if module_path is None:
+        raise ValueError(f"Unknown service '{service_name}'")
+
+    module = importlib.import_module(module_path)
+    api_class: type[Any] = module.Api
+
     try:
-        exec(func_source, global_env, local_env)  # nosec
-        wrapper_func = local_env[tool_name]
-        return wrapper_func
+        kwargs = json.loads(params_json) if params_json else {}
     except Exception as e:
-        logger.error(f"Failed to compile dynamic tool {service}.{method_name}: {e}")
-        return None
+        raise ValueError(f"Invalid params_json: {e}") from e
+
+    # Remove None values
+    kwargs = {k: v for k, v in kwargs.items() if v is not None}
+
+    # Instantiate API client using correct auth keyword (token vs api_key)
+    auth_args = {auth_kw: api_key}
+    client = api_class(base_url=base_url, verify=verify, **auth_args)
+
+    # Dynamic method lookup
+    method = getattr(client, action, None)
+    if method is None:
+        raise ValueError(f"Unknown action '{action}' on {api_class.__name__}")
+
+    res = method(**kwargs)
+    if hasattr(res, "dict") and callable(res.dict):
+        return res.dict()
+    elif hasattr(res, "model_dump") and callable(res.model_dump):
+        return res.model_dump()
+    return res
 
 
-def register_dynamic_tools(
-    mcp: FastMCP, filter_tags: list[str] | None = None
-) -> list[str]:
-    """Read configuration, evaluate env vars, and dynamically register allowed tools."""
-    tool_config = load_tool_config()
-    registered_tags = set()
+def is_service_enabled(service: str) -> bool:
+    """Determine if a service should be enabled based on environment overrides."""
+    # Check if specifically enabled or disabled
+    env_enabled = os.getenv(f"{service.upper()}_ENABLED")
+    if env_enabled is not None:
+        return to_boolean(env_enabled)
 
-    for service, methods in tool_config.items():
-        if service not in API_CLASSES:
-            continue
-
-        api_class = API_CLASSES[service]
-
-        for method_name, tag in methods.items():
-            if filter_tags and tag not in filter_tags:
-                continue
-
-            wrapper_func = _generate_dynamic_tool(service, method_name, tag, api_class)
-            if wrapper_func:
-                mcp.add_tool(wrapper_func)
-                registered_tags.add(tag)
-
-    return sorted(list(registered_tags))
+    # Check for legacy category tool configuration: if any category is disabled, we default to enabled.
+    # We verify if there are any specific service tool settings that are explicitly disabled,
+    # but by default all services are enabled.
+    return True
 
 
-def get_mcp_instance() -> tuple[Any, Any, Any, Any]:
+def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
     """Initialize and return the MCP instance, args, and middlewares."""
     load_dotenv(Path(__file__).parent.parent / ".env")
 
@@ -199,329 +133,306 @@ def get_mcp_instance() -> tuple[Any, Any, Any, Any]:
 
     registered_tags = []
 
-    DEFAULT_BAZARR_CATALOGTOOL = to_boolean(os.getenv("BAZARR_CATALOGTOOL", "True"))
-    if DEFAULT_BAZARR_CATALOGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["bazarr-catalog"])
-        )
+    # 1. Bazarr
+    if is_service_enabled("bazarr"):
 
-    DEFAULT_BAZARR_HISTORYTOOL = to_boolean(os.getenv("BAZARR_HISTORYTOOL", "True"))
-    if DEFAULT_BAZARR_HISTORYTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["bazarr-history"])
-        )
+        @mcp.tool(tags=["bazarr"])
+        async def bazarr_action(
+            action: str = Field(
+                description="The action/method name to execute on Bazarr (e.g. get_series, get_movies, get_system_status)"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            bazarr_base_url: str | None = Field(
+                default=os.environ.get("BAZARR_BASE_URL", None),
+                description="Bazarr Base URL",
+            ),
+            bazarr_api_key: str | None = Field(
+                default=os.environ.get("BAZARR_API_KEY", None),
+                description="Bazarr API Key",
+            ),
+            bazarr_verify: bool = Field(
+                default=to_boolean(os.environ.get("BAZARR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Bazarr API action."""
+            if ctx:
+                await ctx.info(f"Executing Bazarr action: {action}...")
+            return execute_arr_action(
+                "bazarr",
+                bazarr_base_url,
+                bazarr_api_key,
+                bazarr_verify,
+                action,
+                params_json,
+                "api_key",
+            )
 
-    DEFAULT_BAZARR_SYSTEMTOOL = to_boolean(os.getenv("BAZARR_SYSTEMTOOL", "True"))
-    if DEFAULT_BAZARR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["bazarr-system"])
-        )
+        registered_tags.append("bazarr")
 
-    DEFAULT_CHAPTARR_CONFIGTOOL = to_boolean(os.getenv("CHAPTARR_CONFIGTOOL", "True"))
-    if DEFAULT_CHAPTARR_CONFIGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-config"])
-        )
+    # 2. Chaptarr
+    if is_service_enabled("chaptarr"):
 
-    DEFAULT_CHAPTARR_DOWNLOADSTOOL = to_boolean(
-        os.getenv("CHAPTARR_DOWNLOADSTOOL", "True")
-    )
-    if DEFAULT_CHAPTARR_DOWNLOADSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-downloads"])
-        )
+        @mcp.tool(tags=["chaptarr"])
+        async def chaptarr_action(
+            action: str = Field(
+                description="The action/method name to execute on Chaptarr"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            chaptarr_base_url: str | None = Field(
+                default=os.environ.get("CHAPTARR_BASE_URL", None),
+                description="Chaptarr Base URL",
+            ),
+            chaptarr_api_key: str | None = Field(
+                default=os.environ.get("CHAPTARR_API_KEY", None),
+                description="Chaptarr API Key",
+            ),
+            chaptarr_verify: bool = Field(
+                default=to_boolean(os.environ.get("CHAPTARR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Chaptarr API action."""
+            if ctx:
+                await ctx.info(f"Executing Chaptarr action: {action}...")
+            return execute_arr_action(
+                "chaptarr",
+                chaptarr_base_url,
+                chaptarr_api_key,
+                chaptarr_verify,
+                action,
+                params_json,
+                "token",
+            )
 
-    DEFAULT_CHAPTARR_HISTORYTOOL = to_boolean(os.getenv("CHAPTARR_HISTORYTOOL", "True"))
-    if DEFAULT_CHAPTARR_HISTORYTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-history"])
-        )
+        registered_tags.append("chaptarr")
 
-    DEFAULT_CHAPTARR_INDEXERTOOL = to_boolean(os.getenv("CHAPTARR_INDEXERTOOL", "True"))
-    if DEFAULT_CHAPTARR_INDEXERTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-indexer"])
-        )
+    # 3. Lidarr
+    if is_service_enabled("lidarr"):
 
-    DEFAULT_CHAPTARR_OPERATIONSTOOL = to_boolean(
-        os.getenv("CHAPTARR_OPERATIONSTOOL", "True")
-    )
-    if DEFAULT_CHAPTARR_OPERATIONSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-operations"])
-        )
+        @mcp.tool(tags=["lidarr"])
+        async def lidarr_action(
+            action: str = Field(
+                description="The action/method name to execute on Lidarr"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            lidarr_base_url: str | None = Field(
+                default=os.environ.get("LIDARR_BASE_URL", None),
+                description="Lidarr Base URL",
+            ),
+            lidarr_api_key: str | None = Field(
+                default=os.environ.get("LIDARR_API_KEY", None),
+                description="Lidarr API Key",
+            ),
+            lidarr_verify: bool = Field(
+                default=to_boolean(os.environ.get("LIDARR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Lidarr API action."""
+            if ctx:
+                await ctx.info(f"Executing Lidarr action: {action}...")
+            return execute_arr_action(
+                "lidarr",
+                lidarr_base_url,
+                lidarr_api_key,
+                lidarr_verify,
+                action,
+                params_json,
+                "token",
+            )
 
-    DEFAULT_CHAPTARR_PROFILESTOOL = to_boolean(
-        os.getenv("CHAPTARR_PROFILESTOOL", "True")
-    )
-    if DEFAULT_CHAPTARR_PROFILESTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-profiles"])
-        )
+        registered_tags.append("lidarr")
 
-    DEFAULT_CHAPTARR_QUEUETOOL = to_boolean(os.getenv("CHAPTARR_QUEUETOOL", "True"))
-    if DEFAULT_CHAPTARR_QUEUETOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-queue"])
-        )
+    # 4. Prowlarr
+    if is_service_enabled("prowlarr"):
 
-    DEFAULT_CHAPTARR_SEARCHTOOL = to_boolean(os.getenv("CHAPTARR_SEARCHTOOL", "True"))
-    if DEFAULT_CHAPTARR_SEARCHTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-search"])
-        )
+        @mcp.tool(tags=["prowlarr"])
+        async def prowlarr_action(
+            action: str = Field(
+                description="The action/method name to execute on Prowlarr"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            prowlarr_base_url: str | None = Field(
+                default=os.environ.get("PROWLARR_BASE_URL", None),
+                description="Prowlarr Base URL",
+            ),
+            prowlarr_api_key: str | None = Field(
+                default=os.environ.get("PROWLARR_API_KEY", None),
+                description="Prowlarr API Key",
+            ),
+            prowlarr_verify: bool = Field(
+                default=to_boolean(os.environ.get("PROWLARR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Prowlarr API action."""
+            if ctx:
+                await ctx.info(f"Executing Prowlarr action: {action}...")
+            return execute_arr_action(
+                "prowlarr",
+                prowlarr_base_url,
+                prowlarr_api_key,
+                prowlarr_verify,
+                action,
+                params_json,
+                "token",
+            )
 
-    DEFAULT_CHAPTARR_SYSTEMTOOL = to_boolean(os.getenv("CHAPTARR_SYSTEMTOOL", "True"))
-    if DEFAULT_CHAPTARR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["chaptarr-system"])
-        )
+        registered_tags.append("prowlarr")
 
-    DEFAULT_LIDARR_CATALOGTOOL = to_boolean(os.getenv("LIDARR_CATALOGTOOL", "True"))
-    if DEFAULT_LIDARR_CATALOGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-catalog"])
-        )
+    # 5. Radarr
+    if is_service_enabled("radarr"):
 
-    DEFAULT_LIDARR_CONFIGTOOL = to_boolean(os.getenv("LIDARR_CONFIGTOOL", "True"))
-    if DEFAULT_LIDARR_CONFIGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-config"])
-        )
+        @mcp.tool(tags=["radarr"])
+        async def radarr_action(
+            action: str = Field(
+                description="The action/method name to execute on Radarr (e.g. get_movies, add_movie, get_system_status)"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            radarr_base_url: str | None = Field(
+                default=os.environ.get("RADARR_BASE_URL", None),
+                description="Radarr Base URL",
+            ),
+            radarr_api_key: str | None = Field(
+                default=os.environ.get("RADARR_API_KEY", None),
+                description="Radarr API Key",
+            ),
+            radarr_verify: bool = Field(
+                default=to_boolean(os.environ.get("RADARR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Radarr API action."""
+            if ctx:
+                await ctx.info(f"Executing Radarr action: {action}...")
+            return execute_arr_action(
+                "radarr",
+                radarr_base_url,
+                radarr_api_key,
+                radarr_verify,
+                action,
+                params_json,
+                "token",
+            )
 
-    DEFAULT_LIDARR_DOWNLOADSTOOL = to_boolean(os.getenv("LIDARR_DOWNLOADSTOOL", "True"))
-    if DEFAULT_LIDARR_DOWNLOADSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-downloads"])
-        )
+        registered_tags.append("radarr")
 
-    DEFAULT_LIDARR_HISTORYTOOL = to_boolean(os.getenv("LIDARR_HISTORYTOOL", "True"))
-    if DEFAULT_LIDARR_HISTORYTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-history"])
-        )
+    # 6. Seerr
+    if is_service_enabled("seerr"):
 
-    DEFAULT_LIDARR_INDEXERTOOL = to_boolean(os.getenv("LIDARR_INDEXERTOOL", "True"))
-    if DEFAULT_LIDARR_INDEXERTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-indexer"])
-        )
+        @mcp.tool(tags=["seerr"])
+        async def seerr_action(
+            action: str = Field(
+                description="The action/method name to execute on Seerr"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            seerr_base_url: str | None = Field(
+                default=os.environ.get("SEERR_BASE_URL", None),
+                description="Seerr Base URL",
+            ),
+            seerr_api_key: str | None = Field(
+                default=os.environ.get("SEERR_API_KEY", None),
+                description="Seerr API Key",
+            ),
+            seerr_verify: bool = Field(
+                default=to_boolean(os.environ.get("SEERR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Seerr API action."""
+            if ctx:
+                await ctx.info(f"Executing Seerr action: {action}...")
+            return execute_arr_action(
+                "seerr",
+                seerr_base_url,
+                seerr_api_key,
+                seerr_verify,
+                action,
+                params_json,
+                "api_key",
+            )
 
-    DEFAULT_LIDARR_OPERATIONSTOOL = to_boolean(
-        os.getenv("LIDARR_OPERATIONSTOOL", "True")
-    )
-    if DEFAULT_LIDARR_OPERATIONSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-operations"])
-        )
+        registered_tags.append("seerr")
 
-    DEFAULT_LIDARR_PROFILESTOOL = to_boolean(os.getenv("LIDARR_PROFILESTOOL", "True"))
-    if DEFAULT_LIDARR_PROFILESTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-profiles"])
-        )
+    # 7. Sonarr
+    if is_service_enabled("sonarr"):
 
-    DEFAULT_LIDARR_QUEUETOOL = to_boolean(os.getenv("LIDARR_QUEUETOOL", "True"))
-    if DEFAULT_LIDARR_QUEUETOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-queue"])
-        )
+        @mcp.tool(tags=["sonarr"])
+        async def sonarr_action(
+            action: str = Field(
+                description="The action/method name to execute on Sonarr (e.g. get_series, add_series, get_system_status)"
+            ),
+            params_json: str = Field(
+                default="{}",
+                description="JSON string of parameters to pass to the action.",
+            ),
+            sonarr_base_url: str | None = Field(
+                default=os.environ.get("SONARR_BASE_URL", None),
+                description="Sonarr Base URL",
+            ),
+            sonarr_api_key: str | None = Field(
+                default=os.environ.get("SONARR_API_KEY", None),
+                description="Sonarr API Key",
+            ),
+            sonarr_verify: bool = Field(
+                default=to_boolean(os.environ.get("SONARR_SSL_VERIFY", "False")),
+                description="Verify SSL",
+            ),
+            ctx: Context | None = Field(
+                default=None, description="MCP context for progress reporting"
+            ),
+        ) -> Any:
+            """Execute any Sonarr API action."""
+            if ctx:
+                await ctx.info(f"Executing Sonarr action: {action}...")
+            return execute_arr_action(
+                "sonarr",
+                sonarr_base_url,
+                sonarr_api_key,
+                sonarr_verify,
+                action,
+                params_json,
+                "token",
+            )
 
-    DEFAULT_LIDARR_SEARCHTOOL = to_boolean(os.getenv("LIDARR_SEARCHTOOL", "True"))
-    if DEFAULT_LIDARR_SEARCHTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-search"])
-        )
-
-    DEFAULT_LIDARR_SYSTEMTOOL = to_boolean(os.getenv("LIDARR_SYSTEMTOOL", "True"))
-    if DEFAULT_LIDARR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["lidarr-system"])
-        )
-
-    DEFAULT_PROWLARR_CONFIGTOOL = to_boolean(os.getenv("PROWLARR_CONFIGTOOL", "True"))
-    if DEFAULT_PROWLARR_CONFIGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-config"])
-        )
-
-    DEFAULT_PROWLARR_DOWNLOADSTOOL = to_boolean(
-        os.getenv("PROWLARR_DOWNLOADSTOOL", "True")
-    )
-    if DEFAULT_PROWLARR_DOWNLOADSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-downloads"])
-        )
-
-    DEFAULT_PROWLARR_HISTORYTOOL = to_boolean(os.getenv("PROWLARR_HISTORYTOOL", "True"))
-    if DEFAULT_PROWLARR_HISTORYTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-history"])
-        )
-
-    DEFAULT_PROWLARR_INDEXERTOOL = to_boolean(os.getenv("PROWLARR_INDEXERTOOL", "True"))
-    if DEFAULT_PROWLARR_INDEXERTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-indexer"])
-        )
-
-    DEFAULT_PROWLARR_OPERATIONSTOOL = to_boolean(
-        os.getenv("PROWLARR_OPERATIONSTOOL", "True")
-    )
-    if DEFAULT_PROWLARR_OPERATIONSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-operations"])
-        )
-
-    DEFAULT_PROWLARR_PROFILESTOOL = to_boolean(
-        os.getenv("PROWLARR_PROFILESTOOL", "True")
-    )
-    if DEFAULT_PROWLARR_PROFILESTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-profiles"])
-        )
-
-    DEFAULT_PROWLARR_SEARCHTOOL = to_boolean(os.getenv("PROWLARR_SEARCHTOOL", "True"))
-    if DEFAULT_PROWLARR_SEARCHTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-search"])
-        )
-
-    DEFAULT_PROWLARR_SYSTEMTOOL = to_boolean(os.getenv("PROWLARR_SYSTEMTOOL", "True"))
-    if DEFAULT_PROWLARR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["prowlarr-system"])
-        )
-
-    DEFAULT_RADARR_CATALOGTOOL = to_boolean(os.getenv("RADARR_CATALOGTOOL", "True"))
-    if DEFAULT_RADARR_CATALOGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-catalog"])
-        )
-
-    DEFAULT_RADARR_CONFIGTOOL = to_boolean(os.getenv("RADARR_CONFIGTOOL", "True"))
-    if DEFAULT_RADARR_CONFIGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-config"])
-        )
-
-    DEFAULT_RADARR_DOWNLOADSTOOL = to_boolean(os.getenv("RADARR_DOWNLOADSTOOL", "True"))
-    if DEFAULT_RADARR_DOWNLOADSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-downloads"])
-        )
-
-    DEFAULT_RADARR_HISTORYTOOL = to_boolean(os.getenv("RADARR_HISTORYTOOL", "True"))
-    if DEFAULT_RADARR_HISTORYTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-history"])
-        )
-
-    DEFAULT_RADARR_INDEXERTOOL = to_boolean(os.getenv("RADARR_INDEXERTOOL", "True"))
-    if DEFAULT_RADARR_INDEXERTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-indexer"])
-        )
-
-    DEFAULT_RADARR_OPERATIONSTOOL = to_boolean(
-        os.getenv("RADARR_OPERATIONSTOOL", "True")
-    )
-    if DEFAULT_RADARR_OPERATIONSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-operations"])
-        )
-
-    DEFAULT_RADARR_PROFILESTOOL = to_boolean(os.getenv("RADARR_PROFILESTOOL", "True"))
-    if DEFAULT_RADARR_PROFILESTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-profiles"])
-        )
-
-    DEFAULT_RADARR_QUEUETOOL = to_boolean(os.getenv("RADARR_QUEUETOOL", "True"))
-    if DEFAULT_RADARR_QUEUETOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-queue"])
-        )
-
-    DEFAULT_RADARR_SYSTEMTOOL = to_boolean(os.getenv("RADARR_SYSTEMTOOL", "True"))
-    if DEFAULT_RADARR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["radarr-system"])
-        )
-
-    DEFAULT_SEERR_CATALOGTOOL = to_boolean(os.getenv("SEERR_CATALOGTOOL", "True"))
-    if DEFAULT_SEERR_CATALOGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["seerr-catalog"])
-        )
-
-    DEFAULT_SEERR_SEARCHTOOL = to_boolean(os.getenv("SEERR_SEARCHTOOL", "True"))
-    if DEFAULT_SEERR_SEARCHTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["seerr-search"])
-        )
-
-    DEFAULT_SEERR_SYSTEMTOOL = to_boolean(os.getenv("SEERR_SYSTEMTOOL", "True"))
-    if DEFAULT_SEERR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["seerr-system"])
-        )
-
-    DEFAULT_SONARR_CATALOGTOOL = to_boolean(os.getenv("SONARR_CATALOGTOOL", "True"))
-    if DEFAULT_SONARR_CATALOGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-catalog"])
-        )
-
-    DEFAULT_SONARR_CONFIGTOOL = to_boolean(os.getenv("SONARR_CONFIGTOOL", "True"))
-    if DEFAULT_SONARR_CONFIGTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-config"])
-        )
-
-    DEFAULT_SONARR_DOWNLOADSTOOL = to_boolean(os.getenv("SONARR_DOWNLOADSTOOL", "True"))
-    if DEFAULT_SONARR_DOWNLOADSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-downloads"])
-        )
-
-    DEFAULT_SONARR_HISTORYTOOL = to_boolean(os.getenv("SONARR_HISTORYTOOL", "True"))
-    if DEFAULT_SONARR_HISTORYTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-history"])
-        )
-
-    DEFAULT_SONARR_INDEXERTOOL = to_boolean(os.getenv("SONARR_INDEXERTOOL", "True"))
-    if DEFAULT_SONARR_INDEXERTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-indexer"])
-        )
-
-    DEFAULT_SONARR_OPERATIONSTOOL = to_boolean(
-        os.getenv("SONARR_OPERATIONSTOOL", "True")
-    )
-    if DEFAULT_SONARR_OPERATIONSTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-operations"])
-        )
-
-    DEFAULT_SONARR_PROFILESTOOL = to_boolean(os.getenv("SONARR_PROFILESTOOL", "True"))
-    if DEFAULT_SONARR_PROFILESTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-profiles"])
-        )
-
-    DEFAULT_SONARR_QUEUETOOL = to_boolean(os.getenv("SONARR_QUEUETOOL", "True"))
-    if DEFAULT_SONARR_QUEUETOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-queue"])
-        )
-
-    DEFAULT_SONARR_SYSTEMTOOL = to_boolean(os.getenv("SONARR_SYSTEMTOOL", "True"))
-    if DEFAULT_SONARR_SYSTEMTOOL:
-        registered_tags.extend(
-            register_dynamic_tools(mcp, filter_tags=["sonarr-system"])
-        )
+        registered_tags.append("sonarr")
 
     for mw in middlewares:
         mcp.add_middleware(mw)

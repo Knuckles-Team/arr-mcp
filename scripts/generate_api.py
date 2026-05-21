@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from typing import Any, Dict
+from typing import Any
 
 TYPE_MAPPING = {
     "string": "str",
@@ -37,8 +37,8 @@ def to_snake_case(name: str) -> str:
     return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
-def load_json(path: str) -> Dict:
-    with open(path, "r") as f:
+def load_json(path: str) -> dict:
+    with open(path) as f:
         return json.load(f)
 
 
@@ -183,7 +183,6 @@ class Generator:
         ]
 
         for method in self.api_methods:
-
             sorted_params = sorted(method["params"], key=lambda x: not x["required"])
 
             sig_parts = ["self"]
@@ -194,12 +193,12 @@ class Generator:
             sig_str = ", ".join(sig_parts)
 
             content.append(f"    def {method['name']}({sig_str}) -> Any:")
-            content.append(f"        \"\"\"{method['description']}\"\"\"")
+            content.append(f'        """{method["description"]}"""')
 
             path_params = [p for p in method["params"] if p["in"] == "path"]
             query_params = [p for p in method["params"] if p["in"] == "query"]
 
-            endpoint_str = f"f\"{method['path']}\""
+            endpoint_str = f'f"{method["path"]}"'
             if path_params:
                 target_endpoint = method["path"]
                 for p in path_params:
@@ -219,7 +218,7 @@ class Generator:
             )
 
             content.append(
-                f"        return self.request(\"{method['method']}\", {endpoint_str}, params=params, data={data_arg})"
+                f'        return self.request("{method["method"]}", {endpoint_str}, params=params, data={data_arg})'
             )
             content.append("")
 
@@ -268,7 +267,7 @@ class Generator:
             for p in sorted_params:
                 default_val = "..." if p["required"] else "None"
                 field_desc = (
-                    f"Field(default={default_val}, description=\"{p['orig_name']}\")"
+                    f'Field(default={default_val}, description="{p["orig_name"]}")'
                 )
                 sig_lines.append(f"    {p['name']}: {p['type']} = {field_desc},")
 
@@ -286,10 +285,11 @@ class Generator:
 
             content.extend(sig_lines)
 
-            content.append(f"    \"\"\"{method['description']}\"\"\"")
+            content.append(f'    """{method["description"]}"""')
 
             content.append(
-                f"    client = Api(base_url={self.service_name}_base_url, token={self.service_name}_api_key, verify={self.service_name}_verify)"
+                f'    auth_kw = "api_key" if "{self.service_name}" in ["bazarr", "seerr"] else "token"\n'
+                f"    client = Api(base_url={self.service_name}_base_url, **{{auth_kw: {self.service_name}_api_key}}, verify={self.service_name}_verify)  # type: ignore"
             )
 
             call_args = []

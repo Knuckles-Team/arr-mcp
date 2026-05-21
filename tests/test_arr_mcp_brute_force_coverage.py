@@ -1,10 +1,9 @@
-import pytest
-from unittest.mock import patch, MagicMock
-import inspect
-import requests
 import asyncio
-import os
-from pathlib import Path
+import inspect
+from unittest.mock import MagicMock, patch
+
+import pytest
+
 
 @pytest.fixture
 def mock_session():
@@ -22,8 +21,16 @@ def mock_session():
         session.request.return_value = response
         yield session
 
+
 def test_arr_apis_brute_force(mock_session):
-    from arr_mcp.api import api_client_radarr as radarr_api, api_client_sonarr as sonarr_api, api_client_lidarr as lidarr_api, api_client_prowlarr as prowlarr_api, api_client_bazarr as bazarr_api, api_client_seerr as seerr_api, api_client_chaptarr as chaptarr_api
+    from arr_mcp.api import api_client_bazarr as bazarr_api
+    from arr_mcp.api import api_client_chaptarr as chaptarr_api
+    from arr_mcp.api import api_client_lidarr as lidarr_api
+    from arr_mcp.api import api_client_prowlarr as prowlarr_api
+    from arr_mcp.api import api_client_radarr as radarr_api
+    from arr_mcp.api import api_client_seerr as seerr_api
+    from arr_mcp.api import api_client_sonarr as sonarr_api
+
     def create_api(mod):
         try:
             return mod.Api(base_url="http://test", token="test")
@@ -52,16 +59,19 @@ def test_arr_apis_brute_force(mock_session):
         "data": {},
         "limit": 10,
         "page": 1,
-        "term": "test"
+        "term": "test",
     }
 
     for api in apis:
         api_name = api.__class__.__module__
         for name, method in inspect.getmembers(api, predicate=inspect.ismethod):
-            if name.startswith("_"): continue
+            if name.startswith("_"):
+                continue
             print(f"Calling {api_name}.{name}...")
             sig = inspect.signature(method)
-            has_kwargs = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+            has_kwargs = any(
+                p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values()
+            )
             if has_kwargs:
                 kwargs = common_kwargs.copy()
             else:
@@ -71,12 +81,15 @@ def test_arr_apis_brute_force(mock_session):
                         kwargs[p_name] = "test" if p.annotation == str else 1
             try:
                 method(**kwargs)
-            except: pass
+            except:
+                pass
+
 
 def test_mcp_server_coverage(mock_session):
     _ = mock_session
-    from arr_mcp.mcp_server import get_mcp_instance
     from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
+
+    from arr_mcp.mcp_server import get_mcp_instance
 
     # Patch RateLimitingMiddleware to do nothing
     async def mock_on_request(self, context, call_next):
@@ -84,19 +97,24 @@ def test_mcp_server_coverage(mock_session):
 
     with patch.object(RateLimitingMiddleware, "on_request", mock_on_request):
         # Patch all API classes in mcp_server using correct attribute names
-        with patch("arr_mcp.mcp_server.RadarrApi"), \
-             patch("arr_mcp.mcp_server.SonarrApi"), \
-             patch("arr_mcp.mcp_server.LidarrApi"), \
-             patch("arr_mcp.mcp_server.ProwlarrApi"), \
-             patch("arr_mcp.mcp_server.BazarrApi"), \
-             patch("arr_mcp.mcp_server.SeerrApi"), \
-             patch("arr_mcp.mcp_server.ChaptarrApi"):
-
+        with (
+            patch("arr_mcp.api.api_client_radarr.Api"),
+            patch("arr_mcp.api.api_client_sonarr.Api"),
+            patch("arr_mcp.api.api_client_lidarr.Api"),
+            patch("arr_mcp.api.api_client_prowlarr.Api"),
+            patch("arr_mcp.api.api_client_bazarr.Api"),
+            patch("arr_mcp.api.api_client_seerr.Api"),
+            patch("arr_mcp.api.api_client_chaptarr.Api"),
+        ):
             mcp_data = get_mcp_instance()
             mcp = mcp_data[0] if isinstance(mcp_data, tuple) else mcp_data
 
             async def run_tools():
-                tool_objs = await mcp.list_tools() if inspect.iscoroutinefunction(mcp.list_tools) else mcp.list_tools()
+                tool_objs = (
+                    await mcp.list_tools()
+                    if inspect.iscoroutinefunction(mcp.list_tools)
+                    else mcp.list_tools()
+                )
                 for tool in tool_objs:
                     try:
                         target_params = {
@@ -119,25 +137,41 @@ def test_mcp_server_coverage(mock_session):
                         }
                         sig = inspect.signature(tool.fn)
                         for p_name, p in sig.parameters.items():
-                            if p.default == inspect.Parameter.empty and p_name not in ["_client", "context"]:
+                            if p.default == inspect.Parameter.empty and p_name not in [
+                                "_client",
+                                "context",
+                            ]:
                                 if p_name not in target_params:
-                                    target_params[p_name] = "test" if p.annotation == str else 1
+                                    target_params[p_name] = (
+                                        "test" if p.annotation == str else 1
+                                    )
 
-                        has_kwargs = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+                        has_kwargs = any(
+                            p.kind == inspect.Parameter.VAR_KEYWORD
+                            for p in sig.parameters.values()
+                        )
                         if not has_kwargs:
-                            target_params = {k: v for k, v in target_params.items() if k in sig.parameters}
+                            target_params = {
+                                k: v
+                                for k, v in target_params.items()
+                                if k in sig.parameters
+                            }
 
                         await mcp.call_tool(tool.name, target_params)
-                    except: pass
+                    except:
+                        pass
 
             loop = asyncio.new_event_loop()
             loop.run_until_complete(run_tools())
             loop.close()
 
+
 def test_agent_server_coverage():
-    from arr_mcp import agent_server
+    pytest.importorskip("universal_skills")
     import arr_mcp.agent_server as mod
-    with patch("arr_mcp.agent_server.create_graph_agent_server") as mock_s:
+    from arr_mcp.agent_server import agent_server
+
+    with patch("agent_utilities.create_agent_server") as mock_s:
         with patch("sys.argv", ["agent_server.py"]):
             if inspect.isfunction(agent_server):
                 agent_server()

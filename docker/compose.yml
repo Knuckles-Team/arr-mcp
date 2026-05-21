@@ -2,8 +2,8 @@ services:
   arr-agent:
     #    image: docker.io/knucklessg1/arr-mcp:latest
     build:
-      context: ..
-      dockerfile: docker/debug.Dockerfile
+      context: .
+      dockerfile: debug.Dockerfile
     container_name: arr-agent
     hostname: arr-agent
     command: [ "arr-agent" ]
@@ -11,7 +11,9 @@ services:
       - "host.docker.internal:host-gateway"
     dns:
       - "${IP_DNS:-1.1.1.1}"
-
+    depends_on:
+      arr-mcp:
+        condition: service_healthy
     logging:
       driver: json-file
       options:
@@ -19,7 +21,7 @@ services:
         max-file: "3"
     restart: always
     env_file:
-      - ../.env
+      - .env
     environment:
       - "PYTHONUNBUFFERED=1"
       - "HOST=0.0.0.0"
