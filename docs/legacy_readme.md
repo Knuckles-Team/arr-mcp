@@ -82,33 +82,7 @@ Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
 ```
 
 #### Streamable-HTTP Transport (Recommended for production deployments)
-Configure your client's `mcp.json` to launch the Streamable-HTTP server via `uvx` with explicit host and port definition:
-
-```json
-{
-  "mcpServers": {
-    "arr-mcp": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "arr-mcp",
-        "arr-mcp"
-      ],
-      "env": {
-        "TRANSPORT": "streamable-http",
-        "HOST": "0.0.0.0",
-        "PORT": "8000",
-        "ARR_HOST": "your_arr_host_here",
-        "ARR_API_KEY": "your_arr_api_key_here",
-        "PVR_API_KEY": "your_pvr_api_key_here",
-        "PLEX_TOKEN": "your_plex_token_here"
-      }
-    }
-  }
-}
-```
-
-Alternatively, connect to a pre-deployed remote or local Streamable-HTTP instance:
+To run the server as a long-running Streamable-HTTP service:
 
 ```json
 {
