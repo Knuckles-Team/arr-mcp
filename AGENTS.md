@@ -6,7 +6,7 @@
 - Key principles: Functional patterns, Pydantic for data validation, asynchronous tool execution.
 - Architecture:
     - `mcp_server.py`: Main MCP server entry point and tool registration.
-    - `agent_server.py`: Pydantic AI agent definition and logic.
+    - `agent.py`: Pydantic AI agent definition and logic.
     - `skills/`: Directory containing modular agent skills (if applicable).
     - `agent/`: Internal agent logic and prompt templates.
 
@@ -48,17 +48,383 @@ pip install .[all]
 pre-commit run --all-files
 
 # Execution Commands
-# arr-mcp\narr_mcp.mcp:mcp_server\n# arr-agent\narr_mcp.agent:agent_server
+# arr-mcp
+arr_mcp.mcp_server:mcp_server
+# arr-agent
+arr_mcp.agent_server:agent_server
 
 ## Project Structure Quick Reference
 - MCP Entry Point → `mcp_server.py`
-- Agent Entry Point → `agent_server.py`
+- Agent Entry Point → `agent.py`
 - Source Code → `arr_mcp/`
 - Skills → `skills/` (if exists)
 
 ### File Tree
 ```text
-├── .bumpversion.cfg\n├── .dockerignore\n├── .env\n├── .gitattributes\n├── .github\n│   └── workflows\n│       └── pipeline.yml\n├── .gitignore\n├── .pre-commit-config.yaml\n├── AGENTS.md\n├── Dockerfile\n├── LICENSE\n├── README.md\n├── arr_mcp\n│   ├── __init__.py\n│   ├── agent\n│   │   ├── AGENTS.md\n│   │   ├── CRON.md\n│   │   ├── CRON_LOG.md\n│   │   ├── HEARTBEAT.md\n│   │   ├── IDENTITY.md\n│   │   ├── MEMORY.md\n│   │   ├── USER.md\n│   │   ├── mcp_config.json\n│   │   └── templates.py\n│   ├── agent_server.py\n│   ├── bazarr_api.py\n│   ├── chaptarr_api.py\n│   ├── lidarr_api.py\n│   ├── mcp_server.py\n│   ├── prowlarr_api.py\n│   ├── radarr_api.py\n│   ├── seerr_api.py\n│   ├── sonarr_api.py\n│   └── tool_tags.json\n├── compose.yml\n├── debug.Dockerfile\n├── mcp.compose.yml\n├── pyproject.toml\n├── requirements.txt\n└── scripts\n    ├── generate_api.py\n    └── validate_a2a_agent_server.py
+├── .bumpversion.cfg
+├── .codespellignore
+├── .dockerignore
+├── .env
+├── .env.example
+├── .gitattributes
+├── .github
+│   └── workflows
+│       ├── docs.yml
+│       ├── pages.yml
+│       └── pipeline.yml
+├── .gitignore
+├── .mypy_cache
+│   ├── .gitignore
+│   ├── 3.10
+│   │   ├── @plugins_snapshot.json
+│   │   ├── __future__.data.json
+│   │   ├── __future__.meta.json
+│   │   ├── _ast.data.json
+│   │   ├── _ast.meta.json
+│   │   ├── _asyncio.data.json
+│   │   ├── _asyncio.meta.json
+│   │   ├── _blake2.data.json
+│   │   ├── _blake2.meta.json
+│   │   ├── _codecs.data.json
+│   │   ├── _codecs.meta.json
+│   │   ├── _collections_abc.data.json
+│   │   ├── _collections_abc.meta.json
+│   │   ├── _contextvars.data.json
+│   │   ├── _contextvars.meta.json
+│   │   ├── _ctypes.data.json
+│   │   ├── _ctypes.meta.json
+│   │   ├── _decimal.data.json
+│   │   ├── _decimal.meta.json
+│   │   ├── _frozen_importlib.data.json
+│   │   ├── _frozen_importlib.meta.json
+│   │   ├── _frozen_importlib_external.data.json
+│   │   ├── _frozen_importlib_external.meta.json
+│   │   ├── _hashlib.data.json
+│   │   ├── _hashlib.meta.json
+│   │   ├── _io.data.json
+│   │   ├── _io.meta.json
+│   │   ├── _operator.data.json
+│   │   ├── _operator.meta.json
+│   │   ├── _pickle.data.json
+│   │   ├── _pickle.meta.json
+│   │   ├── _queue.data.json
+│   │   ├── _queue.meta.json
+│   │   ├── _random.data.json
+│   │   ├── _random.meta.json
+│   │   ├── _sitebuiltins.data.json
+│   │   ├── _sitebuiltins.meta.json
+│   │   ├── _socket.data.json
+│   │   ├── _socket.meta.json
+│   │   ├── _ssl.data.json
+│   │   ├── _ssl.meta.json
+│   │   ├── _thread.data.json
+│   │   ├── _thread.meta.json
+│   │   ├── _typeshed
+│   │   ├── _warnings.data.json
+│   │   ├── _warnings.meta.json
+│   │   ├── _weakref.data.json
+│   │   ├── _weakref.meta.json
+│   │   ├── _weakrefset.data.json
+│   │   ├── _weakrefset.meta.json
+│   │   ├── abc.data.json
+│   │   ├── abc.meta.json
+│   │   ├── annotated_types
+│   │   ├── arr_mcp
+│   │   ├── ast.data.json
+│   │   ├── ast.meta.json
+│   │   ├── asyncio
+│   │   ├── base64.data.json
+│   │   ├── base64.meta.json
+│   │   ├── binascii.data.json
+│   │   ├── binascii.meta.json
+│   │   ├── builtins.data.json
+│   │   ├── builtins.meta.json
+│   │   ├── cache.db
+│   │   ├── codecs.data.json
+│   │   ├── codecs.meta.json
+│   │   ├── collections
+│   │   ├── colorsys.data.json
+│   │   ├── colorsys.meta.json
+│   │   ├── concurrent
+│   │   ├── contextlib.data.json
+│   │   ├── contextlib.meta.json
+│   │   ├── contextvars.data.json
+│   │   ├── contextvars.meta.json
+│   │   ├── copy.data.json
+│   │   ├── copy.meta.json
+│   │   ├── copyreg.data.json
+│   │   ├── copyreg.meta.json
+│   │   ├── ctypes
+│   │   ├── dataclasses.data.json
+│   │   ├── dataclasses.meta.json
+│   │   ├── datetime.data.json
+│   │   ├── datetime.meta.json
+│   │   ├── decimal.data.json
+│   │   ├── decimal.meta.json
+│   │   ├── dis.data.json
+│   │   ├── dis.meta.json
+│   │   ├── email
+│   │   ├── enum.data.json
+│   │   ├── enum.meta.json
+│   │   ├── errno.data.json
+│   │   ├── errno.meta.json
+│   │   ├── fractions.data.json
+│   │   ├── fractions.meta.json
+│   │   ├── functools.data.json
+│   │   ├── functools.meta.json
+│   │   ├── generate_api.data.json
+│   │   ├── generate_api.meta.json
+│   │   ├── genericpath.data.json
+│   │   ├── genericpath.meta.json
+│   │   ├── hashlib.data.json
+│   │   ├── hashlib.meta.json
+│   │   ├── hmac.data.json
+│   │   ├── hmac.meta.json
+│   │   ├── http
+│   │   ├── importlib
+│   │   ├── inspect.data.json
+│   │   ├── inspect.meta.json
+│   │   ├── io.data.json
+│   │   ├── io.meta.json
+│   │   ├── ipaddress.data.json
+│   │   ├── ipaddress.meta.json
+│   │   ├── itertools.data.json
+│   │   ├── itertools.meta.json
+│   │   ├── json
+│   │   ├── keyword.data.json
+│   │   ├── keyword.meta.json
+│   │   ├── logging
+│   │   ├── math.data.json
+│   │   ├── math.meta.json
+│   │   ├── mimetypes.data.json
+│   │   ├── mimetypes.meta.json
+│   │   ├── multiprocessing
+│   │   ├── numbers.data.json
+│   │   ├── numbers.meta.json
+│   │   ├── opcode.data.json
+│   │   ├── opcode.meta.json
+│   │   ├── operator.data.json
+│   │   ├── operator.meta.json
+│   │   ├── os
+│   │   ├── pathlib.data.json
+│   │   ├── pathlib.meta.json
+│   │   ├── pickle.data.json
+│   │   ├── pickle.meta.json
+│   │   ├── posixpath.data.json
+│   │   ├── posixpath.meta.json
+│   │   ├── pydantic
+│   │   ├── pydantic_core
+│   │   ├── queue.data.json
+│   │   ├── queue.meta.json
+│   │   ├── random.data.json
+│   │   ├── random.meta.json
+│   │   ├── re.data.json
+│   │   ├── re.meta.json
+│   │   ├── requests
+│   │   ├── resource.data.json
+│   │   ├── resource.meta.json
+│   │   ├── select.data.json
+│   │   ├── select.meta.json
+│   │   ├── selectors.data.json
+│   │   ├── selectors.meta.json
+│   │   ├── signal.data.json
+│   │   ├── signal.meta.json
+│   │   ├── socket.data.json
+│   │   ├── socket.meta.json
+│   │   ├── sre_compile.data.json
+│   │   ├── sre_compile.meta.json
+│   │   ├── sre_constants.data.json
+│   │   ├── sre_constants.meta.json
+│   │   ├── sre_parse.data.json
+│   │   ├── sre_parse.meta.json
+│   │   ├── ssl.data.json
+│   │   ├── ssl.meta.json
+│   │   ├── string.data.json
+│   │   ├── string.meta.json
+│   │   ├── subprocess.data.json
+│   │   ├── subprocess.meta.json
+│   │   ├── sys
+│   │   ├── tempfile.data.json
+│   │   ├── tempfile.meta.json
+│   │   ├── test_arr_coverage.data.json
+│   │   ├── test_arr_coverage.meta.json
+│   │   ├── test_arr_mcp_brute_force_coverage.data.json
+│   │   ├── test_arr_mcp_brute_force_coverage.meta.json
+│   │   ├── test_placeholder.data.json
+│   │   ├── test_placeholder.meta.json
+│   │   ├── textwrap.data.json
+│   │   ├── textwrap.meta.json
+│   │   ├── threading.data.json
+│   │   ├── threading.meta.json
+│   │   ├── time.data.json
+│   │   ├── time.meta.json
+│   │   ├── types.data.json
+│   │   ├── types.meta.json
+│   │   ├── typing.data.json
+│   │   ├── typing.meta.json
+│   │   ├── typing_extensions.data.json
+│   │   ├── typing_extensions.meta.json
+│   │   ├── typing_inspection
+│   │   ├── unittest
+│   │   ├── urllib
+│   │   ├── urllib3
+│   │   ├── uuid.data.json
+│   │   ├── uuid.meta.json
+│   │   ├── validate_a2a_agent.data.json
+│   │   ├── validate_a2a_agent.meta.json
+│   │   ├── warnings.data.json
+│   │   ├── warnings.meta.json
+│   │   ├── weakref.data.json
+│   │   ├── weakref.meta.json
+│   │   ├── zipfile
+│   │   ├── zlib.data.json
+│   │   ├── zlib.meta.json
+│   │   └── zoneinfo
+│   └── CACHEDIR.TAG
+├── .pre-commit-config.yaml
+├── .pytest_cache
+│   ├── .gitignore
+│   ├── CACHEDIR.TAG
+│   ├── README.md
+│   └── v
+│       └── cache
+├── .specify
+│   └── specs
+│       └── code-enhancement-20260512
+├── .venv
+│   ├── .gitignore
+│   ├── .lock
+│   ├── CACHEDIR.TAG
+│   ├── bin
+│   │   ├── activate
+│   │   ├── activate-global-python-argcomplete
+│   │   ├── activate.bat
+│   │   ├── activate.csh
+│   │   ├── activate.fish
+│   │   ├── activate.nu
+│   │   ├── activate.ps1
+│   │   ├── activate_this.py
+│   │   ├── agent-terminal-ui
+│   │   ├── arr-agent
+│   │   ├── arr-mcp
+│   │   ├── coverage
+│   │   ├── coverage-3.11
+│   │   ├── coverage3
+│   │   ├── cyclopts
+│   │   ├── deactivate.bat
+│   │   ├── distro
+│   │   ├── docutils
+│   │   ├── dotenv
+│   │   ├── email_validator
+│   │   ├── eunomia
+│   │   ├── eunomia-mcp
+│   │   ├── f2py
+│   │   ├── fastapi
+│   │   ├── fastmcp
+│   │   ├── genai-prices
+│   │   ├── httpx
+│   │   ├── install-skills
+│   │   ├── jsonschema
+│   │   ├── keyring
+│   │   ├── logfire
+│   │   ├── markdown-it
+│   │   ├── mcp
+│   │   ├── normalizer
+│   │   ├── numpy-config
+│   │   ├── openai
+│   │   ├── opentelemetry-bootstrap
+│   │   ├── opentelemetry-instrument
+│   │   ├── pai
+│   │   ├── py.test
+│   │   ├── pydoc.bat
+│   │   ├── pygmentize
+│   │   ├── pyrsa-decrypt
+│   │   ├── pyrsa-encrypt
+│   │   ├── pyrsa-keygen
+│   │   ├── pyrsa-priv2pub
+│   │   ├── pyrsa-sign
+│   │   ├── pyrsa-verify
+│   │   ├── pytest
+│   │   ├── python
+│   │   ├── python-argcomplete-check-easy-install-script
+│   │   ├── python3
+│   │   ├── python3.11
+│   │   ├── register-python-argcomplete
+│   │   ├── rst2html
+│   │   ├── rst2html4
+│   │   ├── rst2html5
+│   │   ├── rst2latex
+│   │   ├── rst2man
+│   │   ├── rst2odt
+│   │   ├── rst2pseudoxml
+│   │   ├── rst2s5
+│   │   ├── rst2xetex
+│   │   ├── rst2xml
+│   │   ├── tqdm
+│   │   ├── typer
+│   │   ├── uvicorn
+│   │   ├── watchfiles
+│   │   └── websockets
+│   ├── include
+│   │   └── site
+│   ├── lib
+│   │   └── python3.11
+│   ├── lib64
+│   │   └── python3.11
+│   └── pyvenv.cfg
+├── .vulture_ignore
+├── AGENTS.md
+├── CHANGELOG.md
+├── LICENSE
+├── README.md
+├── arr_mcp
+│   ├── __init__.py
+│   ├── __main__.py
+│   ├── agent_server.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── api_client_bazarr.py
+│   │   ├── api_client_chaptarr.py
+│   │   ├── api_client_lidarr.py
+│   │   ├── api_client_prowlarr.py
+│   │   ├── api_client_radarr.py
+│   │   ├── api_client_seerr.py
+│   │   └── api_client_sonarr.py
+│   ├── auth.py
+│   ├── main_agent.json
+│   ├── mcp_config.json
+│   └── mcp_server.py
+├── debug.Dockerfile
+├── docker
+│   ├── Dockerfile
+│   ├── agent.compose.yml
+│   ├── debug.Dockerfile
+│   ├── mcp.compose.yml
+│   └── starship.toml
+├── docs
+│   ├── index.md
+│   ├── legacy_readme.md
+│   └── overview.md
+├── fix_mcp_server.py
+├── generate_mcp.py
+├── mkdocs.yml
+├── opencode.json
+├── patch_gen.py
+├── patch_gen_script.py
+├── pyproject.toml
+├── pytest.ini
+├── requirements.txt
+├── scripts
+│   ├── generate_api.py
+│   └── validate_a2a_agent.py
+├── test_gen.py
+├── tests
+│   ├── test_arr_coverage.py
+│   ├── test_arr_mcp_brute_force_coverage.py
+│   ├── test_auth_coverage.py
+│   ├── test_concept_parity.py
+│   └── test_startup.py
+└── uv.lock
 ```
 
 ## Code Style & Conventions
@@ -98,7 +464,7 @@ async def my_tool(param: str) -> str:
 - Use `agent-utilities` base classes.
 
 **Ask first:**
-- Major refactors of `mcp_server.py` or `agent_server.py`.
+- Major refactors of `mcp_server.py` or `agent.py`.
 - Deleting or renaming public tool functions.
 
 **Never do:**
@@ -108,31 +474,3 @@ async def my_tool(param: str) -> str:
 ## When Stuck
 - Propose a plan first before making large changes.
 - Check `agent-utilities` documentation for existing helpers.
-
-
-## Graph Architecture
-
-This agent uses `pydantic-graph` orchestration for intelligent routing and optimal context management.
-
-```mermaid
----
-title: Arr Suite Graph Agent
----
-stateDiagram-v2
-  [*] --> RouterNode: User Query
-  RouterNode --> DomainNode: Classified Domain
-  RouterNode --> [*]: Low confidence / Error
-  DomainNode --> [*]: Domain Result
-```
-
-- **RouterNode**: A fast, lightweight LLM (e.g., `nvidia/nemotron-3-super`) that classifies the user's query into one of the specialized domains.
-- **DomainNode**: The executor node. For the selected domain, it dynamically sets environment variables to temporarily enable ONLY the tools relevant to that domain, creating a highly focused sub-agent (e.g., `gpt-4o`) to complete the request. This preserves LLM context and prevents tool hallucination.
-
-
-## Testing with Timeout
-
-To run tests with a timeout to prevent hanging, use the `pytest-timeout` plugin. You can combine it with the `-k` flag to run specific tests:
-
-```bash
-uv run pytest --timeout=60 -k "test_name_pattern"
-```

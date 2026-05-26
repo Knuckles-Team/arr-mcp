@@ -1,0 +1,75 @@
+# Tasks: Code Enhancement: arr-mcp
+
+Generated: 2026-05-24T04:17:16.165563+00:00
+Skipped informational: 5
+
+- [ ] [P] **T001** [Dependency Audit] Minor update: pytest-xdist 3.6.0 (constraint — not installed) -> 3.8.0
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T002** [Dependency Audit] Minor update: agent-utilities 0.2.40 (installed) -> 0.16.0
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T003** [Dependency Audit] Minor update: urllib3 2.6.3 (installed) -> 2.7.0
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T004** [Dependency Audit] Minor update: requests 2.32.5 (installed) -> 2.34.2
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T005** [Codebase Optimization] 1 functions exceed 200 lines (actionable refactoring targets): get_mcp_instance
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T006** [Codebase Optimization] Monolithic: api_client_prowlarr.py (1211L) — 2 functions with high complexity (w
+  - Priority: P1-High | Effort: Large
+- [ ] [P] **T007** [Codebase Optimization] Needs attention: api_client_sonarr.py (2002L) — God class: Api (238 methods) — c
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T008** [Codebase Optimization] Needs attention: api_client_radarr.py (1919L) — God class: Api (241 methods) — c
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T009** [Codebase Optimization] Needs attention: api_client_lidarr.py (1941L) — God class: Api (237 methods) — c
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T010** [Codebase Optimization] High code duplication ratio: 24.6%
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T011** [Codebase Optimization] 8 functions with nesting depth >4
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T012** [Test Coverage] Test suite lacks intent diversity (only one type)
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T013** [Test Coverage] 13 potential doc-test drift items
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T014** [Architecture & Design Patterns] SRP: 6 modules exceed 500 lines (god modules)
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T015** [Architecture & Design Patterns] SRP: 7 classes have >15 methods
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T016** [Architecture & Design Patterns] No discernible layer architecture (no domain/service/adapter separation)
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T017** [Concept Traceability] Low traceability ratio: 17% concepts fully traced
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T018** [Concept Traceability] 7 orphaned concepts (only in one source)
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T019** [Concept Traceability] 29 test functions missing concept markers
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T020** [Concept Traceability] 164 significant functions (>10 lines) missing concept markers in docstrings
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T021** [Linting & Formatting] Total lint findings: 1 (high/error: 0, medium/warning: 0, low: 1)
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T022** [Pre-Commit Compliance] 2 hook(s) may be outdated: ruff-pre-commit, uv-pre-commit
+  - Priority: P2-Medium | Effort: Small
+- [ ] [P] **T023** [Directory Organization] 4 rogue/throwaway scripts detected (fix_*, validate_*, patch_*, etc.): patch_gen
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T024** [Version Sync Analysis] Found 2 file(s) with version '0.15.0' that are NOT tracked in .bumpversion.cfg:
+  - Priority: P2-Medium | Effort: Small
+- [ ] [P] **T025** [Version Sync Analysis]   - .specify/reports/results.json
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T026** [Version Sync Analysis]   - .specify/reports/code_enhancement_report.md
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T027** [Changelog Audit] CHANGELOG.md exists but could not be parsed — check format compliance
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T028** [Changelog Audit] No changelog entries within the last 30 days
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T029** [Changelog Audit] keepachangelog not installed — pip install 'universal-skills[code-enhancer]'
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T030** [Pytest Quality] 1 test files exceed 500 lines — split into focused modules
+  - Priority: P3-Low | Effort: Large
+- [ ] [P] **T031** [Pytest Quality] Test directory lacks subdirectory organization (consider unit/, integration/, e2
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T032** [Pytest Quality] 5 tests have no assertions
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T033** [Environment Variables] Undocumented env vars: CHAPTARR_API_KEY, EUNOMIA_REMOTE_URL, LIDARR_API_KEY, OAU
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T034** [Environment Variables] 27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T035** [analyze_xdg_kg] Analysis error: No module named 'agent_utilities.knowledge_graph'
+  - Priority: P1-High | Effort: Medium

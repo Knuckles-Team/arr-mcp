@@ -1964,7 +1964,7 @@ class Api:
             "GET", f"/api/v3/log/file/update/{filename}", params=params, data=None
         )
 
-    def lookup_series(self, term: str) -> list[dict]:
+    def lookup_series(self, term: str) -> Any:
         """
         Search for a series using the lookup endpoint.
         """
@@ -1982,10 +1982,10 @@ class Api:
         Lookup a series by term, pick the first result, and add it to Sonarr.
         """
         results = self.lookup_series(term)
-        if not results:
+        if not results or "result" not in results or not results["result"]:
             return {"error": f"No series found for term: {term}"}
 
-        series = results[0]
+        series = results["result"][0]
 
         payload = {
             "title": series.get("title"),

@@ -1881,7 +1881,7 @@ class Api:
             "GET", f"/api/v3/log/file/update/{filename}", params=params, data=None
         )
 
-    def lookup_movie(self, term: str) -> list[dict]:
+    def lookup_movie(self, term: str) -> Any:
         """
         Search for a movie using the lookup endpoint.
         """
@@ -1899,10 +1899,10 @@ class Api:
         Lookup a movie by term, pick the first result, and add it to Radarr.
         """
         results = self.lookup_movie(term)
-        if not results:
+        if not results or "result" not in results or not results["result"]:
             return {"error": f"No movie found for term: {term}"}
 
-        movie = results[0]
+        movie = results["result"][0]
 
         payload = {
             "title": movie.get("title"),

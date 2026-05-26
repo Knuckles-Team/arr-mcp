@@ -1,3 +1,10 @@
+"""
+Unified client coverage testing.
+
+CONCEPT:ECO-4.1 — MCP & Universal Skills
+CONCEPT:ORCH-1.4 — Action Execution Pipeline
+"""
+
 import asyncio
 import inspect
 from typing import Any
@@ -12,25 +19,6 @@ from arr_mcp.api.api_client_prowlarr import Api as ProwlarrApi
 from arr_mcp.api.api_client_radarr import Api as RadarrApi
 from arr_mcp.api.api_client_seerr import Api as SeerrApi
 from arr_mcp.api.api_client_sonarr import Api as SonarrApi
-
-
-@pytest.fixture
-def mock_session():
-    with patch("requests.Session") as mock_sess:
-        session = mock_sess.return_value
-
-        res = MagicMock()
-        res.status_code = 200
-        res.ok = True
-        res.json.return_value = {"status": "success", "results": []}
-        res.text = '{"status": "success"}'
-        session.request.return_value = res
-        session.get.return_value = res
-        session.post.return_value = res
-        session.put.return_value = res
-        session.delete.return_value = res
-
-        yield session
 
 
 def test_apis_brute_force(mock_session):

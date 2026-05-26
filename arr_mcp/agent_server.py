@@ -1,4 +1,12 @@
 #!/usr/bin/python
+"""
+Arr Graph Agent Server execution entrypoint.
+
+CONCEPT:ORCH-1.4 — Action Execution Pipeline
+CONCEPT:OS-5.1 — Runtime Safety Grid
+CONCEPT:OS-5.3 — Prompt Injection Defense
+"""
+
 import logging
 import os
 import sys

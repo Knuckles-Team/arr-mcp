@@ -1,0 +1,75 @@
+# Tasks: Code Enhancement: arr-mcp
+
+Generated: 2026-05-22T22:25:06.552093+00:00
+Skipped informational: 6
+
+- [ ] [P] **T001** [Dependency Audit] Minor update: urllib3 2.6.3 (installed) -> 2.7.0
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T002** [Codebase Optimization] 1 functions exceed 200 lines (actionable refactoring targets): get_mcp_instance
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T003** [Codebase Optimization] Monolithic: api_client_prowlarr.py (1211L) — 2 functions with high complexity (w
+  - Priority: P1-High | Effort: Large
+- [ ] [P] **T004** [Codebase Optimization] Needs attention: api_client_sonarr.py (2002L) — God class: Api (238 methods) — c
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T005** [Codebase Optimization] Needs attention: api_client_radarr.py (1919L) — God class: Api (241 methods) — c
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T006** [Codebase Optimization] Needs attention: api_client_lidarr.py (1941L) — God class: Api (237 methods) — c
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T007** [Codebase Optimization] High code duplication ratio: 24.8%
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T008** [Codebase Optimization] 8 functions with nesting depth >4
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T009** [Test Coverage] Test suite lacks intent diversity (only one type)
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T010** [Test Coverage] 12 potential doc-test drift items
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T011** [Documentation & Governance] README.md missing sections: usage|quick start
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T012** [Documentation & Governance] 2 broken internal links in README.md
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T013** [Documentation & Governance] README missing: Has a Table of Contents
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T014** [Documentation & Governance] README missing: Has usage examples with code blocks
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T015** [Architecture & Design Patterns] SRP: 6 modules exceed 500 lines (god modules)
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T016** [Architecture & Design Patterns] SRP: 7 classes have >15 methods
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T017** [Architecture & Design Patterns] No discernible layer architecture (no domain/service/adapter separation)
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T018** [Concept Traceability] Low traceability ratio: 0% concepts fully traced
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T019** [Concept Traceability] 26 test functions missing concept markers
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T020** [Concept Traceability] 163 significant functions (>10 lines) missing concept markers in docstrings
+  - Priority: P4-Enhancement | Effort: Small
+- [ ] [P] **T021** [Linting & Formatting] Total lint findings: 1 (high/error: 0, medium/warning: 0, low: 1)
+  - Priority: P4-Enhancement | Effort: Medium
+- [ ] [P] **T022** [Pre-Commit Compliance] 2 hook(s) may be outdated: ruff-pre-commit, uv-pre-commit
+  - Priority: P2-Medium | Effort: Small
+- [ ] [P] **T023** [Directory Organization] 4 rogue/throwaway scripts detected (fix_*, validate_*, patch_*, etc.): patch_gen
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T024** [Changelog Audit] CHANGELOG.md exists but could not be parsed — check format compliance
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T025** [Changelog Audit] No changelog entries within the last 30 days
+  - Priority: P3-Low | Effort: Medium
+- [ ] [P] **T026** [Changelog Audit] keepachangelog not installed — pip install 'universal-skills[code-enhancer]'
+  - Priority: P3-Low | Effort: Small
+- [ ] [P] **T027** [Pytest Quality] 1 test files exceed 500 lines — split into focused modules
+  - Priority: P2-Medium | Effort: Large
+- [ ] [P] **T028** [Pytest Quality] Test directory lacks subdirectory organization (consider unit/, integration/, e2
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T029** [Pytest Quality] Missing conftest.py for shared fixtures
+  - Priority: P2-Medium | Effort: Small
+- [ ] [P] **T030** [Pytest Quality] Low fixture usage: only 19% of tests use fixtures
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T031** [Pytest Quality] No shared fixtures in conftest.py
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T032** [Pytest Quality] 5 tests have no assertions
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T033** [Environment Variables] Only 15% of env vars documented in README.md
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T034** [Environment Variables] Undocumented env vars: ALLOWED_CLIENT_REDIRECT_URIS, AUTH_TYPE, BAZARR_API_KEY,
+  - Priority: P2-Medium | Effort: Medium
+- [ ] [P] **T035** [Environment Variables] 27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_
+  - Priority: P2-Medium | Effort: Medium

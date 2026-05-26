@@ -13,13 +13,15 @@ with warnings.catch_warnings():
 # General urllib3/chardet mismatch warnings
 warnings.filterwarnings("ignore", message=".*urllib3.*or chardet.*")
 warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
-
 """
 Arr MCP Server — Consolidated & Optimized.
 
 This module implements a dynamic unified MCP server for the entire Arr stack.
 It collapses hundreds of individual tools into 7 high-level, service-specific
 action-routed tools.
+
+MCP & Universal Skills
+Action Execution Pipeline
 """
 
 import importlib
@@ -46,7 +48,6 @@ __version__ = "0.15.0"
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
 
-
 def execute_arr_action(
     service_name: str,
     base_url: str | None,
@@ -56,7 +57,11 @@ def execute_arr_action(
     params_json: str,
     auth_kw: str,
 ) -> Any:
-    """Instantiate the API client and dynamically dispatch the requested action."""
+    """Instantiate the API client and dynamically dispatch the requested action.
+
+    MCP & Universal Skills
+    Action Execution Pipeline
+    """
     if not base_url:
         raise ValueError(
             "Base URL must be provided (either via environment variable or parameters)."
@@ -103,7 +108,6 @@ def execute_arr_action(
         return res.model_dump()
     return res
 
-
 def is_service_enabled(service: str) -> bool:
     """Determine if a service should be enabled based on environment overrides."""
     # Check if specifically enabled or disabled
@@ -115,7 +119,6 @@ def is_service_enabled(service: str) -> bool:
     # We verify if there are any specific service tool settings that are explicitly disabled,
     # but by default all services are enabled.
     return True
-
 
 def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
     """Initialize and return the MCP instance, args, and middlewares."""
@@ -438,7 +441,6 @@ def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
         mcp.add_middleware(mw)
     return mcp, args, middlewares, registered_tags
 
-
 def mcp_server() -> None:
     mcp, args, middlewares, registered_tags = get_mcp_instance()
     print(f"{'arr-mcp'} MCP v{__version__}", file=sys.stderr)
@@ -456,7 +458,6 @@ def mcp_server() -> None:
     else:
         logger.error("Invalid transport", extra={"transport": args.transport})
         sys.exit(1)
-
 
 if __name__ == "__main__":
     mcp_server()

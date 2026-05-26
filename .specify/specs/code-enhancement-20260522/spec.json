@@ -1,0 +1,247 @@
+{
+  "feature_id": "code-enhancement-20260522",
+  "title": "Code Enhancement: arr-mcp",
+  "created": "2026-05-22T22:25:06.552093+00:00",
+  "overview": "Automated code enhancement review for arr-mcp. Covers 16 analysis domains.",
+  "user_stories": [
+    {
+      "role": "developer",
+      "action": "address Project Analysis findings (grade: C, score: 74)",
+      "value": "improve project project analysis from C to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Codebase Optimization findings (grade: F, score: 49)",
+      "value": "improve project codebase optimization from F to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Test Coverage findings (grade: C, score: 75)",
+      "value": "improve project test coverage from C to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Architecture & Design Patterns findings (grade: C, score: 75)",
+      "value": "improve project architecture & design patterns from C to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Concept Traceability findings (grade: F, score: 30)",
+      "value": "improve project concept traceability from F to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Test Execution findings (grade: F, score: 25)",
+      "value": "improve project test execution from F to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Changelog Audit findings (grade: C, score: 75)",
+      "value": "improve project changelog audit from C to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Pytest Quality findings (grade: C, score: 70)",
+      "value": "improve project pytest quality from C to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Environment Variables findings (grade: D, score: 60)",
+      "value": "improve project environment variables from D to at least B (80+)"
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-001",
+      "description": "Minor update: urllib3 2.6.3 (installed) -> 2.7.0",
+      "testable": true
+    },
+    {
+      "id": "FR-002",
+      "description": "1 functions exceed 200 lines (actionable refactoring targets): get_mcp_instance (320L)",
+      "testable": true
+    },
+    {
+      "id": "FR-003",
+      "description": "Monolithic: api_client_prowlarr.py (1211L) \u2014 2 functions with high complexity (worst: Api.get_indexer_id_newznab at 105L, CC=33); God class: Api (131 methods) \u2014 consider mixins/composition",
+      "testable": true
+    },
+    {
+      "id": "FR-004",
+      "description": "Needs attention: api_client_sonarr.py (2002L) \u2014 God class: Api (238 methods) \u2014 consider mixins/composition",
+      "testable": true
+    },
+    {
+      "id": "FR-005",
+      "description": "Needs attention: api_client_radarr.py (1919L) \u2014 God class: Api (241 methods) \u2014 consider mixins/composition",
+      "testable": true
+    },
+    {
+      "id": "FR-006",
+      "description": "Needs attention: api_client_lidarr.py (1941L) \u2014 God class: Api (237 methods) \u2014 consider mixins/composition",
+      "testable": true
+    },
+    {
+      "id": "FR-007",
+      "description": "High code duplication ratio: 24.8%",
+      "testable": true
+    },
+    {
+      "id": "FR-008",
+      "description": "8 functions with nesting depth >4",
+      "testable": true
+    },
+    {
+      "id": "FR-009",
+      "description": "Test suite lacks intent diversity (only one type)",
+      "testable": true
+    },
+    {
+      "id": "FR-010",
+      "description": "12 potential doc-test drift items",
+      "testable": true
+    },
+    {
+      "id": "FR-011",
+      "description": "README.md missing sections: usage|quick start",
+      "testable": true
+    },
+    {
+      "id": "FR-012",
+      "description": "2 broken internal links in README.md",
+      "testable": true
+    },
+    {
+      "id": "FR-013",
+      "description": "README missing: Has a Table of Contents",
+      "testable": true
+    },
+    {
+      "id": "FR-014",
+      "description": "README missing: Has usage examples with code blocks",
+      "testable": true
+    },
+    {
+      "id": "FR-015",
+      "description": "SRP: 6 modules exceed 500 lines (god modules)",
+      "testable": true
+    },
+    {
+      "id": "FR-016",
+      "description": "SRP: 7 classes have >15 methods",
+      "testable": true
+    },
+    {
+      "id": "FR-017",
+      "description": "No discernible layer architecture (no domain/service/adapter separation)",
+      "testable": true
+    },
+    {
+      "id": "FR-018",
+      "description": "Low traceability ratio: 0% concepts fully traced",
+      "testable": true
+    },
+    {
+      "id": "FR-019",
+      "description": "26 test functions missing concept markers",
+      "testable": true
+    },
+    {
+      "id": "FR-020",
+      "description": "163 significant functions (>10 lines) missing concept markers in docstrings",
+      "testable": true
+    },
+    {
+      "id": "FR-021",
+      "description": "Total lint findings: 1 (high/error: 0, medium/warning: 0, low: 1)",
+      "testable": true
+    },
+    {
+      "id": "FR-022",
+      "description": "2 hook(s) may be outdated: ruff-pre-commit, uv-pre-commit",
+      "testable": true
+    },
+    {
+      "id": "FR-023",
+      "description": "4 rogue/throwaway scripts detected (fix_*, validate_*, patch_*, etc.): patch_gen_script.py, fix_mcp_server.py, patch_gen.py, scripts/validate_a2a_agent.py",
+      "testable": true
+    },
+    {
+      "id": "FR-024",
+      "description": "CHANGELOG.md exists but could not be parsed \u2014 check format compliance",
+      "testable": true
+    },
+    {
+      "id": "FR-025",
+      "description": "No changelog entries within the last 30 days",
+      "testable": true
+    },
+    {
+      "id": "FR-026",
+      "description": "keepachangelog not installed \u2014 pip install 'universal-skills[code-enhancer]'",
+      "testable": true
+    },
+    {
+      "id": "FR-027",
+      "description": "1 test files exceed 500 lines \u2014 split into focused modules",
+      "testable": true
+    },
+    {
+      "id": "FR-028",
+      "description": "Test directory lacks subdirectory organization (consider unit/, integration/, e2e/)",
+      "testable": true
+    },
+    {
+      "id": "FR-029",
+      "description": "Missing conftest.py for shared fixtures",
+      "testable": true
+    },
+    {
+      "id": "FR-030",
+      "description": "Low fixture usage: only 19% of tests use fixtures",
+      "testable": true
+    },
+    {
+      "id": "FR-031",
+      "description": "No shared fixtures in conftest.py",
+      "testable": true
+    },
+    {
+      "id": "FR-032",
+      "description": "5 tests have no assertions",
+      "testable": true
+    },
+    {
+      "id": "FR-033",
+      "description": "Only 15% of env vars documented in README.md",
+      "testable": true
+    },
+    {
+      "id": "FR-034",
+      "description": "Undocumented env vars: ALLOWED_CLIENT_REDIRECT_URIS, AUTH_TYPE, BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_SSL_VERIFY, CHAPTARR_API_KEY, CHAPTARR_BASE_URL, CHAPTARR_SSL_VERIFY, CHAPTARR_TOKEN, DEFAULT_AGENT_NAME",
+      "testable": true
+    },
+    {
+      "id": "FR-035",
+      "description": "27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_SSL_VERIFY, CHAPTARR_API_KEY, CHAPTARR_BASE_URL",
+      "testable": true
+    }
+  ],
+  "success_criteria": [
+    {
+      "metric": "Overall GPA",
+      "current": 2.31,
+      "target": 3.0
+    },
+    {
+      "metric": "Domains at B or above",
+      "current": 7,
+      "target": 16
+    },
+    {
+      "metric": "Actionable findings",
+      "current": 35,
+      "target": 0
+    }
+  ]
+}

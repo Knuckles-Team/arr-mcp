@@ -24,6 +24,20 @@
 
 ---
 
+## Table of Contents
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [CLI or API](#cli-or-api)
+- [MCP](#mcp)
+  - [Dynamic Tool Selection & Visibility](#dynamic-tool-selection--visibility)
+- [Agent](#agent)
+- [Environment Variables](#environment-variables)
+- [Security & Governance](#security--governance)
+- [Contribute](#contribute)
+
+---
+
 ## Overview
 
 **Arr Mcp** is a production-grade Agent and Model Context Protocol (MCP) server designed to interface directly with Arr Suite MCP Server for Agentic AI!.
@@ -43,7 +57,7 @@
 
 This agent wraps the Arr Suite MCP Server for Agentic AI! API. You can interact with it programmatically or via its integrated execution entrypoints.
 
-Detailed instructions on how to use the underlying API wrappers, extended schema bindings, and developer SDK references are maintained in [docs/index.md](file:///home/apps/workspace/agent-packages/agents/arr-mcp/docs/index.md).
+Detailed instructions on how to use the underlying API wrappers, extended schema bindings, and developer SDK references are maintained in [docs/index.md](docs/index.md).
 
 ---
 
@@ -53,7 +67,28 @@ This server utilizes dynamic Action-Routed tools to optimize token overhead and 
 
 ### Available MCP Tools
 
-Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/mcp.md](file:///home/apps/workspace/agent-packages/agents/arr-mcp/docs/mcp.md).
+Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/index.md#mcp-tools](docs/index.md#mcp-tools).
+
+### Dynamic Tool Selection & Visibility
+
+This MCP server supports dynamic toolset selection and visibility filtering at runtime. This allows you to restrict the set of exposed tools in order to prevent blowing up the LLM's context window.
+
+You can configure tool filtering via multiple input channels:
+
+- **CLI Arguments:** Pass `--tools` or `--toolsets` (or their disabled counterparts `--disabled-tools` and `--disabled-toolsets`) during startup.
+- **Environment Variables:** Define standard environment variables:
+  - `MCP_ENABLED_TOOLS` / `MCP_DISABLED_TOOLS`
+  - `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS`
+- **HTTP SSE Request Headers:** Pass custom headers during transport initialization:
+  - `x-mcp-enabled-tools` / `x-mcp-disabled-tools`
+  - `x-mcp-enabled-tags` / `x-mcp-disabled-tags`
+- **HTTP SSE Request Query Parameters:** Append query parameters directly to your transport connection URL:
+  - `?tools=tool1,tool2`
+  - `?tags=tag1`
+
+When query strings or parameters are supplied, an LLM-free **Knowledge Graph resolution layer** (using `DynamicToolOrchestrator`) matches query intents against known tool tags, names, or descriptions, with safe fallback and automated 24-hour background cache refreshing.
+
+---
 
 ### MCP Configuration Examples
 
@@ -223,7 +258,53 @@ services:
 
 ```
 
-Detailed graph node architecture explanations, custom skill configurations, and agentic trace guides are available in [docs/agent.md](file:///home/apps/workspace/agent-packages/agents/arr-mcp/docs/agent.md).
+Detailed graph node architecture explanations, custom skill configurations, and agentic trace guides are available in [docs/index.md#a2a-agent](docs/index.md#a2a-agent).
+
+---
+
+## Environment Variables
+
+The Arr MCP and Agent servers support extensive environment configuration. The full list of supported variables is documented below:
+
+| Variable | Description | Default | Required for |
+|:---|:---|:---|:---|
+| `HOST` | The bind host for Streamable-HTTP or SSE transport. | `0.0.0.0` | Server Transport |
+| `PORT` | The bind port for Streamable-HTTP or SSE transport. | `8000` | Server Transport |
+| `TRANSPORT` | MCP communication transport layer (`stdio`, `streamable-http`, `sse`). | `stdio` | Server Transport |
+| `ENABLE_OTEL` | Enable OpenTelemetry logging and tracing integration. | `True` | Observability |
+| `EUNOMIA_TYPE` | Access control policy engine type (`none`, `embedded`, `remote`). | `none` | Access Governance |
+| `EUNOMIA_POLICY_FILE` | Scoped embedded policy file location. | `mcp_policies.json` | Access Governance |
+| `DEFAULT_AGENT_NAME` | Custom name identification for the Graph Agent. | `Arr Mcp` | Graph Agent |
+| `ALLOWED_CLIENT_REDIRECT_URIS` | Permitted client redirect URIs for authentication flows. | None | Auth Flow |
+| `AUTH_TYPE` | Type of authentication used for A2A endpoints. | None | Auth Flow |
+| `SONARR_ENABLED` | Toggle to enable/disable Sonarr MCP tools and client. | `False` | Sonarr Service |
+| `SONARR_BASE_URL` | Base API URL of your Sonarr service. | None | Sonarr Service |
+| `SONARR_TOKEN` | Authentication API token for Sonarr. | None | Sonarr Service |
+| `SONARR_SSL_VERIFY` | Verify SSL certificates for Sonarr requests. | `False` | Sonarr Service |
+| `RADARR_ENABLED` | Toggle to enable/disable Radarr MCP tools and client. | `False` | Radarr Service |
+| `RADARR_BASE_URL` | Base API URL of your Radarr service. | None | Radarr Service |
+| `RADARR_TOKEN` | Authentication API token for Radarr. | None | Radarr Service |
+| `RADARR_SSL_VERIFY` | Verify SSL certificates for Radarr requests. | `False` | Radarr Service |
+| `LIDARR_ENABLED` | Toggle to enable/disable Lidarr MCP tools and client. | `False` | Lidarr Service |
+| `LIDARR_BASE_URL` | Base API URL of your Lidarr service. | None | Lidarr Service |
+| `LIDARR_TOKEN` | Authentication API token for Lidarr. | None | Lidarr Service |
+| `LIDARR_SSL_VERIFY` | Verify SSL certificates for Lidarr requests. | `False` | Lidarr Service |
+| `PROWLARR_ENABLED` | Toggle to enable/disable Prowlarr MCP tools and client. | `False` | Prowlarr Service |
+| `PROWLARR_BASE_URL` | Base API URL of your Prowlarr service. | None | Prowlarr Service |
+| `PROWLARR_TOKEN` | Authentication API token for Prowlarr. | None | Prowlarr Service |
+| `PROWLARR_SSL_VERIFY` | Verify SSL certificates for Prowlarr requests. | `False` | Prowlarr Service |
+| `BAZARR_ENABLED` | Toggle to enable/disable Bazarr MCP tools and client. | `False` | Bazarr Service |
+| `BAZARR_BASE_URL` | Base API URL of your Bazarr service. | None | Bazarr Service |
+| `BAZARR_API_KEY` | Authentication API key for Bazarr. | None | Bazarr Service |
+| `BAZARR_SSL_VERIFY` | Verify SSL certificates for Bazarr requests. | `False` | Bazarr Service |
+| `SEERR_ENABLED` | Toggle to enable/disable Seerr MCP tools and client. | `False` | Seerr Service |
+| `SEERR_BASE_URL` | Base API URL of your Seerr service. | None | Seerr Service |
+| `SEERR_API_KEY` | Authentication API key for Seerr. | None | Seerr Service |
+| `SEERR_SSL_VERIFY` | Verify SSL certificates for Seerr requests. | `False` | Seerr Service |
+| `CHAPTARR_ENABLED` | Toggle to enable/disable Chaptarr MCP tools and client. | `False` | Chaptarr Service |
+| `CHAPTARR_BASE_URL` | Base API URL of your Chaptarr service. | None | Chaptarr Service |
+| `CHAPTARR_TOKEN` | Authentication API token for Chaptarr. | None | Chaptarr Service |
+| `CHAPTARR_SSL_VERIFY` | Verify SSL certificates for Chaptarr requests. | `False` | Chaptarr Service |
 
 ---
 
@@ -243,8 +324,6 @@ Built directly upon the enterprise-ready [`agent-utilities`](https://github.com/
 | **Prompt Injection Defense** | Input scanning, repetition monitoring, and recursive loop blocks | Enabled by default |
 | **Context Safety Guard** | Stuck-loop detectors and contextual overflow preemptive alerts | Enabled by default |
 
----
-
 ## Installation
 
 Install the Python package locally:
@@ -255,6 +334,29 @@ uv pip install arr-mcp[all]
 
 # Using standard pip
 python -m pip install arr-mcp[all]
+```
+
+---
+
+## Usage & Quick Start
+
+To launch and run `arr-mcp` services:
+
+### 1. Launching the MCP Server
+Launch the MCP server in standard I/O mode (ideal for IDEs):
+```bash
+arr-mcp
+```
+
+Or launch it as a Streamable-HTTP server on port `8000`:
+```bash
+arr-mcp --transport streamable-http --port 8000
+```
+
+### 2. Running the Graph Agent Server
+Start the interactive Pydantic AI Graph Agent CLI with OIDC token delegation and Eunomia policies:
+```bash
+arr-agent --provider openai --model-id gpt-4o
 ```
 
 ---

@@ -1,0 +1,2542 @@
+[
+  {
+    "domain": "Project Analysis",
+    "score": 74,
+    "grade": "C",
+    "findings": [
+      "Detected ecosystem marker: agent-utilities \u2192 Agent-Utilities Ecosystem",
+      "Protocol support: MCP"
+    ],
+    "justifications": [
+      {
+        "criterion": "has_pyproject",
+        "points": 10,
+        "evidence": "pyproject.toml and requirements.txt",
+        "reasoning": "Both pyproject.toml and requirements.txt exist, fulfilling mandatory Python project requirements"
+      },
+      {
+        "criterion": "project_type_detected",
+        "points": 10,
+        "evidence": "Agent-Utilities Ecosystem",
+        "reasoning": "Identified 1 ecosystem marker(s) in dependencies"
+      },
+      {
+        "criterion": "externalized_prompts",
+        "points": 0,
+        "evidence": "/home/apps/workspace/agent-packages/agents/arr-mcp",
+        "reasoning": "No prompts/ directory found. Prompts may be hardcoded in source."
+      },
+      {
+        "criterion": "observability",
+        "points": 0,
+        "evidence": "dependency list",
+        "reasoning": "No observability tools (logfire, sentry, opentelemetry) found"
+      },
+      {
+        "criterion": "testing_suite",
+        "points": 10,
+        "evidence": "tests dir: True, pytest dep: True",
+        "reasoning": "Tests directory exists, pytest in dependencies"
+      },
+      {
+        "criterion": "agents_md",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/arr-mcp/AGENTS.md (16220 bytes)",
+        "reasoning": "AGENTS.md exists with comprehensive content"
+      },
+      {
+        "criterion": "pre_commit_hooks",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/arr-mcp/.pre-commit-config.yaml",
+        "reasoning": "Pre-commit configuration found for automated code quality checks"
+      },
+      {
+        "criterion": "gitignore",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/arr-mcp/.gitignore",
+        "reasoning": ".gitignore exists to prevent committing build artifacts and secrets"
+      },
+      {
+        "criterion": "env_template",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/arr-mcp/.env.example",
+        "reasoning": "Environment template exists for onboarding and secret management"
+      },
+      {
+        "criterion": "protocol_support",
+        "points": 4,
+        "evidence": "MCP",
+        "reasoning": "1 communication protocol(s) detected"
+      }
+    ],
+    "details": {
+      "has_pyproject": true,
+      "has_requirements": true,
+      "dep_count": 8,
+      "project_types": [
+        "Agent-Utilities Ecosystem"
+      ],
+      "has_agent_skills": false
+    }
+  },
+  {
+    "domain": "Dependency Audit",
+    "score": 96,
+    "grade": "A",
+    "findings": [
+      "Minor update: urllib3 2.6.3 (installed) -> 2.7.0"
+    ],
+    "justifications": [
+      {
+        "criterion": "dependency_freshness",
+        "points": 96,
+        "evidence": "source=/home/apps/workspace/agent-packages/agents/arr-mcp/pyproject.toml total=8 major=0 minor=1 patch=1 not_installed=0",
+        "reasoning": "Audited 8 deps (8 installed, 0 constraint-only). 0 major, 1 minor, 1 patch updates."
+      }
+    ],
+    "packages": {
+      "pytest-asyncio": {
+        "current": "1.3.0",
+        "constraint": "Any",
+        "installed": "1.3.0",
+        "latest": "1.3.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Pytest support for asyncio"
+      },
+      "urllib3": {
+        "current": "2.6.3",
+        "constraint": "2.2.2",
+        "installed": "2.6.3",
+        "latest": "2.7.0",
+        "status": "minor",
+        "version_source": "installed",
+        "summary": "HTTP library with thread-safe connection pooling, file post, and more."
+      },
+      "agent-utilities": {
+        "current": "0.16.0",
+        "constraint": "0.16.0",
+        "installed": "0.16.0",
+        "latest": "0.16.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Agent Utilities for Pydantic AI Agents"
+      },
+      "pytest-xdist": {
+        "current": "3.8.0",
+        "constraint": "3.6.0",
+        "installed": "3.8.0",
+        "latest": "3.8.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "pytest xdist plugin for distributed testing, most importantly across multiple CPUs"
+      },
+      "tree-sitter": {
+        "current": "0.25.2",
+        "constraint": "0.23.2",
+        "installed": "0.25.2",
+        "latest": "0.25.2",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Python bindings to the Tree-sitter parsing library"
+      },
+      "pytest": {
+        "current": "9.0.3",
+        "constraint": "Any",
+        "installed": "9.0.3",
+        "latest": "9.0.3",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "pytest: simple powerful testing with Python"
+      },
+      "requests": {
+        "current": "2.34.2",
+        "constraint": "2.8.1",
+        "installed": "2.34.2",
+        "latest": "2.34.2",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Python HTTP for Humans."
+      },
+      "pydantic": {
+        "current": "2.13.3",
+        "constraint": "2.0.0",
+        "installed": "2.13.3",
+        "latest": "2.13.4",
+        "status": "patch",
+        "version_source": "installed",
+        "summary": "Data validation using Python type hints"
+      }
+    }
+  },
+  {
+    "domain": "Codebase Optimization",
+    "score": 49,
+    "grade": "F",
+    "findings": [
+      "1 functions exceed 200 lines (actionable refactoring targets): get_mcp_instance (320L)",
+      "Monolithic: api_client_prowlarr.py (1211L) \u2014 2 functions with high complexity (worst: Api.get_indexer_id_newznab at 105L, CC=33); God class: Api (131 methods) \u2014 consider mixins/composition",
+      "Needs attention: api_client_sonarr.py (2002L) \u2014 God class: Api (238 methods) \u2014 consider mixins/composition",
+      "Needs attention: api_client_radarr.py (1919L) \u2014 God class: Api (241 methods) \u2014 consider mixins/composition",
+      "Needs attention: api_client_lidarr.py (1941L) \u2014 God class: Api (237 methods) \u2014 consider mixins/composition",
+      "High code duplication ratio: 24.8%",
+      "8 functions with nesting depth >4"
+    ],
+    "justifications": [
+      {
+        "criterion": "code_quality",
+        "points": 49,
+        "evidence": "{\"file_count\": 25, \"total_lines\": 11649, \"function_count\": 1209, \"avg_complexity\": 1.8, \"max_complexity\": 33, \"avg_function_length\": 8.5, \"max_function_length\": 320, \"max_nesting_depth\": 15, \"duplication_ratio\": 0.248, \"long_functions\": 16, \"complex_functions\": 15, \"deep_nesting_functions\": 8, \"parse_errors\": 0, \"structural_issues\": 5, \"truly_monolithic\": 1}",
+        "reasoning": "Analyzed 25 files, 1209 functions. Avg CC=1.8, max length=320, duplication=24.8%, 5 structural issues (1 monolithic)."
+      }
+    ],
+    "metrics": {
+      "file_count": 25,
+      "total_lines": 11649,
+      "function_count": 1209,
+      "avg_complexity": 1.8,
+      "max_complexity": 33,
+      "avg_function_length": 8.5,
+      "max_function_length": 320,
+      "max_nesting_depth": 15,
+      "duplication_ratio": 0.248,
+      "long_functions": 16,
+      "complex_functions": 15,
+      "deep_nesting_functions": 8,
+      "parse_errors": 0,
+      "structural_issues": 5,
+      "truly_monolithic": 1
+    },
+    "top_complex": [
+      {
+        "name": "get_indexer_id_newznab",
+        "line": 745,
+        "length": 105,
+        "complexity": 33,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_prowlarr.py"
+      },
+      {
+        "name": "get_id_api",
+        "line": 851,
+        "length": 103,
+        "complexity": 33,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_prowlarr.py"
+      },
+      {
+        "name": "main",
+        "line": 11,
+        "length": 125,
+        "complexity": 23,
+        "nesting_depth": 15,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/validate_a2a_agent.py"
+      },
+      {
+        "name": "test_apis_brute_force",
+        "line": 36,
+        "length": 61,
+        "complexity": 21,
+        "nesting_depth": 8,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_coverage.py"
+      },
+      {
+        "name": "get_mcp_instance",
+        "line": 120,
+        "length": 320,
+        "complexity": 16,
+        "nesting_depth": 2,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py"
+      }
+    ],
+    "top_long": [
+      {
+        "name": "get_mcp_instance",
+        "line": 120,
+        "length": 320,
+        "complexity": 16,
+        "nesting_depth": 2,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py"
+      },
+      {
+        "name": "main",
+        "line": 11,
+        "length": 125,
+        "complexity": 23,
+        "nesting_depth": 15,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/validate_a2a_agent.py"
+      },
+      {
+        "name": "get_indexer_id_newznab",
+        "line": 745,
+        "length": 105,
+        "complexity": 33,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_prowlarr.py"
+      },
+      {
+        "name": "get_id_api",
+        "line": 851,
+        "length": 103,
+        "complexity": 33,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_prowlarr.py"
+      },
+      {
+        "name": "write_api_file",
+        "line": 127,
+        "length": 100,
+        "complexity": 9,
+        "nesting_depth": 3,
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py"
+      }
+    ],
+    "structural_issues": [
+      {
+        "file": "api_client_prowlarr.py",
+        "path": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_prowlarr.py",
+        "lines": 1211,
+        "issues": [
+          "2 functions with high complexity (worst: Api.get_indexer_id_newznab at 105L, CC=33)",
+          "God class: Api (131 methods) \u2014 consider mixins/composition"
+        ],
+        "func_issues": [
+          {
+            "name": "Api.get_indexer_id_newznab",
+            "lines": 105,
+            "complexity": 33,
+            "nesting": 1
+          },
+          {
+            "name": "Api.get_id_api",
+            "lines": 103,
+            "complexity": 33,
+            "nesting": 1
+          }
+        ],
+        "classification": "monolithic"
+      },
+      {
+        "file": "api_client_sonarr.py",
+        "path": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_sonarr.py",
+        "lines": 2002,
+        "issues": [
+          "God class: Api (238 methods) \u2014 consider mixins/composition"
+        ],
+        "func_issues": [],
+        "classification": "needs_attention"
+      },
+      {
+        "file": "api_client_radarr.py",
+        "path": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_radarr.py",
+        "lines": 1919,
+        "issues": [
+          "God class: Api (241 methods) \u2014 consider mixins/composition"
+        ],
+        "func_issues": [],
+        "classification": "needs_attention"
+      },
+      {
+        "file": "api_client_lidarr.py",
+        "path": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_lidarr.py",
+        "lines": 1941,
+        "issues": [
+          "God class: Api (237 methods) \u2014 consider mixins/composition"
+        ],
+        "func_issues": [],
+        "classification": "needs_attention"
+      },
+      {
+        "file": "api_client_chaptarr.py",
+        "path": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_chaptarr.py",
+        "lines": 1881,
+        "issues": [
+          "God class: Api (235 methods) \u2014 consider mixins/composition"
+        ],
+        "func_issues": [],
+        "classification": "needs_attention"
+      }
+    ],
+    "flat_directories": []
+  },
+  {
+    "domain": "Security Analysis",
+    "score": 100,
+    "grade": "A",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "security_posture",
+        "points": 100,
+        "evidence": "high=0 med=0 low=0 attack_surface={\"subprocess_calls\": 0, \"file_io_calls\": 15, \"network_endpoints\": 1, \"eval_exec_usage\": 0, \"sql_usage\": 0}",
+        "reasoning": "Scanned 25 files. Found 0 security findings. High: -0pts, Med: -0pts, Low: -0pts."
+      }
+    ],
+    "vulnerabilities": [],
+    "attack_surface": {
+      "subprocess_calls": 0,
+      "file_io_calls": 15,
+      "network_endpoints": 1,
+      "eval_exec_usage": 0,
+      "sql_usage": 0
+    }
+  },
+  {
+    "domain": "Test Coverage",
+    "score": 75,
+    "grade": "C",
+    "findings": [
+      "Test suite lacks intent diversity (only one type)",
+      "12 potential doc-test drift items"
+    ],
+    "justifications": [
+      {
+        "criterion": "test_coverage_quality",
+        "points": 75,
+        "evidence": "{\"test_file_count\": 6, \"test_count\": 26, \"source_file_count\": 25, \"test_to_source_ratio\": 1.04, \"intent_distribution\": {\"unit\": 26}, \"tests_without_assertions\": 5, \"concept_traced_tests\": 0, \"drift_items\": 12}",
+        "reasoning": "26 tests across 6 files. Ratio: 1.04. Intent: {'unit': 26}. 5 without assertions, 12 drift items."
+      }
+    ],
+    "metrics": {
+      "test_file_count": 6,
+      "test_count": 26,
+      "source_file_count": 25,
+      "test_to_source_ratio": 1.04,
+      "intent_distribution": {
+        "unit": 26
+      },
+      "tests_without_assertions": 5,
+      "concept_traced_tests": 0,
+      "drift_items": 12
+    },
+    "tests": [
+      {
+        "name": "test_concept_parity",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_concept_parity.py",
+        "line": 58,
+        "length": 30,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_apis_brute_force",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_coverage.py",
+        "line": 36,
+        "length": 61,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": false
+      },
+      {
+        "name": "test_mcp_server_coverage",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_coverage.py",
+        "line": 99,
+        "length": 67,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": false
+      },
+      {
+        "name": "test_main_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_startup.py",
+        "line": 6,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_server_main_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_startup.py",
+        "line": 14,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_agent_server_main_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_startup.py",
+        "line": 22,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_auth_missing_base_url",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 27,
+        "length": 4,
+        "intent": "unit",
+        "markers": [
+          "parametrize"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_sonarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 32,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_radarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 39,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_lidarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 46,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_prowlarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 53,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_bazarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 60,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_seerr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 67,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_chaptarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 74,
+        "length": 6,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_arr_apis_brute_force",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 74,
+        "length": 62,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": false
+      },
+      {
+        "name": "test_arr_apis_error_handling",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 138,
+        "length": 46,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_execute_arr_action_failures_and_models",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 186,
+        "length": 49,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_is_service_enabled",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 237,
+        "length": 19,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_custom_health_route",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 259,
+        "length": 17,
+        "intent": "unit",
+        "markers": [
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_server_run_transports",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 278,
+        "length": 31,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_server_coverage",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 311,
+        "length": 70,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": false
+      },
+      {
+        "name": "test_agent_server_coverage",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 383,
+        "length": 15,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_all_api_clients_error_handling_and_special_cases",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 400,
+        "length": 66,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_sonarr_radarr_lookup_empty",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 468,
+        "length": 53,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_tools_with_context_and_serializer",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 524,
+        "length": 44,
+        "intent": "unit",
+        "markers": [
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_server_dependency_warning_import_error",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 570,
+        "length": 18,
+        "intent": "unit",
+        "markers": [],
+        "concept_id": "",
+        "has_assertions": false
+      }
+    ],
+    "drift": [
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "overview",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "key features",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "cli or api",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "mcp",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "mcp configuration examples",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "docker compose orchestration",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "security & governance",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "access control & policy enforcement",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "runtime security grid",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "installation",
+        "detail": "Feature heading in README has no corresponding test"
+      }
+    ]
+  },
+  {
+    "domain": "Documentation & Governance",
+    "score": 97,
+    "grade": "A",
+    "findings": [
+      "README.md missing sections: usage|quick start",
+      "2 broken internal links in README.md",
+      "README missing: Has a Table of Contents",
+      "README missing: Has usage examples with code blocks"
+    ],
+    "justifications": [
+      {
+        "criterion": "documentation_quality",
+        "points": 97,
+        "evidence": "{\"README.md\": {\"exists\": true, \"missing\": [\"usage|quick start\"]}, \"AGENTS.md\": {\"exists\": true, \"missing\": []}, \"STANDARDS.md\": {\"exists\": false, \"missing\": []}, \"CONTRIBUTING.md\": {\"exists\": false, \"missing\": []}, \"CHANGELOG.md\": {\"exists\": true, \"missing\": []}, \"LICENSE\": {\"exists\": true, \"missing\": []}, \"docs/\": {\"exists\": true, \"missing\": []}}",
+        "reasoning": "Audited 6 standard docs + docs/ directory. 0 broken references, 5 docs present. README industry grade: B (81.2%)."
+      }
+    ],
+    "doc_results": {
+      "README.md": {
+        "exists": true,
+        "size": 8778,
+        "headings": [
+          "Arr Mcp",
+          "CLI or API | MCP | Agent",
+          "Overview",
+          "Key Features",
+          "CLI or API",
+          "MCP",
+          "Available MCP Tools",
+          "MCP Configuration Examples",
+          "stdio Transport (Recommended for local IDEs e.g., Cursor, Claude Desktop)",
+          "Streamable-HTTP Transport (Recommended for production deployments)",
+          "Agent",
+          "Running the Agent CLI",
+          "Set credentials",
+          "Run the agent server",
+          "Docker Compose Orchestration",
+          "Security & Governance",
+          "Access Control & Policy Enforcement",
+          "Runtime Security Grid",
+          "Installation",
+          "Using uv (highly recommended)"
+        ],
+        "missing_sections": [
+          "usage|quick start"
+        ],
+        "heading_count": 23,
+        "stale": false,
+        "last_modified": "2026-05-22 08:16:54 -0500",
+        "category": "project_overview"
+      },
+      "AGENTS.md": {
+        "exists": true,
+        "size": 12802,
+        "headings": [
+          "AGENTS.md",
+          "Tech Stack & Architecture",
+          "Architecture Diagram",
+          "Workflow Diagram",
+          "Commands (run these exactly)",
+          "Installation",
+          "Quality & Linting (run from project root)",
+          "Execution Commands",
+          "arr-mcp",
+          "arr-agent",
+          "Project Structure Quick Reference",
+          "File Tree",
+          "Code Style & Conventions",
+          "Dos and Don'ts",
+          "Safety & Boundaries",
+          "When Stuck"
+        ],
+        "missing_sections": [],
+        "heading_count": 16,
+        "stale": false,
+        "last_modified": "2026-05-05 09:24:10 -0500",
+        "category": "agentic_metadata"
+      },
+      "STANDARDS.md": {
+        "exists": false,
+        "missing_sections": [],
+        "size": 0,
+        "headings": [],
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "standards"
+      },
+      "CONTRIBUTING.md": {
+        "exists": false,
+        "missing_sections": [],
+        "size": 0,
+        "headings": [],
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "contributing"
+      },
+      "CHANGELOG.md": {
+        "exists": true,
+        "size": 365,
+        "headings": [
+          "Changelog",
+          "[Unreleased]",
+          "Added",
+          "Changed",
+          "Fixed",
+          "[0.2.55] - 2026-04-29",
+          "Added"
+        ],
+        "missing_sections": [],
+        "heading_count": 7,
+        "stale": false,
+        "last_modified": "2026-04-30 08:34:58 -0500",
+        "category": "changelog"
+      },
+      "LICENSE": {
+        "exists": true,
+        "size": 1070,
+        "headings": [],
+        "missing_sections": [],
+        "heading_count": 0,
+        "stale": false,
+        "last_modified": "2026-01-31 22:06:55 -0600",
+        "category": "license"
+      },
+      "docs/": {
+        "exists": true,
+        "file_count": 3,
+        "files": [
+          "docs/legacy_readme.md",
+          "docs/overview.md",
+          "docs/index.md"
+        ]
+      }
+    },
+    "drift": [
+      {
+        "type": "info",
+        "doc": "README.md",
+        "reference": "arr-mcp[all], arr-mcp[all]",
+        "detail": "README references 2 install commands"
+      }
+    ],
+    "readme_grade": {
+      "score": 26,
+      "max_score": 32,
+      "percentage": 81.2,
+      "grade": "B",
+      "criteria": {
+        "has_title": true,
+        "has_badges": true,
+        "has_description": true,
+        "has_toc": false,
+        "has_installation": true,
+        "has_usage": false,
+        "has_api_docs": true,
+        "has_architecture": true,
+        "has_contributing": true,
+        "has_license": false,
+        "has_code_blocks": true,
+        "has_docs_refs": true,
+        "no_broken_links": false,
+        "reasonable_length": true,
+        "has_cli_api_details": true,
+        "has_mcp_configs": true,
+        "has_agent_configs": true,
+        "has_env_var_docs": true,
+        "has_mcp_tool_table": true,
+        "has_deployment_docs": true
+      },
+      "findings": [
+        "2 broken internal links in README.md",
+        "README missing: Has a Table of Contents",
+        "README missing: Has usage examples with code blocks"
+      ]
+    }
+  },
+  {
+    "domain": "Architecture & Design Patterns",
+    "score": 75,
+    "grade": "C",
+    "findings": [
+      "SRP: 6 modules exceed 500 lines (god modules)",
+      "SRP: 7 classes have >15 methods",
+      "No discernible layer architecture (no domain/service/adapter separation)"
+    ],
+    "justifications": [
+      {
+        "criterion": "architecture_quality",
+        "points": 75,
+        "evidence": "{\"layers\": 0, \"di_ratio\": 0.73, \"solid_violations\": 2}",
+        "reasoning": "Analyzed 25 files. 0/5 architecture layers present, DI ratio: 73%, 2 SOLID violations."
+      }
+    ],
+    "analysis": {
+      "solid_findings": [
+        {
+          "principle": "SRP",
+          "status": "violation",
+          "detail": "6 modules exceed 500 lines (god modules)",
+          "items": [
+            {
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_sonarr.py",
+              "lines": 2002
+            },
+            {
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_radarr.py",
+              "lines": 1919
+            },
+            {
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_lidarr.py",
+              "lines": 1941
+            },
+            {
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_chaptarr.py",
+              "lines": 1881
+            },
+            {
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_prowlarr.py",
+              "lines": 1211
+            }
+          ]
+        },
+        {
+          "principle": "SRP",
+          "status": "violation",
+          "detail": "7 classes have >15 methods",
+          "items": [
+            {
+              "class": "Api",
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_sonarr.py",
+              "method_count": 238
+            },
+            {
+              "class": "Api",
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_radarr.py",
+              "method_count": 241
+            },
+            {
+              "class": "Api",
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_lidarr.py",
+              "method_count": 237
+            },
+            {
+              "class": "Api",
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_chaptarr.py",
+              "method_count": 235
+            },
+            {
+              "class": "Api",
+              "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/api/api_client_bazarr.py",
+              "method_count": 27
+            }
+          ]
+        }
+      ],
+      "layer_architecture": {
+        "has_domain_layer": false,
+        "has_adapter_layer": false,
+        "has_port_interfaces": false,
+        "has_service_layer": false,
+        "has_model_layer": false
+      },
+      "dependency_injection": {
+        "total_classes": 11,
+        "di_classes": 8,
+        "di_ratio": 0.73
+      },
+      "event_driven": {
+        "event_classes": 0,
+        "callback_patterns": 0,
+        "observer_patterns": 0,
+        "signal_patterns": 0
+      },
+      "file_count": 25
+    }
+  },
+  {
+    "domain": "Concept Traceability",
+    "score": 30,
+    "grade": "F",
+    "findings": [
+      "Low traceability ratio: 0% concepts fully traced",
+      "26 test functions missing concept markers",
+      "163 significant functions (>10 lines) missing concept markers in docstrings"
+    ],
+    "justifications": [
+      {
+        "criterion": "concept_traceability",
+        "points": 30,
+        "evidence": "{\"total_concepts\": 5, \"well_traced\": 0, \"orphans\": 5, \"drift\": 0, \"code_concepts\": 0, \"doc_concepts\": 7, \"test_concepts\": 0, \"decorator_concepts\": 0, \"tests_missing_markers\": 26, \"functions_missing_docstrings\": 163, \"registry_concepts\": 0, \"unimplemented_concepts\": 0}",
+        "reasoning": "5 unique concepts found. 0 fully traced (code+docs+tests), 5 orphans, 0 drifted. 26 tests without concept markers. 163 functions without concept docstrings."
+      }
+    ],
+    "metrics": {
+      "total_concepts": 5,
+      "well_traced": 0,
+      "orphans": 5,
+      "drift": 0,
+      "code_concepts": 0,
+      "doc_concepts": 7,
+      "test_concepts": 0,
+      "decorator_concepts": 0,
+      "tests_missing_markers": 26,
+      "functions_missing_docstrings": 163,
+      "registry_concepts": 0,
+      "unimplemented_concepts": 0
+    },
+    "concept_map": {
+      "OS-5.4": {
+        "code": 0,
+        "docs": 2,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      },
+      "OS-5.1": {
+        "code": 0,
+        "docs": 1,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      },
+      "OS-5.3": {
+        "code": 0,
+        "docs": 2,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      },
+      "ORCH-1.4": {
+        "code": 0,
+        "docs": 1,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      },
+      "OS-5.2": {
+        "code": 0,
+        "docs": 1,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      }
+    },
+    "orphans": [
+      {
+        "concept_id": "OS-5.4",
+        "present_in": [
+          "docs"
+        ],
+        "missing_from": [
+          "code",
+          "test"
+        ]
+      },
+      {
+        "concept_id": "OS-5.1",
+        "present_in": [
+          "docs"
+        ],
+        "missing_from": [
+          "code",
+          "test"
+        ]
+      },
+      {
+        "concept_id": "OS-5.3",
+        "present_in": [
+          "docs"
+        ],
+        "missing_from": [
+          "code",
+          "test"
+        ]
+      },
+      {
+        "concept_id": "ORCH-1.4",
+        "present_in": [
+          "docs"
+        ],
+        "missing_from": [
+          "code",
+          "test"
+        ]
+      },
+      {
+        "concept_id": "OS-5.2",
+        "present_in": [
+          "docs"
+        ],
+        "missing_from": [
+          "code",
+          "test"
+        ]
+      }
+    ],
+    "drift": [],
+    "tests_missing_markers": [
+      {
+        "test_name": "test_concept_parity",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_concept_parity.py",
+        "line": 58
+      },
+      {
+        "test_name": "test_apis_brute_force",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_coverage.py",
+        "line": 36
+      },
+      {
+        "test_name": "test_mcp_server_coverage",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_coverage.py",
+        "line": 99
+      },
+      {
+        "test_name": "test_main_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_startup.py",
+        "line": 6
+      },
+      {
+        "test_name": "test_mcp_server_main_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_startup.py",
+        "line": 14
+      },
+      {
+        "test_name": "test_agent_server_main_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_startup.py",
+        "line": 22
+      },
+      {
+        "test_name": "test_auth_missing_base_url",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 27
+      },
+      {
+        "test_name": "test_get_sonarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 32
+      },
+      {
+        "test_name": "test_get_radarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 39
+      },
+      {
+        "test_name": "test_get_lidarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 46
+      },
+      {
+        "test_name": "test_get_prowlarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 53
+      },
+      {
+        "test_name": "test_get_bazarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 60
+      },
+      {
+        "test_name": "test_get_seerr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 67
+      },
+      {
+        "test_name": "test_get_chaptarr_client_success",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_auth_coverage.py",
+        "line": 74
+      },
+      {
+        "test_name": "test_arr_apis_brute_force",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 74
+      },
+      {
+        "test_name": "test_arr_apis_error_handling",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 138
+      },
+      {
+        "test_name": "test_execute_arr_action_failures_and_models",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 186
+      },
+      {
+        "test_name": "test_is_service_enabled",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 237
+      },
+      {
+        "test_name": "test_mcp_custom_health_route",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 259
+      },
+      {
+        "test_name": "test_mcp_server_run_transports",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/tests/test_arr_mcp_brute_force_coverage.py",
+        "line": 278
+      }
+    ],
+    "functions_missing_docstrings": [
+      {
+        "function": "clean_param_name",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py",
+        "line": 16,
+        "length": 17
+      },
+      {
+        "function": "main",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py",
+        "line": 345,
+        "length": 21
+      },
+      {
+        "function": "parse_spec",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py",
+        "line": 61,
+        "length": 65
+      },
+      {
+        "function": "write_api_file",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py",
+        "line": 127,
+        "length": 100
+      },
+      {
+        "function": "write_mcp_file",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py",
+        "line": 228,
+        "length": 78
+      },
+      {
+        "function": "write_agent_file",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/generate_api.py",
+        "line": 307,
+        "length": 36
+      },
+      {
+        "function": "main",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/scripts/validate_a2a_agent.py",
+        "line": 11,
+        "length": 125
+      },
+      {
+        "function": "execute_arr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 50,
+        "length": 55
+      },
+      {
+        "function": "is_service_enabled",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 107,
+        "length": 11
+      },
+      {
+        "function": "get_mcp_instance",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 120,
+        "length": 320
+      },
+      {
+        "function": "mcp_server",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 442,
+        "length": 17
+      },
+      {
+        "function": "bazarr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 140,
+        "length": 36
+      },
+      {
+        "function": "chaptarr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 183,
+        "length": 36
+      },
+      {
+        "function": "lidarr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 226,
+        "length": 36
+      },
+      {
+        "function": "prowlarr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 269,
+        "length": 36
+      },
+      {
+        "function": "radarr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 312,
+        "length": 36
+      },
+      {
+        "function": "seerr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 355,
+        "length": 36
+      },
+      {
+        "function": "sonarr_action",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/mcp_server.py",
+        "line": 398,
+        "length": 36
+      },
+      {
+        "function": "__getattr__",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/auth.py",
+        "line": 96,
+        "length": 30
+      },
+      {
+        "function": "agent_server",
+        "file": "/home/apps/workspace/agent-packages/agents/arr-mcp/arr_mcp/agent_server.py",
+        "line": 22,
+        "length": 58
+      }
+    ],
+    "unimplemented_concepts": []
+  },
+  {
+    "domain": "Linting & Formatting",
+    "score": 99,
+    "grade": "A",
+    "findings": [
+      "Total lint findings: 1 (high/error: 0, medium/warning: 0, low: 1)"
+    ],
+    "justifications": [
+      {
+        "criterion": "lint_compliance",
+        "points": 99,
+        "evidence": "ruff=1, bandit=0, mypy=0",
+        "reasoning": "1 total findings across 3 tools. High/error: -0pts, Med/warning: -0pts, Low: -1pt."
+      }
+    ],
+    "tool_results": {
+      "ruff": {
+        "available": true,
+        "finding_count": 1,
+        "returncode": 1
+      },
+      "bandit": {
+        "available": true,
+        "finding_count": 0,
+        "returncode": 1
+      },
+      "mypy": {
+        "available": true,
+        "finding_count": 0,
+        "returncode": 1
+      }
+    },
+    "all_findings": [
+      {
+        "file": "",
+        "line": "",
+        "col": "",
+        "message": "tests/test_arr_mcp_brute_force_coverage.py:5:8",
+        "tool": "ruff"
+      }
+    ]
+  },
+  {
+    "domain": "Pre-Commit Compliance",
+    "score": 84,
+    "grade": "B",
+    "findings": [
+      "2/24 pre-commit hooks failed: don't commit to branch, check cli help",
+      "2 hook(s) may be outdated: ruff-pre-commit, uv-pre-commit",
+      "Pytest hooks skipped (handled by CE-016 Test Execution): pytest, local-pytest"
+    ],
+    "justifications": [
+      {
+        "criterion": "precommit_compliance",
+        "points": 84,
+        "evidence": "{\"total_hooks\": 24, \"passed\": 21, \"failed\": 2, \"skipped\": 1, \"outdated_hooks\": 2, \"pytest_hooks_skipped\": 2, \"exit_code\": 1}",
+        "reasoning": "Ran pre-commit with 24 hooks: 21 passed, 2 failed, 1 skipped. 2 potentially outdated. 2 pytest hooks deferred to CE-016."
+      }
+    ],
+    "hook_results": [
+      {
+        "hook": "check for added large files",
+        "status": "passed"
+      },
+      {
+        "hook": "check python ast",
+        "status": "passed"
+      },
+      {
+        "hook": "check yaml",
+        "status": "passed"
+      },
+      {
+        "hook": "check toml",
+        "status": "passed"
+      },
+      {
+        "hook": "check json",
+        "status": "passed"
+      },
+      {
+        "hook": "fix utf-8 byte order marker",
+        "status": "passed"
+      },
+      {
+        "hook": "check for merge conflicts",
+        "status": "passed"
+      },
+      {
+        "hook": "detect private key",
+        "status": "passed"
+      },
+      {
+        "hook": "trim trailing whitespace",
+        "status": "passed"
+      },
+      {
+        "hook": "fix end of files",
+        "status": "passed"
+      },
+      {
+        "hook": "don't commit to branch",
+        "status": "failed"
+      },
+      {
+        "hook": "ruff check",
+        "status": "passed"
+      },
+      {
+        "hook": "ruff format",
+        "status": "passed"
+      },
+      {
+        "hook": "mypy",
+        "status": "passed"
+      },
+      {
+        "hook": "vulture",
+        "status": "passed"
+      },
+      {
+        "hook": "codespell",
+        "status": "passed"
+      },
+      {
+        "hook": "bandit",
+        "status": "passed"
+      },
+      {
+        "hook": "nbqa-ruff",
+        "status": "passed"
+      },
+      {
+        "hook": "uv-lock",
+        "status": "passed"
+      },
+      {
+        "hook": "mermaid-validate",
+        "status": "passed"
+      },
+      {
+        "hook": "check agent standards",
+        "status": "passed"
+      },
+      {
+        "hook": "check cli help",
+        "status": "failed"
+      },
+      {
+        "hook": "validate bumpversion config",
+        "status": "passed"
+      },
+      {
+        "hook": "pytest",
+        "status": "skipped"
+      }
+    ],
+    "pytest_hooks_skipped": [
+      "pytest",
+      "local-pytest"
+    ],
+    "outdated_hooks": [
+      {
+        "repo": "https://github.com/astral-sh/ruff-pre-commit",
+        "current_rev": "v0.15.12",
+        "issue": "Pre-1.0 version \u2014 check for updates"
+      },
+      {
+        "repo": "https://github.com/astral-sh/uv-pre-commit",
+        "current_rev": "0.11.8",
+        "issue": "Pre-1.0 version \u2014 check for updates"
+      }
+    ],
+    "metrics": {
+      "total_hooks": 24,
+      "passed": 21,
+      "failed": 2,
+      "skipped": 1,
+      "outdated_hooks": 2,
+      "pytest_hooks_skipped": 2,
+      "exit_code": 1
+    }
+  },
+  {
+    "domain": "Test Execution",
+    "score": 25,
+    "grade": "F",
+    "findings": [
+      "No tests were executed (test framework detected but no tests found)"
+    ],
+    "justifications": [
+      {
+        "criterion": "test_execution",
+        "points": 25,
+        "evidence": "{\"frameworks_detected\": 1, \"total_passed\": 0, \"total_failed\": 0, \"total_errors\": 0, \"pass_rate\": 0.0, \"timeout\": 300}",
+        "reasoning": "Executed 1 framework(s). 0 passed, 0 failed, 0 errors. Pass rate: 0%."
+      }
+    ],
+    "framework_results": [
+      {
+        "language": "python",
+        "framework": "pytest",
+        "command": [
+          "/home/apps/workspace/.venv/bin/python3",
+          "-m",
+          "pytest",
+          "--tb=line",
+          "-q",
+          "--timeout=300",
+          "--no-header"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "parsed": {
+          "passed": 0,
+          "failed": 0,
+          "errors": 0,
+          "warnings": 0,
+          "skipped": 0,
+          "failures": []
+        }
+      }
+    ],
+    "metrics": {
+      "frameworks_detected": 1,
+      "total_passed": 0,
+      "total_failed": 0,
+      "total_errors": 0,
+      "pass_rate": 0.0,
+      "timeout": 300
+    }
+  },
+  {
+    "domain": "Directory Organization",
+    "score": 88,
+    "grade": "B",
+    "findings": [
+      "4 rogue/throwaway scripts detected (fix_*, validate_*, patch_*, etc.): patch_gen_script.py, fix_mcp_server.py, patch_gen.py, scripts/validate_a2a_agent.py"
+    ],
+    "justifications": [
+      {
+        "criterion": "directory_organization",
+        "points": 88,
+        "evidence": "{\"total_source_files\": 50, \"total_directories\": 10, \"max_depth\": 3, \"avg_depth\": 1.2, \"crowded_dirs_20plus\": 0, \"severely_crowded_40plus\": 0, \"monolithic_dirs\": 0, \"empty_dirs\": 1, \"avg_files_per_dir\": 5.0, \"rogue_scripts\": 4}",
+        "reasoning": "50 files across 10 directories. Max depth: 3, avg files/dir: 5.0. 0 crowded, 0 severely crowded, 0 monolithic, 4 rogue scripts."
+      }
+    ],
+    "metrics": {
+      "total_source_files": 50,
+      "total_directories": 10,
+      "max_depth": 3,
+      "avg_depth": 1.2,
+      "crowded_dirs_20plus": 0,
+      "severely_crowded_40plus": 0,
+      "monolithic_dirs": 0,
+      "empty_dirs": 1,
+      "avg_files_per_dir": 5.0,
+      "rogue_scripts": 4
+    },
+    "crowded_dirs": [],
+    "monolithic_dirs": [],
+    "suggestions": [],
+    "rogue_scripts": [
+      {
+        "file": "patch_gen_script.py",
+        "prefix": "patch",
+        "recommendation": "Remove or integrate into project modules"
+      },
+      {
+        "file": "fix_mcp_server.py",
+        "prefix": "fix",
+        "recommendation": "Remove or integrate into project modules"
+      },
+      {
+        "file": "patch_gen.py",
+        "prefix": "patch",
+        "recommendation": "Remove or integrate into project modules"
+      },
+      {
+        "file": "scripts/validate_a2a_agent.py",
+        "prefix": "validate",
+        "recommendation": "Remove or integrate into project modules"
+      }
+    ]
+  },
+  {
+    "domain": "Version Sync Analysis",
+    "score": 100,
+    "grade": "A",
+    "findings": [
+      "All version '0.15.0' declarations appear to be tracked correctly."
+    ],
+    "justifications": [
+      {
+        "criterion": "bumpversion_exists",
+        "points": 20,
+        "evidence": "/home/apps/workspace/agent-packages/agents/arr-mcp/.bumpversion.cfg",
+        "reasoning": ".bumpversion.cfg found"
+      },
+      {
+        "criterion": "current_version_defined",
+        "points": 20,
+        "evidence": "0.15.0",
+        "reasoning": "Current version tracked is 0.15.0"
+      },
+      {
+        "criterion": "files_tracked",
+        "points": 20,
+        "evidence": "5 files tracked",
+        "reasoning": "Found 5 files tracked in .bumpversion.cfg"
+      },
+      {
+        "criterion": "version_drift_check",
+        "points": 40,
+        "evidence": "0 drifted files",
+        "reasoning": "No version drift detected in codebase files"
+      }
+    ],
+    "details": {
+      "tracked_files": [
+        "pyproject.toml",
+        "README.md",
+        "docker/Dockerfile",
+        "arr_mcp/agent_server.py",
+        "arr_mcp/mcp_server.py"
+      ],
+      "drifted_files": []
+    }
+  },
+  {
+    "domain": "Changelog Audit",
+    "score": 75,
+    "grade": "C",
+    "findings": [
+      "CHANGELOG.md exists but could not be parsed \u2014 check format compliance",
+      "No changelog entries within the last 30 days",
+      "keepachangelog not installed \u2014 pip install 'universal-skills[code-enhancer]'"
+    ],
+    "justifications": [
+      {
+        "criterion": "changelog_quality",
+        "points": 75,
+        "evidence": "{\"exists\": true, \"parseable\": false, \"version_count\": 0, \"has_drift\": false, \"dep_deltas_found\": 0}",
+        "reasoning": "CHANGELOG.md exists. 0 versions tracked. 0 dependency changelogs analyzed."
+      }
+    ],
+    "format_validation": {
+      "exists": true,
+      "parseable": false,
+      "has_unreleased": false,
+      "version_count": 0,
+      "uses_semver": true,
+      "valid_categories": true,
+      "has_dates": true,
+      "has_header": true,
+      "issues": [
+        "keepachangelog not installed \u2014 pip install 'universal-skills[code-enhancer]'"
+      ]
+    },
+    "version_drift": {
+      "has_drift": false,
+      "changelog_version": null,
+      "pyproject_version": "0.15.0"
+    },
+    "dependency_deltas": {}
+  },
+  {
+    "domain": "Pytest Quality",
+    "score": 70,
+    "grade": "C",
+    "findings": [
+      "1 test files exceed 500 lines \u2014 split into focused modules",
+      "Test directory lacks subdirectory organization (consider unit/, integration/, e2e/)",
+      "Missing conftest.py for shared fixtures",
+      "Low fixture usage: only 19% of tests use fixtures",
+      "No shared fixtures in conftest.py",
+      "5 tests have no assertions"
+    ],
+    "justifications": [
+      {
+        "criterion": "pytest_quality",
+        "points": 70,
+        "evidence": "{\"test_files\": 6, \"total_tests\": 26, \"descriptive_name_ratio\": 1.0, \"generic_names\": 0, \"fixture_usage_ratio\": 0.19, \"parametrize_users\": 1, \"conftest_fixtures\": 0, \"no_assertion_tests\": 5, \"weak_assertion_tests\": 1, \"duplicate_groups\": 0, \"large_files\": 1, \"over_mocked_tests\": 3, \"very_long_tests\": 0, \"subscores\": {\"naming\": 20, \"structure\": 12, \"fixtures\": 8, \"assertions\": 10, \"ai_slop\": 20}}",
+        "reasoning": "26 tests across 6 files. Naming: 20/20, Structure: 12/20, Fixtures: 8/20, Assertions: 10/20, AI Slop: 20/20."
+      }
+    ],
+    "metrics": {
+      "test_files": 6,
+      "total_tests": 26,
+      "descriptive_name_ratio": 1.0,
+      "generic_names": 0,
+      "fixture_usage_ratio": 0.19,
+      "parametrize_users": 1,
+      "conftest_fixtures": 0,
+      "no_assertion_tests": 5,
+      "weak_assertion_tests": 1,
+      "duplicate_groups": 0,
+      "large_files": 1,
+      "over_mocked_tests": 3,
+      "very_long_tests": 0,
+      "subscores": {
+        "naming": 20,
+        "structure": 12,
+        "fixtures": 8,
+        "assertions": 10,
+        "ai_slop": 20
+      }
+    },
+    "conftest": {
+      "conftest_count": 0,
+      "total_shared_fixtures": 0,
+      "has_root_conftest": false
+    },
+    "duplicates": [],
+    "large_files": [
+      {
+        "file": "test_arr_mcp_brute_force_coverage.py",
+        "lines": 587
+      }
+    ]
+  },
+  {
+    "domain": "Environment Variables",
+    "score": 60,
+    "grade": "D",
+    "findings": [
+      "Only 15% of env vars documented in README.md",
+      "Undocumented env vars: ALLOWED_CLIENT_REDIRECT_URIS, AUTH_TYPE, BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_SSL_VERIFY, CHAPTARR_API_KEY, CHAPTARR_BASE_URL, CHAPTARR_SSL_VERIFY, CHAPTARR_TOKEN, DEFAULT_AGENT_NAME",
+      "27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_SSL_VERIFY, CHAPTARR_API_KEY, CHAPTARR_BASE_URL"
+    ],
+    "justifications": [
+      {
+        "criterion": "env_var_documentation",
+        "points": 60,
+        "evidence": "{\"total_vars\": 55, \"python_vars\": 29, \"dockerfile_vars\": 22, \"compose_vars\": 0, \"dotenv_vars\": 11, \"readme_documented\": 8, \"readme_undocumented\": 47, \"documentation_coverage\": 0.15}",
+        "reasoning": "Found 55 unique env vars across 97 occurrences. README documents 8/55. Has .env.example."
+      }
+    ],
+    "metrics": {
+      "total_vars": 55,
+      "python_vars": 29,
+      "dockerfile_vars": 22,
+      "compose_vars": 0,
+      "dotenv_vars": 11,
+      "readme_documented": 8,
+      "readme_undocumented": 47,
+      "documentation_coverage": 0.15
+    },
+    "variables": {
+      "HOST": {
+        "name": "HOST",
+        "sources": [
+          "scripts/generate_api.py:246",
+          "docker/Dockerfile:8",
+          "docker/Dockerfile:3",
+          "debug.Dockerfile:26",
+          "debug.Dockerfile:3"
+        ],
+        "defaults": [
+          "0.0.0.0"
+        ],
+        "source_types": [
+          "dockerfile",
+          "dotenv",
+          "python"
+        ]
+      },
+      "PORT": {
+        "name": "PORT",
+        "sources": [
+          "scripts/generate_api.py:247",
+          "scripts/generate_api.py:336",
+          "docker/Dockerfile:4",
+          "debug.Dockerfile:4",
+          "docker/debug.Dockerfile:4"
+        ],
+        "defaults": [
+          "9000",
+          "8000"
+        ],
+        "source_types": [
+          "dockerfile",
+          "dotenv",
+          "python"
+        ]
+      },
+      "BAZARR_BASE_URL": {
+        "name": "BAZARR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:149",
+          "arr_mcp/auth.py:66"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "BAZARR_API_KEY": {
+        "name": "BAZARR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:153",
+          "arr_mcp/auth.py:67"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "BAZARR_SSL_VERIFY": {
+        "name": "BAZARR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:157",
+          "arr_mcp/auth.py:68"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "CHAPTARR_BASE_URL": {
+        "name": "CHAPTARR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:192",
+          "arr_mcp/auth.py:88"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "CHAPTARR_API_KEY": {
+        "name": "CHAPTARR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:196"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "CHAPTARR_SSL_VERIFY": {
+        "name": "CHAPTARR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:200",
+          "arr_mcp/auth.py:90"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "LIDARR_BASE_URL": {
+        "name": "LIDARR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:235",
+          "arr_mcp/auth.py:44"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "LIDARR_API_KEY": {
+        "name": "LIDARR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:239"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "LIDARR_SSL_VERIFY": {
+        "name": "LIDARR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:243",
+          "arr_mcp/auth.py:46"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "PROWLARR_BASE_URL": {
+        "name": "PROWLARR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:278",
+          "arr_mcp/auth.py:55"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "PROWLARR_API_KEY": {
+        "name": "PROWLARR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:282"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "PROWLARR_SSL_VERIFY": {
+        "name": "PROWLARR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:286",
+          "arr_mcp/auth.py:57"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "RADARR_BASE_URL": {
+        "name": "RADARR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:321",
+          "arr_mcp/auth.py:33"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "RADARR_API_KEY": {
+        "name": "RADARR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:325"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "RADARR_SSL_VERIFY": {
+        "name": "RADARR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:329",
+          "arr_mcp/auth.py:35"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SEERR_BASE_URL": {
+        "name": "SEERR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:364",
+          "arr_mcp/auth.py:77"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SEERR_API_KEY": {
+        "name": "SEERR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:368",
+          "arr_mcp/auth.py:78"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SEERR_SSL_VERIFY": {
+        "name": "SEERR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:372",
+          "arr_mcp/auth.py:79"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SONARR_BASE_URL": {
+        "name": "SONARR_BASE_URL",
+        "sources": [
+          "arr_mcp/mcp_server.py:407",
+          "arr_mcp/auth.py:22"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SONARR_API_KEY": {
+        "name": "SONARR_API_KEY",
+        "sources": [
+          "arr_mcp/mcp_server.py:411"
+        ],
+        "defaults": [
+          "None"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SONARR_SSL_VERIFY": {
+        "name": "SONARR_SSL_VERIFY",
+        "sources": [
+          "arr_mcp/mcp_server.py:415",
+          "arr_mcp/auth.py:24"
+        ],
+        "defaults": [
+          "False"
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "SONARR_TOKEN": {
+        "name": "SONARR_TOKEN",
+        "sources": [
+          "arr_mcp/auth.py:23"
+        ],
+        "defaults": [],
+        "source_types": [
+          "python"
+        ]
+      },
+      "RADARR_TOKEN": {
+        "name": "RADARR_TOKEN",
+        "sources": [
+          "arr_mcp/auth.py:34"
+        ],
+        "defaults": [],
+        "source_types": [
+          "python"
+        ]
+      },
+      "LIDARR_TOKEN": {
+        "name": "LIDARR_TOKEN",
+        "sources": [
+          "arr_mcp/auth.py:45"
+        ],
+        "defaults": [],
+        "source_types": [
+          "python"
+        ]
+      },
+      "PROWLARR_TOKEN": {
+        "name": "PROWLARR_TOKEN",
+        "sources": [
+          "arr_mcp/auth.py:56"
+        ],
+        "defaults": [],
+        "source_types": [
+          "python"
+        ]
+      },
+      "CHAPTARR_TOKEN": {
+        "name": "CHAPTARR_TOKEN",
+        "sources": [
+          "arr_mcp/auth.py:89"
+        ],
+        "defaults": [],
+        "source_types": [
+          "python"
+        ]
+      },
+      "DEFAULT_AGENT_NAME": {
+        "name": "DEFAULT_AGENT_NAME",
+        "sources": [
+          "arr_mcp/agent_server.py:34"
+        ],
+        "defaults": [
+          "meta.get("
+        ],
+        "source_types": [
+          "python"
+        ]
+      },
+      "TRANSPORT": {
+        "name": "TRANSPORT",
+        "sources": [
+          "docker/Dockerfile:5",
+          "debug.Dockerfile:5",
+          "docker/debug.Dockerfile:5",
+          ".env:8",
+          ".env.example:8"
+        ],
+        "defaults": [
+          "stdio",
+          "stdio # options: stdio, streamable-http, sse"
+        ],
+        "source_types": [
+          "dockerfile",
+          "dotenv"
+        ]
+      },
+      "AUTH_TYPE": {
+        "name": "AUTH_TYPE",
+        "sources": [
+          "docker/Dockerfile:6",
+          "debug.Dockerfile:6",
+          "docker/debug.Dockerfile:6"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "TOKEN_JWKS_URI": {
+        "name": "TOKEN_JWKS_URI",
+        "sources": [
+          "debug.Dockerfile:7"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "TOKEN_ISSUER": {
+        "name": "TOKEN_ISSUER",
+        "sources": [
+          "debug.Dockerfile:8"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "TOKEN_AUDIENCE": {
+        "name": "TOKEN_AUDIENCE",
+        "sources": [
+          "debug.Dockerfile:9"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OAUTH_UPSTREAM_AUTH_ENDPOINT": {
+        "name": "OAUTH_UPSTREAM_AUTH_ENDPOINT",
+        "sources": [
+          "debug.Dockerfile:10"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OAUTH_UPSTREAM_TOKEN_ENDPOINT": {
+        "name": "OAUTH_UPSTREAM_TOKEN_ENDPOINT",
+        "sources": [
+          "debug.Dockerfile:11"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OAUTH_UPSTREAM_CLIENT_ID": {
+        "name": "OAUTH_UPSTREAM_CLIENT_ID",
+        "sources": [
+          "debug.Dockerfile:12"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OAUTH_UPSTREAM_CLIENT_SECRET": {
+        "name": "OAUTH_UPSTREAM_CLIENT_SECRET",
+        "sources": [
+          "debug.Dockerfile:13"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OAUTH_BASE_URL": {
+        "name": "OAUTH_BASE_URL",
+        "sources": [
+          "debug.Dockerfile:14"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OIDC_CONFIG_URL": {
+        "name": "OIDC_CONFIG_URL",
+        "sources": [
+          "debug.Dockerfile:15"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OIDC_CLIENT_ID": {
+        "name": "OIDC_CLIENT_ID",
+        "sources": [
+          "debug.Dockerfile:16"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OIDC_CLIENT_SECRET": {
+        "name": "OIDC_CLIENT_SECRET",
+        "sources": [
+          "debug.Dockerfile:17"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "OIDC_BASE_URL": {
+        "name": "OIDC_BASE_URL",
+        "sources": [
+          "debug.Dockerfile:18"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "REMOTE_AUTH_SERVERS": {
+        "name": "REMOTE_AUTH_SERVERS",
+        "sources": [
+          "debug.Dockerfile:19"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "REMOTE_BASE_URL": {
+        "name": "REMOTE_BASE_URL",
+        "sources": [
+          "debug.Dockerfile:20"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "ALLOWED_CLIENT_REDIRECT_URIS": {
+        "name": "ALLOWED_CLIENT_REDIRECT_URIS",
+        "sources": [
+          "debug.Dockerfile:21"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "EUNOMIA_TYPE": {
+        "name": "EUNOMIA_TYPE",
+        "sources": [
+          "debug.Dockerfile:22",
+          ".env:18",
+          ".env.example:18"
+        ],
+        "defaults": [
+          "none",
+          "none # options: none, embedded, remote"
+        ],
+        "source_types": [
+          "dockerfile",
+          "dotenv"
+        ]
+      },
+      "EUNOMIA_POLICY_FILE": {
+        "name": "EUNOMIA_POLICY_FILE",
+        "sources": [
+          "debug.Dockerfile:23",
+          ".env:19",
+          ".env.example:19"
+        ],
+        "defaults": [
+          "mcp_policies.json"
+        ],
+        "source_types": [
+          "dockerfile",
+          "dotenv"
+        ]
+      },
+      "EUNOMIA_REMOTE_URL": {
+        "name": "EUNOMIA_REMOTE_URL",
+        "sources": [
+          "debug.Dockerfile:24"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dockerfile"
+        ]
+      },
+      "ENABLE_OTEL": {
+        "name": "ENABLE_OTEL",
+        "sources": [
+          ".env:11",
+          ".env.example:11"
+        ],
+        "defaults": [
+          "True"
+        ],
+        "source_types": [
+          "dotenv"
+        ]
+      },
+      "OTEL_EXPORTER_OTLP_ENDPOINT": {
+        "name": "OTEL_EXPORTER_OTLP_ENDPOINT",
+        "sources": [
+          ".env:12"
+        ],
+        "defaults": [
+          "http://langfuse.arpa/api/public/otel"
+        ],
+        "source_types": [
+          "dotenv"
+        ]
+      },
+      "ARR_HOST": {
+        "name": "ARR_HOST",
+        "sources": [
+          ".env:23",
+          ".env.example:23"
+        ],
+        "defaults": [
+          "your_arr_host"
+        ],
+        "source_types": [
+          "dotenv"
+        ]
+      },
+      "ARR_API_KEY": {
+        "name": "ARR_API_KEY",
+        "sources": [
+          ".env:24"
+        ],
+        "defaults": [
+          "your_arr_api_key_here"
+        ],
+        "source_types": [
+          "dotenv"
+        ]
+      },
+      "PVR_API_KEY": {
+        "name": "PVR_API_KEY",
+        "sources": [
+          ".env:25"
+        ],
+        "defaults": [
+          "your_pvr_api_key_here"
+        ],
+        "source_types": [
+          "dotenv"
+        ]
+      },
+      "PLEX_TOKEN": {
+        "name": "PLEX_TOKEN",
+        "sources": [
+          ".env:26"
+        ],
+        "defaults": [
+          "yourplextokenhere"
+        ],
+        "source_types": [
+          "dotenv"
+        ]
+      }
+    },
+    "readme_coverage": {
+      "documented": [
+        "ARR_API_KEY",
+        "ARR_HOST",
+        "ENABLE_OTEL",
+        "HOST",
+        "PLEX_TOKEN",
+        "PORT",
+        "PVR_API_KEY",
+        "TRANSPORT"
+      ],
+      "undocumented": [
+        "ALLOWED_CLIENT_REDIRECT_URIS",
+        "AUTH_TYPE",
+        "BAZARR_API_KEY",
+        "BAZARR_BASE_URL",
+        "BAZARR_SSL_VERIFY",
+        "CHAPTARR_API_KEY",
+        "CHAPTARR_BASE_URL",
+        "CHAPTARR_SSL_VERIFY",
+        "CHAPTARR_TOKEN",
+        "DEFAULT_AGENT_NAME",
+        "EUNOMIA_POLICY_FILE",
+        "EUNOMIA_REMOTE_URL",
+        "EUNOMIA_TYPE",
+        "LIDARR_API_KEY",
+        "LIDARR_BASE_URL",
+        "LIDARR_SSL_VERIFY",
+        "LIDARR_TOKEN",
+        "OAUTH_BASE_URL",
+        "OAUTH_UPSTREAM_AUTH_ENDPOINT",
+        "OAUTH_UPSTREAM_CLIENT_ID",
+        "OAUTH_UPSTREAM_CLIENT_SECRET",
+        "OAUTH_UPSTREAM_TOKEN_ENDPOINT",
+        "OIDC_BASE_URL",
+        "OIDC_CLIENT_ID",
+        "OIDC_CLIENT_SECRET",
+        "OIDC_CONFIG_URL",
+        "OTEL_EXPORTER_OTLP_ENDPOINT",
+        "PROWLARR_API_KEY",
+        "PROWLARR_BASE_URL",
+        "PROWLARR_SSL_VERIFY",
+        "PROWLARR_TOKEN",
+        "RADARR_API_KEY",
+        "RADARR_BASE_URL",
+        "RADARR_SSL_VERIFY",
+        "RADARR_TOKEN",
+        "REMOTE_AUTH_SERVERS",
+        "REMOTE_BASE_URL",
+        "SEERR_API_KEY",
+        "SEERR_BASE_URL",
+        "SEERR_SSL_VERIFY",
+        "SONARR_API_KEY",
+        "SONARR_BASE_URL",
+        "SONARR_SSL_VERIFY",
+        "SONARR_TOKEN",
+        "TOKEN_AUDIENCE",
+        "TOKEN_ISSUER",
+        "TOKEN_JWKS_URI"
+      ],
+      "coverage": 0.14545454545454545
+    }
+  }
+]
