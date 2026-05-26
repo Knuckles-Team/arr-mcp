@@ -48,6 +48,7 @@ __version__ = "0.15.0"
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
 
+
 def execute_arr_action(
     service_name: str,
     base_url: str | None,
@@ -108,6 +109,7 @@ def execute_arr_action(
         return res.model_dump()
     return res
 
+
 def is_service_enabled(service: str) -> bool:
     """Determine if a service should be enabled based on environment overrides."""
     # Check if specifically enabled or disabled
@@ -119,6 +121,7 @@ def is_service_enabled(service: str) -> bool:
     # We verify if there are any specific service tool settings that are explicitly disabled,
     # but by default all services are enabled.
     return True
+
 
 def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
     """Initialize and return the MCP instance, args, and middlewares."""
@@ -441,6 +444,7 @@ def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
         mcp.add_middleware(mw)
     return mcp, args, middlewares, registered_tags
 
+
 def mcp_server() -> None:
     mcp, args, middlewares, registered_tags = get_mcp_instance()
     print(f"{'arr-mcp'} MCP v{__version__}", file=sys.stderr)
@@ -458,6 +462,7 @@ def mcp_server() -> None:
     else:
         logger.error("Invalid transport", extra={"transport": args.transport})
         sys.exit(1)
+
 
 if __name__ == "__main__":
     mcp_server()
