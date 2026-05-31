@@ -20,7 +20,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
 
-*Version: 0.33.4*
+*Version: 0.34.0*
 
 ---
 

@@ -43,7 +43,7 @@ from pydantic import Field
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-__version__ = "0.33.4"
+__version__ = "0.34.0"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
