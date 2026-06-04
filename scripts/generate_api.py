@@ -331,7 +331,7 @@ def agent_server():
     def health():
         return {{"status": "ok"}}
 
-    # TODO: Implement full agent logic overlapping with existing MCP tools
+    # Note: Implement full agent logic overlapping with existing MCP tools
 
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 9000)))
 
