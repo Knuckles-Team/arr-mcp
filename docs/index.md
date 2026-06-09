@@ -1,503 +1,63 @@
-# Arr Stack - A2A | AG-UI | MCP
+# arr-mcp
 
-![PyPI - Version](https://img.shields.io/pypi/v/arr-mcp)
+Arr Suite **API + MCP Server + A2A Agent** for the agent-utilities ecosystem — a
+typed, deterministic control surface over Sonarr, Radarr, Lidarr, Prowlarr, Bazarr,
+Seerr, and Chaptarr.
+
+!!! info "Official documentation"
+    This site is the canonical reference for `arr-mcp`, maintained alongside every
+    release.
+
+[![PyPI](https://img.shields.io/pypi/v/arr-mcp)](https://pypi.org/project/arr-mcp/)
 ![MCP Server](https://badge.mcpx.dev?type=server 'MCP Server')
-![PyPI - Downloads](https://img.shields.io/pypi/dd/arr-mcp)
-![GitHub Repo stars](https://img.shields.io/github/stars/Knuckles-Team/arr-mcp)
-![GitHub forks](https://img.shields.io/github/forks/Knuckles-Team/arr-mcp)
-![GitHub contributors](https://img.shields.io/github/contributors/Knuckles-Team/arr-mcp)
-![PyPI - License](https://img.shields.io/pypi/l/arr-mcp)
-![GitHub](https://img.shields.io/github/license/Knuckles-Team/arr-mcp)
-
-![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/Knuckles-Team/arr-mcp)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/Knuckles-Team/arr-mcp)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/Knuckles-Team/arr-mcp)
-![GitHub issues](https://img.shields.io/github/issues/Knuckles-Team/arr-mcp)
-
-![GitHub top language](https://img.shields.io/github/languages/top/Knuckles-Team/arr-mcp)
-![GitHub language count](https://img.shields.io/github/languages/count/Knuckles-Team/arr-mcp)
-![GitHub repo size](https://img.shields.io/github/repo-size/Knuckles-Team/arr-mcp)
-![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/Knuckles-Team/arr-mcp)
-![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
-![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
-
-*Version: 0.8.0*
+[![License](https://img.shields.io/pypi/l/arr-mcp)](https://github.com/Knuckles-Team/arr-mcp/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/badge/source-GitHub-181717?logo=github)](https://github.com/Knuckles-Team/arr-mcp)
 
 ## Overview
 
-Arr Stack MCP Server + A2A Server
+`arr-mcp` wraps the REST surface of the **Arr Suite** of media-automation services
+with consolidated, action-routed MCP tools and a built-in Pydantic-AI agent. It
+provides:
 
-It includes a Model Context Protocol (MCP) server and an out of the box Agent2Agent (A2A) agent.
+- **Per-service API clients** — request-session facades over Sonarr, Radarr, Lidarr,
+  Prowlarr, Bazarr, Seerr, and Chaptarr, each constructed from the environment.
+- **Action-dispatch MCP tools** — one consolidated tool per service
+  (`sonarr_action`, `radarr_action`, …) that keeps the LLM tool surface compact and
+  togglable.
+- **An A2A agent server** (`arr-agent`) that calls the MCP tools over the
+  Agent Control Protocol with an optional web interface.
 
-This server is a consolidated MCP server for the entire Arr stack, providing a single entry point for AI agents to interact with your media management services. Each service's tools can be enabled or disabled independently via environment variables.
+Each service connector remains inactive when its credentials are absent, so the
+server runs cleanly with only the integrations you configure.
 
-This repository is actively maintained - Contributions are welcome!
+## Explore the documentation
 
-### Supports:
-- **Sonarr**: TV series management (`SONARRTOOL`)
-- **Radarr**: Movie collection management (`RADARRTOOL`)
-- **Lidarr**: Music collection management (`LIDARRTOOL`)
-- **Prowlarr**: Indexer management (`PROWLARRTOOL`)
-- **Bazarr**: Subtitle management (`BAZARRTOOL`)
-- **Seerr**: Media request management (`SEERRTOOL`)
-- **Chaptarr**: Book/Audiobook management (`CHAPTARRTOOL`)
-- Centralized authentication
+<div class="grid cards" markdown>
 
-## MCP
+- :material-rocket-launch: **[Installation](installation.md)** — pip, source, extras, and the prebuilt Docker image.
+- :material-server-network: **[Deployment](deployment.md)** — run the MCP and agent servers, Docker Compose, Caddy + Technitium.
+- :material-console: **[Usage](usage.md)** — the MCP tools, the Python API clients, and the CLI.
+- :material-database-cog: **[Backing Platform](platform.md)** — provision the Arr Suite services with Docker.
+- :material-sitemap: **[Overview](overview.md)** — ecosystem role, enterprise readiness, and configuration.
+- :material-tag-multiple: **[Concepts](concepts.md)** — the `CONCEPT:ARR-*` registry.
 
-### MCP Tools
+</div>
 
-All tools are registered directly in a single consolidated server. Enable or disable each service via environment variables.
-
-| Service     | Description                                      | Env Variable   | Default |
-|:------------|:-------------------------------------------------|:---------------|:--------|
-| `sonarr`    | Tools for managing TV shows (add, search, monitor)| `SONARRTOOL`  | `True`  |
-| `radarr`    | Tools for managing movies (add, search, monitor) | `RADARRTOOL`   | `True`  |
-| `lidarr`    | Tools for managing music (add, search, monitor)  | `LIDARRTOOL`   | `True`  |
-| `prowlarr`  | Tools for managing indexers                      | `PROWLARRTOOL` | `True`  |
-| `bazarr`    | Tools for managing subtitles                     | `BAZARRTOOL`   | `True`  |
-| `seerr`     | Tools for managing media requests                | `SEERRTOOL`    | `True`  |
-| `chaptarr`  | Tools for managing books and audiobooks          | `CHAPTARRTOOL` | `True`  |
-
-
-### Using as an MCP Server
-
-The MCP Server can be run in two modes: `stdio` (for local testing) or `http` (for networked access). To start the server, use the following commands:
-
-#### Run in stdio mode (default):
-```bash
-arr-mcp --transport "stdio"
-```
-
-#### Run in HTTP mode:
-```bash
-arr-mcp --transport "http"  --host "0.0.0.0"  --port "8000"
-```
-
-AI Prompt:
-```text
-Find the movie Inception
-```
-
-AI Response:
-```text
-Found movie "Inception" (2010). It is currently monitored and available on disk.
-```
-
-## A2A Agent
-
-This package also includes an A2A agent server that can be used to interact with the Arr MCP server.
-
-### Architecture:
-
-```mermaid
----
-config:
-  layout: dagre
----
-flowchart TB
- subgraph subGraph0["Agent Capabilities"]
-        C["Agent"]
-        B["A2A Server - Uvicorn/FastAPI"]
-        D["MCP Tools"]
-        F["Agent Skills"]
-  end
-    C --> D & F
-    A["User Query"] --> B
-    B --> C
-    D --> E["Radarr/Sonarr/etc API"]
-
-     C:::agent
-     B:::server
-     A:::server
-    classDef server fill:#f9f,stroke:#333
-    classDef agent fill:#bbf,stroke:#333,stroke-width:2px
-    style B stroke:#000000,fill:#FFD600
-    style D stroke:#000000,fill:#BBDEFB
-    style F fill:#BBDEFB
-    style A fill:#C8E6C9
-    style subGraph0 fill:#FFF9C4
-```
-
-### Component Interaction Diagram
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Server as A2A Server
-    participant Agent as Agent
-    participant Skill as Agent Skills
-    participant MCP as MCP Tools
-    participant API as Arr Application
-
-    User->>Server: Send Query
-    Server->>Agent: Invoke Agent
-    Agent->>Skill: Analyze Skills Available
-    Skill->>Agent: Provide Guidance on Next Steps
-    Agent->>MCP: Invoke Tool
-    MCP->>API: Call API (e.g. Radarr)
-    API-->>MCP: API Response
-    MCP-->>Agent: Tool Response Returned
-    Agent-->>Agent: Return Results Summarized
-    Agent-->>Server: Final Response
-    Server-->>User: Output
-```
-
-
-## Graph Architecture
-
-This agent uses `pydantic-graph` orchestration for intelligent routing and optimal context management.
-
-```mermaid
----
-title: Arr Suite Graph Agent
----
-stateDiagram-v2
-  [*] --> RouterNode: User Query
-  RouterNode --> DomainNode: Classified Domain
-  RouterNode --> [*]: Low confidence / Error
-  DomainNode --> [*]: Domain Result
-```
-
-- **RouterNode**: A fast, lightweight LLM (e.g., `nvidia/nemotron-3-super`) that classifies the user's query into one of the specialized domains.
-- **DomainNode**: The executor node. For the selected domain, it dynamically sets environment variables to temporarily enable ONLY the tools relevant to that domain, creating a highly focused sub-agent (e.g., `gpt-4o`) to complete the request. This preserves LLM context and prevents tool hallucination.
-
-## Usage
-
-### MCP CLI
-
-| Short Flag | Long Flag                          | Description                                                                 |
-|------------|------------------------------------|-----------------------------------------------------------------------------|
-| -h         | --help                             | Display help information                                                    |
-| -t         | --transport                        | Transport method: 'stdio', 'streamable-http', or 'sse' [legacy] (default: stdio) |
-| -s         | --host                             | Host address for HTTP transport (default: 0.0.0.0)                          |
-| -p         | --port                             | Port number for HTTP transport (default: 8000)                              |
-|            | --auth-type                        | Authentication type: 'none', 'static', 'jwt', 'oauth-proxy', 'oidc-proxy', 'remote-oauth' (default: none) |
-|            | --enable-delegation                | Enable OIDC token delegation                                                |
-|            | --eunomia-type                     | Eunomia authorization type: 'none', 'embedded', 'remote' (default: none)   |
-
-### A2A CLI
-#### Endpoints
-- **Web UI**: `http://localhost:8000/` (if enabled)
-- **A2A**: `http://localhost:8000/a2a` (Discovery: `/a2a/.well-known/agent.json`)
-- **AG-UI**: `http://localhost:8000/ag-ui` (POST)
-
-| Short Flag | Long Flag         | Description                                                            |
-|------------|-------------------|------------------------------------------------------------------------|
-| -h         | --help            | Display help information                                               |
-|            | --host            | Host to bind the server to (default: 0.0.0.0)                          |
-|            | --port            | Port to bind the server to (default: 9000)                             |
-|            | --reload          | Enable auto-reload                                                     |
-|            | --provider        | LLM Provider: 'openai', 'anthropic', 'google', 'huggingface'           |
-|            | --model-id        | LLM Model ID (default: nvidia/nemotron-3-super)                                  |
-|            | --base-url        | LLM Base URL (for OpenAI compatible providers)                         |
-|            | --api-key         | LLM API Key                                                            |
-|            | --mcp-url         | MCP Server URL (default: http://localhost:8000/mcp)                    |
-|            | --mcp-config      | Path to mcp_config.json                                                |
-|            | --web             | Enable Pydantic AI Web UI                                              | False (Env: ENABLE_WEB_UI) |
-
-### Agentic AI
-`arr-mcp` is designed to be used by Agentic AI systems. It provides a set of tools that allow agents to manage your media library.
-
-## Agent-to-Agent (A2A)
-
-This package also includes an A2A agent server that can be used to interact with the Arr MCP server.
-
-### Examples
-
-#### Run A2A Server
-```bash
-arr-agent --provider openai --model-id gpt-4 --api-key sk-... --mcp-url http://localhost:8000/mcp
-```
-
-#### Run with Docker
-```bash
-docker run -e CMD=arr-agent -p 8000:8000 arr-mcp
-```
-
-## Docker
-
-### Build
+## Quick start
 
 ```bash
-docker build -t arr-mcp .
+pip install "arr-mcp[mcp]"
+arr-mcp                          # stdio MCP server (default transport)
 ```
 
-### Run MCP Server
+Connect it to your Arr Suite services:
 
 ```bash
-docker run -p 8000:8000 arr-mcp
+export SONARR_BASE_URL=http://localhost:8989
+export SONARR_TOKEN=your_sonarr_api_key
+arr-mcp --transport streamable-http --host 0.0.0.0 --port 8000
 ```
 
-### Run A2A Server
-
-```bash
-docker run -e CMD=arr-agent -p 8001:8001 arr-mcp
-```
-
-### Deploy MCP Server as a Service
-
-The Arr MCP server can be deployed using Docker, with configurable authentication, middleware, and Eunomia authorization.
-
-#### Using Docker Run
-
-```bash
-docker pull knucklessg1/arr-mcp:latest
-
-# Run with all services enabled (default)
-docker run -d \
-  --name arr-mcp \
-  -p 8004:8004 \
-  -e HOST=0.0.0.0 \
-  -e PORT=8004 \
-  -e TRANSPORT=streamable-http \
-  -e AUTH_TYPE=none \
-  -e SONARR_BASE_URL=http://sonarr:8989 \
-  -e SONARR_API_KEY=your-sonarr-key \
-  -e RADARR_BASE_URL=http://radarr:7878 \
-  -e RADARR_API_KEY=your-radarr-key \
-  knucklessg1/arr-mcp:latest
-
-# Run with only Sonarr and Radarr enabled
-docker run -d \
-  --name arr-mcp \
-  -p 8004:8004 \
-  -e TRANSPORT=streamable-http \
-  -e SONARR_BASE_URL=http://sonarr:8989 \
-  -e SONARR_API_KEY=your-sonarr-key \
-  -e RADARR_BASE_URL=http://radarr:7878 \
-  -e RADARR_API_KEY=your-radarr-key \
-  -e SONARRTOOL=True \
-  -e RADARRTOOL=True \
-  -e LIDARRTOOL=False \
-  -e PROWLARRTOOL=False \
-  -e BAZARRTOOL=False \
-  -e SEERRTOOL=False \
-  -e CHAPTARRTOOL=False \
-  knucklessg1/arr-mcp:latest
-```
-
-#### Using Docker Compose
-
-Create a `docker-compose.yml` file:
-
-```yaml
-services:
-  arr-mcp:
-    image: knucklessg1/arr-mcp:latest
-    environment:
-      - HOST=0.0.0.0
-      - PORT=8004
-      - TRANSPORT=streamable-http
-      - AUTH_TYPE=none
-      # Service API Connections
-      - SONARR_BASE_URL=http://sonarr:8989
-      - SONARR_API_KEY=${SONARR_API_KEY}
-      - RADARR_BASE_URL=http://radarr:7878
-      - RADARR_API_KEY=${RADARR_API_KEY}
-      - LIDARR_BASE_URL=http://lidarr:8686
-      - LIDARR_API_KEY=${LIDARR_API_KEY}
-      - PROWLARR_BASE_URL=http://prowlarr:9696
-      - PROWLARR_API_KEY=${PROWLARR_API_KEY}
-      - BAZARR_BASE_URL=http://bazarr:6767
-      - BAZARR_API_KEY=${BAZARR_API_KEY}
-      # Tool Tag Flags (all default to True)
-      - SONARRTOOL=True
-      - RADARRTOOL=True
-      - LIDARRTOOL=True
-      - PROWLARRTOOL=True
-      - BAZARRTOOL=True
-      - SEERRTOOL=True
-      - CHAPTARRTOOL=True
-    ports:
-      - 8004:8004
-```
-
-#### Configure `mcp_config.json` for AI Integration
-
-```json
-{
-  "mcpServers": {
-    "arr-mcp": {
-      "command": "arr-mcp",
-      "args": ["--transport", "stdio"],
-      "env": {
-        "SONARR_BASE_URL": "http://sonarr:8989",
-        "SONARR_API_KEY": "your-sonarr-key",
-        "RADARR_BASE_URL": "http://radarr:7878",
-        "RADARR_API_KEY": "your-radarr-key",
-        "SONARRTOOL": "True",
-        "RADARRTOOL": "True",
-        "LIDARRTOOL": "False",
-        "PROWLARRTOOL": "False",
-        "BAZARRTOOL": "False",
-        "SEERRTOOL": "False",
-        "CHAPTARRTOOL": "False"
-      }
-    }
-  }
-}
-```
-
-## Install Python Package
-
-```bash
-python -m pip install arr-mcp
-```
-```bash
-uv pip install arr-mcp
-```
-
-## Repository Owners
-
-<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=Knucklessg1&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
-
-![GitHub followers](https://img.shields.io/github/followers/Knucklessg1)
-![GitHub User's stars](https://img.shields.io/github/stars/Knucklessg1)
-
-
-## MCP Configuration Examples
-
-### 1. Standard IO (stdio) Deployment
-
-```json
-{
-  "mcpServers": {
-    "arr-mcp": {
-      "command": "uv",
-      "args": [
-        "run",
-        "arr-mcp"
-      ],
-      "env": {
-        "BAZARR_CATALOGTOOL": "True",
-        "BAZARR_HISTORYTOOL": "True",
-        "BAZARR_SYSTEMTOOL": "True",
-        "CHAPTARR_CONFIGTOOL": "True",
-        "CHAPTARR_DOWNLOADSTOOL": "True",
-        "CHAPTARR_HISTORYTOOL": "True",
-        "CHAPTARR_INDEXERTOOL": "True",
-        "CHAPTARR_OPERATIONSTOOL": "True",
-        "CHAPTARR_PROFILESTOOL": "True",
-        "CHAPTARR_QUEUETOOL": "True",
-        "CHAPTARR_SEARCHTOOL": "True",
-        "CHAPTARR_SYSTEMTOOL": "True",
-        "LIDARR_CATALOGTOOL": "True",
-        "LIDARR_CONFIGTOOL": "True",
-        "LIDARR_DOWNLOADSTOOL": "True",
-        "LIDARR_HISTORYTOOL": "True",
-        "LIDARR_INDEXERTOOL": "True",
-        "LIDARR_OPERATIONSTOOL": "True",
-        "LIDARR_PROFILESTOOL": "True",
-        "LIDARR_QUEUETOOL": "True",
-        "LIDARR_SEARCHTOOL": "True",
-        "LIDARR_SYSTEMTOOL": "True",
-        "PROWLARR_CONFIGTOOL": "True",
-        "PROWLARR_DOWNLOADSTOOL": "True",
-        "PROWLARR_HISTORYTOOL": "True",
-        "PROWLARR_INDEXERTOOL": "True",
-        "PROWLARR_OPERATIONSTOOL": "True",
-        "PROWLARR_PROFILESTOOL": "True",
-        "PROWLARR_SEARCHTOOL": "True",
-        "PROWLARR_SYSTEMTOOL": "True",
-        "RADARR_CATALOGTOOL": "True",
-        "RADARR_CONFIGTOOL": "True",
-        "RADARR_DOWNLOADSTOOL": "True",
-        "RADARR_HISTORYTOOL": "True",
-        "RADARR_INDEXERTOOL": "True",
-        "RADARR_OPERATIONSTOOL": "True",
-        "RADARR_PROFILESTOOL": "True",
-        "RADARR_QUEUETOOL": "True",
-        "RADARR_SYSTEMTOOL": "True",
-        "SEERR_CATALOGTOOL": "True",
-        "SEERR_SEARCHTOOL": "True",
-        "SEERR_SYSTEMTOOL": "True",
-        "SONARR_CATALOGTOOL": "True",
-        "SONARR_CONFIGTOOL": "True",
-        "SONARR_DOWNLOADSTOOL": "True",
-        "SONARR_HISTORYTOOL": "True",
-        "SONARR_INDEXERTOOL": "True",
-        "SONARR_OPERATIONSTOOL": "True",
-        "SONARR_PROFILESTOOL": "True",
-        "SONARR_QUEUETOOL": "True",
-        "SONARR_SYSTEMTOOL": "True"
-      }
-    }
-  }
-}
-```
-
-### 2. Streamable HTTP (SSE) Deployment
-
-```json
-{
-  "mcpServers": {
-    "arr-mcp": {
-      "command": "uv",
-      "args": [
-        "run",
-        "arr-mcp",
-        "--transport",
-        "http",
-        "--host",
-        "0.0.0.0",
-        "--port",
-        "8000"
-      ],
-      "env": {
-        "BAZARR_CATALOGTOOL": "True",
-        "BAZARR_HISTORYTOOL": "True",
-        "BAZARR_SYSTEMTOOL": "True",
-        "CHAPTARR_CONFIGTOOL": "True",
-        "CHAPTARR_DOWNLOADSTOOL": "True",
-        "CHAPTARR_HISTORYTOOL": "True",
-        "CHAPTARR_INDEXERTOOL": "True",
-        "CHAPTARR_OPERATIONSTOOL": "True",
-        "CHAPTARR_PROFILESTOOL": "True",
-        "CHAPTARR_QUEUETOOL": "True",
-        "CHAPTARR_SEARCHTOOL": "True",
-        "CHAPTARR_SYSTEMTOOL": "True",
-        "LIDARR_CATALOGTOOL": "True",
-        "LIDARR_CONFIGTOOL": "True",
-        "LIDARR_DOWNLOADSTOOL": "True",
-        "LIDARR_HISTORYTOOL": "True",
-        "LIDARR_INDEXERTOOL": "True",
-        "LIDARR_OPERATIONSTOOL": "True",
-        "LIDARR_PROFILESTOOL": "True",
-        "LIDARR_QUEUETOOL": "True",
-        "LIDARR_SEARCHTOOL": "True",
-        "LIDARR_SYSTEMTOOL": "True",
-        "PROWLARR_CONFIGTOOL": "True",
-        "PROWLARR_DOWNLOADSTOOL": "True",
-        "PROWLARR_HISTORYTOOL": "True",
-        "PROWLARR_INDEXERTOOL": "True",
-        "PROWLARR_OPERATIONSTOOL": "True",
-        "PROWLARR_PROFILESTOOL": "True",
-        "PROWLARR_SEARCHTOOL": "True",
-        "PROWLARR_SYSTEMTOOL": "True",
-        "RADARR_CATALOGTOOL": "True",
-        "RADARR_CONFIGTOOL": "True",
-        "RADARR_DOWNLOADSTOOL": "True",
-        "RADARR_HISTORYTOOL": "True",
-        "RADARR_INDEXERTOOL": "True",
-        "RADARR_OPERATIONSTOOL": "True",
-        "RADARR_PROFILESTOOL": "True",
-        "RADARR_QUEUETOOL": "True",
-        "RADARR_SYSTEMTOOL": "True",
-        "SEERR_CATALOGTOOL": "True",
-        "SEERR_SEARCHTOOL": "True",
-        "SEERR_SYSTEMTOOL": "True",
-        "SONARR_CATALOGTOOL": "True",
-        "SONARR_CONFIGTOOL": "True",
-        "SONARR_DOWNLOADSTOOL": "True",
-        "SONARR_HISTORYTOOL": "True",
-        "SONARR_INDEXERTOOL": "True",
-        "SONARR_OPERATIONSTOOL": "True",
-        "SONARR_PROFILESTOOL": "True",
-        "SONARR_QUEUETOOL": "True",
-        "SONARR_SYSTEMTOOL": "True"
-      }
-    }
-  }
-}
-```
+See **[Installation](installation.md)** and **[Deployment](deployment.md)** for the
+full matrix (PyPI extras, Docker image, all transports, the agent server, reverse
+proxy, DNS).

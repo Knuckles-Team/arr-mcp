@@ -22,6 +22,10 @@
 
 *Version: 0.41.0*
 
+> **Documentation** — Installation, deployment, usage across the API, CLI, MCP, and
+> A2A agent interfaces, and guidance for provisioning the Arr Suite services are
+> maintained in the [official documentation](https://knuckles-team.github.io/arr-mcp/).
+
 ---
 
 ## Table of Contents
@@ -367,6 +371,23 @@ arr-agent --provider openai --model-id gpt-4o
 
 ![GitHub followers](https://img.shields.io/github/followers/Knucklessg1)
 ![GitHub User's stars](https://img.shields.io/github/stars/Knucklessg1)
+
+---
+
+## Documentation
+
+The complete documentation is published as the
+[official documentation site](https://knuckles-team.github.io/arr-mcp/) and is the
+recommended reference for installation, deployment, and day-to-day operation.
+
+| Page | Contents |
+|---|---|
+| [Installation](https://knuckles-team.github.io/arr-mcp/installation/) | pip, source, extras, prebuilt Docker image |
+| [Deployment](https://knuckles-team.github.io/arr-mcp/deployment/) | run the MCP and agent servers, Compose, Caddy + Technitium, env config |
+| [Usage](https://knuckles-team.github.io/arr-mcp/usage/) | the MCP tools, the Python API clients, the CLI |
+| [Backing Platform](https://knuckles-team.github.io/arr-mcp/platform/) | provision the Arr Suite services with Docker |
+| [Overview](https://knuckles-team.github.io/arr-mcp/overview/) | ecosystem role, enterprise readiness, configuration |
+| [Concepts](https://knuckles-team.github.io/arr-mcp/concepts/) | concept registry (`CONCEPT:ARR-*`) |
 
 ---
 
