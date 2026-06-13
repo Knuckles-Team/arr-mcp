@@ -54,7 +54,7 @@ ENV HOST=${HOST} \
 WORKDIR /app
 COPY . /app
 RUN apt-get update \
-    && apt-get install -y default-jre ripgrep tree fd-find curl nano \
+    && apt-get install -y default-jre ripgrep tree fd-find curl nano build-essential \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && curl -sS https://starship.rs/install.sh | sh -s -- --yes \
     && mkdir -p /root/.config \
