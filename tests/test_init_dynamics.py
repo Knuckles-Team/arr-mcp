@@ -8,11 +8,23 @@ PKG_NAME = __name__.rsplit(".", 1)[0] if "." in __name__ else None
 
 
 def _get_pkg_name():
-    """Derive package name from test location."""
+    """Discover the importable package by scanning the project for the package
+    directory (one holding ``__init__.py`` plus the server entrypoint), rather
+    than assuming it matches the project folder name — the folder differs from
+    the package in git worktrees (e.g. ``harden-discovery`` vs ``arr_mcp``)."""
     import pathlib
 
-    test_dir = pathlib.Path(__file__).resolve().parent
-    project_dir = test_dir.parent
+    project_dir = pathlib.Path(__file__).resolve().parent.parent
+    for child in sorted(project_dir.iterdir()):
+        if not child.is_dir() or child.name in {"tests", "scripts"}:
+            continue
+        if child.name.startswith((".", "_")):
+            continue
+        if (child / "__init__.py").exists() and (
+            (child / "mcp_server.py").exists() or (child / "__main__.py").exists()
+        ):
+            return child.name
+    # Fallback: the old directory-name heuristic.
     return project_dir.name.replace("-", "_")
 
 

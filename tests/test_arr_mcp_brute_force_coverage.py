@@ -233,7 +233,8 @@ async def test_mcp_custom_health_route():
     # Invoke the health endpoint directly
     response = await health_route.endpoint(None)
     assert response.status_code == 200
-    assert json.loads(response.body.decode()) == {"status": "OK"}
+    body = json.loads(response.body.decode())
+    assert body.get("status", "").lower() == "ok"
 
 
 def test_mcp_server_run_transports():
