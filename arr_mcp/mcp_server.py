@@ -24,6 +24,7 @@ MCP & Universal Skills
 Action Execution Pipeline
 """
 
+import difflib
 import importlib
 import json
 import logging
@@ -97,10 +98,37 @@ def execute_arr_action(
     auth_args = {auth_kw: api_key}
     client = api_class(base_url=base_url, verify=verify, **auth_args)
 
-    # Dynamic method lookup
+    # Discoverability: let callers introspect the valid action names instead of
+    # guessing (the dynamic dispatch has no fixed schema).
+    available_actions = sorted(
+        name
+        for name in dir(client)
+        if not name.startswith("_") and callable(getattr(client, name, None))
+    )
+    if action in ("list_actions", "help", "actions"):
+        return {"service": service_name, "actions": available_actions}
+
+    # Dynamic method lookup with plural->singular alias resolution: intuitive
+    # plurals (e.g. get_movies) map to the real singular collection method
+    # (get_movie) so common guesses work across services.
     method = getattr(client, action, None)
+    if method is None and action.endswith("s"):
+        candidates = [action[:-1]]
+        if action.endswith("es"):
+            candidates.append(action[:-2])
+        for singular in candidates:
+            candidate = getattr(client, singular, None)
+            if callable(candidate):
+                method = candidate
+                break
     if method is None:
-        raise ValueError(f"Unknown action '{action}' on {api_class.__name__}")
+        suggestions = difflib.get_close_matches(action, available_actions, n=3)
+        hint = f" Did you mean: {', '.join(suggestions)}?" if suggestions else ""
+        raise ValueError(
+            f"Unknown action '{action}' on {api_class.__name__}.{hint} "
+            f"Call with action='list_actions' to see all "
+            f"{len(available_actions)} available actions."
+        )
 
     res = method(**kwargs)
     if hasattr(res, "dict") and callable(res.dict):
@@ -317,7 +345,7 @@ def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
         @mcp.tool(tags=["radarr"])
         async def radarr_action(
             action: str = Field(
-                description="The action/method name to execute on Radarr (e.g. get_movies, add_movie, get_system_status)"
+                description="The action/method name to execute on Radarr (e.g. get_movie to list all movies, add_movie, get_system_status). Use action='list_actions' to discover every valid action."
             ),
             params_json: str = Field(
                 default="{}",
