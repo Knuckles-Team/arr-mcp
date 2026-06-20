@@ -4,11 +4,11 @@ Authentication and client instantiation factory.
 CONCEPT:OS-5.4 — OIDC & Credentials Governance
 """
 
-import os
 import sys
 from typing import TYPE_CHECKING
 
-from agent_utilities.base_utilities import get_logger, to_boolean
+from agent_utilities.base_utilities import get_logger
+from agent_utilities.core.config import setting
 
 if TYPE_CHECKING:
     from arr_mcp.api.api_client_bazarr import Api as BazarrApi
@@ -25,9 +25,9 @@ logger = get_logger(__name__)
 def get_sonarr_client() -> "SonarrApi":
     """Get authenticated sonarr client."""
     api_cls = sys.modules[__name__].SonarrApi
-    base_url = os.getenv("SONARR_BASE_URL")
-    token = os.getenv("SONARR_TOKEN")
-    verify = to_boolean(os.getenv("SONARR_SSL_VERIFY", "False"))
+    base_url = setting("SONARR_BASE_URL")
+    token = setting("SONARR_TOKEN")
+    verify = setting("SONARR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("SONARR_BASE_URL not set")
     return api_cls(base_url=base_url, token=token, verify=verify)
@@ -36,9 +36,9 @@ def get_sonarr_client() -> "SonarrApi":
 def get_radarr_client() -> "RadarrApi":
     """Get authenticated radarr client."""
     api_cls = sys.modules[__name__].RadarrApi
-    base_url = os.getenv("RADARR_BASE_URL")
-    token = os.getenv("RADARR_TOKEN")
-    verify = to_boolean(os.getenv("RADARR_SSL_VERIFY", "False"))
+    base_url = setting("RADARR_BASE_URL")
+    token = setting("RADARR_TOKEN")
+    verify = setting("RADARR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("RADARR_BASE_URL not set")
     return api_cls(base_url=base_url, token=token, verify=verify)
@@ -47,9 +47,9 @@ def get_radarr_client() -> "RadarrApi":
 def get_lidarr_client() -> "LidarrApi":
     """Get authenticated lidarr client."""
     api_cls = sys.modules[__name__].LidarrApi
-    base_url = os.getenv("LIDARR_BASE_URL")
-    token = os.getenv("LIDARR_TOKEN")
-    verify = to_boolean(os.getenv("LIDARR_SSL_VERIFY", "False"))
+    base_url = setting("LIDARR_BASE_URL")
+    token = setting("LIDARR_TOKEN")
+    verify = setting("LIDARR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("LIDARR_BASE_URL not set")
     return api_cls(base_url=base_url, token=token, verify=verify)
@@ -58,9 +58,9 @@ def get_lidarr_client() -> "LidarrApi":
 def get_prowlarr_client() -> "ProwlarrApi":
     """Get authenticated prowlarr client."""
     api_cls = sys.modules[__name__].ProwlarrApi
-    base_url = os.getenv("PROWLARR_BASE_URL")
-    token = os.getenv("PROWLARR_TOKEN")
-    verify = to_boolean(os.getenv("PROWLARR_SSL_VERIFY", "False"))
+    base_url = setting("PROWLARR_BASE_URL")
+    token = setting("PROWLARR_TOKEN")
+    verify = setting("PROWLARR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("PROWLARR_BASE_URL not set")
     return api_cls(base_url=base_url, token=token, verify=verify)
@@ -69,9 +69,9 @@ def get_prowlarr_client() -> "ProwlarrApi":
 def get_bazarr_client() -> "BazarrApi":
     """Get authenticated bazarr client."""
     api_cls = sys.modules[__name__].BazarrApi
-    base_url = os.getenv("BAZARR_BASE_URL")
-    api_key = os.getenv("BAZARR_API_KEY")
-    verify = to_boolean(os.getenv("BAZARR_SSL_VERIFY", "False"))
+    base_url = setting("BAZARR_BASE_URL")
+    api_key = setting("BAZARR_API_KEY")
+    verify = setting("BAZARR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("BAZARR_BASE_URL not set")
     return api_cls(base_url=base_url, api_key=api_key, verify=verify)
@@ -80,9 +80,9 @@ def get_bazarr_client() -> "BazarrApi":
 def get_seerr_client() -> "SeerrApi":
     """Get authenticated seerr client."""
     api_cls = sys.modules[__name__].SeerrApi
-    base_url = os.getenv("SEERR_BASE_URL")
-    api_key = os.getenv("SEERR_API_KEY")
-    verify = to_boolean(os.getenv("SEERR_SSL_VERIFY", "False"))
+    base_url = setting("SEERR_BASE_URL")
+    api_key = setting("SEERR_API_KEY")
+    verify = setting("SEERR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("SEERR_BASE_URL not set")
     return api_cls(base_url=base_url, api_key=api_key, verify=verify)
@@ -91,9 +91,9 @@ def get_seerr_client() -> "SeerrApi":
 def get_chaptarr_client() -> "ChaptarrApi":
     """Get authenticated chaptarr client."""
     api_cls = sys.modules[__name__].ChaptarrApi
-    base_url = os.getenv("CHAPTARR_BASE_URL")
-    token = os.getenv("CHAPTARR_TOKEN")
-    verify = to_boolean(os.getenv("CHAPTARR_SSL_VERIFY", "False"))
+    base_url = setting("CHAPTARR_BASE_URL")
+    token = setting("CHAPTARR_TOKEN")
+    verify = setting("CHAPTARR_SSL_VERIFY", False)
     if not base_url:
         raise RuntimeError("CHAPTARR_BASE_URL not set")
     return api_cls(base_url=base_url, token=token, verify=verify)
