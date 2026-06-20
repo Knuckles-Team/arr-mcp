@@ -502,56 +502,39 @@ def test_sonarr_radarr_lookup_empty():
 
 
 @pytest.mark.asyncio
-async def test_mcp_tools_with_context_and_serializer():
+async def test_condensed_action_tools_dispatch_via_client():
+    """The organized condensed tools resolve a client via the auth factory and
+    dispatch the requested action through it (CONCEPT:ECO-4.82)."""
+    from unittest.mock import MagicMock
+
     from arr_mcp.mcp_server import get_mcp_instance
-    from unittest.mock import MagicMock, AsyncMock
 
     mcp, _, _, _ = get_mcp_instance()
 
-    # 1. Test MCP tools with context parameter
-    mock_ctx = AsyncMock()
+    # tool_name -> the auth factory it resolves its client from.
+    action_tools = {
+        "bazarr_action": "arr_mcp.mcp.mcp_bazarr.get_bazarr_client",
+        "chaptarr_action": "arr_mcp.mcp.mcp_chaptarr.get_chaptarr_client",
+        "lidarr_action": "arr_mcp.mcp.mcp_lidarr.get_lidarr_client",
+        "prowlarr_action": "arr_mcp.mcp.mcp_prowlarr.get_prowlarr_client",
+        "radarr_action": "arr_mcp.mcp.mcp_radarr.get_radarr_client",
+        "seerr_action": "arr_mcp.mcp.mcp_seerr.get_seerr_client",
+        "sonarr_action": "arr_mcp.mcp.mcp_sonarr.get_sonarr_client",
+    }
 
-    # We can invoke each of the registered action tools with a mock ctx
-    action_tools = [
-        "bazarr_action",
-        "chaptarr_action",
-        "lidarr_action",
-        "prowlarr_action",
-        "radarr_action",
-        "seerr_action",
-        "sonarr_action",
-    ]
+    for tool_name, factory_path in action_tools.items():
+        tool = await mcp.get_tool(tool_name)
+        tool_fn = tool.fn
 
-    for tool_name in action_tools:
-        try:
-            tool = await mcp.get_tool(tool_name)
-            tool_fn = tool.fn
-        except Exception:
-            continue
+        fake_client = MagicMock()
+        fake_client.get_status.return_value = {"status": "success"}
 
-        # Mock the underlying execute_arr_action to avoid actually calling it
-        with patch("arr_mcp.mcp_server.execute_arr_action") as mock_exec:
-            mock_exec.return_value = {"status": "success"}
+        with patch(factory_path, return_value=fake_client) as mock_factory:
+            res = await tool_fn(action="get_status", params_json='{"page": 1}')
 
-            # Check parameters to only pass relevant ones
-            sig = inspect.signature(tool_fn)
-            kwargs = {
-                "action": "get_series"
-                if "bazarr" in tool_name or "sonarr" in tool_name
-                else "get_status",
-                "ctx": mock_ctx,
-            }
-            # Add default values for other required parameters
-            for param_name, param in sig.parameters.items():
-                if (
-                    param_name not in kwargs
-                    and param.default == inspect.Parameter.empty
-                ):
-                    kwargs[param_name] = "test"
-
-            await tool_fn(**kwargs)
-            mock_ctx.info.assert_called()
-            mock_ctx.info.reset_mock()
+        mock_factory.assert_called_once()
+        fake_client.get_status.assert_called_once_with(page=1)
+        assert res == {"status": "success"}
 
 
 def test_mcp_server_dependency_warning_import_error():
