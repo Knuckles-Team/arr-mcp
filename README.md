@@ -71,6 +71,23 @@ This server utilizes dynamic Action-Routed tools to optimize token overhead and 
 
 ### Available MCP Tools
 
+The table below is auto-generated from the live server — do not edit by hand.
+
+<!-- MCP-TOOLS-TABLE:START -->
+
+| MCP Tool | Toggle Env Var | Description |
+|----------|----------------|-------------|
+| `bazarr_action` | `BAZARRTOOL` | Execute any Bazarr API action. |
+| `chaptarr_action` | `CHAPTARRTOOL` | Execute any Chaptarr API action. |
+| `lidarr_action` | `LIDARRTOOL` | Execute any Lidarr API action. |
+| `prowlarr_action` | `PROWLARRTOOL` | Execute any Prowlarr API action. |
+| `radarr_action` | `RADARRTOOL` | Execute any Radarr API action. |
+| `seerr_action` | `SEERRTOOL` | Execute any Seerr API action. |
+| `sonarr_action` | `SONARRTOOL` | Execute any Sonarr API action. |
+
+_7 action-routed tools (default `MCP_TOOL_MODE=condensed`). Each is enabled unless its toggle is set false; set `MCP_TOOL_MODE=verbose` (or `both`) for the 1:1 per-operation surface. Auto-generated — do not edit._
+<!-- MCP-TOOLS-TABLE:END -->
+
 Detailed tool schemas, parameter shapes, and validation constraints are preserved in [docs/index.md#mcp-tools](docs/index.md#mcp-tools).
 
 ### Dynamic Tool Selection & Visibility
