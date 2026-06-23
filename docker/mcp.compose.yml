@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   arr-mcp-mcp:
-    image: knucklessg1/arr-mcp:latest
+    image: knucklessg1/arr-mcp:mcp
     container_name: arr-mcp-mcp
     hostname: arr-mcp-mcp
     restart: always
