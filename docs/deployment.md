@@ -13,6 +13,7 @@ matches where the server runs relative to your MCP client, then copy the matchin
 | 2 | Streamable-HTTP (local) | `streamable-http` | a local network port | `command` or `url` |
 | 3 | Local container / uv | `stdio` or `streamable-http` | Docker / Podman / uv on this host | `command` or `url` |
 | 4 | Remote URL | `streamable-http` | a remote host behind Caddy | `url` |
+| 5 | Open WebUI | `streamable-http` | any reachable HTTP endpoint | `url` |
 
 ### 1. stdio (local subprocess)
 
@@ -135,6 +136,52 @@ image required:
 Caddy reverse-proxies `http://arr-mcp.arpa` to the container's `:8000`
 streamable-http listener; `http://arr-mcp.arpa/health` returns
 `{"status":"OK"}` when the service is live.
+
+### 5. Open WebUI
+
+[Open WebUI](https://openwebui.com/) connects to MCP servers via their
+Streamable-HTTP endpoint. Run arr-mcp with the `streamable-http` transport so
+Open WebUI can reach it by URL:
+
+```bash
+arr-mcp --transport streamable-http --host 0.0.0.0 --port 8000
+```
+
+Or with Docker, ensuring the port is published:
+
+```bash
+docker run -d --name arr-mcp -p 8000:8000 \
+  -e TRANSPORT=streamable-http \
+  -e PORT=8000 \
+  -e ARR_HOST="<your-arr_host>" \
+  knucklessg1/arr-mcp:latest
+```
+
+In Open WebUI, navigate to **Workspace → MCP Servers → Add Server** and enter:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `arr-mcp` |
+| **Server URL** | `http://<host>:8000/mcp` |
+
+Replace `<host>` with the address where arr-mcp is reachable from Open WebUI.
+When running on the same Docker network or host, `http://localhost:8000/mcp`
+or `http://arr-mcp:8000/mcp` (Docker service name) work as the URL.
+
+No additional headers are required. Open WebUI discovers the full tool set
+(`radarr_action`, `sonarr_action`, `lidarr_action`, etc.) automatically via
+the MCP protocol's `tools/list` handshake.
+
+To test the connection, use Open WebUI's built-in tool call editor or send a
+simple query like *"Show me movies in Radarr"* — the LLM will call
+`radarr_action` with action `get_movie` to list the catalog.
+
+**Action naming:** All actions follow the API client method names. Use
+`action='list_actions'` to discover every valid action for a service. Common
+plurals like `get_movies` are aliased automatically to `get_movie` by the
+dispatch resolver. A `did-you-mean` suggestion is returned for any action name
+that can't be resolved.
+
 <!-- END GENERATED: deployment-options -->
 
 This page covers running `arr-mcp` as long-lived servers: the MCP transports, the
