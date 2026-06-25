@@ -113,6 +113,14 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
 
 ### MCP Configuration Examples
 
+> **Install the slim `[mcp]` extra.** All examples below install
+> `arr-mcp[mcp]` — the MCP-server extra that pulls only the FastMCP /
+> FastAPI tooling (`agent-utilities[mcp]`). It deliberately **excludes** the heavy
+> agent runtime (the epistemic-graph engine, `pydantic-ai`, `dspy`, `llama-index`,
+> `tree-sitter`), so `uvx`/container installs are dramatically smaller and faster.
+> Use the full `[agent]` extra only when you need the integrated Pydantic AI agent
+> (see [Installation](#installation)).
+
 #### stdio Transport (Recommended for local IDEs e.g., Cursor, Claude Desktop)
 Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
 
@@ -123,7 +131,7 @@ Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
       "command": "uvx",
       "args": [
         "--from",
-        "arr-mcp",
+        "arr-mcp[mcp]",
         "arr-mcp"
       ],
       "env": {
@@ -147,7 +155,7 @@ Configure your client's `mcp.json` to launch the Streamable-HTTP server via `uvx
       "command": "uvx",
       "args": [
         "--from",
-        "arr-mcp",
+        "arr-mcp[mcp]",
         "arr-mcp"
       ],
       "env": {
@@ -188,8 +196,15 @@ docker run -d \
   -e ARR_API_KEY="your_value" \
   -e PVR_API_KEY="your_value" \
   -e PLEX_TOKEN="your_value" \
-  knucklessg1/arr-mcp:latest
+  knucklessg1/arr-mcp:mcp
 ```
+
+> The `:mcp` tag is the **slim MCP-server image** (built from
+> `docker/Dockerfile --target mcp`, installing `arr-mcp[mcp]`). The default
+> `:latest` tag is the **full agent image** (`--target agent`, `arr-mcp[agent]`)
+> which also bundles the Pydantic AI agent and the epistemic-graph engine — use it
+> when you run `arr-agent` (the agent), not just the MCP server. See
+> [Container images](#container-images-mcp-vs-agent).
 
 ---
 
@@ -234,7 +249,7 @@ version: '3.8'
 
 services:
   arr-mcp-mcp:
-    image: knucklessg1/arr-mcp:latest
+    image: knucklessg1/arr-mcp:mcp
     container_name: arr-mcp-mcp
     hostname: arr-mcp-mcp
     restart: always
@@ -300,47 +315,72 @@ Detailed graph node architecture explanations, custom skill configurations, and 
 
 ## Environment Variables
 
-The Arr MCP and Agent servers support extensive environment configuration. The full list of supported variables is documented below:
+Every variable the server reads, grouped by concern. arr-mcp fronts seven independent
+*arr services — each is wired by setting its own `<SVC>_ENABLED` plus that service's
+`_BASE_URL` and `_TOKEN`/`_API_KEY`. The shared `ARR_HOST` / `ARR_API_KEY` / `PVR_API_KEY` /
+`PLEX_TOKEN` values are convenience defaults consumed by the clients.
 
-| Variable | Description | Default | Required for |
-|:---|:---|:---|:---|
-| `HOST` | The bind host for Streamable-HTTP or SSE transport. | `0.0.0.0` | Server Transport |
-| `PORT` | The bind port for Streamable-HTTP or SSE transport. | `8000` | Server Transport |
-| `TRANSPORT` | MCP communication transport layer (`stdio`, `streamable-http`, `sse`). | `stdio` | Server Transport |
-| `ENABLE_OTEL` | Enable OpenTelemetry logging and tracing integration. | `True` | Observability |
-| `EUNOMIA_TYPE` | Access control policy engine type (`none`, `embedded`, `remote`). | `none` | Access Governance |
-| `EUNOMIA_POLICY_FILE` | Scoped embedded policy file location. | `mcp_policies.json` | Access Governance |
-| `DEFAULT_AGENT_NAME` | Custom name identification for the Graph Agent. | `Arr Mcp` | Graph Agent |
-| `ALLOWED_CLIENT_REDIRECT_URIS` | Permitted client redirect URIs for authentication flows. | None | Auth Flow |
-| `AUTH_TYPE` | Type of authentication used for A2A endpoints. | None | Auth Flow |
-| `SONARR_ENABLED` | Toggle to enable/disable Sonarr MCP tools and client. | `False` | Sonarr Service |
-| `SONARR_BASE_URL` | Base API URL of your Sonarr service. | None | Sonarr Service |
-| `SONARR_TOKEN` | Authentication API token for Sonarr. | None | Sonarr Service |
-| `SONARR_SSL_VERIFY` | Verify SSL certificates for Sonarr requests. | `False` | Sonarr Service |
-| `RADARR_ENABLED` | Toggle to enable/disable Radarr MCP tools and client. | `False` | Radarr Service |
-| `RADARR_BASE_URL` | Base API URL of your Radarr service. | None | Radarr Service |
-| `RADARR_TOKEN` | Authentication API token for Radarr. | None | Radarr Service |
-| `RADARR_SSL_VERIFY` | Verify SSL certificates for Radarr requests. | `False` | Radarr Service |
-| `LIDARR_ENABLED` | Toggle to enable/disable Lidarr MCP tools and client. | `False` | Lidarr Service |
-| `LIDARR_BASE_URL` | Base API URL of your Lidarr service. | None | Lidarr Service |
-| `LIDARR_TOKEN` | Authentication API token for Lidarr. | None | Lidarr Service |
-| `LIDARR_SSL_VERIFY` | Verify SSL certificates for Lidarr requests. | `False` | Lidarr Service |
-| `PROWLARR_ENABLED` | Toggle to enable/disable Prowlarr MCP tools and client. | `False` | Prowlarr Service |
-| `PROWLARR_BASE_URL` | Base API URL of your Prowlarr service. | None | Prowlarr Service |
-| `PROWLARR_TOKEN` | Authentication API token for Prowlarr. | None | Prowlarr Service |
-| `PROWLARR_SSL_VERIFY` | Verify SSL certificates for Prowlarr requests. | `False` | Prowlarr Service |
-| `BAZARR_ENABLED` | Toggle to enable/disable Bazarr MCP tools and client. | `False` | Bazarr Service |
-| `BAZARR_BASE_URL` | Base API URL of your Bazarr service. | None | Bazarr Service |
-| `BAZARR_API_KEY` | Authentication API key for Bazarr. | None | Bazarr Service |
-| `BAZARR_SSL_VERIFY` | Verify SSL certificates for Bazarr requests. | `False` | Bazarr Service |
-| `SEERR_ENABLED` | Toggle to enable/disable Seerr MCP tools and client. | `False` | Seerr Service |
-| `SEERR_BASE_URL` | Base API URL of your Seerr service. | None | Seerr Service |
-| `SEERR_API_KEY` | Authentication API key for Seerr. | None | Seerr Service |
-| `SEERR_SSL_VERIFY` | Verify SSL certificates for Seerr requests. | `False` | Seerr Service |
-| `CHAPTARR_ENABLED` | Toggle to enable/disable Chaptarr MCP tools and client. | `False` | Chaptarr Service |
-| `CHAPTARR_BASE_URL` | Base API URL of your Chaptarr service. | None | Chaptarr Service |
-| `CHAPTARR_TOKEN` | Authentication API token for Chaptarr. | None | Chaptarr Service |
-| `CHAPTARR_SSL_VERIFY` | Verify SSL certificates for Chaptarr requests. | `False` | Chaptarr Service |
+### Connection & Credentials — shared
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ARR_HOST` | Shared base host for the Arr services | — |
+| `ARR_API_KEY` | Shared Arr API key | — |
+| `PVR_API_KEY` | Shared PVR (Sonarr/Radarr/Lidarr) API key | — |
+| `PLEX_TOKEN` | Plex authentication token (Seerr/overseerr flows) | — |
+
+### Connection & Credentials — per service
+Each service accepts an `_ENABLED` toggle, a `_BASE_URL`, an auth token (`_TOKEN` for
+Sonarr/Radarr/Lidarr/Prowlarr/Chaptarr; `_API_KEY` for Bazarr/Seerr), and a `_SSL_VERIFY` flag.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SONARR_ENABLED` / `SONARR_BASE_URL` / `SONARR_TOKEN` / `SONARR_SSL_VERIFY` | Sonarr service enable + connection + API token + TLS verify | `False` / — / — / `False` |
+| `RADARR_ENABLED` / `RADARR_BASE_URL` / `RADARR_TOKEN` / `RADARR_SSL_VERIFY` | Radarr service enable + connection + API token + TLS verify | `False` / — / — / `False` |
+| `LIDARR_ENABLED` / `LIDARR_BASE_URL` / `LIDARR_TOKEN` / `LIDARR_SSL_VERIFY` | Lidarr service enable + connection + API token + TLS verify | `False` / — / — / `False` |
+| `PROWLARR_ENABLED` / `PROWLARR_BASE_URL` / `PROWLARR_TOKEN` / `PROWLARR_SSL_VERIFY` | Prowlarr service enable + connection + API token + TLS verify | `False` / — / — / `False` |
+| `BAZARR_ENABLED` / `BAZARR_BASE_URL` / `BAZARR_API_KEY` / `BAZARR_SSL_VERIFY` | Bazarr service enable + connection + API key + TLS verify | `False` / — / — / `False` |
+| `SEERR_ENABLED` / `SEERR_BASE_URL` / `SEERR_API_KEY` / `SEERR_SSL_VERIFY` | Seerr service enable + connection + API key + TLS verify | `False` / — / — / `False` |
+| `CHAPTARR_ENABLED` / `CHAPTARR_BASE_URL` / `CHAPTARR_TOKEN` / `CHAPTARR_SSL_VERIFY` | Chaptarr service enable + connection + API token + TLS verify | `False` / — / — / `False` |
+
+### MCP server / transport
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `TRANSPORT` | `stdio`, `streamable-http`, or `sse` | `stdio` |
+| `HOST` | Bind host (HTTP transports) | `0.0.0.0` |
+| `PORT` | Bind port (HTTP transports) | `8000` |
+| `MCP_TOOL_MODE` | Tool surface: `condensed`, `verbose`, or `both` | `condensed` |
+| `MCP_ENABLED_TOOLS` / `MCP_DISABLED_TOOLS` | Comma-separated tool allow/deny list | — |
+| `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS` | Comma-separated tag allow/deny list | — |
+
+### Tool toggles
+Each action-routed tool can be disabled individually via its toggle env var (set to `false`).
+The full list is in the [Available MCP Tools](#available-mcp-tools) table above
+(e.g. `SONARRTOOL`, `RADARRTOOL`, `PROWLARRTOOL`, `BAZARRTOOL`, `SEERRTOOL`, `CHAPTARRTOOL`,
+`LIDARRTOOL`).
+
+### Telemetry & governance
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ENABLE_OTEL` | Enable OpenTelemetry export | `True` |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP collector endpoint | — |
+| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | OTLP auth keys | — |
+| `OTEL_EXPORTER_OTLP_PROTOCOL` | OTLP protocol (e.g. `http/protobuf`) | — |
+| `EUNOMIA_TYPE` | Authorization mode: `none`, `embedded`, `remote` | `none` |
+| `EUNOMIA_POLICY_FILE` | Embedded policy file | `mcp_policies.json` |
+| `EUNOMIA_REMOTE_URL` | Remote Eunomia server URL | — |
+
+### Agent CLI (full `[agent]` runtime only)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MCP_URL` | URL of the MCP server the agent connects to | `http://localhost:8000/mcp` |
+| `PROVIDER` | LLM provider (e.g. `openai`) | `openai` |
+| `MODEL_ID` | Model id (e.g. `gpt-4o`) | `gpt-4o` |
+| `ENABLE_WEB_UI` | Serve the AG-UI web interface | `True` |
+| `DEFAULT_AGENT_NAME` | Custom name for the Graph Agent | `Arr Mcp` |
+| `ALLOWED_CLIENT_REDIRECT_URIS` | Permitted client redirect URIs for auth flows | — |
+| `AUTH_TYPE` | Authentication type for A2A endpoints | — |
+
+See [`.env.example`](.env.example) for a copy-paste starting point.
 
 ---
 
@@ -362,15 +402,51 @@ Built directly upon the enterprise-ready [`agent-utilities`](https://github.com/
 
 ## Installation
 
-Install the Python package locally:
+Pick the extra that matches what you want to run:
+
+| Extra | Installs | Use when |
+|-------|----------|----------|
+| `arr-mcp[mcp]` | Slim MCP server only (`agent-utilities[mcp]` — FastMCP/FastAPI) | You only run the **MCP server** (smallest install / image) |
+| `arr-mcp[agent]` | Full agent runtime (`agent-utilities[agent,logfire]` — Pydantic AI + the epistemic-graph engine) | You run the **integrated agent** |
+| `arr-mcp[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
 
 ```bash
-# Using uv (highly recommended)
-uv pip install arr-mcp[all]
+# MCP server only (recommended for tool hosting — slim deps)
+uv pip install "arr-mcp[mcp]"
 
-# Using standard pip
-python -m pip install arr-mcp[all]
+# Full agent runtime (Pydantic AI + epistemic-graph engine)
+uv pip install "arr-mcp[agent]"
+
+# Everything (development)
+uv pip install "arr-mcp[all]"      # or: python -m pip install "arr-mcp[all]"
 ```
+
+### Container images (`:mcp` vs `:agent`)
+
+One multi-stage `docker/Dockerfile` builds two right-sized images, selected by `--target`:
+
+| Image tag | Build target | Contents | Entrypoint |
+|-----------|--------------|----------|------------|
+| `knucklessg1/arr-mcp:mcp` | `--target mcp` | `arr-mcp[mcp]` — **slim**, no engine/`pydantic-ai`/`dspy`/`llama-index`/`tree-sitter` | `arr-mcp` |
+| `knucklessg1/arr-mcp:latest` | `--target agent` (default) | `arr-mcp[agent]` — **full** agent runtime + epistemic-graph engine | `arr-agent` |
+
+```bash
+docker build --target mcp   -t knucklessg1/arr-mcp:mcp    docker/   # slim MCP server
+docker build --target agent -t knucklessg1/arr-mcp:latest docker/   # full agent
+```
+
+`docker/mcp.compose.yml` runs the slim `:mcp` server; `docker/agent.compose.yml` runs the
+agent (`:latest`) with a co-located `:mcp` sidecar.
+
+### Knowledge-graph database (`epistemic-graph`)
+
+The **full agent** (`[agent]` / `:latest`) embeds the **epistemic-graph** engine (pulled in
+transitively via `agent-utilities[agent]`). For production — or to share one knowledge graph
+across multiple agents — run **epistemic-graph as its own database container** and point the
+agent at it instead of embedding it. Deployment recipes (single-node + Raft HA), connection
+config, and the full database architecture (with diagrams) are documented in the
+[epistemic-graph deployment guide](https://knuckles-team.github.io/epistemic-graph/deployment/).
+The slim `[mcp]` server does **not** require the database.
 
 ---
 
