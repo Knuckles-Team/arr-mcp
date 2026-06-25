@@ -315,6 +315,89 @@ Detailed graph node architecture explanations, custom skill configurations, and 
 
 ## Environment Variables
 
+<!-- ENV-VARS-TABLE:START -->
+
+#### Package environment variables
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `HOST` | `0.0.0.0` |  |
+| `PORT` | `8000` |  |
+| `TRANSPORT` | `stdio` | options: stdio, streamable-http, sse |
+| `ENABLE_OTEL` | `True` |  |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:8080/api/public/otel` |  |
+| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | `pk-...` |  |
+| `OTEL_EXPORTER_OTLP_SECRET_KEY` | `sk-...` |  |
+| `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` |  |
+| `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
+| `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
+| `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
+| `ARR_HOST` | `your_arr_host` |  |
+| `ARR_API_KEY` | `your_arr_api_key_here` |  |
+| `PVR_API_KEY` | `your_pvr_api_key_here` |  |
+| `PLEX_TOKEN` | `your_plex_token_here` |  |
+| `SONARR_ENABLED` | `True` | Sonarr Client |
+| `SONARR_BASE_URL` | `http://localhost:8989` |  |
+| `SONARR_TOKEN` | `your_sonarr_token_here` |  |
+| `SONARR_SSL_VERIFY` | `False` |  |
+| `RADARR_ENABLED` | `True` | Radarr Client |
+| `RADARR_BASE_URL` | `http://localhost:7878` |  |
+| `RADARR_TOKEN` | `your_radarr_token_here` |  |
+| `RADARR_SSL_VERIFY` | `False` |  |
+| `LIDARR_ENABLED` | `True` | Lidarr Client |
+| `LIDARR_BASE_URL` | `http://localhost:8686` |  |
+| `LIDARR_TOKEN` | `your_lidarr_token_here` |  |
+| `LIDARR_SSL_VERIFY` | `False` |  |
+| `PROWLARR_ENABLED` | `True` | Prowlarr Client |
+| `PROWLARR_BASE_URL` | `http://localhost:9696` |  |
+| `PROWLARR_TOKEN` | `your_prowlarr_token_here` |  |
+| `PROWLARR_SSL_VERIFY` | `False` |  |
+| `BAZARR_ENABLED` | `True` | Bazarr Client |
+| `BAZARR_BASE_URL` | `http://localhost:6767` |  |
+| `BAZARR_API_KEY` | `your_bazarr_api_key_here` |  |
+| `BAZARR_SSL_VERIFY` | `False` |  |
+| `SEERR_ENABLED` | `True` | Seerr Client |
+| `SEERR_BASE_URL` | `http://localhost:5055` |  |
+| `SEERR_API_KEY` | `your_seerr_api_key_here` |  |
+| `SEERR_SSL_VERIFY` | `False` |  |
+| `CHAPTARR_ENABLED` | `True` | Chaptarr Client |
+| `CHAPTARR_BASE_URL` | `http://localhost:8006` |  |
+| `CHAPTARR_TOKEN` | `your_chaptarr_token_here` |  |
+| `CHAPTARR_SSL_VERIFY` | `False` |  |
+| `SONARRTOOL` | `True` | MCP tools table (condensed action-routed surface). |
+| `RADARRTOOL` | `True` |  |
+| `LIDARRTOOL` | `True` |  |
+| `PROWLARRTOOL` | `True` |  |
+| `BAZARRTOOL` | `True` |  |
+| `SEERRTOOL` | `True` |  |
+| `CHAPTARRTOOL` | `True` |  |
+| `DEFAULT_AGENT_NAME` | `Arr Mcp` |  |
+| `ALLOWED_CLIENT_REDIRECT_URIS` | — |  |
+| `AUTH_TYPE` | — |  |
+
+#### Inherited agent-utilities variables (apply to every connector)
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| `MCP_TOOL_MODE` | `condensed` | Tool surface: `condensed` | `verbose` | `both` |
+| `MCP_ENABLED_TOOLS` | — | Comma-separated tool allow-list |
+| `MCP_DISABLED_TOOLS` | — | Comma-separated tool deny-list |
+| `MCP_ENABLED_TAGS` | — | Comma-separated tag allow-list |
+| `MCP_DISABLED_TAGS` | — | Comma-separated tag deny-list |
+| `MCP_CLIENT_AUTH` | — | Outbound MCP auth (`oidc-client-credentials` for fleet calls) |
+| `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
+| `OIDC_CLIENT_SECRET` | — | OIDC client secret (service-account auth) |
+| `DEBUG` | `False` | Verbose logging |
+| `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
+| `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
+| `PROVIDER` | `openai` | LLM provider for the agent |
+| `MODEL_ID` | `gpt-4o` | Model id for the agent |
+| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
+
+_53 package + 14 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+<!-- ENV-VARS-TABLE:END -->
+
+
 Every variable the server reads, grouped by concern. arr-mcp fronts seven independent
 *arr services — each is wired by setting its own `<SVC>_ENABLED` plus that service's
 `_BASE_URL` and `_TOKEN`/`_API_KEY`. The shared `ARR_HOST` / `ARR_API_KEY` / `PVR_API_KEY` /
