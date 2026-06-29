@@ -60,7 +60,7 @@ from arr_mcp.auth import (
     get_sonarr_client,
 )
 
-__version__ = "0.46.0"
+__version__ = "1.0.0"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
