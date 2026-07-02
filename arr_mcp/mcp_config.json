@@ -8,13 +8,27 @@
       ],
       "env": {
         "MCP_TOOL_MODE": "condensed",
-        "SONARRTOOL": "True",
-        "RADARRTOOL": "True",
-        "LIDARRTOOL": "True",
-        "PROWLARRTOOL": "True",
         "BAZARRTOOL": "True",
+        "BAZARR_API_KEY": "your_bazarr_api_key_here",
+        "BAZARR_BASE_URL": "http://localhost:6767",
+        "CHAPTARRTOOL": "True",
+        "CHAPTARR_BASE_URL": "http://localhost:8006",
+        "CHAPTARR_TOKEN": "your_chaptarr_token_here",
+        "LIDARRTOOL": "True",
+        "LIDARR_BASE_URL": "http://localhost:8686",
+        "LIDARR_TOKEN": "your_lidarr_token_here",
+        "PROWLARRTOOL": "True",
+        "PROWLARR_BASE_URL": "http://localhost:9696",
+        "PROWLARR_TOKEN": "your_prowlarr_token_here",
+        "RADARRTOOL": "True",
+        "RADARR_BASE_URL": "http://localhost:7878",
+        "RADARR_TOKEN": "your_radarr_token_here",
         "SEERRTOOL": "True",
-        "CHAPTARRTOOL": "True"
+        "SEERR_API_KEY": "your_seerr_api_key_here",
+        "SEERR_BASE_URL": "http://localhost:5055",
+        "SONARRTOOL": "True",
+        "SONARR_BASE_URL": "http://localhost:8989",
+        "SONARR_TOKEN": "your_sonarr_token_here"
       }
     }
   }

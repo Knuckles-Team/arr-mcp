@@ -1248,16 +1248,15 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
 
 ### MCP Configuration Examples
 
-> **Install the slim `[mcp]` extra.** All examples below install
-> `arr-mcp[mcp]` — the MCP-server extra that pulls only the FastMCP /
-> FastAPI tooling (`agent-utilities[mcp]`). It deliberately **excludes** the heavy
-> agent runtime (the epistemic-graph engine, `pydantic-ai`, `dspy`, `llama-index`,
-> `tree-sitter`), so `uvx`/container installs are dramatically smaller and faster.
-> Use the full `[agent]` extra only when you need the integrated Pydantic AI agent
-> (see [Installation](#installation)).
+<!-- MCP-CONFIG-EXAMPLES:START -->
 
-#### stdio Transport (Recommended for local IDEs e.g., Cursor, Claude Desktop)
-Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
+> **Install the slim `[mcp]` extra.** All examples install `arr-mcp[mcp]` — the
+> MCP-server extra that pulls only the FastMCP / FastAPI tooling (`agent-utilities[mcp]`).
+> It deliberately **excludes** the heavy agent runtime (`pydantic-ai`, the epistemic-graph
+> engine, `dspy`, `llama-index`), so `uvx` / container installs are far smaller. Use the
+> full `[agent]` extra only when you need the integrated Pydantic AI agent.
+
+#### stdio Transport (local IDEs — Cursor, Claude Desktop, VS Code)
 
 ```json
 {
@@ -1270,18 +1269,35 @@ Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
         "arr-mcp"
       ],
       "env": {
-        "SONARR_BASE_URL": "http://localhost:8989",
-        "SONARR_TOKEN": "your_sonarr_token_here",
+        "MCP_TOOL_MODE": "condensed",
+        "BAZARRTOOL": "True",
+        "BAZARR_API_KEY": "your_bazarr_api_key_here",
+        "BAZARR_BASE_URL": "http://localhost:6767",
+        "CHAPTARRTOOL": "True",
+        "CHAPTARR_BASE_URL": "http://localhost:8006",
+        "CHAPTARR_TOKEN": "your_chaptarr_token_here",
+        "LIDARRTOOL": "True",
+        "LIDARR_BASE_URL": "http://localhost:8686",
+        "LIDARR_TOKEN": "your_lidarr_token_here",
+        "PROWLARRTOOL": "True",
+        "PROWLARR_BASE_URL": "http://localhost:9696",
+        "PROWLARR_TOKEN": "your_prowlarr_token_here",
+        "RADARRTOOL": "True",
         "RADARR_BASE_URL": "http://localhost:7878",
-        "RADARR_TOKEN": "your_radarr_token_here"
+        "RADARR_TOKEN": "your_radarr_token_here",
+        "SEERRTOOL": "True",
+        "SEERR_API_KEY": "your_seerr_api_key_here",
+        "SEERR_BASE_URL": "http://localhost:5055",
+        "SONARRTOOL": "True",
+        "SONARR_BASE_URL": "http://localhost:8989",
+        "SONARR_TOKEN": "your_sonarr_token_here"
       }
     }
   }
 }
 ```
 
-#### Streamable-HTTP Transport (Recommended for production deployments)
-Configure your client's `mcp.json` to launch the Streamable-HTTP server via `uvx` with explicit host and port definition:
+#### Streamable-HTTP Transport (networked / production)
 
 ```json
 {
@@ -1291,23 +1307,45 @@ Configure your client's `mcp.json` to launch the Streamable-HTTP server via `uvx
       "args": [
         "--from",
         "arr-mcp[mcp]",
-        "arr-mcp"
+        "arr-mcp",
+        "--transport",
+        "streamable-http",
+        "--port",
+        "8000"
       ],
       "env": {
         "TRANSPORT": "streamable-http",
         "HOST": "0.0.0.0",
         "PORT": "8000",
-        "SONARR_BASE_URL": "http://localhost:8989",
-        "SONARR_TOKEN": "your_sonarr_token_here",
+        "MCP_TOOL_MODE": "condensed",
+        "BAZARRTOOL": "True",
+        "BAZARR_API_KEY": "your_bazarr_api_key_here",
+        "BAZARR_BASE_URL": "http://localhost:6767",
+        "CHAPTARRTOOL": "True",
+        "CHAPTARR_BASE_URL": "http://localhost:8006",
+        "CHAPTARR_TOKEN": "your_chaptarr_token_here",
+        "LIDARRTOOL": "True",
+        "LIDARR_BASE_URL": "http://localhost:8686",
+        "LIDARR_TOKEN": "your_lidarr_token_here",
+        "PROWLARRTOOL": "True",
+        "PROWLARR_BASE_URL": "http://localhost:9696",
+        "PROWLARR_TOKEN": "your_prowlarr_token_here",
+        "RADARRTOOL": "True",
         "RADARR_BASE_URL": "http://localhost:7878",
-        "RADARR_TOKEN": "your_radarr_token_here"
+        "RADARR_TOKEN": "your_radarr_token_here",
+        "SEERRTOOL": "True",
+        "SEERR_API_KEY": "your_seerr_api_key_here",
+        "SEERR_BASE_URL": "http://localhost:5055",
+        "SONARRTOOL": "True",
+        "SONARR_BASE_URL": "http://localhost:8989",
+        "SONARR_TOKEN": "your_sonarr_token_here"
       }
     }
   }
 }
 ```
 
-Alternatively, connect to a pre-deployed remote or local Streamable-HTTP instance:
+Alternatively, connect to a pre-deployed Streamable-HTTP instance by `url`:
 
 ```json
 {
@@ -1326,22 +1364,35 @@ docker run -d \
   --name arr-mcp-mcp \
   -p 8000:8000 \
   -e TRANSPORT=streamable-http \
+  -e HOST=0.0.0.0 \
   -e PORT=8000 \
-  -e SONARR_BASE_URL="http://localhost:8989" \
-  -e SONARR_TOKEN="your_value" \
-  -e RADARR_BASE_URL="http://localhost:7878" \
-  -e RADARR_TOKEN="your_value" \
+  -e MCP_TOOL_MODE=condensed \
+  -e BAZARRTOOL=True \
+  -e BAZARR_API_KEY=your_bazarr_api_key_here \
+  -e BAZARR_BASE_URL=http://localhost:6767 \
+  -e CHAPTARRTOOL=True \
+  -e CHAPTARR_BASE_URL=http://localhost:8006 \
+  -e CHAPTARR_TOKEN=your_chaptarr_token_here \
+  -e LIDARRTOOL=True \
+  -e LIDARR_BASE_URL=http://localhost:8686 \
+  -e LIDARR_TOKEN=your_lidarr_token_here \
+  -e PROWLARRTOOL=True \
+  -e PROWLARR_BASE_URL=http://localhost:9696 \
+  -e PROWLARR_TOKEN=your_prowlarr_token_here \
+  -e RADARRTOOL=True \
+  -e RADARR_BASE_URL=http://localhost:7878 \
+  -e RADARR_TOKEN=your_radarr_token_here \
+  -e SEERRTOOL=True \
+  -e SEERR_API_KEY=your_seerr_api_key_here \
+  -e SEERR_BASE_URL=http://localhost:5055 \
+  -e SONARRTOOL=True \
+  -e SONARR_BASE_URL=http://localhost:8989 \
+  -e SONARR_TOKEN=your_sonarr_token_here \
   knucklessg1/arr-mcp:mcp
 ```
 
-> The `:mcp` tag is the **slim MCP-server image** (built from
-> `docker/Dockerfile --target mcp`, installing `arr-mcp[mcp]`). The default
-> `:latest` tag is the **full agent image** (`--target agent`, `arr-mcp[agent]`)
-> which also bundles the Pydantic AI agent and the epistemic-graph engine — use it
-> when you run `arr-agent` (the agent), not just the MCP server. See
-> [Container images](#container-images-mcp-vs-agent).
-
----
+_Auto-generated from the code-read env surface (`MCP_TOOL_MODE` + package vars) — do not edit._
+<!-- MCP-CONFIG-EXAMPLES:END -->
 
 <!-- BEGIN GENERATED: additional-deployment-options -->
 ### Additional Deployment Options
