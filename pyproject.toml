@@ -31,6 +31,12 @@ arr-agent = "arr_mcp.agent_server:agent_server"
 [project.entry-points."agent_utilities.skill_providers"]
 arr-mcp = "arr_mcp.skills"
 
+[project.entry-points."agent_utilities.ontology_providers"]
+arr-mcp = "arr_mcp.ontology"
+
+[project.entry-points."agent_utilities.source_connector_providers"]
+arr-mcp = "arr_mcp.connectors"
+
 [project.entry-points."agent_utilities.prompt_providers"]
 arr-mcp = "arr_mcp.prompts"
 
@@ -52,7 +58,7 @@ dev = [
 ]
 
 [tool.setuptools.package-data]
-arr_mcp = [ "mcp_config.json", "agent_data/**", "prompts/**", "skills/**",]
+arr_mcp = [ "mcp_config.json", "agent_data/**", "prompts/**", "skills/**", "ontology/**", "connectors/**",]
 
 [tool.ruff.lint]
 select = [ "E", "F", "I", "UP", "B",]

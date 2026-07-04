@@ -1,0 +1,178 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Arr media-automation ontology — the *arr stack (Radarr movies, Sonarr series/episodes,
+# Lidarr artists/albums, Chaptarr books, Prowlarr indexers, Overseerr/Jellyseerr requests,
+# Bazarr subtitles). All classes and properties live in the shared `:` (kg#) namespace;
+# only the owl:Ontology node gets the per-package IRI. Shared classes (:MediaAsset, :Blob,
+# :Document, :Person) are REUSED, never redefined. Backs the arr-mcp condensed tool surface
+# (radarr_action / sonarr_action / lidarr_action / prowlarr_action / seerr_action / ...).
+
+# --- classes (owl:Class) ---
+
+:Movie a owl:Class ;
+    rdfs:label "Movie" ;
+    rdfs:comment "A film tracked by Radarr (radarr_action get_movie)." .
+
+:Series a owl:Class ;
+    rdfs:label "Series" ;
+    rdfs:comment "A TV series tracked by Sonarr (sonarr_action get_series)." .
+
+:Episode a owl:Class ;
+    rdfs:label "Episode" ;
+    rdfs:comment "A single episode of a Series (sonarr_action get_episode)." .
+
+:Artist a owl:Class ;
+    rdfs:label "Artist" ;
+    rdfs:comment "A music artist tracked by Lidarr (lidarr_action get_artist)." .
+
+:Album a owl:Class ;
+    rdfs:label "Album" ;
+    rdfs:comment "A music album/release by an Artist (lidarr_action get_album)." .
+
+:Book a owl:Class ;
+    rdfs:label "Book" ;
+    rdfs:comment "A book/ebook tracked by Chaptarr (chaptarr_action get_book)." .
+
+:Indexer a owl:Class ;
+    rdfs:label "Indexer" ;
+    rdfs:comment "A search indexer (Torznab/Newznab) configured in Prowlarr or an *arr app (prowlarr_action get_indexer)." .
+
+:MediaRequest a owl:Class ;
+    rdfs:label "Media Request" ;
+    rdfs:comment "A user request for a movie or series in Overseerr/Jellyseerr (seerr_action get_request)." .
+
+:QualityProfile a owl:Class ;
+    rdfs:label "Quality Profile" ;
+    rdfs:comment "A quality/cutoff profile governing which release qualities an *arr app grabs (get_qualityprofile)." .
+
+:RootFolder a owl:Class ;
+    rdfs:label "Root Folder" ;
+    rdfs:comment "A library root path where an *arr app stores media (get_rootfolder)." .
+
+# --- links (owl:ObjectProperty) ---
+
+:hasEpisode a owl:ObjectProperty ;
+    rdfs:label "has episode" ;
+    rdfs:comment "Links a Series to an Episode it contains." ;
+    rdfs:domain :Series ;
+    rdfs:range :Episode .
+
+:hasAlbum a owl:ObjectProperty ;
+    rdfs:label "has album" ;
+    rdfs:comment "Links an Artist to an Album they released." ;
+    rdfs:domain :Artist ;
+    rdfs:range :Album .
+
+:indexedBy a owl:ObjectProperty ;
+    rdfs:label "indexed by" ;
+    rdfs:comment "Links a Movie, Series, Album, or Book to an Indexer that can source its releases." ;
+    rdfs:range :Indexer .
+
+:requestedBy a owl:ObjectProperty ;
+    rdfs:label "requested by" ;
+    rdfs:comment "Links a MediaRequest to the Person who submitted it." ;
+    rdfs:domain :MediaRequest ;
+    rdfs:range :Person .
+
+:requestsMedia a owl:ObjectProperty ;
+    rdfs:label "requests media" ;
+    rdfs:comment "Links a MediaRequest to the Movie or Series it asks for." ;
+    rdfs:domain :MediaRequest .
+
+:hasQualityProfile a owl:ObjectProperty ;
+    rdfs:label "has quality profile" ;
+    rdfs:comment "Links a Movie, Series, Artist, or Book to the QualityProfile governing its grabs." ;
+    rdfs:range :QualityProfile .
+
+:storedIn a owl:ObjectProperty ;
+    rdfs:label "stored in" ;
+    rdfs:comment "Links a Movie or Series to the RootFolder its files live under." ;
+    rdfs:range :RootFolder .
+
+:downloadedAs a owl:ObjectProperty ;
+    rdfs:label "downloaded as" ;
+    rdfs:comment "Links a Movie, Episode, Album, or Book to the imported :MediaAsset (the file on disk)." ;
+    rdfs:range :MediaAsset .
+
+# --- fields (owl:DatatypeProperty) ---
+
+:title a owl:DatatypeProperty ;
+    rdfs:label "title" ;
+    rdfs:comment "Display title of a Movie, Series, Album, or Book." ;
+    rdfs:range xsd:string .
+
+:year a owl:DatatypeProperty ;
+    rdfs:label "year" ;
+    rdfs:comment "Release/first-air year." ;
+    rdfs:range xsd:integer .
+
+:tmdbId a owl:DatatypeProperty ;
+    rdfs:label "tmdb id" ;
+    rdfs:comment "The Movie Database id of a Movie (Radarr's stable external key)." ;
+    rdfs:range xsd:string .
+
+:tvdbId a owl:DatatypeProperty ;
+    rdfs:label "tvdb id" ;
+    rdfs:comment "TheTVDB id of a Series (Sonarr's stable external key)." ;
+    rdfs:range xsd:string .
+
+:imdbId a owl:DatatypeProperty ;
+    rdfs:label "imdb id" ;
+    rdfs:comment "IMDb id of a Movie or Series." ;
+    rdfs:range xsd:string .
+
+:overview a owl:DatatypeProperty ;
+    rdfs:label "overview" ;
+    rdfs:comment "Synopsis / plot summary of a media item." ;
+    rdfs:range xsd:string .
+
+:monitored a owl:DatatypeProperty ;
+    rdfs:label "monitored" ;
+    rdfs:comment "Whether the *arr app is actively searching/grabbing for this item." ;
+    rdfs:range xsd:boolean .
+
+:hasFile a owl:DatatypeProperty ;
+    rdfs:label "has file" ;
+    rdfs:comment "Whether the item has at least one imported file on disk." ;
+    rdfs:range xsd:boolean .
+
+:mediaStatus a owl:DatatypeProperty ;
+    rdfs:label "media status" ;
+    rdfs:comment "Lifecycle status of a media item (announced, inCinemas, released, continuing, ended)." ;
+    rdfs:range xsd:string .
+
+:sizeOnDisk a owl:DatatypeProperty ;
+    rdfs:label "size on disk" ;
+    rdfs:comment "Total bytes the item's files occupy on disk." ;
+    rdfs:range xsd:integer .
+
+:protocol a owl:DatatypeProperty ;
+    rdfs:label "protocol" ;
+    rdfs:comment "Indexer protocol (usenet or torrent)." ;
+    rdfs:range xsd:string .
+
+:enabled a owl:DatatypeProperty ;
+    rdfs:label "enabled" ;
+    rdfs:comment "Whether an Indexer is enabled." ;
+    rdfs:range xsd:boolean .
+
+:requestStatus a owl:DatatypeProperty ;
+    rdfs:label "request status" ;
+    rdfs:comment "State of a MediaRequest (1=pending, 2=approved, 3=declined)." ;
+    rdfs:range xsd:string .
+
+<http://knuckles.team/kg/arr> a owl:Ontology ;
+    rdfs:label "Arr Media Automation Ontology" ;
+    rdfs:comment """The *arr media-automation stack — Radarr movies, Sonarr series and
+    episodes, Lidarr artists and albums, Chaptarr books, Prowlarr indexers,
+    Overseerr/Jellyseerr media requests and quality profiles — with their library,
+    indexing, request and download relationships, federated into the agent-utilities
+    knowledge-graph hub. Reuses the shared :MediaAsset, :Blob, :Document and :Person
+    classes for imported files and requesting users.""" ;
+    owl:imports <http://knuckles.team/kg> .

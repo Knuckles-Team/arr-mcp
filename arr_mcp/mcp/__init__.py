@@ -9,6 +9,7 @@ CONCEPT:AU-ECO.mcp.tool-mode-standardization — gitlab-style organized per-serv
 
 from arr_mcp.mcp.mcp_bazarr import register_bazarr_tools
 from arr_mcp.mcp.mcp_chaptarr import register_chaptarr_tools
+from arr_mcp.mcp.mcp_kg import register_kg_tools
 from arr_mcp.mcp.mcp_lidarr import register_lidarr_tools
 from arr_mcp.mcp.mcp_prowlarr import register_prowlarr_tools
 from arr_mcp.mcp.mcp_radarr import register_radarr_tools
@@ -18,6 +19,7 @@ from arr_mcp.mcp.mcp_sonarr import register_sonarr_tools
 __all__ = [
     "register_bazarr_tools",
     "register_chaptarr_tools",
+    "register_kg_tools",
     "register_lidarr_tools",
     "register_prowlarr_tools",
     "register_radarr_tools",

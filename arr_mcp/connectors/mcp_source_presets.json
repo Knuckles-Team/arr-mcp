@@ -1,0 +1,36 @@
+{
+  "_comment": "Tier-1 mcp_tool source presets for arr-mcp (AU-KG.ingest.mcp-tool-connector). Sync the *arr library into the KG via the arr-mcp MCP server. The condensed per-service tools take action + params_json; records come back as the raw list response. Contributed presets win over the central MCP_TOOL_PRESETS.",
+  "arr-movies": {
+    "server": "arr-mcp",
+    "tool": "radarr_action",
+    "action": "get_movie",
+    "records_path": "",
+    "id_field": "tmdbId",
+    "title_field": "title",
+    "text_field": "overview",
+    "updated_field": "added",
+    "doc_type": "movie"
+  },
+  "arr-series": {
+    "server": "arr-mcp",
+    "tool": "sonarr_action",
+    "action": "get_series",
+    "records_path": "",
+    "id_field": "tvdbId",
+    "title_field": "title",
+    "text_field": "overview",
+    "updated_field": "added",
+    "doc_type": "series"
+  },
+  "arr-indexers": {
+    "server": "arr-mcp",
+    "tool": "prowlarr_action",
+    "action": "get_indexer",
+    "records_path": "",
+    "id_field": "id",
+    "title_field": "name",
+    "text_field": "description",
+    "updated_field": "",
+    "doc_type": "indexer"
+  }
+}
