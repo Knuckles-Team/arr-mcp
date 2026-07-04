@@ -4,7 +4,7 @@ Mirrors the gitlab-api / servicenow-api layout: each service exposes a
 ``register_<svc>_tools(mcp)`` that registers one condensed action-routed tool.
 ``mcp_server.get_mcp_instance`` discovers these via ``register_tool_surface``.
 
-CONCEPT:ECO-4.82 — gitlab-style organized per-service tool surface.
+CONCEPT:AU-ECO.mcp.tool-mode-standardization — gitlab-style organized per-service tool surface.
 """
 
 from arr_mcp.mcp.mcp_bazarr import register_bazarr_tools

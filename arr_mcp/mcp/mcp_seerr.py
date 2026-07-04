@@ -1,6 +1,6 @@
 """Seerr condensed action-routed MCP tool.
 
-CONCEPT:ECO-4.82 — gitlab-style organized per-service tool surface.
+CONCEPT:AU-ECO.mcp.tool-mode-standardization — gitlab-style organized per-service tool surface.
 """
 
 import json

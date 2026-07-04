@@ -2,9 +2,9 @@
 """
 Arr Graph Agent Server execution entrypoint.
 
-CONCEPT:ORCH-1.4 — Action Execution Pipeline
-CONCEPT:OS-5.1 — Runtime Safety Grid
-CONCEPT:OS-5.3 — Prompt Injection Defense
+CONCEPT:AU-ORCH.adapter.kg-graph-materialization — Action Execution Pipeline
+CONCEPT:AU-OS.config.secrets-authentication — Runtime Safety Grid
+CONCEPT:AU-OS.governance.reactive-multi-axis-budget — Prompt Injection Defense
 """
 
 import logging

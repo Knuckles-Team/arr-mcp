@@ -171,7 +171,7 @@ def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
     """Initialize and return the MCP instance, args, and middlewares.
 
     Wires the whole tool surface through the central ``register_tool_surface``
-    helper (CONCEPT:ECO-4.82): one condensed action-routed tool per *arr service
+    helper (CONCEPT:AU-ECO.mcp.tool-mode-standardization): one condensed action-routed tool per *arr service
     (gated by ``<SVC>TOOL``, default on) plus, in verbose/both mode, the 1:1
     ``<svc>_<method>`` surface for each service's client.
     """

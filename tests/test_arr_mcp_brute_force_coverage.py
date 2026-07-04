@@ -504,7 +504,7 @@ def test_sonarr_radarr_lookup_empty():
 @pytest.mark.asyncio
 async def test_condensed_action_tools_dispatch_via_client():
     """The organized condensed tools resolve a client via the auth factory and
-    dispatch the requested action through it (CONCEPT:ECO-4.82)."""
+    dispatch the requested action through it (CONCEPT:AU-ECO.mcp.tool-mode-standardization)."""
     from unittest.mock import MagicMock
 
     from arr_mcp.mcp_server import get_mcp_instance

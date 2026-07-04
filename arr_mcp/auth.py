@@ -1,7 +1,7 @@
 """
 Authentication and client instantiation factory.
 
-CONCEPT:OS-5.4 — OIDC & Credentials Governance
+CONCEPT:AU-OS.governance.wasm-micro-agent-sandbox — OIDC & Credentials Governance
 """
 
 import sys

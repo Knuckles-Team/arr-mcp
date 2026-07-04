@@ -1,8 +1,8 @@
 """
 Unified client coverage testing.
 
-CONCEPT:ECO-4.1 — MCP & Universal Skills
-CONCEPT:ORCH-1.4 — Action Execution Pipeline
+CONCEPT:AU-ECO.mcp.fastmcp-middleware — MCP & Universal Skills
+CONCEPT:AU-ORCH.adapter.kg-graph-materialization — Action Execution Pipeline
 """
 
 import asyncio
