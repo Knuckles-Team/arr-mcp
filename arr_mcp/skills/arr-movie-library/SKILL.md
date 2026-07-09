@@ -1,5 +1,6 @@
 ---
 name: arr-movie-library
+skill_type: skill
 description: >-
   Manage the Radarr movie library via the arr-mcp MCP server — list monitored
   movies, look up a movie by TMDB id, add a movie, trigger searches, and check

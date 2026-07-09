@@ -1,5 +1,6 @@
 ---
 name: arr-series-library
+skill_type: skill
 description: >-
   Manage the Sonarr TV series library via the arr-mcp MCP server — list series,
   look one up by TVDB id, add a series, inspect seasons/episodes, and check

@@ -1,5 +1,6 @@
 ---
 name: arr-indexer-management
+skill_type: skill
 description: >-
   Manage Prowlarr search indexers via the arr-mcp MCP server — list configured
   indexers, inspect one, add/update/delete an indexer, and test connectivity. Use
