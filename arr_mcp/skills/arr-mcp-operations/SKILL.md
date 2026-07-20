@@ -1,5 +1,6 @@
 ---
 name: arr-mcp-operations
+skill_type: skill
 description: >-
   Operate arr-mcp through its governed MCP and GraphOS capabilities, including arr indexer management, arr movie library, arr series library. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
 ---
