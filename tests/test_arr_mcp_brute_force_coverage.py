@@ -1,14 +1,9 @@
 import asyncio
 import inspect
 import json
-import os
-import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
-from fastmcp import FastMCP
-from starlette.requests import Request
-from starlette.responses import JSONResponse
 
 
 def test_arr_apis_brute_force(mock_session):
@@ -67,11 +62,11 @@ def test_arr_apis_brute_force(mock_session):
                 kwargs = {k: v for k, v in common_kwargs.items() if k in sig.parameters}
                 for p_name, p in sig.parameters.items():
                     if p.default == inspect.Parameter.empty and p_name not in kwargs:
-                        kwargs[p_name] = "test" if p.annotation == str else 1
+                        kwargs[p_name] = "test" if p.annotation is str else 1
             try:
                 method(**kwargs)
             except Exception as e:
-                print(f"Failed call to {name}: {e}")
+                print(f"Operation failed: {type(e).__name__}")
                 pass
 
 
@@ -86,7 +81,7 @@ def test_arr_apis_error_handling():
         response.text = "Bad Request"
         session.request.return_value = response
         api = Api(base_url="http://test", api_key="test")
-        with pytest.raises(Exception, match="Bad Request"):
+        with pytest.raises(RuntimeError, match="API error: HTTP 400"):
             api.get_series()
 
     # 2. Error status code >= 400 with text property raising Exception
@@ -99,7 +94,7 @@ def test_arr_apis_error_handling():
         )
         session.request.return_value = response
         api = Api(base_url="http://test", api_key="test")
-        with pytest.raises(Exception, match="Unknown error"):
+        with pytest.raises(RuntimeError, match="API error: HTTP 400"):
             api.get_series()
 
     # 3. Status code 204
@@ -130,7 +125,7 @@ def test_execute_arr_action_failures_and_models():
 
     # 1. Base URL is None
     with pytest.raises(ValueError, match="Base URL must be provided"):
-        execute_arr_action("radarr", None, "test", False, "some_action", "{}", "token")
+        execute_arr_action("radarr", None, "test", "some_action", "{}", "token")
 
     # 2. Unknown service name
     with pytest.raises(ValueError, match="Unknown service"):
@@ -138,29 +133,24 @@ def test_execute_arr_action_failures_and_models():
             "invalid_service",
             "http://test",
             "test",
-            False,
             "some_action",
             "{}",
             "token",
         )
 
     # 3. Invalid params_json
-    with pytest.raises(ValueError, match="Invalid params_json"):
+    with pytest.raises(ValueError, match="params_json must be valid JSON"):
         execute_arr_action(
-            "radarr", "http://test", "test", False, "some_action", "{invalid", "token"
+            "radarr", "http://test", "test", "some_action", "{invalid", "token"
         )
 
     # 4. Unknown action method
     with pytest.raises(ValueError, match="Unknown action"):
         execute_arr_action(
-            "radarr", "http://test", "test", False, "invalid_action", "{}", "token"
+            "radarr", "http://test", "test", "invalid_action", "{}", "token"
         )
 
-    # 5. Pydantic-like dict/model_dump conversion coverage
-    class DummyModelDict:
-        def dict(self):
-            return {"source": "dict"}
-
+    # 5. Current Pydantic model_dump conversion coverage
     class DummyModelDump:
         def model_dump(self):
             return {"source": "model_dump"}
@@ -171,25 +161,17 @@ def test_execute_arr_action_failures_and_models():
         mock_import.return_value = mock_module
         mock_module.Api = mock_api
 
-        # Test dict() call
         instance = mock_api.return_value
-        instance.some_action.return_value = DummyModelDict()
-        res = execute_arr_action(
-            "radarr", "http://test", "test", False, "some_action", "{}", "token"
-        )
-        assert res == {"source": "dict"}
-
-        # Test model_dump() call
         instance.some_action.return_value = DummyModelDump()
         res = execute_arr_action(
-            "radarr", "http://test", "test", False, "some_action", "{}", "token"
+            "radarr", "http://test", "test", "some_action", "{}", "token"
         )
         assert res == {"source": "model_dump"}
 
         # Test standard return (dict)
         instance.some_action.return_value = {"source": "plain"}
         res = execute_arr_action(
-            "radarr", "http://test", "test", False, "some_action", "{}", "token"
+            "radarr", "http://test", "test", "some_action", "{}", "token"
         )
         assert res == {"source": "plain"}
 
@@ -235,10 +217,11 @@ async def test_mcp_custom_health_route():
     assert response.status_code == 200
     body = json.loads(response.body.decode())
     assert body.get("status", "").lower() == "ok"
+    assert response.headers["cache-control"] == "no-store"
 
 
 def test_mcp_server_run_transports():
-    from arr_mcp.mcp_server import mcp_server, get_mcp_instance
+    from arr_mcp.mcp_server import mcp_server
 
     mcp_mock = MagicMock()
     args_mock = MagicMock()
@@ -323,7 +306,7 @@ def test_mcp_server_coverage(mock_session):
                         ]:
                             if p_name not in target_params:
                                 target_params[p_name] = (
-                                    "test" if p.annotation == str else 1
+                                    "test" if p.annotation is str else 1
                                 )
 
                     has_kwargs = any(
@@ -339,7 +322,7 @@ def test_mcp_server_coverage(mock_session):
 
                     await mcp.call_tool(tool.name, target_params)
                 except Exception as e:
-                    print(f"Failed calling tool {tool.name}: {e}")
+                    print(f"Operation failed: {type(e).__name__}")
                     pass
 
         loop = asyncio.new_event_loop()
@@ -366,6 +349,7 @@ def test_agent_server_coverage():
 
 def test_all_api_clients_error_handling_and_special_cases():
     from typing import Any
+
     from arr_mcp.api import (
         api_client_bazarr,
         api_client_chaptarr,
@@ -397,7 +381,7 @@ def test_all_api_clients_error_handling_and_special_cases():
             )
             session.request.return_value = response
             api = mod.Api(base_url="http://test", **init_kwargs)
-            with pytest.raises(Exception, match="Unknown error"):
+            with pytest.raises(RuntimeError, match="API error: HTTP 400"):
                 getattr(api, method_name)()
 
         # Case 2: Status 204
@@ -435,8 +419,8 @@ def test_all_api_clients_error_handling_and_special_cases():
 
 
 def test_sonarr_radarr_lookup_empty():
-    from arr_mcp.api.api_client_sonarr import Api as SonarrApi
     from arr_mcp.api.api_client_radarr import Api as RadarrApi
+    from arr_mcp.api.api_client_sonarr import Api as SonarrApi
 
     # Sonarr lookup empty
     with patch("requests.Session") as mock_sess:

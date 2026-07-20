@@ -1,0 +1,4 @@
+interface:
+  display_name: "Arr MCP Operations"
+  short_description: "Help with Arr MCP Operations tasks"
+  default_prompt: "Use $arr-mcp-operations to complete a governed provider workflow."

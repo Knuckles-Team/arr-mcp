@@ -1,0 +1,6 @@
+{
+  "connector": "arr-mcp",
+  "current_ontology_source": "arr",
+  "migrations": [],
+  "schema_version": "1"
+}

@@ -1,18 +1,3 @@
-import warnings
-
-# Filter RequestsDependencyWarning early to prevent log spam
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    try:
-        from requests.exceptions import RequestsDependencyWarning
-
-        warnings.filterwarnings("ignore", category=RequestsDependencyWarning)
-    except ImportError:
-        pass
-
-# General urllib3/chardet mismatch warnings
-warnings.filterwarnings("ignore", message=".*urllib3.*or chardet.*")
-warnings.filterwarnings("ignore", message=".*urllib3.*or charset_normalizer.*")
 """
 Arr MCP Server — Consolidated & Optimized.
 
@@ -24,20 +9,16 @@ MCP & Universal Skills
 Action Execution Pipeline
 """
 
-import difflib
 import importlib
-import json
 import logging
-import os
 import sys
 from typing import Any
 
-from agent_utilities.base_utilities import to_boolean
-from agent_utilities.mcp_utilities import (
-    create_mcp_server,
-    load_config,
-    register_tool_surface,
-)
+from agent_utilities.core.config import load_config, setting
+from agent_utilities.core.transport_security import resolve_tls_profile
+from agent_utilities.mcp.action_dispatch import dispatch, parse_json_object
+from agent_utilities.mcp.server_factory import create_mcp_server
+from agent_utilities.mcp.verbose_tools import register_tool_surface
 from fastmcp.utilities.logging import get_logger
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -70,7 +51,6 @@ def execute_arr_action(
     service_name: str,
     base_url: str | None,
     api_key: str | None,
-    verify: bool,
     action: str,
     params_json: str,
     auth_kw: str,
@@ -102,69 +82,35 @@ def execute_arr_action(
     module = importlib.import_module(module_path)
     api_class: type[Any] = module.Api
 
-    try:
-        kwargs = json.loads(params_json) if params_json else {}
-    except Exception as e:
-        raise ValueError(f"Invalid params_json: {e}") from e
+    kwargs = parse_json_object(params_json)
 
     # Remove None values
     kwargs = {k: v for k, v in kwargs.items() if v is not None}
 
     # Instantiate API client using correct auth keyword (token vs api_key)
     auth_args = {auth_kw: api_key}
-    client = api_class(base_url=base_url, verify=verify, **auth_args)
-
-    # Discoverability: let callers introspect the valid action names instead of
-    # guessing (the dynamic dispatch has no fixed schema).
-    available_actions = sorted(
-        name
-        for name in dir(client)
-        if not name.startswith("_") and callable(getattr(client, name, None))
+    client = api_class(
+        base_url=base_url,
+        tls_profile=resolve_tls_profile(service_name),
+        **auth_args,
     )
-    if action in ("list_actions", "help", "actions"):
-        return {"service": service_name, "actions": available_actions}
 
-    # Dynamic method lookup with plural->singular alias resolution: intuitive
-    # plurals (e.g. get_movies) map to the real singular collection method
-    # (get_movie) so common guesses work across services.
-    method = getattr(client, action, None)
-    if method is None and action.endswith("s"):
-        candidates = [action[:-1]]
-        if action.endswith("es"):
-            candidates.append(action[:-2])
-        for singular in candidates:
-            candidate = getattr(client, singular, None)
-            if callable(candidate):
-                method = candidate
-                break
-    if method is None:
-        suggestions = difflib.get_close_matches(action, available_actions, n=3)
-        hint = f" Did you mean: {', '.join(suggestions)}?" if suggestions else ""
-        raise ValueError(
-            f"Unknown action '{action}' on {api_class.__name__}.{hint} "
-            f"Call with action='list_actions' to see all "
-            f"{len(available_actions)} available actions."
-        )
-
-    res = method(**kwargs)
-    if hasattr(res, "dict") and callable(res.dict):
-        return res.dict()
-    elif hasattr(res, "model_dump") and callable(res.model_dump):
-        return res.model_dump()
-    return res
+    return dispatch(
+        client,
+        action,
+        kwargs,
+        service=service_name,
+        result_coercer=lambda result: (
+            result.model_dump()
+            if hasattr(result, "model_dump") and callable(result.model_dump)
+            else result
+        ),
+    )
 
 
 def is_service_enabled(service: str) -> bool:
-    """Determine if a service should be enabled based on environment overrides."""
-    # Check if specifically enabled or disabled
-    env_enabled = os.getenv(f"{service.upper()}_ENABLED")
-    if env_enabled is not None:
-        return to_boolean(env_enabled)
-
-    # Check for legacy category tool configuration: if any category is disabled, we default to enabled.
-    # We verify if there are any specific service tool settings that are explicitly disabled,
-    # but by default all services are enabled.
-    return True
+    """Return the centrally configured service enablement decision."""
+    return bool(setting(f"{service.upper()}_ENABLED", True))
 
 
 def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
@@ -185,7 +131,7 @@ def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
 
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
-        return JSONResponse({"status": "OK"})
+        return JSONResponse({"status": "ok"}, headers={"Cache-Control": "no-store"})
 
     registered_tags = register_tool_surface(
         mcp,

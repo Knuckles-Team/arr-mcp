@@ -23,7 +23,7 @@ The base install is intentionally minimal. Install the extra for what you need:
 | Extra | Install | Pulls in |
 |---|---|---|
 | `mcp` | `pip install "arr-mcp[mcp]"` | FastMCP MCP-server runtime (`agent-utilities[mcp]`) |
-| `agent` | `pip install "arr-mcp[agent]"` | Pydantic-AI agent + Logfire tracing (`agent-utilities[agent,logfire]`) |
+| `agent` | `pip install "arr-mcp[agent]"` | Pydantic-AI agent + Logfire tracing (`agent-utilities[agent-runtime,logfire]`) |
 | `all` | `pip install "arr-mcp[all]"` | Everything above |
 | `test` | `pip install "arr-mcp[test]"` | The pytest suite (`pytest`, `pytest-xdist`, `pytest-asyncio`) |
 
@@ -49,15 +49,15 @@ uv run arr-mcp
 
 ## Prebuilt Docker image
 
-A multi-stage, slim image is published on every release (entrypoint `arr-mcp`):
+A multi-stage runtime image is published on every release (entrypoint `arr-mcp`):
 
 ```bash
-docker pull knucklessg1/arr-mcp:latest
+docker pull example/arr-mcp@sha256:<digest>
 
 docker run --rm -i \
   -e SONARR_BASE_URL=http://your-sonarr:8989 \
   -e SONARR_TOKEN=your_sonarr_api_key \
-  knucklessg1/arr-mcp:latest            # stdio transport (default)
+  example/arr-mcp@sha256:<digest>            # stdio transport (default)
 ```
 
 For an HTTP server with a published port — and the A2A agent — see

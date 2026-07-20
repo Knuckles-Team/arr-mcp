@@ -21,7 +21,7 @@ conventional port with a persistent config volume:
 # docker/arr-stack.compose.yml
 services:
   sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: lscr.io/linuxserver/sonarr@sha256:<digest>
     container_name: sonarr
     environment:
       - PUID=1000
@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
 
   radarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: lscr.io/linuxserver/radarr@sha256:<digest>
     container_name: radarr
     environment:
       - PUID=1000
@@ -47,7 +47,7 @@ services:
     restart: unless-stopped
 
   lidarr:
-    image: lscr.io/linuxserver/lidarr:latest
+    image: lscr.io/linuxserver/lidarr@sha256:<digest>
     container_name: lidarr
     environment:
       - PUID=1000
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: lscr.io/linuxserver/prowlarr@sha256:<digest>
     container_name: prowlarr
     environment:
       - PUID=1000
@@ -73,7 +73,7 @@ services:
     restart: unless-stopped
 
   bazarr:
-    image: lscr.io/linuxserver/bazarr:latest
+    image: lscr.io/linuxserver/bazarr@sha256:<digest>
     container_name: bazarr
     environment:
       - PUID=1000
@@ -86,7 +86,7 @@ services:
     restart: unless-stopped
 
   seerr:
-    image: ghcr.io/seerr-team/seerr:latest
+    image: ghcr.io/seerr-team/seerr@sha256:<digest>
     container_name: seerr
     environment:
       - TZ=Etc/UTC
@@ -136,19 +136,19 @@ the server reaches each service by container name:
 # docker/stack.compose.yml
 services:
   sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: lscr.io/linuxserver/sonarr@sha256:<digest>
     environment: [PUID=1000, PGID=1000, TZ=Etc/UTC]
     volumes: ["sonarr-config:/config"]
     ports: ["8989:8989"]
 
   radarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: lscr.io/linuxserver/radarr@sha256:<digest>
     environment: [PUID=1000, PGID=1000, TZ=Etc/UTC]
     volumes: ["radarr-config:/config"]
     ports: ["7878:7878"]
 
   arr-mcp:
-    image: knucklessg1/arr-mcp:latest
+    image: example/arr-mcp@sha256:<digest>
     depends_on: [sonarr, radarr]
     environment:
       - SONARR_BASE_URL=http://sonarr:8989

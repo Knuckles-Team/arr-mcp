@@ -2,13 +2,13 @@
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor — lists the live library via the real
 Radarr/Sonarr/Prowlarr clients and pushes it into epistemic-graph as typed :Movie /
-:Series / :Indexer nodes (+ :Document overviews). Best-effort: no-ops when no engine is
-reachable. Auto-discovered by ``register_tool_surface`` (gated by ``KGTOOL``, default on).
+:Series / :Indexer nodes (+ :Document overviews). Native-ingest failures propagate to
+the caller. Auto-discovered by ``register_tool_surface`` (gated by ``KGTOOL``, default on).
 """
 
 from typing import Any
 
-from agent_utilities.mcp_utilities import run_blocking
+from agent_utilities.mcp.concurrency import run_blocking
 from fastmcp import FastMCP
 from pydantic import Field
 
@@ -47,8 +47,8 @@ def register_kg_tools(mcp: FastMCP) -> None:
 
         Lists movies/series/indexers via the real clients and pushes them (with their
         :QualityProfile links + :Document overviews) into the knowledge graph via the
-        fast engine client. Best-effort: each section returns ``ingested: None`` when no
-        engine is reachable. CONCEPT:AU-KG.ingest.enterprise-source-extractor.
+        authoritative native-ingest transaction.
+        CONCEPT:AU-KG.ingest.enterprise-source-extractor.
         """
         wanted = {s.strip().lower() for s in services.split(",") if s.strip()}
         result: dict[str, Any] = {}

@@ -1,0 +1,10 @@
+{
+  "algorithm": "agent-utilities:mcp-tool-schema-compat:v1",
+  "connector": "arr-mcp",
+  "schema_version": "1",
+  "tools": {
+    "prowlarr_action": "2857678d34bb37ccb6a313cd29259d9becbc32e73681eda8c36e6a2f4035d7e5",
+    "radarr_action": "3b6c2929b3b2407d83651d97a701999550f7280f610eb25269ca70ddb2b84876",
+    "sonarr_action": "54d5024b9c89c1a28e23128328065bedaa52421e623e9c8bdd1986e39c0d778b"
+  }
+}

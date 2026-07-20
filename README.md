@@ -1250,11 +1250,10 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
 
 <!-- MCP-CONFIG-EXAMPLES:START -->
 
-> **Install the slim `[mcp]` extra.** All examples install `arr-mcp[mcp]` — the
-> MCP-server extra that pulls only the FastMCP / FastAPI tooling (`agent-utilities[mcp]`).
-> It deliberately **excludes** the heavy agent runtime (`pydantic-ai`, the epistemic-graph
-> engine, `dspy`, `llama-index`), so `uvx` / container installs are far smaller. Use the
-> full `[agent]` extra only when you need the integrated Pydantic AI agent.
+> **Install the connector-focused `[mcp]` extra.** Examples use `arr-mcp[mcp]` to add
+> FastMCP / FastAPI through `agent-utilities[mcp]`; the required Agent Utilities core
+> still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
+> enables model orchestration.
 
 #### stdio Transport (local IDEs — Cursor, Claude Desktop, VS Code)
 
@@ -1269,7 +1268,7 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
         "arr-mcp"
       ],
       "env": {
-        "MCP_TOOL_MODE": "condensed",
+        "MCP_TOOL_MODE": "intent",
         "BAZARRTOOL": "True",
         "BAZARR_API_KEY": "your_bazarr_api_key_here",
         "BAZARR_BASE_URL": "http://localhost:6767",
@@ -1297,6 +1296,10 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
 }
 ```
 
+Runtime references require an alias-aware launcher such as GraphOS. Other
+launchers must omit those entries and inject the resolved values through their
+own runtime secret boundary.
+
 #### Streamable-HTTP Transport (networked / production)
 
 ```json
@@ -1315,9 +1318,9 @@ When query strings or parameters are supplied, an LLM-free **Knowledge Graph res
       ],
       "env": {
         "TRANSPORT": "streamable-http",
-        "HOST": "0.0.0.0",
+        "HOST": "127.0.0.1",
         "PORT": "8000",
-        "MCP_TOOL_MODE": "condensed",
+        "MCP_TOOL_MODE": "intent",
         "BAZARRTOOL": "True",
         "BAZARR_API_KEY": "your_bazarr_api_key_here",
         "BAZARR_BASE_URL": "http://localhost:6767",
@@ -1357,16 +1360,18 @@ Alternatively, connect to a pre-deployed Streamable-HTTP instance by `url`:
 }
 ```
 
-Deploying the Streamable-HTTP server via Docker:
+Run a reviewed container image as a least-privilege stdio child (no
+listener or published port):
 
 ```bash
-docker run -d \
-  --name arr-mcp-mcp \
-  -p 8000:8000 \
-  -e TRANSPORT=streamable-http \
-  -e HOST=0.0.0.0 \
-  -e PORT=8000 \
-  -e MCP_TOOL_MODE=condensed \
+docker run -i --rm \
+  --read-only \
+  --cap-drop=ALL \
+  --security-opt=no-new-privileges \
+  --pids-limit=256 \
+  --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m \
+  -e TRANSPORT=stdio \
+  -e MCP_TOOL_MODE=intent \
   -e BAZARRTOOL=True \
   -e BAZARR_API_KEY=your_bazarr_api_key_here \
   -e BAZARR_BASE_URL=http://localhost:6767 \
@@ -1388,8 +1393,13 @@ docker run -d \
   -e SONARRTOOL=True \
   -e SONARR_BASE_URL=http://localhost:8989 \
   -e SONARR_TOKEN=your_sonarr_token_here \
-  knucklessg1/arr-mcp:mcp
+  registry.example.invalid/arr-mcp@sha256:<digest> arr-mcp
 ```
+
+For containerized network HTTP, supply an authenticated TLS ingress (or
+direct server TLS), exact `MCP_ALLOWED_HOSTS`, and an exact trusted-proxy
+CIDR policy through the operator-owned deployment profile. The generator
+does not emit an unauthenticated non-loopback listener.
 
 _Auto-generated from the code-read env surface (`MCP_TOOL_MODE` + package vars) — do not edit._
 <!-- MCP-CONFIG-EXAMPLES:END -->
@@ -1397,16 +1407,16 @@ _Auto-generated from the code-read env surface (`MCP_TOOL_MODE` + package vars) 
 <!-- BEGIN GENERATED: additional-deployment-options -->
 ### Additional Deployment Options
 
-`arr-mcp` can also run as a **local container** (Docker / Podman / `uv`) or be
-consumed from a **remote deployment**. The
-[Deployment guide](https://knuckles-team.github.io/arr-mcp/deployment/) has full, copy-paste
-`mcp_config.json` for all four transports — **stdio**, **streamable-http**,
-**local container / uv**, and **remote URL**:
+`arr-mcp` can run as a local stdio process or container, or behind a remote
+network boundary. The
+[Deployment guide](https://knuckles-team.github.io/arr-mcp/deployment/) carries
+the detailed transport contract.
 
-- **Local container / uv** — launch the server from `mcp_config.json` via `uvx`,
-  `docker run`, or `podman run`, or point at a local streamable-http container by `url`.
-- **Remote URL** — connect to a server deployed behind Caddy at
-  `http://arr-mcp.arpa/mcp` using the `"url"` key.
+- **Local container** — launch a reviewed immutable image as a least-privilege
+  stdio child with no listener or published port.
+- **Remote URL** — connect through an operator-supplied authenticated HTTPS
+  ingress. Keep its URL, outbound identity references, trust profile, and exact
+  `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
 ## Agent
@@ -1435,7 +1445,7 @@ version: '3.8'
 
 services:
   arr-mcp-mcp:
-    image: knucklessg1/arr-mcp:mcp
+    image: example/arr-mcp:mcp
     container_name: arr-mcp-mcp
     hostname: arr-mcp-mcp
     restart: always
@@ -1461,7 +1471,7 @@ services:
         max-file: "3"
 
   arr-mcp-agent:
-    image: knucklessg1/arr-mcp:latest
+    image: example/arr-mcp@sha256:<digest>
     container_name: arr-mcp-agent
     hostname: arr-mcp-agent
     restart: always
@@ -1520,25 +1530,25 @@ Detailed graph node architecture explanations, custom skill configurations, and 
 | `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
 | `SONARR_BASE_URL` | `http://localhost:8989` | Sonarr Client |
 | `SONARR_TOKEN` | `your_sonarr_token_here` |  |
-| `SONARR_SSL_VERIFY` | `False` |  |
+| `SONARR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `RADARR_BASE_URL` | `http://localhost:7878` | Radarr Client |
 | `RADARR_TOKEN` | `your_radarr_token_here` |  |
-| `RADARR_SSL_VERIFY` | `False` |  |
+| `RADARR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `LIDARR_BASE_URL` | `http://localhost:8686` | Lidarr Client |
 | `LIDARR_TOKEN` | `your_lidarr_token_here` |  |
-| `LIDARR_SSL_VERIFY` | `False` |  |
+| `LIDARR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `PROWLARR_BASE_URL` | `http://localhost:9696` | Prowlarr Client |
 | `PROWLARR_TOKEN` | `your_prowlarr_token_here` |  |
-| `PROWLARR_SSL_VERIFY` | `False` |  |
+| `PROWLARR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `BAZARR_BASE_URL` | `http://localhost:6767` | Bazarr Client |
 | `BAZARR_API_KEY` | `your_bazarr_api_key_here` |  |
-| `BAZARR_SSL_VERIFY` | `False` |  |
+| `BAZARR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `SEERR_BASE_URL` | `http://localhost:5055` | Seerr Client |
 | `SEERR_API_KEY` | `your_seerr_api_key_here` |  |
-| `SEERR_SSL_VERIFY` | `False` |  |
+| `SEERR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `CHAPTARR_BASE_URL` | `http://localhost:8006` | Chaptarr Client |
 | `CHAPTARR_TOKEN` | `your_chaptarr_token_here` |  |
-| `CHAPTARR_SSL_VERIFY` | `False` |  |
+| `CHAPTARR_TLS_PROFILE` | — | Runtime transport-security profile |
 | `SONARRTOOL` | `True` | MCP tools table (condensed action-routed surface). |
 | `RADARRTOOL` | `True` |  |
 | `LIDARRTOOL` | `True` |  |
@@ -1574,21 +1584,23 @@ _41 package + 14 inherited variable(s). Auto-generated from `.env.example` + the
 
 Every variable the server reads, grouped by concern. arr-mcp fronts seven independent
 *arr services — each is wired by setting that service's `_BASE_URL` and
-`_TOKEN`/`_API_KEY` (plus an optional `_SSL_VERIFY` flag).
+`_TOKEN`/`_API_KEY`. TLS trust, mTLS, and proxy policy use runtime TLS profiles.
 
 ### Connection & Credentials — per service
-Each service accepts a `_BASE_URL`, an auth token (`_TOKEN` for
-Sonarr/Radarr/Lidarr/Prowlarr/Chaptarr; `_API_KEY` for Bazarr/Seerr), and a `_SSL_VERIFY` flag.
+Each service accepts a `_BASE_URL` and an auth token (`_TOKEN` for
+Sonarr/Radarr/Lidarr/Prowlarr/Chaptarr; `_API_KEY` for Bazarr/Seerr). Verification is
+mandatory. Select a runtime profile with `<SERVICE>_TLS_PROFILE`, or provide runtime
+CA/mTLS settings through the shared transport-security environment.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `SONARR_BASE_URL` / `SONARR_TOKEN` / `SONARR_SSL_VERIFY` | Sonarr connection + API token + TLS verify | — / — / `False` |
-| `RADARR_BASE_URL` / `RADARR_TOKEN` / `RADARR_SSL_VERIFY` | Radarr connection + API token + TLS verify | — / — / `False` |
-| `LIDARR_BASE_URL` / `LIDARR_TOKEN` / `LIDARR_SSL_VERIFY` | Lidarr connection + API token + TLS verify | — / — / `False` |
-| `PROWLARR_BASE_URL` / `PROWLARR_TOKEN` / `PROWLARR_SSL_VERIFY` | Prowlarr connection + API token + TLS verify | — / — / `False` |
-| `BAZARR_BASE_URL` / `BAZARR_API_KEY` / `BAZARR_SSL_VERIFY` | Bazarr connection + API key + TLS verify | — / — / `False` |
-| `SEERR_BASE_URL` / `SEERR_API_KEY` / `SEERR_SSL_VERIFY` | Seerr connection + API key + TLS verify | — / — / `False` |
-| `CHAPTARR_BASE_URL` / `CHAPTARR_TOKEN` / `CHAPTARR_SSL_VERIFY` | Chaptarr connection + API token + TLS verify | — / — / `False` |
+| `SONARR_BASE_URL` / `SONARR_TOKEN` / `SONARR_TLS_PROFILE` | Sonarr connection, API token, and optional runtime TLS profile | — |
+| `RADARR_BASE_URL` / `RADARR_TOKEN` / `RADARR_TLS_PROFILE` | Radarr connection, API token, and optional runtime TLS profile | — |
+| `LIDARR_BASE_URL` / `LIDARR_TOKEN` / `LIDARR_TLS_PROFILE` | Lidarr connection, API token, and optional runtime TLS profile | — |
+| `PROWLARR_BASE_URL` / `PROWLARR_TOKEN` / `PROWLARR_TLS_PROFILE` | Prowlarr connection, API token, and optional runtime TLS profile | — |
+| `BAZARR_BASE_URL` / `BAZARR_API_KEY` / `BAZARR_TLS_PROFILE` | Bazarr connection, API key, and optional runtime TLS profile | — |
+| `SEERR_BASE_URL` / `SEERR_API_KEY` / `SEERR_TLS_PROFILE` | Seerr connection, API key, and optional runtime TLS profile | — |
+| `CHAPTARR_BASE_URL` / `CHAPTARR_TOKEN` / `CHAPTARR_TLS_PROFILE` | Chaptarr connection, API token, and optional runtime TLS profile | — |
 
 ### MCP server / transport
 | Variable | Description | Default |
@@ -1653,15 +1665,15 @@ Pick the extra that matches what you want to run:
 
 | Extra | Installs | Use when |
 |-------|----------|----------|
-| `arr-mcp[mcp]` | Slim MCP server only (`agent-utilities[mcp]` — FastMCP/FastAPI) | You only run the **MCP server** (smallest install / image) |
-| `arr-mcp[agent]` | Full agent runtime (`agent-utilities[agent,logfire]` — Pydantic AI + the epistemic-graph engine) | You run the **integrated agent** |
+| `arr-mcp[mcp]` | Connector-focused MCP server (`agent-utilities[mcp]` — FastMCP/FastAPI + `epistemic-graph[full]`) | You only run the **MCP server** (smallest install / image) |
+| `arr-mcp[agent]` | Agent runtime (`agent-utilities[agent-runtime,logfire]` — model orchestration + `epistemic-graph[full]`) | You run the **integrated agent** |
 | `arr-mcp[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
 
 ```bash
-# MCP server only (recommended for tool hosting — slim deps)
+# Connector-focused MCP server (includes the shared graph engine)
 uv pip install "arr-mcp[mcp]"
 
-# Full agent runtime (Pydantic AI + epistemic-graph engine)
+# Agent runtime (adds model orchestration to the shared graph engine)
 uv pip install "arr-mcp[agent]"
 
 # Everything (development)
@@ -1674,26 +1686,27 @@ One multi-stage `docker/Dockerfile` builds two right-sized images, selected by `
 
 | Image tag | Build target | Contents | Entrypoint |
 |-----------|--------------|----------|------------|
-| `knucklessg1/arr-mcp:mcp` | `--target mcp` | `arr-mcp[mcp]` — **slim**, no engine/`pydantic-ai`/`dspy`/`llama-index`/`tree-sitter` | `arr-mcp` |
-| `knucklessg1/arr-mcp:latest` | `--target agent` (default) | `arr-mcp[agent]` — **full** agent runtime + epistemic-graph engine | `arr-agent` |
+| `example/arr-mcp:mcp` | `--target mcp` | `arr-mcp[mcp]` — **connector-focused**, includes `epistemic-graph[full]`; no model-orchestration stack | `arr-mcp` |
+| `example/arr-mcp@sha256:<digest>` | `--target agent` (default) | `arr-mcp[agent]` — **agent runtime**, model orchestration + `epistemic-graph[full]` | `arr-agent` |
 
 ```bash
-docker build --target mcp   -t knucklessg1/arr-mcp:mcp    docker/   # slim MCP server
-docker build --target agent -t knucklessg1/arr-mcp:latest docker/   # full agent
+docker build --target mcp   -t example/arr-mcp:mcp    docker/   # connector-focused MCP server
+docker build --target agent -t example/arr-mcp:agent-local docker/   # agent runtime
 ```
 
-`docker/mcp.compose.yml` runs the slim `:mcp` server; `docker/agent.compose.yml` runs the
-agent (`:latest`) with a co-located `:mcp` sidecar.
+`docker/mcp.compose.yml` runs the connector-focused `:mcp` server; `docker/agent.compose.yml` runs the
+agent (`immutable agent digest`) with a co-located `:mcp` sidecar.
 
 ### Knowledge-graph database (`epistemic-graph`)
 
-The **full agent** (`[agent]` / `:latest`) embeds the **epistemic-graph** engine (pulled in
-transitively via `agent-utilities[agent]`). For production — or to share one knowledge graph
-across multiple agents — run **epistemic-graph as its own database container** and point the
-agent at it instead of embedding it. Deployment recipes (single-node + Raft HA), connection
-config, and the full database architecture (with diagrams) are documented in the
+Both `[mcp]` and `[agent]` carry the **epistemic-graph** engine through the required
+Agent Utilities core dependency (`epistemic-graph[full]`). The `[mcp]` extra keeps
+the server connector-focused; `[agent]` additionally enables model orchestration. Local
+deployments can use the bundled engine. For production or shared state, run
+**epistemic-graph as a dedicated database service** and configure the runtime to use it.
+Deployment recipes (single-node + Raft HA), connection configuration, and architecture
+diagrams are documented in the
 [epistemic-graph deployment guide](https://knuckles-team.github.io/epistemic-graph/deployment/).
-The slim `[mcp]` server does **not** require the database.
 
 ---
 
@@ -1722,10 +1735,10 @@ arr-agent --provider openai --model-id gpt-4o
 
 ## Repository Owners
 
-<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=Knucklessg1&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
+<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=example&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
 
-![GitHub followers](https://img.shields.io/github/followers/Knucklessg1)
-![GitHub User's stars](https://img.shields.io/github/stars/Knucklessg1)
+![GitHub followers](https://img.shields.io/github/followers/example)
+![GitHub User's stars](https://img.shields.io/github/stars/example)
 
 ---
 
@@ -1755,23 +1768,40 @@ Contributions are welcome! Please ensure code quality by executing local checks 
 - Execute test suites using `pytest`
 
 
-<!-- BEGIN agent-os-genesis-deploy (generated; do not edit between markers) -->
+<!-- BEGIN agent-utilities-deployment (generated; do not edit between markers) -->
 
-## Deploy with `agent-os-genesis`
+## Deploy with `agent-utilities-deployment`
 
-This package can be provisioned for you — skill-guided — by the **`agent-os-genesis`**
-universal skill (its *single-package deploy mode*): it picks your install method, seeds
-secrets to OpenBao/Vault (or `.env`), trusts your enterprise CA, registers the MCP
-server, and verifies it — the same machinery that stands up the whole Agent OS, narrowed
-to just this package. Ask your agent to **"deploy `arr-mcp` with agent-os-genesis"**.
+Provision this package with the consolidated **`agent-utilities-deployment`**
+workflow. It selects an installed-package, editable-source, or immutable-container
+path; records only runtime secret and TLS-profile references in `AgentConfig`; and
+runs doctor, registration, policy, observability, and rollback gates. Ask your agent
+to **"deploy `arr-mcp` with agent-utilities-deployment"**.
 
 | Install mode | Command |
 |------|---------|
-| Bare-metal, prod (PyPI) | `uvx arr-mcp` · or `uv tool install arr-mcp` |
-| Bare-metal, dev (editable) | `uv pip install -e ".[all]"` · or `pip install -e ".[all]"` |
-| Container, prod | deploy `knucklessg1/arr-mcp:latest` via docker-compose / swarm / podman / podman-compose / kubernetes |
-| Container, dev (editable) | deploy `docker/compose.dev.yml` (source-mounted at `/src`; edits live on restart) |
+| Installed package | `uv tool install "arr-mcp[mcp]"`, then run `arr-mcp` |
+| Editable source | `uv pip install -e ".[agent]"`, then run `arr-mcp` |
+| Immutable container | deploy `registry.example.invalid/arr-mcp@sha256:<digest>` through the operator-selected orchestrator |
 
-Secrets are read-existing + seeded via `vault_sync` — you are only prompted for what's missing.
+The repository embeds no deployment profile, credential value, certificate path, or
+environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
+configured secret provider.
 
-<!-- END agent-os-genesis-deploy -->
+<!-- END agent-utilities-deployment -->
+
+<!-- GOVERNED-CAPABILITY:START -->
+## Governed capability contract
+
+This package ships a compact canonical skill surface with specialist procedures
+kept as referenced workflows. The current MCP tools, skill metadata,
+`connector_manifest.yml`, ontology, mappings, shapes, fixtures, migrations,
+tool-schema fingerprints, and certification metadata form one versioned
+capability contract. Validate them together; do not rely on stale tool names or
+historical per-task skill wrappers.
+
+Runtime endpoints, credentials, certificate trust, tenant identity, retention,
+and observability policy are deployment inputs and are never packaged values.
+See [Configuration, trust, and privacy](docs/configuration.md) before enabling a
+network transport, connector ingestion, GraphOS delegation, or trace export.
+<!-- GOVERNED-CAPABILITY:END -->

@@ -48,11 +48,12 @@ You can also construct a client directly:
 
 ```python
 from arr_mcp.api.api_client_sonarr import Api as SonarrApi
+from agent_utilities.core.transport_security import resolve_tls_profile
 
 sonarr = SonarrApi(
     base_url="http://your-sonarr:8989",
     token="your_sonarr_api_key",
-    verify=False,
+    tls_profile=resolve_tls_profile("sonarr"),
 )
 queue = sonarr.request("GET", "/api/v3/queue")
 ```

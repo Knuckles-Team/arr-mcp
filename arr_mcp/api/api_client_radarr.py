@@ -5,10 +5,19 @@ This module provides a class to interact with the Radarr API for managing movie 
 """
 
 from typing import Any
-from urllib.parse import urljoin
 
 import requests
-import urllib3
+from agent_utilities.core.transport_security import (
+    ResolvedTLSProfile,
+    resolve_tls_profile,
+)
+
+from arr_mcp.api._security import (
+    REQUEST_TIMEOUT,
+    decode_response,
+    request_url,
+    validate_base_url,
+)
 
 
 class Api:
@@ -23,7 +32,7 @@ class Api:
         self,
         base_url: str,
         token: str | None = None,
-        verify: bool = False,
+        tls_profile: ResolvedTLSProfile | None = None,
     ):
         """
         Initialize the Radarr API client.
@@ -31,15 +40,13 @@ class Api:
         Args:
             base_url (str): The base URL of the Radarr instance.
             token (Optional[str]): The API key or token for authentication.
-            verify (bool): Whether to verify SSL certificates. Defaults to False.
+            tls_profile: Runtime trust, mTLS, and proxy policy. Resolved automatically when omitted.
         """
-        self.base_url = base_url
+        self.base_url, self._origin = validate_base_url(base_url)
         self.token = token
         self._session = requests.Session()
-        self._session.verify = verify
-
-        if not verify:
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        self._tls_profile = tls_profile or resolve_tls_profile("radarr")
+        self._tls_profile.configure_requests_session(self._session)
 
         if token:
             self._session.headers.update({"X-Api-Key": token})
@@ -66,25 +73,27 @@ class Api:
         Raises:
             Exception: If the API returns a status code >= 400.
         """
-        url = urljoin(self.base_url, endpoint)
+        url = request_url(self.base_url, self._origin, endpoint)
         response = self._session.request(
-            method=method, url=url, params=params, json=data
+            method=method,
+            url=url,
+            params=params,
+            json=data,
+            timeout=REQUEST_TIMEOUT,
+            allow_redirects=False,
+            stream=True,
         )
-        if response.status_code >= 400:
-            try:
-                error_text = response.text
-            except Exception:
-                error_text = "Unknown error"
-            raise Exception(f"API error: {response.status_code} - {error_text}")
-        if response.status_code == 204:
-            return {"status": "success"}
         try:
-            result = response.json()
+            if response.status_code >= 400:
+                raise RuntimeError(f"API error: HTTP {response.status_code}")
+            if response.status_code == 204:
+                return {"status": "success"}
+            result = decode_response(response)
             if isinstance(result, list):
                 return {"result": result}
             return result
-        except Exception:
-            return {"status": "success", "text": response.text}
+        finally:
+            response.close()
 
     def get_alttitle(
         self, movieId: int | None = None, movieMetadataId: int | None = None

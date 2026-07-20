@@ -8,9 +8,7 @@ CONCEPT:AU-ORCH.adapter.kg-graph-materialization — Action Execution Pipeline
 import asyncio
 import inspect
 from typing import Any
-from unittest.mock import MagicMock, patch
-
-import pytest
+from unittest.mock import patch
 
 from arr_mcp.api.api_client_bazarr import Api as BazarrApi
 from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
@@ -55,15 +53,15 @@ def test_apis_brute_force(mock_session):
                 if param.name == "kwargs":
                     continue
                 # Guessing values
-                if "id" in param.name.lower() or param.annotation == int:
+                if "id" in param.name.lower() or param.annotation is int:
                     kwargs[param.name] = 123
                 elif "url" in param.name.lower():
                     kwargs[param.name] = "http://test.com"
-                elif "enabled" in param.name.lower() or "verify" in param.name.lower():
+                elif "enabled" in param.name.lower():
                     kwargs[param.name] = True
-                elif param.annotation == dict:
+                elif param.annotation is dict:
                     kwargs[param.name] = {}
-                elif param.annotation == list:
+                elif param.annotation is list:
                     kwargs[param.name] = []
                 else:
                     kwargs[param.name] = "test"
@@ -81,7 +79,7 @@ def test_apis_brute_force(mock_session):
                             del kwargs[param.name]
                 method(*pos_args, **kwargs)
             except Exception as e:
-                print(f"Failed calling {name}: {e}")
+                print(f"Operation failed: {type(e).__name__}")
 
 
 def test_mcp_server_coverage(mock_session):
@@ -146,7 +144,7 @@ def test_mcp_server_coverage(mock_session):
 
                         await mcp.call_tool(tool_name, target_params)
                     except Exception as e:
-                        print(f"Tool {tool_name} failed: {e}")
+                        print(f"Operation failed: {type(e).__name__}")
 
             loop = asyncio.new_event_loop()
             loop.run_until_complete(run_tools())

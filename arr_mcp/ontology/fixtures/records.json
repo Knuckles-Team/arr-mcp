@@ -1,0 +1,50 @@
+{
+  "connector": "arr-mcp",
+  "fixtures": [
+    {
+      "expected": {
+        "acl_state": "quarantine",
+        "id": "fixture-record",
+        "title": "Synthetic certification record"
+      },
+      "preset": "arr-indexers",
+      "record": {
+        "acl_public": false,
+        "description": "Synthetic content used only for contract validation.",
+        "id": "fixture-record",
+        "name": "Synthetic certification record"
+      }
+    },
+    {
+      "expected": {
+        "acl_state": "quarantine",
+        "id": "fixture-record",
+        "title": "Synthetic certification record"
+      },
+      "preset": "arr-movies",
+      "record": {
+        "acl_public": false,
+        "added": "2000-01-01T00:00:00Z",
+        "overview": "Synthetic content used only for contract validation.",
+        "title": "Synthetic certification record",
+        "tmdbId": "fixture-record"
+      }
+    },
+    {
+      "expected": {
+        "acl_state": "quarantine",
+        "id": "fixture-record",
+        "title": "Synthetic certification record"
+      },
+      "preset": "arr-series",
+      "record": {
+        "acl_public": false,
+        "added": "2000-01-01T00:00:00Z",
+        "overview": "Synthetic content used only for contract validation.",
+        "title": "Synthetic certification record",
+        "tvdbId": "fixture-record"
+      }
+    }
+  ],
+  "schema_version": "1"
+}

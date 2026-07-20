@@ -14,7 +14,6 @@ def _radarr(action: str):
         service_name="radarr",
         base_url="http://radarr.local",
         api_key="x",
-        verify=False,
         action=action,
         params_json="{}",
         auth_kw="token",

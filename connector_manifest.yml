@@ -259,6 +259,7 @@ sync:
   updated_field: ''
   pagination: null
   doc_type: indexer
+  tool_schema_sha256: 2857678d34bb37ccb6a313cd29259d9becbc32e73681eda8c36e6a2f4035d7e5
   raw:
     server: arr-mcp
     tool: prowlarr_action
@@ -280,6 +281,7 @@ sync:
   updated_field: added
   pagination: null
   doc_type: movie
+  tool_schema_sha256: 3b6c2929b3b2407d83651d97a701999550f7280f610eb25269ca70ddb2b84876
   raw:
     server: arr-mcp
     tool: radarr_action
@@ -301,6 +303,7 @@ sync:
   updated_field: added
   pagination: null
   doc_type: series
+  tool_schema_sha256: 54d5024b9c89c1a28e23128328065bedaa52421e623e9c8bdd1986e39c0d778b
   raw:
     server: arr-mcp
     tool: sonarr_action
@@ -313,16 +316,19 @@ sync:
     doc_type: series
 provenance:
   generated_by: scripts/generate_connector_manifests.py
-  generated_at: '2026-07-09T00:00:00Z'
+  generated_at: '2026-07-18T00:00:00Z'
   source_artifacts:
   - arr_mcp/connectors/mcp_source_presets.json
+  - arr_mcp/connectors/tool_schema_fingerprints.json
   - arr_mcp/ontology/arr.ttl
   integrity:
     algorithm: urdna2015-sha256
     hash: 8b921c452bb35f134b2d8dad809afcb49ec7abd16d78f5ee79e704ae5acb7c75
     triple_count: 89
   signer: ontology-manifest-generator
-  signature: e83225a9fac89ab46e62abec8610952a1a49c6aeda2c20ef599936ab9e6d4ce4
+  signature_algorithm: ed25519
+  signing_public_key: q0Cp7bmQMqJhbofGKKw8xXC6KbFzukBDDke0UYVi8y4
+  signature: Wz4J66Xb3BTH5cBQAuVCcsw9g8m_iO5vo5LtqRece5StwLXJ6Z3XomTyHKZllwdlHxgkeFf5-D5PHknzYMJLDQ
 policy:
   pii_fields: {}
   tenant_boundary: null
