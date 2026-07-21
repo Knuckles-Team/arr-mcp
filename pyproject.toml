@@ -9,7 +9,7 @@ description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.11, <3.15"
-dependencies = [ "agent-utilities>=1.27.1,<2.0.0", "tree-sitter>=0.23.2", "requests>=2.8.1", "urllib3>=2.2.2", "pydantic>=2.0.0",]
+dependencies = [ "agent-utilities>=1.27.1,<2.0.0", "tree-sitter>=0.26.0", "requests>=2.34.2", "urllib3>=2.7.0", "pydantic>=2.13.4",]
 [[project.authors]]
 name = "Genius"
 email = "genius@example.com"
@@ -22,7 +22,7 @@ mcp = [ "agent-utilities[mcp]>=1.27.1,<2.0.0",]
 agent = [ "agent-utilities[agent-runtime,logfire]>=1.27.1,<2.0.0",]
 all = [ "agent-utilities[mcp,agent-runtime,logfire]>=1.27.1,<2.0.0",]
 test = [
-    "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio",]
+    "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0",]
 
 [project.scripts]
 arr-mcp = "arr_mcp.mcp_server:mcp_server"
