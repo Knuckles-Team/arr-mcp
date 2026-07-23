@@ -8,7 +8,7 @@ version = "1.0.1"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
-requires-python = ">=3.11, <3.15"
+requires-python = ">=3.12, <3.15"
 dependencies = [ "agent-utilities>=1.27.1,<2.0.0", "tree-sitter>=0.26.0", "requests>=2.34.2", "urllib3>=2.7.0", "pydantic>=2.13.4",]
 [[project.authors]]
 name = "Genius"
