@@ -40,6 +40,9 @@ arr-mcp = "arr_mcp.connectors"
 [project.entry-points."agent_utilities.prompt_providers"]
 arr-mcp = "arr_mcp.prompts"
 
+[tool.uv.workspace]
+members = ["."]
+
 [tool.setuptools]
 include-package-data = true
 
