@@ -24,8 +24,10 @@ def _origin(parsed: SplitResult) -> tuple[str, str, int]:
 def validate_base_url(base_url: str) -> tuple[str, tuple[str, str, int]]:
     """Validate a configured service URL and return its canonical origin."""
     rendered = str(base_url or "").strip()
-    if not rendered or len(rendered) > 2048 or any(
-        char in rendered for char in "\x00\r\n"
+    if (
+        not rendered
+        or len(rendered) > 2048
+        or any(char in rendered for char in "\x00\r\n")
     ):
         raise ValueError("Invalid service base URL")
     try:
@@ -41,7 +43,9 @@ def validate_base_url(base_url: str) -> tuple[str, tuple[str, str, int]]:
         or parsed.query
         or parsed.fragment
     ):
-        raise ValueError("Service base URL must be an HTTP(S) origin without credentials")
+        raise ValueError(
+            "Service base URL must be an HTTP(S) origin without credentials"
+        )
     return rendered.rstrip("/") + "/", origin
 
 

@@ -57,11 +57,17 @@ def test_validate_base_url_rejects_non_origin_configuration(base_url):
         validate_base_url(base_url)
 
 
-def test_response_decoder_rejects_oversized_streamed_content():
+def test_response_decoder_rejects_oversized_streamed_content(
+    monkeypatch: pytest.MonkeyPatch,
+):
     response = requests.Response()
     response.status_code = 200
-    response.headers = {}
-    response.iter_content = lambda **_kwargs: iter([b"x" * (16 * 1024 * 1024 + 1)])
+    response.headers = requests.structures.CaseInsensitiveDict()
+    monkeypatch.setattr(
+        response,
+        "iter_content",
+        lambda **_kwargs: iter([b"x" * (16 * 1024 * 1024 + 1)]),
+    )
 
     with pytest.raises(RuntimeError, match="size limit"):
         decode_response(response)
