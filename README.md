@@ -20,7 +20,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
 
-*Version: 2.0.0*
+*Version: 2.1.0*
 
 > **Documentation** — Installation, deployment, usage across the API, CLI, MCP, and
 > A2A agent interfaces, and guidance for provisioning the Arr Suite services are
@@ -1517,39 +1517,40 @@ Detailed graph node architecture explanations, custom skill configurations, and 
 
 | Variable | Example | Description |
 |----------|---------|-------------|
-| `HOST` | `0.0.0.0` |  |
+| `HOST` | `127.0.0.1` |  |
 | `PORT` | `8000` |  |
 | `TRANSPORT` | `stdio` | options: stdio, streamable-http, sse |
+| `AUTH_TYPE` | `none` | non-loopback network listeners require configured authentication |
 | `ENABLE_OTEL` | `True` |  |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:8080/api/public/otel` |  |
-| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | `pk-...` |  |
-| `OTEL_EXPORTER_OTLP_SECRET_KEY` | `sk-...` |  |
+| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | secret-injected |  |
+| `OTEL_EXPORTER_OTLP_SECRET_KEY` | secret-injected |  |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` |  |
 | `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
 | `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
 | `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
 | `SONARR_BASE_URL` | `http://localhost:8989` | Sonarr Client |
-| `SONARR_TOKEN` | `your_sonarr_token_here` |  |
-| `SONARR_TLS_PROFILE` | — | Runtime transport-security profile |
+| `SONARR_TOKEN` | secret-injected |  |
+| `SONARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
 | `RADARR_BASE_URL` | `http://localhost:7878` | Radarr Client |
-| `RADARR_TOKEN` | `your_radarr_token_here` |  |
-| `RADARR_TLS_PROFILE` | — | Runtime transport-security profile |
+| `RADARR_TOKEN` | secret-injected |  |
+| `RADARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
 | `LIDARR_BASE_URL` | `http://localhost:8686` | Lidarr Client |
-| `LIDARR_TOKEN` | `your_lidarr_token_here` |  |
-| `LIDARR_TLS_PROFILE` | — | Runtime transport-security profile |
+| `LIDARR_TOKEN` | secret-injected |  |
+| `LIDARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
 | `PROWLARR_BASE_URL` | `http://localhost:9696` | Prowlarr Client |
-| `PROWLARR_TOKEN` | `your_prowlarr_token_here` |  |
-| `PROWLARR_TLS_PROFILE` | — | Runtime transport-security profile |
+| `PROWLARR_TOKEN` | secret-injected |  |
+| `PROWLARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
 | `BAZARR_BASE_URL` | `http://localhost:6767` | Bazarr Client |
-| `BAZARR_API_KEY` | `your_bazarr_api_key_here` |  |
-| `BAZARR_TLS_PROFILE` | — | Runtime transport-security profile |
+| `BAZARR_API_KEY` | secret-injected |  |
+| `BAZARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
 | `SEERR_BASE_URL` | `http://localhost:5055` | Seerr Client |
-| `SEERR_API_KEY` | `your_seerr_api_key_here` |  |
-| `SEERR_TLS_PROFILE` | — | Runtime transport-security profile |
+| `SEERR_API_KEY` | secret-injected |  |
+| `SEERR_TLS_PROFILE` | `<runtime-profile-name>` |  |
 | `CHAPTARR_BASE_URL` | `http://localhost:8006` | Chaptarr Client |
-| `CHAPTARR_TOKEN` | `your_chaptarr_token_here` |  |
-| `CHAPTARR_TLS_PROFILE` | — | Runtime transport-security profile |
-| `SONARRTOOL` | `True` | MCP tools table (condensed action-routed surface). |
+| `CHAPTARR_TOKEN` | secret-injected |  |
+| `CHAPTARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
+| `SONARRTOOL` | `True` | These names match the authoritative "Toggle Env Var" column in the README MCP tools table (condensed action-routed surface). |
 | `RADARRTOOL` | `True` |  |
 | `LIDARRTOOL` | `True` |  |
 | `PROWLARRTOOL` | `True` |  |
@@ -1557,20 +1558,21 @@ Detailed graph node architecture explanations, custom skill configurations, and 
 | `SEERRTOOL` | `True` |  |
 | `CHAPTARRTOOL` | `True` |  |
 | `DEFAULT_AGENT_NAME` | `Arr Mcp` |  |
-| `AUTH_TYPE` | — |  |
 
 #### Inherited agent-utilities variables (apply to every connector)
 
 | Variable | Example | Description |
 |----------|---------|-------------|
-| `MCP_TOOL_MODE` | `condensed` | Tool surface: `condensed` | `verbose` | `both` |
+| `MCP_TOOL_MODE` | `intent` | Tool surface: `intent` \| `condensed` \| `verbose` \| `both` |
 | `MCP_ENABLED_TOOLS` | — | Comma-separated tool allow-list |
 | `MCP_DISABLED_TOOLS` | — | Comma-separated tool deny-list |
 | `MCP_ENABLED_TAGS` | — | Comma-separated tag allow-list |
 | `MCP_DISABLED_TAGS` | — | Comma-separated tag deny-list |
-| `MCP_CLIENT_AUTH` | — | Outbound MCP auth (`oidc-client-credentials` for fleet calls) |
+| `MCP_CLIENT_AUTH` | — | Outbound MCP child auth: `oidc-client-credentials` \| `basic` \| `none` |
 | `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
-| `OIDC_CLIENT_SECRET` | — | OIDC client secret (service-account auth) |
+| `OIDC_CLIENT_SECRET_REF` | `secret://identity/oidc-client-secret` | Runtime secret reference for the OIDC service account |
+| `MCP_BASIC_AUTH_USERNAME` | — | HTTP Basic username (`MCP_CLIENT_AUTH=basic`) |
+| `MCP_BASIC_AUTH_PASSWORD_REF` | `secret://identity/mcp-basic-password` | Runtime secret reference for HTTP Basic auth (`MCP_CLIENT_AUTH=basic`) |
 | `DEBUG` | `False` | Verbose logging |
 | `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
 | `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
@@ -1578,7 +1580,7 @@ Detailed graph node architecture explanations, custom skill configurations, and 
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
 | `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
-_41 package + 14 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+_41 package + 16 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
 
 
