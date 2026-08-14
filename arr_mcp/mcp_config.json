@@ -7,7 +7,7 @@
         "arr-mcp"
       ],
       "env": {
-        "MCP_TOOL_MODE": "condensed",
+        "MCP_TOOL_MODE": "intent",
         "BAZARRTOOL": "True",
         "BAZARR_API_KEY": "your_bazarr_api_key_here",
         "BAZARR_BASE_URL": "http://localhost:6767",
