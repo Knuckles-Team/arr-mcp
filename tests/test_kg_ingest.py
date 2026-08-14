@@ -8,8 +8,14 @@ CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 
 from __future__ import annotations
 
+from typing import Any
+
+import msgpack
 import pytest
 from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
+from agent_utilities.security.brain_context import ActorContext, use_actor
+from agent_utilities.models.company_brain import ActorType
+from agent_utilities.knowledge_graph.core.session import GraphSession, use_session
 
 from arr_mcp.kg_ingest import (
     ingest_documents,
@@ -20,30 +26,92 @@ from arr_mcp.kg_ingest import (
 )
 
 
-class _FakeTxn:
-    def __init__(self):
-        self.nodes = {}
-        self.edges = []
-        self.committed = False
+@pytest.fixture(autouse=True)
+def _governed_session():
+    actor = ActorContext(
+        actor_id="subject:opaque:synthetic",
+        actor_type=ActorType.AUTOMATED_SERVICE,
+        roles=(),
+        tenant_id="tenant:opaque:synthetic",
+        authenticated=True,
+    )
+    session = GraphSession(
+        actor=actor,
+        tenant=actor.tenant_id,
+        scopes=frozenset({"kg:write"}),
+        graph="graph:opaque:synthetic",
+        policy_version="policy:opaque:synthetic",
+        audience="epistemic-graph",
+    )
+    with use_actor(actor), use_session(session):
+        yield
 
-    def begin(self, graph=None):
-        self.graph = graph
-        return "txn-1"
 
-    def add_node(self, txn, node_id, props):
-        self.nodes[node_id] = props
+class _FakeNodes:
+    def __init__(self) -> None:
+        self.values: dict[str, dict[str, Any]] = {}
 
-    def add_edge(self, txn, source, target, props):
-        self.edges.append((source, target, props))
+    def properties(self, node_id: str) -> dict[str, Any] | None:
+        return self.values.get(node_id)
 
-    def commit(self, txn):
-        self.committed = True
-        return True
+    def list(self) -> list[tuple[str, dict[str, Any]]]:
+        return list(self.values.items())
+
+
+class _FakeChanges:
+    def __init__(self, nodes: _FakeNodes) -> None:
+        self.nodes = nodes
+        self.edges: list[tuple[str, str, dict[str, Any]]] = []
+        self.applied: list[dict[str, Any]] = []
+        self.records: dict[str, dict[str, Any]] = {}
+        self.versions: dict[str, dict[str, Any]] = {}
+
+    def get(self, envelope_id: str) -> dict[str, Any] | None:
+        return self.records.get(envelope_id)
+
+    def content_version(self, object_id: str) -> dict[str, Any] | None:
+        return self.versions.get(object_id)
+
+    def cursor(self, _source: str, _partition: str = "") -> None:
+        return None
+
+    def apply(self, envelope: dict[str, Any]) -> dict[str, Any]:
+        self.applied.append(envelope)
+        mutation = envelope["mutation"]
+        for operation in mutation["operations"]:
+            method = operation["method"]
+            params = method["params"]
+            properties = msgpack.unpackb(params["properties_msgpack"], raw=False)
+            if method["method"] == "AddNode":
+                self.nodes.values[params["node_id"]] = properties
+            elif method["method"] == "AddEdge":
+                self.edges.append(
+                    (params["source_id"], params["target_id"], properties)
+                )
+        version = envelope["content_version"]
+        self.versions[version["object_id"]] = version
+        self.records[envelope["envelope_id"]] = envelope
+        return {
+            "batch_id": mutation["batch_id"],
+            "replayed": False,
+            "projection_pending": False,
+        }
+
+
+class _FakeRdf:
+    def validate_shacl(self, _shapes: str, _data_graph: str) -> dict[str, Any]:
+        return {"conforms": True, "results": []}
 
 
 class _FakeClient:
-    def __init__(self):
-        self.txn = _FakeTxn()
+    def __init__(self) -> None:
+        self.nodes = _FakeNodes()
+        self.changes = _FakeChanges(self.nodes)
+        self.rdf = _FakeRdf()
+
+    @staticmethod
+    def supports(operation: str) -> bool:
+        return operation == "ApplyChangeEnvelope"
 
 
 def test_ingest_entities_writes_nodes_and_edges():
@@ -55,15 +123,14 @@ def test_ingest_entities_writes_nodes_and_edges():
         ],
         [{"source": "a", "target": "b", "relationship": "hasQualityProfile"}],
         client=c,
-        graph="__commons__",
     )
     assert res == {"nodes": 2, "edges": 1}
-    assert c.txn.committed is True
-    assert set(c.txn.nodes) == {"a", "b"}
+    assert len(c.changes.applied) == 1
+    assert set(c.nodes.values) == {"a", "b"}
     # provenance is stamped
-    assert c.txn.nodes["a"]["source"] == "arr-mcp"
-    assert c.txn.nodes["a"]["domain"] == "arr"
-    assert c.txn.edges == [("a", "b", {"relationship": "hasQualityProfile"})]
+    assert c.nodes.values["a"]["source"] == "arr-mcp"
+    assert c.nodes.values["a"]["domain"] == "arr"
+    assert c.changes.edges == [("a", "b", {"relationship": "hasQualityProfile"})]
 
 
 def test_ingest_movies_maps_movie_quality_and_document():
@@ -83,20 +150,19 @@ def test_ingest_movies_maps_movie_quality_and_document():
             }
         ],
         client=c,
-        graph="__commons__",
     )
     # 1 movie + 1 quality profile + 1 overview document, 1 hasQualityProfile edge
     assert res == {"nodes": 3, "edges": 1}
-    mv = c.txn.nodes["arr:Movie:27205"]
+    mv = c.nodes.values["arr:Movie:27205"]
     assert mv["node_type"] == "Movie"
     assert mv["title"] == "Inception"
     assert mv["tmdbId"] == "27205"
     assert mv["externalToolId"] == "27205"
-    assert c.txn.nodes["arr:QualityProfile:1"]["node_type"] == "QualityProfile"
-    doc = c.txn.nodes["arr:Document:movie:27205"]
+    assert c.nodes.values["arr:QualityProfile:1"]["node_type"] == "QualityProfile"
+    doc = c.nodes.values["arr:Document:movie:27205"]
     assert doc["node_type"] == "Document"
     assert "thief" in doc["text"]
-    assert c.txn.edges == [
+    assert c.changes.edges == [
         ("arr:Movie:27205", "arr:QualityProfile:1", {"relationship": "hasQualityProfile"})
     ]
 
@@ -116,10 +182,9 @@ def test_ingest_series_maps_series_and_statistics_size():
             }
         ],
         client=c,
-        graph="__commons__",
     )
     assert res == {"nodes": 1, "edges": 0}
-    sv = c.txn.nodes["arr:Series:121361"]
+    sv = c.nodes.values["arr:Series:121361"]
     assert sv["node_type"] == "Series"
     assert sv["tvdbId"] == "121361"
     assert sv["sizeOnDisk"] == 1234
@@ -140,10 +205,9 @@ def test_ingest_indexers_maps_indexer():
             }
         ],
         client=c,
-        graph="__commons__",
     )
     assert res == {"nodes": 1, "edges": 0}
-    ix = c.txn.nodes["arr:Indexer:3"]
+    ix = c.nodes.values["arr:Indexer:3"]
     assert ix["node_type"] == "Indexer"
     assert ix["name"] == "MyIndexer"
     assert ix["enabled"] is True
@@ -155,10 +219,9 @@ def test_ingest_documents_writes_document_nodes():
     res = ingest_documents(
         [{"id": "arr:Document:x", "text": "hello", "title": "X"}],
         client=c,
-        graph="__commons__",
     )
     assert res == {"nodes": 1, "edges": 0}
-    assert c.txn.nodes["arr:Document:x"]["node_type"] == "Document"
+    assert c.nodes.values["arr:Document:x"]["node_type"] == "Document"
 
 
 def test_retired_node_type_alias_is_rejected():
