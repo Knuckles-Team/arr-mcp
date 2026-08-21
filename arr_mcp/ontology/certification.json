@@ -1,7 +1,6 @@
 {
   "api_version": "graphos.io/v1",
   "artifacts": {
-    "a2a.json": "4c1d5781afceab6f7882dbffebdff9b0c601e63d1c1126466269a70126dac8cc",
     "arr_mcp/connectors/mcp_source_presets.json": "6a8029c7ec02a93d9c448ab35d7ca18d8df7f1a6cc4b0479ca4d24be54a5060c",
     "arr_mcp/connectors/tool_schema_fingerprints.json": "d12cfba4219583923fc39ef73d16e82cdee558ef79d8ee518c8487346590ed57",
     "arr_mcp/ontology/arr.ttl": "61474cd8c885409f3f9c85fea0e562942d13721f400da880c0f61b617c6d031f",
@@ -9,7 +8,7 @@
     "arr_mcp/ontology/mappings/source.yaml": "b9c852315cff2b64843cb21f144f83525c2fceeb4ee1d13ad4978df404bc6189",
     "arr_mcp/ontology/migrations/manifest.json": "a732d59657716a3b32a6d417d58d2662008b0e2915c183d457cc4427604fa1b2",
     "arr_mcp/ontology/shapes/connector.shacl.ttl": "56f237a737b400e2a882d2edcc85dc39ab6b0e41f4ab7335b432993902e195bd",
-    "connector_manifest.yml": "45aecea86be2af9bc96305edaad703eebdfdcf181624444d788967db19baabc9"
+    "connector_manifest.yml": "49a6129bc6b43cf56f5a60f00c083736a04d056c19e7d6a0bf20feb0fe1d87f1"
   },
   "checks": {
     "declared_tool_schema": "passed",
@@ -19,19 +18,19 @@
     "synthetic_fixture_contract": "passed"
   },
   "compatibility": {
-    "agent_utilities": ">=2.1.0,<3",
+    "agent_utilities": ">=2.4.0,<3",
     "bundle_schema": "2",
-    "epistemic_graph": ">=2.23.0,<3"
+    "epistemic_graph": ">=2.26.0,<3"
   },
   "connector": "arr-mcp",
   "kind": "ConnectorSourceAttestation",
   "live_certified": false,
   "mode": "offline-source",
   "schema_version": "2",
-  "signature": "v5yifIn93eXCGqy4SpcGoTSs3PBS-A0JxFM9W4qw08F6HCVG2bBchfl8V6wt78zammhtkOsGQoiSSQTiAxPYDA",
-  "signature_algorithm": "ed25519",
-  "signer": "ontology-manifest-generator",
-  "signing_public_key": "QkigdPNpcUU7x7NcSkwCsUXIQpaFncMQbYSoiSgI2SY",
+  "signature": null,
+  "signature_algorithm": "none",
+  "signer": "UNSIGNED-PREVIEW",
+  "signing_public_key": "",
   "status": "source-validated",
-  "validated_at": "2026-07-31T04:00:00Z"
+  "validated_at": "2026-08-21T04:30:39Z"
 }
