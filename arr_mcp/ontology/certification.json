@@ -8,7 +8,7 @@
     "arr_mcp/ontology/mappings/source.yaml": "b9c852315cff2b64843cb21f144f83525c2fceeb4ee1d13ad4978df404bc6189",
     "arr_mcp/ontology/migrations/manifest.json": "a732d59657716a3b32a6d417d58d2662008b0e2915c183d457cc4427604fa1b2",
     "arr_mcp/ontology/shapes/connector.shacl.ttl": "56f237a737b400e2a882d2edcc85dc39ab6b0e41f4ab7335b432993902e195bd",
-    "connector_manifest.yml": "49a6129bc6b43cf56f5a60f00c083736a04d056c19e7d6a0bf20feb0fe1d87f1"
+    "connector_manifest.yml": "52b91224998232bda867db131582be8e2bee5262a161e084c1a74cfc2af8104a"
   },
   "checks": {
     "declared_tool_schema": "passed",
@@ -18,9 +18,9 @@
     "synthetic_fixture_contract": "passed"
   },
   "compatibility": {
-    "agent_utilities": ">=2.4.0,<3",
+    "agent_utilities": ">=2.5.0,<3",
     "bundle_schema": "2",
-    "epistemic_graph": ">=2.26.0,<3"
+    "epistemic_graph": ">=2.27.0,<3"
   },
   "connector": "arr-mcp",
   "kind": "ConnectorSourceAttestation",
@@ -32,5 +32,5 @@
   "signer": "UNSIGNED-PREVIEW",
   "signing_public_key": "",
   "status": "source-validated",
-  "validated_at": "2026-08-21T04:30:39Z"
+  "validated_at": "2026-08-26T13:42:55Z"
 }
