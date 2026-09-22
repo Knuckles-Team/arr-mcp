@@ -267,7 +267,7 @@ sync:
   updated_field: ''
   pagination: null
   doc_type: indexer
-  tool_schema_sha256: 2857678d34bb37ccb6a313cd29259d9becbc32e73681eda8c36e6a2f4035d7e5
+  tool_schema_sha256: 46131f52bf9c831650ca2c04da5baad0fe9525c7155f8031d9f02e21cab1da6a
   raw:
     server: arr-mcp
     tool: prowlarr_action
@@ -289,7 +289,7 @@ sync:
   updated_field: added
   pagination: null
   doc_type: movie
-  tool_schema_sha256: 3b6c2929b3b2407d83651d97a701999550f7280f610eb25269ca70ddb2b84876
+  tool_schema_sha256: 81e6a453bb37da2e4b5ca6b7e33d08153990683368710455c66fc300a5d5d2e0
   raw:
     server: arr-mcp
     tool: radarr_action
@@ -311,7 +311,7 @@ sync:
   updated_field: added
   pagination: null
   doc_type: series
-  tool_schema_sha256: 54d5024b9c89c1a28e23128328065bedaa52421e623e9c8bdd1986e39c0d778b
+  tool_schema_sha256: 491b0e5958c97e372774f764fea0afd2d678921d29ef9c38f3a4288491a44bb5
   raw:
     server: arr-mcp
     tool: sonarr_action
