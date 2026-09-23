@@ -252,7 +252,18 @@ _SONARR_ACTIONS = Literal[
 
 
 def register_sonarr_tools(mcp: FastMCP) -> None:
-    @mcp.tool(tags={"sonarr"})
+    @mcp.tool(
+        tags={"sonarr"},
+        annotations={
+            "readOnlyHint": False,
+            "destructiveHint": True,
+            "idempotentHint": False,
+            "openWorldHint": True,
+        },
+        meta={
+            "eg.annotations": {"modalities_in": ["text"], "modalities_out": ["text"]}
+        },
+    )
     async def sonarr_action(
         action: _SONARR_ACTIONS = Field(
             description="The action/method name to execute on Sonarr (get_series, add_series, get_system_status). One of 236 real Sonarr API methods; use action='list_actions' to list them all at runtime."

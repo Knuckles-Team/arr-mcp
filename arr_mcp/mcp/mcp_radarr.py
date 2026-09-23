@@ -255,7 +255,18 @@ _RADARR_ACTIONS = Literal[
 
 
 def register_radarr_tools(mcp: FastMCP) -> None:
-    @mcp.tool(tags={"radarr"})
+    @mcp.tool(
+        tags={"radarr"},
+        annotations={
+            "readOnlyHint": False,
+            "destructiveHint": True,
+            "idempotentHint": False,
+            "openWorldHint": True,
+        },
+        meta={
+            "eg.annotations": {"modalities_in": ["text"], "modalities_out": ["text"]}
+        },
+    )
     async def radarr_action(
         action: _RADARR_ACTIONS = Field(
             description="The action/method name to execute on Radarr (get_movie to list all movies, add_movie, get_system_status). One of 239 real Radarr API methods; use action='list_actions' to list them all at runtime."

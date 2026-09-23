@@ -145,7 +145,18 @@ _PROWLARR_ACTIONS = Literal[
 
 
 def register_prowlarr_tools(mcp: FastMCP) -> None:
-    @mcp.tool(tags={"prowlarr"})
+    @mcp.tool(
+        tags={"prowlarr"},
+        annotations={
+            "readOnlyHint": False,
+            "destructiveHint": True,
+            "idempotentHint": False,
+            "openWorldHint": True,
+        },
+        meta={
+            "eg.annotations": {"modalities_in": ["text"], "modalities_out": ["text"]}
+        },
+    )
     async def prowlarr_action(
         action: _PROWLARR_ACTIONS = Field(
             description="The action/method name to execute on Prowlarr (get_indexer to list all indexers, get_system_status). One of 129 real Prowlarr API methods; use action='list_actions' to list them all at runtime."
