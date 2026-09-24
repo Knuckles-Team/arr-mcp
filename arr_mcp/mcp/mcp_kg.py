@@ -8,7 +8,7 @@ the caller. Auto-discovered by ``register_tool_surface`` (gated by ``KGTOOL``, d
 
 from typing import Any
 
-from agent_utilities.mcp.concurrency import run_blocking
+from agent_connector_sdk.mcp.concurrency import run_blocking
 from fastmcp import FastMCP
 from pydantic import Field
 

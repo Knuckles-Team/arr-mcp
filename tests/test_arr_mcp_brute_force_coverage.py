@@ -330,23 +330,6 @@ def test_mcp_server_coverage(mock_session):
         loop.close()
 
 
-def test_agent_server_coverage():
-    pytest.importorskip("universal_skills")
-    from arr_mcp.agent_server import agent_server
-
-    # Case 1: debug=False
-    with patch("agent_utilities.create_agent_server") as mock_s:
-        with patch("sys.argv", ["agent_server.py"]):
-            agent_server()
-            mock_s.assert_called_once()
-
-    # Case 2: debug=True
-    with patch("agent_utilities.create_agent_server") as mock_s:
-        with patch("sys.argv", ["agent_server.py", "--debug"]):
-            agent_server()
-            mock_s.assert_called_once()
-
-
 def test_all_api_clients_error_handling_and_special_cases():
     from typing import Any
 

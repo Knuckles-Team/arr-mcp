@@ -8,8 +8,8 @@ import logging
 import sys
 from typing import TYPE_CHECKING
 
-from agent_utilities.core.config import setting
-from agent_utilities.core.transport_security import resolve_tls_profile
+from agent_connector_sdk.config import setting
+from agent_connector_sdk.tls.resolve import resolve_tls_profile
 
 if TYPE_CHECKING:
     from arr_mcp.api.api_client_bazarr import Api as BazarrApi
