@@ -1,7 +1,7 @@
 # Installation
 
 `arr-mcp` is a standard Python package and a prebuilt container image. Pick the path
-that matches how you want to run it.
+that matches how the operator want to run it.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ pip install arr-mcp
 
 ### Optional extras
 
-The base install is intentionally minimal. Install the extra for what you need:
+The base install is intentionally minimal. Install the extra for what the operator need:
 
 | Extra | Install | Pulls in |
 |---|---|---|

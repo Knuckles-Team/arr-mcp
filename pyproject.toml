@@ -77,3 +77,6 @@ ignore = [ "E402", "E501", "B008",]
 
 [tool.setuptools.packages.find]
 where = [ ".",]
+
+[tool.pipelines_hooks.ste]
+exempt = ["specs/*", "specs/**/*"]

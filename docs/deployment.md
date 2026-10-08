@@ -138,7 +138,7 @@ Each service also accepts a `*_TLS_PROFILE` selector. For a private CA, inject a
 complete PEM trust chain through the shared runtime transport-security environment.
 Certificate and hostname verification are mandatory. The full set, grouped by service, is documented in
 [`.env.example`](https://github.com/Knuckles-Team/arr-mcp/blob/main/.env.example).
-Copy it to `.env` and populate only the services you use.
+Copy it to `.env` and populate only the services the operator use.
 
 ## Docker Compose
 
@@ -235,7 +235,7 @@ curl -s http://localhost:9099/health         # agent health
 
 ## Behind a Caddy reverse proxy
 
-Expose the HTTP server on a hostname with automatic TLS. Add to your `Caddyfile`:
+Expose the HTTP server on a hostname with automatic TLS. Add to the operator's `Caddyfile`:
 
 ```caddy
 # Internal (self-signed) — homelab .example.invalid zone
@@ -279,7 +279,7 @@ this as a tool.
 
 ## Register with an MCP client
 
-Add to your client's `mcp_config.json`:
+Add to the operator's client's `mcp_config.json`:
 
 ```json
 {
