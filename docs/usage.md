@@ -1,7 +1,7 @@
 # Usage — API / CLI / MCP
 
 `arr-mcp` exposes the same capability three ways: as **MCP tools** an agent calls, as
-a **Python API** (the per-service clients) you import, and as a **CLI / agent**
+a **Python API** (the per-service clients) the operator import, and as a **CLI / agent**
 entrypoint. The ecosystem role and configuration are summarized in
 [Overview](overview.md).
 
@@ -44,7 +44,7 @@ movies = radarr.get("/api/v3/movie")
 health = radarr.get("/api/v3/health")
 ```
 
-You can also construct a client directly:
+The operator can also build a client directly:
 
 ```python
 from arr_mcp.api.api_client_sonarr import Api as SonarrApi
@@ -77,5 +77,5 @@ MCP_URL=http://localhost:8000/mcp arr-agent
 ```
 
 `arr-agent` connects to the MCP server over the Agent Control Protocol and drives the
-Arr tools on your behalf. See [Deployment](deployment.md#run-the-a2a-agent-server)
+Arr tools on the operator's behalf. See [Deployment](deployment.md#run-the-a2a-agent-server)
 for the agent environment variables and the combined Compose stack.

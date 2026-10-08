@@ -113,7 +113,7 @@ curl -s http://localhost:8989/ping
 ```
 
 Retrieve each service's API key from its **Settings → General** page; that value is
-what you supply as the matching `*_TOKEN` / `*_API_KEY` to `arr-mcp`.
+what the operator provide as the matching `*_TOKEN` / `*_API_KEY` to `arr-mcp`.
 
 ## Connect arr-mcp
 
