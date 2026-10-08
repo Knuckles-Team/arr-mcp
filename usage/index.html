@@ -812,7 +812,7 @@
 
 <h1 id="usage-api-cli-mcp">Usage — API / CLI / MCP<a class="headerlink" href="#usage-api-cli-mcp" title="Permanent link">&para;</a></h1>
 <p><code>arr-mcp</code> exposes the same capability three ways: as <strong>MCP tools</strong> an agent calls, as
-a <strong>Python API</strong> (the per-service clients) you import, and as a <strong>CLI / agent</strong>
+a <strong>Python API</strong> (the per-service clients) the operator import, and as a <strong>CLI / agent</strong>
 entrypoint. The ecosystem role and configuration are summarized in
 <a href="../overview/">Overview</a>.</p>
 <h2 id="as-an-mcp-server">As an MCP server<a class="headerlink" href="#as-an-mcp-server" title="Permanent link">&para;</a></h2>
@@ -876,7 +876,7 @@ module builds a configured client straight from the environment:</p>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">movies</span> <span class="o">=</span> <span class="n">radarr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/v3/movie"</span><span class="p">)</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">health</span> <span class="o">=</span> <span class="n">radarr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/v3/health"</span><span class="p">)</span>
 </span></code></pre></div>
-<p>You can also construct a client directly:</p>
+<p>The operator can also build a client directly:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">arr_mcp.api.api_client_sonarr</span><span class="w"> </span><span class="kn">import</span> <span class="n">Api</span> <span class="k">as</span> <span class="n">SonarrApi</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">agent_utilities.core.transport_security</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_tls_profile</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -901,7 +901,7 @@ fails loudly rather than silently.</p>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nv">MCP_URL</span><span class="o">=</span>http://localhost:8000/mcp<span class="w"> </span>arr-agent
 </span></code></pre></div>
 <p><code>arr-agent</code> connects to the MCP server over the Agent Control Protocol and drives the
-Arr tools on your behalf. See <a href="../deployment/#run-the-a2a-agent-server">Deployment</a>
+Arr tools on the operator's behalf. See <a href="../deployment/#run-the-a2a-agent-server">Deployment</a>
 for the agent environment variables and the combined Compose stack.</p>
 
 

@@ -918,7 +918,7 @@ conventional port with a persistent config volume:</p>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8989/ping
 </span></code></pre></div>
 <p>Retrieve each service's API key from its <strong>Settings → General</strong> page; that value is
-what you supply as the matching <code>*_TOKEN</code> / <code>*_API_KEY</code> to <code>arr-mcp</code>.</p>
+what the operator provide as the matching <code>*_TOKEN</code> / <code>*_API_KEY</code> to <code>arr-mcp</code>.</p>
 <h2 id="connect-arr-mcp">Connect arr-mcp<a class="headerlink" href="#connect-arr-mcp" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SONARR_BASE_URL</span><span class="o">=</span>http://localhost:8989
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SONARR_TOKEN</span><span class="o">=</span>your_sonarr_api_key
