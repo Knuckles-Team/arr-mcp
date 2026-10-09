@@ -1,21 +1,19 @@
-"""Native epistemic-graph typed-node ingestion — Wire-First coverage for arr-mcp.
+"""Knowledge-ingest typed-node ingestion — Wire-First coverage for arr-mcp.
 
 Exercises the real ``ingest_entities`` / ``ingest_movies`` / ``ingest_series`` /
-``ingest_indexers`` seam with a fake engine client (no engine required), asserting the
-txn add_node/commit + edge calls and the *arr record → :Movie/:Series/:Indexer mapping.
+``ingest_indexers`` seam against a fake epistemic-graph transport (no engine required),
+letting the agent-connector-sdk's own request builder run on top of it so the test
+exercises the SDK's validation contract rather than re-deriving it.
 CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 """
 
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import Any
 
-import msgpack
 import pytest
-from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
-from agent_utilities.security.brain_context import ActorContext, use_actor
-from agent_utilities.security.actor_identity import ActorType
-from agent_utilities.knowledge_graph.core.session import GraphSession, use_session
+from agent_connector_sdk.ingest import IngestError, KnowledgeIngest
 
 from arr_mcp.kg_ingest import (
     ingest_documents,
@@ -26,116 +24,58 @@ from arr_mcp.kg_ingest import (
 )
 
 
-@pytest.fixture(autouse=True)
-def _governed_session():
-    actor = ActorContext(
-        actor_id="subject:opaque:synthetic",
-        actor_type=ActorType.AUTOMATED_SERVICE,
-        roles=(),
-        tenant_id="tenant:opaque:synthetic",
-        authenticated=True,
-    )
-    session = GraphSession(
-        actor=actor,
-        tenant=actor.tenant_id,
-        scopes=frozenset({"kg:write"}),
-        graph="graph:opaque:synthetic",
-        policy_version="policy:opaque:synthetic",
-        audience="epistemic-graph",
-    )
-    with use_actor(actor), use_session(session):
-        yield
-
-
-class _FakeNodes:
+class _FakeTransport:
     def __init__(self) -> None:
-        self.values: dict[str, dict[str, Any]] = {}
+        self.requests: list[Any] = []
 
-    def properties(self, node_id: str) -> dict[str, Any] | None:
-        return self.values.get(node_id)
+    async def source_status(self, connector: str, stream: str) -> Any:
+        return SimpleNamespace(accepted_checkpoint=None)
 
-    def list(self) -> list[tuple[str, dict[str, Any]]]:
-        return list(self.values.items())
+    async def submit(self, request: Any) -> Any:
+        self.requests.append(request)
+        return SimpleNamespace(
+            affected_count=len(request.records),
+            relationship_count=len(request.relationships),
+        )
 
-
-class _FakeChanges:
-    def __init__(self, nodes: _FakeNodes) -> None:
-        self.nodes = nodes
-        self.edges: list[tuple[str, str, dict[str, Any]]] = []
-        self.applied: list[dict[str, Any]] = []
-        self.records: dict[str, dict[str, Any]] = {}
-        self.versions: dict[str, dict[str, Any]] = {}
-
-    def get(self, envelope_id: str) -> dict[str, Any] | None:
-        return self.records.get(envelope_id)
-
-    def content_version(self, object_id: str) -> dict[str, Any] | None:
-        return self.versions.get(object_id)
-
-    def cursor(self, _source: str, _partition: str = "") -> None:
-        return None
-
-    def apply(self, envelope: dict[str, Any]) -> dict[str, Any]:
-        self.applied.append(envelope)
-        mutation = envelope["mutation"]
-        for operation in mutation["operations"]:
-            method = operation["method"]
-            params = method["params"]
-            properties = msgpack.unpackb(params["properties_msgpack"], raw=False)
-            if method["method"] == "AddNode":
-                self.nodes.values[params["node_id"]] = properties
-            elif method["method"] == "AddEdge":
-                self.edges.append(
-                    (params["source_id"], params["target_id"], properties)
-                )
-        version = envelope["content_version"]
-        self.versions[version["object_id"]] = version
-        self.records[envelope["envelope_id"]] = envelope
-        return {
-            "batch_id": mutation["batch_id"],
-            "replayed": False,
-            "projection_pending": False,
-        }
+    async def store_blob(self, data: bytes) -> str:
+        raise AssertionError("this connector's ingestion carries no media")
 
 
-class _FakeRdf:
-    def validate_shacl(self, _shapes: str, _data_graph: str) -> dict[str, Any]:
-        return {"conforms": True, "results": []}
+@pytest.fixture
+def ingest() -> tuple[KnowledgeIngest, _FakeTransport]:
+    transport = _FakeTransport()
+    return KnowledgeIngest(transport, loop=None), transport
 
 
-class _FakeClient:
-    def __init__(self) -> None:
-        self.nodes = _FakeNodes()
-        self.changes = _FakeChanges(self.nodes)
-        self.rdf = _FakeRdf()
-
-    @staticmethod
-    def supports(operation: str) -> bool:
-        return operation == "ApplyChangeEnvelope"
-
-
-def test_ingest_entities_writes_nodes_and_edges():
-    c = _FakeClient()
-    res = ingest_entities(
+@pytest.mark.asyncio
+async def test_ingest_entities_writes_nodes_and_edges(ingest):
+    service, transport = ingest
+    res = await ingest_entities(
         [
             {"id": "a", "node_type": "Movie", "title": "p"},
             {"id": "b", "node_type": "QualityProfile"},
         ],
         [{"source": "a", "target": "b", "relationship": "hasQualityProfile"}],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 2, "edges": 1}
-    assert len(c.changes.applied) == 1
-    assert set(c.nodes.values) == {"a", "b"}
-    # provenance is stamped
-    assert c.nodes.values["a"]["source"] == "arr-mcp"
-    assert c.nodes.values["a"]["domain"] == "arr"
-    assert c.changes.edges == [("a", "b", {"relationship": "hasQualityProfile"})]
+    assert len(transport.requests) == 1
+    request = transport.requests[0]
+    assert {r.record_id for r in request.records} == {"a", "b"}
+    a_record = next(r for r in request.records if r.record_id == "a")
+    assert a_record.payload["title"] == "p"
+    assert request.relationships[0].source.record_id == "a"
+    assert request.relationships[0].target.record_id == "b"
+    assert request.relationships[0].relation_reference.endswith(
+        "/relations/hasQualityProfile"
+    )
 
 
-def test_ingest_movies_maps_movie_quality_and_document():
-    c = _FakeClient()
-    res = ingest_movies(
+@pytest.mark.asyncio
+async def test_ingest_movies_maps_movie_quality_and_document(ingest):
+    service, transport = ingest
+    res = await ingest_movies(
         [
             {
                 "id": 5,
@@ -149,27 +89,31 @@ def test_ingest_movies_maps_movie_quality_and_document():
                 "overview": "A thief who steals corporate secrets.",
             }
         ],
-        client=c,
+        ingest=service,
     )
     # 1 movie + 1 quality profile + 1 overview document, 1 hasQualityProfile edge
     assert res == {"nodes": 3, "edges": 1}
-    mv = c.nodes.values["arr:Movie:27205"]
-    assert mv["node_type"] == "Movie"
-    assert mv["title"] == "Inception"
-    assert mv["tmdbId"] == "27205"
-    assert mv["externalToolId"] == "27205"
-    assert c.nodes.values["arr:QualityProfile:1"]["node_type"] == "QualityProfile"
-    doc = c.nodes.values["arr:Document:movie:27205"]
-    assert doc["node_type"] == "Document"
-    assert "thief" in doc["text"]
-    assert c.changes.edges == [
-        ("arr:Movie:27205", "arr:QualityProfile:1", {"relationship": "hasQualityProfile"})
-    ]
+    # two submits: entities+relationships, then the overview document
+    assert len(transport.requests) == 2
+    entity_request, doc_request = transport.requests
+    mv = next(r for r in entity_request.records if r.record_id == "arr:Movie:27205")
+    assert mv.payload["title"] == "Inception"
+    assert mv.payload["tmdbId"] == "27205"
+    assert mv.payload["externalToolId"] == "27205"
+    assert any(
+        r.record_id == "arr:QualityProfile:1" for r in entity_request.records
+    )
+    assert entity_request.relationships[0].source.record_id == "arr:Movie:27205"
+    assert entity_request.relationships[0].target.record_id == "arr:QualityProfile:1"
+    doc = doc_request.records[0]
+    assert doc.record_id == "arr:Document:movie:27205"
+    assert "thief" in doc.payload["text"]
 
 
-def test_ingest_series_maps_series_and_statistics_size():
-    c = _FakeClient()
-    res = ingest_series(
+@pytest.mark.asyncio
+async def test_ingest_series_maps_series_and_statistics_size(ingest):
+    service, transport = ingest
+    res = await ingest_series(
         [
             {
                 "id": 9,
@@ -181,19 +125,20 @@ def test_ingest_series_maps_series_and_statistics_size():
                 "statistics": {"sizeOnDisk": 1234},
             }
         ],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 1, "edges": 0}
-    sv = c.nodes.values["arr:Series:121361"]
-    assert sv["node_type"] == "Series"
-    assert sv["tvdbId"] == "121361"
-    assert sv["sizeOnDisk"] == 1234
-    assert sv["externalToolId"] == "121361"
+    sv = transport.requests[0].records[0]
+    assert sv.record_id == "arr:Series:121361"
+    assert sv.payload["tvdbId"] == "121361"
+    assert sv.payload["sizeOnDisk"] == 1234
+    assert sv.payload["externalToolId"] == "121361"
 
 
-def test_ingest_indexers_maps_indexer():
-    c = _FakeClient()
-    res = ingest_indexers(
+@pytest.mark.asyncio
+async def test_ingest_indexers_maps_indexer(ingest):
+    service, transport = ingest
+    res = await ingest_indexers(
         [
             {
                 "id": 3,
@@ -204,34 +149,39 @@ def test_ingest_indexers_maps_indexer():
                 "implementation": "Torznab",
             }
         ],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 1, "edges": 0}
-    ix = c.nodes.values["arr:Indexer:3"]
-    assert ix["node_type"] == "Indexer"
-    assert ix["name"] == "MyIndexer"
-    assert ix["enabled"] is True
-    assert ix["protocol"] == "torrent"
+    ix = transport.requests[0].records[0]
+    assert ix.record_id == "arr:Indexer:3"
+    assert ix.payload["name"] == "MyIndexer"
+    assert ix.payload["enabled"] is True
+    assert ix.payload["protocol"] == "torrent"
 
 
-def test_ingest_documents_writes_document_nodes():
-    c = _FakeClient()
-    res = ingest_documents(
+@pytest.mark.asyncio
+async def test_ingest_documents_writes_document_nodes(ingest):
+    service, transport = ingest
+    res = await ingest_documents(
         [{"id": "arr:Document:x", "text": "hello", "title": "X"}],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 1, "edges": 0}
-    assert c.nodes.values["arr:Document:x"]["node_type"] == "Document"
+    assert transport.requests[0].records[0].record_id == "arr:Document:x"
 
 
-def test_retired_node_type_alias_is_rejected():
-    with pytest.raises(NativeIngestError, match="canonical node_type"):
-        ingest_entities(
+@pytest.mark.asyncio
+async def test_missing_node_type_is_rejected(ingest):
+    service, _transport = ingest
+    with pytest.raises(IngestError, match="node_type"):
+        await ingest_entities(
             [{"id": "retired", "type": "RetiredAlias"}],
-            client=_FakeClient(),
+            ingest=service,
         )
 
 
-def test_empty_native_ingest_is_rejected():
-    with pytest.raises(NativeIngestError, match="at least one entity"):
-        ingest_entities([], client=_FakeClient())
+@pytest.mark.asyncio
+async def test_empty_entities_is_rejected(ingest):
+    service, _transport = ingest
+    with pytest.raises(IngestError, match="at least one entity"):
+        await ingest_entities([], ingest=service)

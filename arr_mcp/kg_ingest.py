@@ -1,62 +1,93 @@
 """Native epistemic-graph ingestion for *arr records.
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor. Connector-specific mappers emit
-canonical node_type nodes and relationship edges. The required agent-utilities
-native-ingest primitive owns the transaction and raises NativeIngestError when the
-authoritative engine cannot commit.
+canonical node_type nodes and relationship edges. The agent-connector-sdk knowledge-ingest
+facade owns the transaction and raises IngestError when the authoritative engine cannot
+commit.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    ingest_documents as _native_ingest_documents,
+from agent_connector_sdk.ingest import (
+    ChangeSet,
+    Document,
+    Entity,
+    IngestBinding,
+    IngestError,
+    KnowledgeIngest,
+    Relationship,
+    current_ingest,
 )
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    ingest_entities as _native_ingest_entities,
-)
 
-_SOURCE = "arr-mcp"
-_DOMAIN = "arr"
+_BINDING = IngestBinding(connector="arr-mcp", stream="arr")
 
 
-def ingest_entities(
+def _to_entity(record: dict[str, Any]) -> Entity:
+    return Entity(
+        id=record.get("id"),
+        node_type=record.get("node_type"),
+        properties={k: v for k, v in record.items() if k not in ("id", "node_type")},
+    )
+
+
+def _to_relationship(record: dict[str, Any]) -> Relationship:
+    props = {
+        k: v for k, v in record.items() if k not in ("source", "target", "relationship")
+    }
+    return Relationship(
+        source=record["source"],
+        target=record["target"],
+        relationship=record["relationship"],
+        properties=props or None,
+    )
+
+
+def _to_document(record: dict[str, Any]) -> Document:
+    return Document(
+        id=record.get("id"),
+        text=record.get("text"),
+        title=record.get("title"),
+        source_uri=record.get("source_uri"),
+        properties={
+            k: v
+            for k, v in record.items()
+            if k not in ("id", "text", "title", "source_uri")
+        },
+    )
+
+
+async def ingest_entities(
     entities: list[dict[str, Any]],
     relationships: list[dict[str, Any]] | None = None,
     *,
-    source: str = _SOURCE,
-    domain: str = _DOMAIN,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Write canonical typed nodes and relationships through agent-utilities."""
-    return _native_ingest_entities(
-        entities,
-        relationships,
-        source=source,
-        domain=domain,
-        client=client,
-        graph=graph,
+    """Write canonical typed nodes and relationships through agent-connector-sdk."""
+    if not entities:
+        raise IngestError("ingest_entities needs at least one entity")
+    change_set = ChangeSet(
+        entities=tuple(_to_entity(e) for e in entities),
+        relationships=tuple(_to_relationship(r) for r in relationships or ()),
     )
+    service = ingest or current_ingest()
+    receipt = await service.submit(_BINDING, change_set)
+    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
 
 
-def ingest_documents(
+async def ingest_documents(
     documents: list[dict[str, Any]],
     *,
-    source: str = _SOURCE,
-    domain: str = _DOMAIN,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Write searchable documents through the authoritative native-ingest path."""
-    return _native_ingest_documents(
-        documents,
-        source=source,
-        domain=domain,
-        client=client,
-        graph=graph,
-    )
+    """Write searchable documents through the authoritative knowledge-ingest path."""
+    if not documents:
+        raise IngestError("ingest_documents needs at least one document")
+    change_set = ChangeSet(documents=tuple(_to_document(d) for d in documents))
+    service = ingest or current_ingest()
+    receipt = await service.submit(_BINDING, change_set)
+    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
 
 
 def _ext_id(record: dict[str, Any], *keys: str) -> str | None:
@@ -70,11 +101,10 @@ def _ext_id(record: dict[str, Any], *keys: str) -> str | None:
     return str(v) if v is not None else None
 
 
-def ingest_movies(
+async def ingest_movies(
     movies: list[dict[str, Any]],
     *,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Map Radarr movie records → ``:Movie`` nodes (+ overview ``:Document`` links)."""
     entities: list[dict[str, Any]] = []
@@ -119,20 +149,17 @@ def ingest_movies(
                     else None,
                 }
             )
-    res = ingest_entities(entities, relationships, client=client, graph=graph)
+    res = await ingest_entities(entities, relationships, ingest=ingest)
     doc_res = (
-        ingest_documents(docs, client=client, graph=graph)
-        if docs
-        else {"nodes": 0, "edges": 0}
+        await ingest_documents(docs, ingest=ingest) if docs else {"nodes": 0, "edges": 0}
     )
     return _merge(res, doc_res)
 
 
-def ingest_series(
+async def ingest_series(
     series: list[dict[str, Any]],
     *,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Map Sonarr series records → ``:Series`` nodes (+ overview ``:Document`` links)."""
     entities: list[dict[str, Any]] = []
@@ -176,20 +203,17 @@ def ingest_series(
                     else None,
                 }
             )
-    res = ingest_entities(entities, relationships, client=client, graph=graph)
+    res = await ingest_entities(entities, relationships, ingest=ingest)
     doc_res = (
-        ingest_documents(docs, client=client, graph=graph)
-        if docs
-        else {"nodes": 0, "edges": 0}
+        await ingest_documents(docs, ingest=ingest) if docs else {"nodes": 0, "edges": 0}
     )
     return _merge(res, doc_res)
 
 
-def ingest_indexers(
+async def ingest_indexers(
     indexers: list[dict[str, Any]],
     *,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Map Prowlarr/*arr indexer records → ``:Indexer`` nodes."""
     entities: list[dict[str, Any]] = []
@@ -209,11 +233,11 @@ def ingest_indexers(
                 "externalToolId": str(iid),
             }
         )
-    return ingest_entities(entities, client=client, graph=graph)
+    return await ingest_entities(entities, ingest=ingest)
 
 
 def _merge(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
-    """Sum two authoritative native-ingest results."""
+    """Sum two authoritative knowledge-ingest results."""
     return {
         "nodes": a.get("nodes", 0) + b.get("nodes", 0),
         "edges": a.get("edges", 0) + b.get("edges", 0),

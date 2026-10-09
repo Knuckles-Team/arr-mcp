@@ -8,7 +8,7 @@ the caller. Auto-discovered by ``register_tool_surface`` (gated by ``KGTOOL``, d
 
 from typing import Any
 
-from agent_utilities.mcp.concurrency import run_blocking
+from agent_connector_sdk.mcp.concurrency import run_blocking
 from fastmcp import FastMCP
 from pydantic import Field
 
@@ -57,18 +57,18 @@ def register_kg_tools(mcp: FastMCP) -> None:
             movies = _records(await run_blocking(get_radarr_client().get_movie))
             result["movies"] = {
                 "listed": len(movies),
-                "ingested": ingest_movies(movies),
+                "ingested": await ingest_movies(movies),
             }
         if "series" in wanted:
             series = _records(await run_blocking(get_sonarr_client().get_series))
             result["series"] = {
                 "listed": len(series),
-                "ingested": ingest_series(series),
+                "ingested": await ingest_series(series),
             }
         if "indexers" in wanted:
             indexers = _records(await run_blocking(get_prowlarr_client().get_indexer))
             result["indexers"] = {
                 "listed": len(indexers),
-                "ingested": ingest_indexers(indexers),
+                "ingested": await ingest_indexers(indexers),
             }
         return result
