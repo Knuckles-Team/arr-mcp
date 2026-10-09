@@ -7,10 +7,8 @@ This module provides a class to interact with the Prowlarr API for managing inde
 from typing import Any
 
 import requests
-from agent_utilities.core.transport_security import (
-    ResolvedTLSProfile,
-    resolve_tls_profile,
-)
+from agent_connector_sdk.tls.profile import ResolvedTLSProfile
+from agent_connector_sdk.tls.resolve import resolve_tls_profile
 
 from arr_mcp.api._security import (
     REQUEST_TIMEOUT,

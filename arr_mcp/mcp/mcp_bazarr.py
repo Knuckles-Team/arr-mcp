@@ -5,7 +5,7 @@ CONCEPT:AU-ECO.mcp.tool-mode-standardization — gitlab-style organized per-serv
 
 from typing import Any
 
-from agent_utilities.mcp.action_dispatch import dispatch_async, parse_json_object
+from agent_connector_sdk.mcp.action_dispatch import dispatch_async, parse_json_object
 from fastmcp import Context, FastMCP
 from pydantic import Field
 
