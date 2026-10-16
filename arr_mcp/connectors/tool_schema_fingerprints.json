@@ -1,10 +1,10 @@
 {
-  "algorithm": "agent-utilities:mcp-tool-schema-compat:v1",
+  "algorithm": "agent-connector-sdk:mcp-tool-contract-compat:v2",
   "connector": "arr-mcp",
   "schema_version": "1",
   "tools": {
-    "prowlarr_action": "2857678d34bb37ccb6a313cd29259d9becbc32e73681eda8c36e6a2f4035d7e5",
-    "radarr_action": "3b6c2929b3b2407d83651d97a701999550f7280f610eb25269ca70ddb2b84876",
-    "sonarr_action": "54d5024b9c89c1a28e23128328065bedaa52421e623e9c8bdd1986e39c0d778b"
+    "prowlarr_action": "7039914282e843a73b16fd585bbf833e15cb2340c1d9e2410122c4a9a37f543c",
+    "radarr_action": "a969fff358225777a5cb940c37c7e3401de4e589172ff2e407aa8f76f51d74f0",
+    "sonarr_action": "718113ff12e6570d698a523cd1c8c268d046120bd601a5af5066218c7664f9d1"
   }
 }
