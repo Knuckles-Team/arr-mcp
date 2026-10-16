@@ -48,7 +48,7 @@ The operator can also build a client directly:
 
 ```python
 from arr_mcp.api.api_client_sonarr import Api as SonarrApi
-from agent_utilities.core.transport_security import resolve_tls_profile
+from agent_connector_sdk.core.transport_security import resolve_tls_profile
 
 sonarr = SonarrApi(
     base_url="http://your-sonarr:8989",

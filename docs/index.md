@@ -1,6 +1,6 @@
 # arr-mcp
 
-Arr Suite **API + MCP Server + A2A Agent** for the agent-utilities ecosystem — a
+Arr Suite **API + MCP Server + A2A Agent** for the agent-connector-sdk ecosystem — a
 typed, deterministic control surface over Sonarr, Radarr, Lidarr, Prowlarr, Bazarr,
 Seerr, and Chaptarr.
 

@@ -5,7 +5,7 @@ Skipped informational: 5
 
 - [ ] [P] **T001** [Dependency Audit] Minor update: pytest-xdist 3.6.0 (constraint — not installed) -> 3.8.0
   - Priority: P3-Low | Effort: Small
-- [ ] [P] **T002** [Dependency Audit] Minor update: agent-utilities 0.2.40 (installed) -> 0.16.0
+- [ ] [P] **T002** [Dependency Audit] Minor update: agent-connector-sdk 0.2.40 (installed) -> 0.16.0
   - Priority: P3-Low | Effort: Small
 - [ ] [P] **T003** [Dependency Audit] Minor update: urllib3 2.6.3 (installed) -> 2.7.0
   - Priority: P3-Low | Effort: Small
@@ -71,5 +71,5 @@ Skipped informational: 5
   - Priority: P3-Low | Effort: Medium
 - [ ] [P] **T034** [Environment Variables] 27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_
   - Priority: P3-Low | Effort: Medium
-- [ ] [P] **T035** [analyze_xdg_kg] Analysis error: No module named 'agent_utilities.knowledge_graph'
+- [ ] [P] **T035** [analyze_xdg_kg] Analysis error: No module named 'agent_connector_sdk.knowledge_graph'
   - Priority: P1-High | Effort: Medium
