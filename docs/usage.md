@@ -68,14 +68,5 @@ fails loudly rather than silently.
 
 The package installs two console scripts:
 
-```bash
-# The MCP server (see Deployment for transports)
-arr-mcp --transport streamable-http --host 0.0.0.0 --port 8000
-
-# The Pydantic-AI A2A agent (serves the AG-UI web interface)
-MCP_URL=http://localhost:8000/mcp arr-agent
-```
-
 `arr-agent` connects to the MCP server over the Agent Control Protocol and drives the
-Arr tools on the operator's behalf. See [Deployment](deployment.md#run-the-a2a-agent-server)
 for the agent environment variables and the combined Compose stack.

@@ -1,6 +1,5 @@
 # arr-mcp — Concept Overview
 
-> **Category**: Media | **Ecosystem Role**: MCP Server + A2A Agent
 > Built on [`agent-connector-sdk`](https://github.com/Knuckles-Team/agent-connector-sdk) — the unified AGI Harness.
 
 ## Description
@@ -37,21 +36,6 @@ This project implements or inherits the following ecosystem concepts:
 ## Architecture
 
 This project follows the standardized agent-package pattern:
-
-```
-arr-mcp/
-├── arr_mcp/        # Source code
-│   ├── __init__.py
-│   ├── agent_server.py      # Entry point (create_graph_agent_server)
-│   ├── api_client.py        # REST/GraphQL API wrapper
-│   └── mcp_server.py        # FastMCP tool definitions
-├── tests/                   # Test suite
-├── docs/                    # Documentation
-├── pyproject.toml           # Package metadata
-├── mcp_config.json          # MCP server configuration
-├── main_agent.json          # Agent identity & system prompt
-└── Dockerfile               # Container deployment
-```
 
 ## MCP Configuration
 

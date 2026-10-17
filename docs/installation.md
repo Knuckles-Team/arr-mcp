@@ -23,14 +23,8 @@ The base install is intentionally minimal. Install the extra for what the operat
 | Extra | Install | Pulls in |
 |---|---|---|
 | `mcp` | `pip install "arr-mcp[mcp]"` | FastMCP MCP-server runtime (`agent-connector-sdk`) |
-| `agent` | `pip install "arr-mcp[agent]"` | Pydantic-AI agent + Logfire tracing (`agent-connector-sdk`) |
 | `all` | `pip install "arr-mcp[all]"` | Everything above |
 | `test` | `pip install "arr-mcp[test]"` | The pytest suite (`pytest`, `pytest-xdist`, `pytest-asyncio`) |
-
-```bash
-# Typical: run the MCP server and the A2A agent
-pip install "arr-mcp[all]"
-```
 
 ## From source
 
@@ -60,7 +54,6 @@ docker run --rm -i \
   example/arr-mcp@sha256:<digest>            # stdio transport (default)
 ```
 
-For an HTTP server with a published port — and the A2A agent — see
 [Deployment](deployment.md).
 
 ## Verify the install
@@ -72,6 +65,5 @@ python -c "import arr_mcp; print(arr_mcp.__version__)"
 
 ## Next steps
 
-- **[Deployment](deployment.md)** — run it as a long-lived MCP and agent server behind Caddy + DNS.
 - **[Usage](usage.md)** — call the tools, the API clients, and the CLI.
 - **[Configuration](deployment.md#configuration-environment)** — every environment variable.

@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "setuptools>=80.9.0", "wheel",]
+requires = [ "setuptools>=84.0.0", "wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,7 +9,7 @@ description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.12, <3.15"
-dependencies = [ "agent-connector-sdk>=0.2.0,<1.0.0", "tree-sitter>=0.26.0", "requests>=2.34.2", "urllib3>=2.7.0", "pydantic>=2.13.4",]
+dependencies = [ "agent-connector-sdk>=0.2.0,<1.0.0", "tree-sitter>=0.26.0", "requests>=2.34.2", "urllib3>=2.8.0", "pydantic>=2.14.1",]
 [[project.authors]]
 name = "Genius"
 email = "genius@example.com"
@@ -46,7 +46,7 @@ include-package-data = true
 
 [tool.uv]
 override-dependencies = [
-    "fastmcp-slim[client,server]>=4.0.0b1",
+    "fastmcp-slim[client,server]>=4.1.0",
 ]
 
 

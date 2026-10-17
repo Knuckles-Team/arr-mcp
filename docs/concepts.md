@@ -12,7 +12,6 @@
 |------------|------|-------------|
 | `CONCEPT:RR-OS.governance.arr` | Core API Client | Primary API client for Arr Suite MCP Server for Agentic AI! |
 | `CONCEPT:RR-OS.governance.arr-2` | MCP Server | Model Context Protocol server entry point |
-| `CONCEPT:RR-OS.governance.arr-3` | A2A Agent | Agent-to-Agent protocol server |
 
 ## Cross-Project References (from agent-connector-sdk)
 
