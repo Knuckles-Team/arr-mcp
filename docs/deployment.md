@@ -63,13 +63,10 @@ Store the real remote URL, outbound identity reference, and TLS-profile referenc
 <!-- END GENERATED: deployment-options -->
 
 This page covers running `arr-mcp` as long-lived servers: the MCP transports, the
-companion A2A agent, a Docker Compose stack, putting it behind a Caddy reverse proxy,
 and giving it a DNS name with Technitium. To provision the **Arr Suite services** it
 connects to, see [Backing Platform](platform.md).
 
 > `arr-mcp` ships **two** console scripts: an **MCP server** (`arr-mcp`) and an
-> **A2A agent server** (`arr-agent`). The MCP server is a typed, deterministic tool
-> surface; the agent server is a Pydantic-AI agent that calls those tools over the
 > Agent Control Protocol.
 
 ## Run the MCP server
@@ -173,65 +170,6 @@ cp .env.example .env          # then edit the SONARR_* / RADARR_* values
 docker compose -f docker/mcp.compose.yml up -d
 docker compose -f docker/mcp.compose.yml logs -f
 ```
-
-## Run the A2A agent server
-
-`arr-mcp` ships a second console script, `arr-agent`, a Pydantic-AI agent that calls
-the MCP tools over the Agent Control Protocol and exposes an optional web interface.
-It connects to the MCP server via `MCP_URL` and listens on `:9099` by default. The
-repo ships [`docker/agent.compose.yml`](https://github.com/Knuckles-Team/arr-mcp/blob/main/docker/agent.compose.yml),
-which runs both servers together:
-
-```yaml
-services:
-  arr-mcp-mcp:
-    image: example/arr-mcp@sha256:<digest>
-    container_name: arr-mcp-mcp
-    hostname: arr-mcp-mcp
-    restart: always
-    env_file:
-      - ../.env
-    environment:
-      - PYTHONUNBUFFERED=1
-      - HOST=0.0.0.0
-      - PORT=8000
-      - TRANSPORT=streamable-http
-    ports:
-      - "8000:8000"
-
-  arr-mcp-agent:
-    image: example/arr-mcp@sha256:<digest>
-    container_name: arr-mcp-agent
-    hostname: arr-mcp-agent
-    restart: always
-    depends_on:
-      - arr-mcp-mcp
-    env_file:
-      - ../.env
-    command: ["arr-agent"]
-    environment:
-      - PYTHONUNBUFFERED=1
-      - HOST=0.0.0.0
-      - PORT=9099
-      - MCP_URL=http://arr-mcp-mcp:8000/mcp
-      - PROVIDER=${PROVIDER:-openai}
-      - MODEL_ID=${MODEL_ID:-gpt-4o}
-      - ENABLE_WEB_UI=True
-    ports:
-      - "9099:9099"
-```
-
-```bash
-docker compose -f docker/agent.compose.yml up -d
-curl -s http://localhost:9099/health         # agent health
-```
-
-| Var | Default | Meaning |
-|---|---|---|
-| `MCP_URL` | `http://arr-mcp-mcp:8000/mcp` | MCP server the agent calls |
-| `PROVIDER` | `openai` | LLM provider |
-| `MODEL_ID` | `gpt-4o` | Model identifier |
-| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
 ## Behind a Caddy reverse proxy
 

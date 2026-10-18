@@ -2,12 +2,12 @@
 name: arr-mcp-operations
 skill_type: skill
 description: >-
-  Operate arr-mcp through its governed MCP and GraphOS capabilities, including arr indexer management, arr movie library, arr series library. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
+  Operate arr-mcp through its governed MCP and Arbora capabilities, including arr indexer management, arr movie library, arr series library. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
 ---
 
 # Arr Mcp Operations
 
-Use the provider's governed MCP tools through GraphOS delegation.
+Use the provider's governed MCP tools through Arbora delegation.
 
 ## Workflow
 

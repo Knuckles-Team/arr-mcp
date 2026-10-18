@@ -1,5 +1,4 @@
 site_name: "arr-mcp"
-site_description: "Arr Suite API + MCP Server + A2A Agent — a typed control surface over Sonarr, Radarr, Lidarr, Prowlarr, Bazarr, Seerr, and Chaptarr for the agent-utilities ecosystem."
 site_url: "https://knuckles-team.github.io/arr-mcp/"
 repo_name: "Knuckles-Team/arr-mcp"
 repo_url: "https://github.com/Knuckles-Team/arr-mcp"

@@ -5,23 +5,13 @@
 
 ## Tech Stack & Architecture
 - Language/Version: Python 3.10+
-- Core Libraries: `agent-utilities`, `fastmcp`, `pydantic-ai`
+- Core Libraries: `agent-connector-sdk`, `fastmcp`, `pydantic-ai`
 - Key principles: Functional patterns, Pydantic for data validation, asynchronous tool execution.
 - Architecture:
     - `mcp_server.py`: Main MCP server entry point and tool registration.
-    - `agent.py`: Pydantic AI agent definition and logic.
     - `skills/`: Directory containing modular agent skills (if applicable).
 
 ### Architecture Diagram
-```mermaid
-graph TD
-    User([User/A2A]) --> Server[A2A Server / FastAPI]
-    Server --> Agent[Pydantic AI Agent]
-    Agent --> Skills[Modular Skills]
-    Agent --> MCP[MCP Server / FastMCP]
-    MCP --> Client[API Client / Wrapper]
-    Client --> ExternalAPI([External Service API])
-```
 
 ### Workflow Diagram
 ```mermaid
@@ -53,7 +43,6 @@ pre-commit run --all-files
 # arr-mcp
 arr_mcp.mcp_server:mcp_server
 # arr-agent
-arr_mcp.agent_server:agent_server
 
 ## Project Structure Quick Reference
 - MCP Entry Point → `mcp_server.py`
@@ -62,383 +51,17 @@ arr_mcp.agent_server:agent_server
 - Skills → `skills/` (if exists)
 
 ### File Tree
-```text
-├── .bumpversion.cfg
-├── .codespellignore
-├── .dockerignore
-├── .env
-├── .env.example
-├── .gitattributes
-├── .github
-│   └── workflows
-│       ├── docs.yml
-│       ├── pages.yml
-│       └── pipeline.yml
-├── .gitignore
-├── .mypy_cache
-│   ├── .gitignore
-│   ├── 3.10
-│   │   ├── @plugins_snapshot.json
-│   │   ├── __future__.data.json
-│   │   ├── __future__.meta.json
-│   │   ├── _ast.data.json
-│   │   ├── _ast.meta.json
-│   │   ├── _asyncio.data.json
-│   │   ├── _asyncio.meta.json
-│   │   ├── _blake2.data.json
-│   │   ├── _blake2.meta.json
-│   │   ├── _codecs.data.json
-│   │   ├── _codecs.meta.json
-│   │   ├── _collections_abc.data.json
-│   │   ├── _collections_abc.meta.json
-│   │   ├── _contextvars.data.json
-│   │   ├── _contextvars.meta.json
-│   │   ├── _ctypes.data.json
-│   │   ├── _ctypes.meta.json
-│   │   ├── _decimal.data.json
-│   │   ├── _decimal.meta.json
-│   │   ├── _frozen_importlib.data.json
-│   │   ├── _frozen_importlib.meta.json
-│   │   ├── _frozen_importlib_external.data.json
-│   │   ├── _frozen_importlib_external.meta.json
-│   │   ├── _hashlib.data.json
-│   │   ├── _hashlib.meta.json
-│   │   ├── _io.data.json
-│   │   ├── _io.meta.json
-│   │   ├── _operator.data.json
-│   │   ├── _operator.meta.json
-│   │   ├── _pickle.data.json
-│   │   ├── _pickle.meta.json
-│   │   ├── _queue.data.json
-│   │   ├── _queue.meta.json
-│   │   ├── _random.data.json
-│   │   ├── _random.meta.json
-│   │   ├── _sitebuiltins.data.json
-│   │   ├── _sitebuiltins.meta.json
-│   │   ├── _socket.data.json
-│   │   ├── _socket.meta.json
-│   │   ├── _ssl.data.json
-│   │   ├── _ssl.meta.json
-│   │   ├── _thread.data.json
-│   │   ├── _thread.meta.json
-│   │   ├── _typeshed
-│   │   ├── _warnings.data.json
-│   │   ├── _warnings.meta.json
-│   │   ├── _weakref.data.json
-│   │   ├── _weakref.meta.json
-│   │   ├── _weakrefset.data.json
-│   │   ├── _weakrefset.meta.json
-│   │   ├── abc.data.json
-│   │   ├── abc.meta.json
-│   │   ├── annotated_types
-│   │   ├── arr_mcp
-│   │   ├── ast.data.json
-│   │   ├── ast.meta.json
-│   │   ├── asyncio
-│   │   ├── base64.data.json
-│   │   ├── base64.meta.json
-│   │   ├── binascii.data.json
-│   │   ├── binascii.meta.json
-│   │   ├── builtins.data.json
-│   │   ├── builtins.meta.json
-│   │   ├── cache.db
-│   │   ├── codecs.data.json
-│   │   ├── codecs.meta.json
-│   │   ├── collections
-│   │   ├── colorsys.data.json
-│   │   ├── colorsys.meta.json
-│   │   ├── concurrent
-│   │   ├── contextlib.data.json
-│   │   ├── contextlib.meta.json
-│   │   ├── contextvars.data.json
-│   │   ├── contextvars.meta.json
-│   │   ├── copy.data.json
-│   │   ├── copy.meta.json
-│   │   ├── copyreg.data.json
-│   │   ├── copyreg.meta.json
-│   │   ├── ctypes
-│   │   ├── dataclasses.data.json
-│   │   ├── dataclasses.meta.json
-│   │   ├── datetime.data.json
-│   │   ├── datetime.meta.json
-│   │   ├── decimal.data.json
-│   │   ├── decimal.meta.json
-│   │   ├── dis.data.json
-│   │   ├── dis.meta.json
-│   │   ├── email
-│   │   ├── enum.data.json
-│   │   ├── enum.meta.json
-│   │   ├── errno.data.json
-│   │   ├── errno.meta.json
-│   │   ├── fractions.data.json
-│   │   ├── fractions.meta.json
-│   │   ├── functools.data.json
-│   │   ├── functools.meta.json
-│   │   ├── generate_api.data.json
-│   │   ├── generate_api.meta.json
-│   │   ├── genericpath.data.json
-│   │   ├── genericpath.meta.json
-│   │   ├── hashlib.data.json
-│   │   ├── hashlib.meta.json
-│   │   ├── hmac.data.json
-│   │   ├── hmac.meta.json
-│   │   ├── http
-│   │   ├── importlib
-│   │   ├── inspect.data.json
-│   │   ├── inspect.meta.json
-│   │   ├── io.data.json
-│   │   ├── io.meta.json
-│   │   ├── ipaddress.data.json
-│   │   ├── ipaddress.meta.json
-│   │   ├── itertools.data.json
-│   │   ├── itertools.meta.json
-│   │   ├── json
-│   │   ├── keyword.data.json
-│   │   ├── keyword.meta.json
-│   │   ├── logging
-│   │   ├── math.data.json
-│   │   ├── math.meta.json
-│   │   ├── mimetypes.data.json
-│   │   ├── mimetypes.meta.json
-│   │   ├── multiprocessing
-│   │   ├── numbers.data.json
-│   │   ├── numbers.meta.json
-│   │   ├── opcode.data.json
-│   │   ├── opcode.meta.json
-│   │   ├── operator.data.json
-│   │   ├── operator.meta.json
-│   │   ├── os
-│   │   ├── pathlib.data.json
-│   │   ├── pathlib.meta.json
-│   │   ├── pickle.data.json
-│   │   ├── pickle.meta.json
-│   │   ├── posixpath.data.json
-│   │   ├── posixpath.meta.json
-│   │   ├── pydantic
-│   │   ├── pydantic_core
-│   │   ├── queue.data.json
-│   │   ├── queue.meta.json
-│   │   ├── random.data.json
-│   │   ├── random.meta.json
-│   │   ├── re.data.json
-│   │   ├── re.meta.json
-│   │   ├── requests
-│   │   ├── resource.data.json
-│   │   ├── resource.meta.json
-│   │   ├── select.data.json
-│   │   ├── select.meta.json
-│   │   ├── selectors.data.json
-│   │   ├── selectors.meta.json
-│   │   ├── signal.data.json
-│   │   ├── signal.meta.json
-│   │   ├── socket.data.json
-│   │   ├── socket.meta.json
-│   │   ├── sre_compile.data.json
-│   │   ├── sre_compile.meta.json
-│   │   ├── sre_constants.data.json
-│   │   ├── sre_constants.meta.json
-│   │   ├── sre_parse.data.json
-│   │   ├── sre_parse.meta.json
-│   │   ├── ssl.data.json
-│   │   ├── ssl.meta.json
-│   │   ├── string.data.json
-│   │   ├── string.meta.json
-│   │   ├── subprocess.data.json
-│   │   ├── subprocess.meta.json
-│   │   ├── sys
-│   │   ├── tempfile.data.json
-│   │   ├── tempfile.meta.json
-│   │   ├── test_arr_coverage.data.json
-│   │   ├── test_arr_coverage.meta.json
-│   │   ├── test_arr_mcp_brute_force_coverage.data.json
-│   │   ├── test_arr_mcp_brute_force_coverage.meta.json
-│   │   ├── test_placeholder.data.json
-│   │   ├── test_placeholder.meta.json
-│   │   ├── textwrap.data.json
-│   │   ├── textwrap.meta.json
-│   │   ├── threading.data.json
-│   │   ├── threading.meta.json
-│   │   ├── time.data.json
-│   │   ├── time.meta.json
-│   │   ├── types.data.json
-│   │   ├── types.meta.json
-│   │   ├── typing.data.json
-│   │   ├── typing.meta.json
-│   │   ├── typing_extensions.data.json
-│   │   ├── typing_extensions.meta.json
-│   │   ├── typing_inspection
-│   │   ├── unittest
-│   │   ├── urllib
-│   │   ├── urllib3
-│   │   ├── uuid.data.json
-│   │   ├── uuid.meta.json
-│   │   ├── validate_a2a_agent.data.json
-│   │   ├── validate_a2a_agent.meta.json
-│   │   ├── warnings.data.json
-│   │   ├── warnings.meta.json
-│   │   ├── weakref.data.json
-│   │   ├── weakref.meta.json
-│   │   ├── zipfile
-│   │   ├── zlib.data.json
-│   │   ├── zlib.meta.json
-│   │   └── zoneinfo
-│   └── CACHEDIR.TAG
-├── .pre-commit-config.yaml
-├── .pytest_cache
-│   ├── .gitignore
-│   ├── CACHEDIR.TAG
-│   ├── README.md
-│   └── v
-│       └── cache
-├── .specify
-│   └── specs
-│       └── code-enhancement-20260512
-├── .venv
-│   ├── .gitignore
-│   ├── .lock
-│   ├── CACHEDIR.TAG
-│   ├── bin
-│   │   ├── activate
-│   │   ├── activate-global-python-argcomplete
-│   │   ├── activate.bat
-│   │   ├── activate.csh
-│   │   ├── activate.fish
-│   │   ├── activate.nu
-│   │   ├── activate.ps1
-│   │   ├── activate_this.py
-│   │   ├── agent-terminal-ui
-│   │   ├── arr-agent
-│   │   ├── arr-mcp
-│   │   ├── coverage
-│   │   ├── coverage-3.11
-│   │   ├── coverage3
-│   │   ├── cyclopts
-│   │   ├── deactivate.bat
-│   │   ├── distro
-│   │   ├── docutils
-│   │   ├── dotenv
-│   │   ├── email_validator
-│   │   ├── eunomia
-│   │   ├── eunomia-mcp
-│   │   ├── f2py
-│   │   ├── fastapi
-│   │   ├── fastmcp
-│   │   ├── genai-prices
-│   │   ├── httpx
-│   │   ├── install-skills
-│   │   ├── jsonschema
-│   │   ├── keyring
-│   │   ├── logfire
-│   │   ├── markdown-it
-│   │   ├── mcp
-│   │   ├── normalizer
-│   │   ├── numpy-config
-│   │   ├── openai
-│   │   ├── opentelemetry-bootstrap
-│   │   ├── opentelemetry-instrument
-│   │   ├── pai
-│   │   ├── py.test
-│   │   ├── pydoc.bat
-│   │   ├── pygmentize
-│   │   ├── pyrsa-decrypt
-│   │   ├── pyrsa-encrypt
-│   │   ├── pyrsa-keygen
-│   │   ├── pyrsa-priv2pub
-│   │   ├── pyrsa-sign
-│   │   ├── pyrsa-verify
-│   │   ├── pytest
-│   │   ├── python
-│   │   ├── python-argcomplete-check-easy-install-script
-│   │   ├── python3
-│   │   ├── python3.11
-│   │   ├── register-python-argcomplete
-│   │   ├── rst2html
-│   │   ├── rst2html4
-│   │   ├── rst2html5
-│   │   ├── rst2latex
-│   │   ├── rst2man
-│   │   ├── rst2odt
-│   │   ├── rst2pseudoxml
-│   │   ├── rst2s5
-│   │   ├── rst2xetex
-│   │   ├── rst2xml
-│   │   ├── tqdm
-│   │   ├── typer
-│   │   ├── uvicorn
-│   │   ├── watchfiles
-│   │   └── websockets
-│   ├── include
-│   │   └── site
-│   ├── lib
-│   │   └── python3.11
-│   ├── lib64
-│   │   └── python3.11
-│   └── pyvenv.cfg
-├── .vulture_ignore
-├── AGENTS.md
-├── CHANGELOG.md
-├── LICENSE
-├── README.md
-├── arr_mcp
-│   ├── __init__.py
-│   ├── __main__.py
-│   ├── agent_server.py
-│   ├── api
-│   │   ├── __init__.py
-│   │   ├── api_client_bazarr.py
-│   │   ├── api_client_chaptarr.py
-│   │   ├── api_client_lidarr.py
-│   │   ├── api_client_prowlarr.py
-│   │   ├── api_client_radarr.py
-│   │   ├── api_client_seerr.py
-│   │   └── api_client_sonarr.py
-│   ├── auth.py
-│   ├── main_agent.json
-│   ├── mcp_config.json
-│   └── mcp_server.py
-├── debug.Dockerfile
-├── docker
-│   ├── Dockerfile
-│   ├── agent.compose.yml
-│   ├── debug.Dockerfile
-│   ├── mcp.compose.yml
-│   └── starship.toml
-├── docs
-│   ├── index.md
-│   ├── legacy_readme.md
-│   └── overview.md
-├── fix_mcp_server.py
-├── generate_mcp.py
-├── mkdocs.yml
-├── opencode.json
-├── patch_gen.py
-├── patch_gen_script.py
-├── pyproject.toml
-├── pytest.ini
-├── requirements.txt
-├── scripts
-│   ├── generate_api.py
-│   └── validate_a2a_agent.py
-├── test_gen.py
-├── tests
-│   ├── test_arr_coverage.py
-│   ├── test_arr_mcp_brute_force_coverage.py
-│   ├── test_auth_coverage.py
-│   ├── test_concept_parity.py
-│   └── test_startup.py
-└── uv.lock
-```
 
 ## Code Style & Conventions
 **Always:**
-- Use `agent-utilities` for common patterns (e.g., `create_mcp_server`, `create_agent`).
+- Use `agent-connector-sdk` for common patterns (e.g., `create_mcp_server`, `create_agent`).
 - Define input/output models using Pydantic.
 - Include descriptive docstrings for all tools (they are used as tool descriptions for LLMs).
 - Check for optional dependencies using `try/except ImportError`.
 
 **Good example:**
 ```python
-from agent_utilities import create_mcp_server
+from agent_connector_sdk import create_mcp_server
 from mcp.server.fastmcp import FastMCP
 
 mcp = create_mcp_server("my-agent")
@@ -452,7 +75,7 @@ async def my_tool(param: str) -> str:
 ## Dos and Don'ts
 **Do:**
 - Run `pre-commit` before pushing changes.
-- Use existing patterns from `agent-utilities`.
+- Use existing patterns from `agent-connector-sdk`.
 - Keep tools focused and idempotent where possible.
 
 **Don't:**
@@ -463,7 +86,7 @@ async def my_tool(param: str) -> str:
 ## Safety & Boundaries
 **Always do:**
 - Run lint/test via `pre-commit`.
-- Use `agent-utilities` base classes.
+- Use `agent-connector-sdk` base classes.
 
 **Ask first:**
 - Major refactors of `mcp_server.py` or `agent.py`.
@@ -471,11 +94,11 @@ async def my_tool(param: str) -> str:
 
 **Never do:**
 - Commit `.env` files or secrets.
-- Modify `agent-utilities` or `universal-skills` files from within this package.
+- Modify `agent-connector-sdk` or `universal-skills` files from within this package.
 
 ## When Stuck
 - Propose a plan first before making large changes.
-- Check `agent-utilities` documentation for existing helpers.
+- Check `agent-connector-sdk` documentation for existing helpers.
 
 ## ⛔ No Scratch or Temporary Files in Repository
 
@@ -599,10 +222,10 @@ alone).
 Working in parallel with other sessions/worktrees? **Reserve a concept id before you write its `CONCEPT:` marker** so two sessions never collide:
 
 ```bash
-agent-utilities --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
+agent-connector-sdk --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
 ```
 
-Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-utilities/concept_coordination/>
+Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-connector-sdk/concept_coordination/>
 <!-- END concept-coordination (generated) -->
 
 ## Version & lockfile drift edict (keep the version mirrors AND the lock in sync)
@@ -630,14 +253,14 @@ is what Dependabot flags. Rules:
 ## Upstream currency edict — target the newest release; a pin is a hypothesis, not a fact (READ BEFORE capping, deferring, or opt-in-gating an upgrade)
 
 This governs how this repository treat **other people's** releases, deprecations, and version caps in
-this repo (fleet-wide edict, propagated from `agent-utilities/AGENTS.md`).
+this repo (fleet-wide edict, propagated from `agent-connector-sdk/AGENTS.md`).
 
 1. **Latest by default.** Target the newest upstream release -- including a pre-release
    where the ecosystem has already moved onto it. Sitting on an old major because the
    upgrade is work is not a reason to defer it.
 2. **A conservative upstream pin is a hypothesis, not a fact -- test it, don't inherit
    it.** Upstream maintainers cap defensively (an unreleased major, an untested surface)
-   as often as they cap for a known break. Worked example (from `agent-utilities`):
+   as often as they cap for a known break. Worked example (from `agent-connector-sdk`):
    `pydantic-ai-slim` 2.18.0 declared `fastmcp-slim[client]>=3.3.0` with no upper bound;
    2.19.0 added `<4` purely as a defensive guard while fastmcp 4 was still pre-release --
    not because of an observed incompatibility. Blocking an upgrade on that kind of cap

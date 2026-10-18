@@ -17,7 +17,7 @@
 ## Functional Requirements
 
 - **FR-001**: Minor update: pytest-xdist 3.6.0 (constraint — not installed) -> 3.8.0
-- **FR-002**: Minor update: agent-utilities 0.2.40 (installed) -> 0.16.0
+- **FR-002**: Minor update: agent-connector-sdk 0.2.40 (installed) -> 0.16.0
 - **FR-003**: Minor update: urllib3 2.6.3 (installed) -> 2.7.0
 - **FR-004**: Minor update: requests 2.32.5 (installed) -> 2.34.2
 - **FR-005**: 1 functions exceed 200 lines (actionable refactoring targets): get_mcp_instance (320L)
@@ -50,7 +50,7 @@
 - **FR-032**: 5 tests have no assertions
 - **FR-033**: Undocumented env vars: CHAPTARR_API_KEY, EUNOMIA_REMOTE_URL, LIDARR_API_KEY, OAUTH_BASE_URL, OAUTH_UPSTREAM_AUTH_ENDPOINT, OAUTH_UPSTREAM_CLIENT_ID, OAUTH_UPSTREAM_CLIENT_SECRET, OAUTH_UPSTREAM_TOKEN_ENDPOINT, OIDC_BASE_URL, OIDC_CLIENT_ID
 - **FR-034**: 27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_SSL_VERIFY, CHAPTARR_API_KEY, CHAPTARR_BASE_URL
-- **FR-035**: Analysis error: No module named 'agent_utilities.knowledge_graph'
+- **FR-035**: Analysis error: No module named 'agent_connector_sdk.knowledge_graph'
 
 ## Success Criteria
 

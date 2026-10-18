@@ -48,7 +48,7 @@ The operator can also build a client directly:
 
 ```python
 from arr_mcp.api.api_client_sonarr import Api as SonarrApi
-from agent_utilities.core.transport_security import resolve_tls_profile
+from agent_connector_sdk.core.transport_security import resolve_tls_profile
 
 sonarr = SonarrApi(
     base_url="http://your-sonarr:8989",
@@ -68,14 +68,5 @@ fails loudly rather than silently.
 
 The package installs two console scripts:
 
-```bash
-# The MCP server (see Deployment for transports)
-arr-mcp --transport streamable-http --host 0.0.0.0 --port 8000
-
-# The Pydantic-AI A2A agent (serves the AG-UI web interface)
-MCP_URL=http://localhost:8000/mcp arr-agent
-```
-
 `arr-agent` connects to the MCP server over the Agent Control Protocol and drives the
-Arr tools on the operator's behalf. See [Deployment](deployment.md#run-the-a2a-agent-server)
 for the agent environment variables and the combined Compose stack.

@@ -1,5 +1,5 @@
 # Arr Mcp
-## CLI or API | MCP | Agent
+## CLI or API | MCP
 
 ![PyPI - Version](https://img.shields.io/pypi/v/arr-mcp)
 ![MCP Server](https://badge.mcpx.dev?type=server 'MCP Server')
@@ -20,10 +20,9 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
 
-*Version: 2.1.0*
+*Version: 2.2.0*
 
 > **Documentation** — Installation, deployment, usage across the API, CLI, MCP, and
-> A2A agent interfaces, and guidance for provisioning the Arr Suite services are
 > maintained in the [official documentation](https://knuckles-team.github.io/arr-mcp/).
 
 ---
@@ -35,7 +34,6 @@
 - [CLI or API](#cli-or-api)
 - [MCP](#mcp)
   - [Dynamic Tool Selection & Visibility](#dynamic-tool-selection--visibility)
-- [Agent](#agent)
 - [Environment Variables](#environment-variables)
 - [Security & Governance](#security--governance)
 - [Contribute](#contribute)
@@ -52,7 +50,6 @@
 
 - **Consolidated Action-Routed MCP Tools:** Minimizes token overhead and eliminates tool bloat in LLM contexts by grouping methods into optimized, togglable tool modules.
 - **Enterprise-Grade Security:** Complete support for Eunomia policies, OIDC token delegation, and granular execution context tracking.
-- **Integrated Graph Agent:** Built-in Pydantic AI agent supporting the Agent Control Protocol (ACP) and standard Web interfaces (AG-UI).
 - **Native Telemetry & Tracing:** Out-of-the-box OpenTelemetry exports and native Langfuse tracing.
 
 ---
@@ -1251,7 +1248,7 @@ When query strings or parameters are provided, an LLM-free **Knowledge Graph res
 <!-- MCP-CONFIG-EXAMPLES:START -->
 
 > **Install the connector-focused `[mcp]` extra.** Examples use `arr-mcp[mcp]` to add
-> FastMCP / FastAPI through `agent-utilities[mcp]`; the required Agent Utilities core
+> FastMCP / FastAPI through `agent-connector-sdk`; the required Agent Connector SDK core
 > still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
 > enables model orchestration.
 
@@ -1296,7 +1293,7 @@ When query strings or parameters are provided, an LLM-free **Knowledge Graph res
 }
 ```
 
-Runtime references require an alias-aware launcher such as GraphOS. Other
+Runtime references require an alias-aware launcher such as Arbora. Other
 launchers must omit those entries and inject the resolved values through their
 own runtime secret boundary.
 
@@ -1421,289 +1418,36 @@ the detailed transport contract.
 
 ## Agent
 
-This repository features a fully integrated Pydantic AI Graph Agent. It communicates over the **Agent Control Protocol (ACP)** and interacts smoothly with the **Agent Web UI (AG-UI)** and Terminal interface.
-
-### Running the Agent CLI
-To start the interactive command-line agent:
-
-```bash
 # Set credentials
 export SONARR_BASE_URL="http://localhost:8989"
 export SONARR_TOKEN="your_value"
 export RADARR_BASE_URL="http://localhost:7878"
 export RADARR_TOKEN="your_value"
 
-# Run the agent server
-arr-agent --provider openai --model-id gpt-4o
-```
-
-### Docker Compose Orchestration
-The following `docker/agent.compose.yml` configures the Agent, Web UI, and Terminal Interface together:
-
-```yaml
-version: '3.8'
-
-services:
-  arr-mcp-mcp:
-    image: example/arr-mcp:mcp
-    container_name: arr-mcp-mcp
-    hostname: arr-mcp-mcp
-    restart: always
-    env_file:
-      - ../.env
-    environment:
-      - PYTHONUNBUFFERED=1
-      - HOST=0.0.0.0
-      - PORT=8000
-      - TRANSPORT=streamable-http
-    ports:
-      - "8000:8000"
-    healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  arr-mcp-agent:
-    image: example/arr-mcp@sha256:<digest>
-    container_name: arr-mcp-agent
-    hostname: arr-mcp-agent
-    restart: always
-    depends_on:
-      - arr-mcp-mcp
-    env_file:
-      - ../.env
-    command: [ "arr-agent" ]
-    environment:
-      - PYTHONUNBUFFERED=1
-      - HOST=0.0.0.0
-      - PORT=9099
-      - MCP_URL=http://arr-mcp-mcp:8000/mcp
-      - PROVIDER=${PROVIDER:-openai}
-      - MODEL_ID=${MODEL_ID:-gpt-4o}
-      - ENABLE_WEB_UI=True
-      - ENABLE_OTEL=True
-    ports:
-      - "9099:9099"
-    healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9099/health')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-```
-
-Detailed graph node architecture explanations, custom skill configurations, and agentic trace guides are available in [docs/index.md#a2a-agent](docs/index.md#a2a-agent).
-
----
-
-## Environment Variables
-
-<!-- ENV-VARS-TABLE:START -->
-
-#### Package environment variables
-
-| Variable | Example | Description |
-|----------|---------|-------------|
-| `HOST` | `127.0.0.1` |  |
-| `PORT` | `8000` |  |
-| `TRANSPORT` | `stdio` | options: stdio, streamable-http, sse |
-| `AUTH_TYPE` | `none` | non-loopback network listeners require configured authentication |
-| `ENABLE_OTEL` | `True` |  |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://localhost:8080/api/public/otel` |  |
-| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` | secret-injected |  |
-| `OTEL_EXPORTER_OTLP_SECRET_KEY` | secret-injected |  |
-| `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` |  |
-| `EUNOMIA_TYPE` | `none` | options: none, embedded, remote |
-| `EUNOMIA_POLICY_FILE` | `mcp_policies.json` |  |
-| `EUNOMIA_REMOTE_URL` | `http://eunomia-server:8000` |  |
-| `SONARR_BASE_URL` | `http://localhost:8989` | Sonarr Client |
-| `SONARR_TOKEN` | secret-injected |  |
-| `SONARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `RADARR_BASE_URL` | `http://localhost:7878` | Radarr Client |
-| `RADARR_TOKEN` | secret-injected |  |
-| `RADARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `LIDARR_BASE_URL` | `http://localhost:8686` | Lidarr Client |
-| `LIDARR_TOKEN` | secret-injected |  |
-| `LIDARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `PROWLARR_BASE_URL` | `http://localhost:9696` | Prowlarr Client |
-| `PROWLARR_TOKEN` | secret-injected |  |
-| `PROWLARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `BAZARR_BASE_URL` | `http://localhost:6767` | Bazarr Client |
-| `BAZARR_API_KEY` | secret-injected |  |
-| `BAZARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `SEERR_BASE_URL` | `http://localhost:5055` | Seerr Client |
-| `SEERR_API_KEY` | secret-injected |  |
-| `SEERR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `CHAPTARR_BASE_URL` | `http://localhost:8006` | Chaptarr Client |
-| `CHAPTARR_TOKEN` | secret-injected |  |
-| `CHAPTARR_TLS_PROFILE` | `<runtime-profile-name>` |  |
-| `SONARRTOOL` | `True` | These names match the authoritative "Toggle Env Var" column in the README MCP tools table (condensed action-routed surface). |
-| `RADARRTOOL` | `True` |  |
-| `LIDARRTOOL` | `True` |  |
-| `PROWLARRTOOL` | `True` |  |
-| `BAZARRTOOL` | `True` |  |
-| `SEERRTOOL` | `True` |  |
-| `CHAPTARRTOOL` | `True` |  |
-| `DEFAULT_AGENT_NAME` | `Arr Mcp` |  |
-
-#### Inherited agent-utilities variables (apply to every connector)
-
-| Variable | Example | Description |
-|----------|---------|-------------|
-| `MCP_TOOL_MODE` | `intent` | Tool surface: `intent` \| `condensed` \| `verbose` \| `both` |
-| `MCP_ENABLED_TOOLS` | — | Comma-separated tool allow-list |
-| `MCP_DISABLED_TOOLS` | — | Comma-separated tool deny-list |
-| `MCP_ENABLED_TAGS` | — | Comma-separated tag allow-list |
-| `MCP_DISABLED_TAGS` | — | Comma-separated tag deny-list |
-| `MCP_CLIENT_AUTH` | — | Outbound MCP child auth: `oidc-client-credentials` \| `basic` \| `none` |
-| `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
-| `OIDC_CLIENT_SECRET_REF` | `secret://identity/oidc-client-secret` | Runtime secret reference for the OIDC service account |
-| `MCP_BASIC_AUTH_USERNAME` | — | HTTP Basic username (`MCP_CLIENT_AUTH=basic`) |
-| `MCP_BASIC_AUTH_PASSWORD_REF` | `secret://identity/mcp-basic-password` | Runtime secret reference for HTTP Basic auth (`MCP_CLIENT_AUTH=basic`) |
-| `DEBUG` | `False` | Verbose logging |
-| `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
-| `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
-| `PROVIDER` | `openai` | LLM provider for the agent |
-| `MODEL_ID` | `gpt-4o` | Model id for the agent |
-| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
-
-_41 package + 16 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
-<!-- ENV-VARS-TABLE:END -->
-
-
-Every variable the server reads, grouped by concern. arr-mcp fronts seven independent
-*arr services — each is wired by setting that service's `_BASE_URL` and
-`_TOKEN`/`_API_KEY`. TLS trust, mTLS, and proxy policy use runtime TLS profiles.
-
-### Connection & Credentials — per service
-Each service accepts a `_BASE_URL` and an auth token (`_TOKEN` for
-Sonarr/Radarr/Lidarr/Prowlarr/Chaptarr; `_API_KEY` for Bazarr/Seerr). Verification is
-mandatory. Select a runtime profile with `<SERVICE>_TLS_PROFILE`, or provide runtime
-CA/mTLS settings through the shared transport-security environment.
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `SONARR_BASE_URL` / `SONARR_TOKEN` / `SONARR_TLS_PROFILE` | Sonarr connection, API token, and optional runtime TLS profile | — |
-| `RADARR_BASE_URL` / `RADARR_TOKEN` / `RADARR_TLS_PROFILE` | Radarr connection, API token, and optional runtime TLS profile | — |
-| `LIDARR_BASE_URL` / `LIDARR_TOKEN` / `LIDARR_TLS_PROFILE` | Lidarr connection, API token, and optional runtime TLS profile | — |
-| `PROWLARR_BASE_URL` / `PROWLARR_TOKEN` / `PROWLARR_TLS_PROFILE` | Prowlarr connection, API token, and optional runtime TLS profile | — |
-| `BAZARR_BASE_URL` / `BAZARR_API_KEY` / `BAZARR_TLS_PROFILE` | Bazarr connection, API key, and optional runtime TLS profile | — |
-| `SEERR_BASE_URL` / `SEERR_API_KEY` / `SEERR_TLS_PROFILE` | Seerr connection, API key, and optional runtime TLS profile | — |
-| `CHAPTARR_BASE_URL` / `CHAPTARR_TOKEN` / `CHAPTARR_TLS_PROFILE` | Chaptarr connection, API token, and optional runtime TLS profile | — |
-
-### MCP server / transport
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `TRANSPORT` | `stdio`, `streamable-http`, or `sse` | `stdio` |
-| `HOST` | Bind host (HTTP transports) | `0.0.0.0` |
-| `PORT` | Bind port (HTTP transports) | `8000` |
-| `MCP_TOOL_MODE` | Tool surface: `condensed`, `verbose`, or `both` | `condensed` |
-| `MCP_ENABLED_TOOLS` / `MCP_DISABLED_TOOLS` | Comma-separated tool allow/deny list | — |
-| `MCP_ENABLED_TAGS` / `MCP_DISABLED_TAGS` | Comma-separated tag allow/deny list | — |
-
-### Tool toggles
-Each action-routed tool can be disabled individually via its toggle env var (set to `false`).
-The full list is in the [Available MCP Tools](#available-mcp-tools) table above
-(e.g. `SONARRTOOL`, `RADARRTOOL`, `PROWLARRTOOL`, `BAZARRTOOL`, `SEERRTOOL`, `CHAPTARRTOOL`,
-`LIDARRTOOL`).
-
-### Telemetry & governance
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `ENABLE_OTEL` | Enable OpenTelemetry export | `True` |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP collector endpoint | — |
-| `OTEL_EXPORTER_OTLP_PUBLIC_KEY` / `OTEL_EXPORTER_OTLP_SECRET_KEY` | OTLP auth keys | — |
-| `OTEL_EXPORTER_OTLP_PROTOCOL` | OTLP protocol (e.g. `http/protobuf`) | — |
-| `EUNOMIA_TYPE` | Authorization mode: `none`, `embedded`, `remote` | `none` |
-| `EUNOMIA_POLICY_FILE` | Embedded policy file | `mcp_policies.json` |
-| `EUNOMIA_REMOTE_URL` | Remote Eunomia server URL | — |
-
-### Agent CLI (full `[agent]` runtime only)
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `MCP_URL` | URL of the MCP server the agent connects to | `http://localhost:8000/mcp` |
-| `PROVIDER` | LLM provider (e.g. `openai`) | `openai` |
-| `MODEL_ID` | Model id (e.g. `gpt-4o`) | `gpt-4o` |
-| `ENABLE_WEB_UI` | Serve the AG-UI web interface | `True` |
-| `DEFAULT_AGENT_NAME` | Custom name for the Graph Agent | `Arr Mcp` |
-| `AUTH_TYPE` | Authentication type for A2A endpoints | — |
-
-See [`.env.example`](.env.example) for a copy-paste starting point.
-
----
-
-## Security & Governance
-
-Built directly upon the enterprise-ready [`agent-utilities`](https://github.com/Knuckles-Team/agent-utilities) core, standard security parameters are fully supported:
-
-### Access Control & Policy Enforcement
-- **Eunomia Policies:** Fine-grained, policy-driven tool authorization. Supports `none`, local `embedded` (`mcp_policies.json`), or centralized `remote` modes.
-- **OIDC Token Delegation:** Compliant with RFC 8693 token exchange for flowing authenticating user credentials from Web UI / ACP → Agent → MCP.
-- **Scoped Credentials:** Execution context runs restricted to the specific caller identity.
-
-### Runtime Security Grid
-| Feature | Feature | Enablement |
-|---------|---------------|------------|
-| **Tool Guard** | Sensitivity inspection with human-in-the-loop validation | Enabled by default |
-| **Prompt Injection Defense** | Input scanning, repetition monitoring, and recursive loop blocks | Enabled by default |
-| **Context Safety Guard** | Stuck-loop detectors and contextual overflow preemptive alerts | Enabled by default |
-
-## Installation
-
-Pick the extra that matches what the operator want to run:
-
-| Extra | Installs | Use when |
-|-------|----------|----------|
-| `arr-mcp[mcp]` | Connector-focused MCP server (`agent-utilities[mcp]` — FastMCP/FastAPI + `epistemic-graph[full]`) | The operator only run the **MCP server** (smallest install / image) |
-| `arr-mcp[agent]` | Agent runtime (`agent-utilities[agent-runtime,logfire]` — model orchestration + `epistemic-graph[full]`) | The operator run the **integrated agent** |
-| `arr-mcp[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
-
-```bash
 # Connector-focused MCP server (includes the shared graph engine)
 uv pip install "arr-mcp[mcp]"
-
-# Agent runtime (adds model orchestration to the shared graph engine)
-uv pip install "arr-mcp[agent]"
 
 # Everything (development)
 uv pip install "arr-mcp[all]"      # or: python -m pip install "arr-mcp[all]"
 ```
 
-### Container images (`:mcp` vs `:agent`)
+### Container images (`:mcp`)
 
-One multi-stage `docker/Dockerfile` builds two right-sized images, selected by `--target`:
+One multi-stage `docker/Dockerfile` builds the MCP-only image (`--target mcp`):
 
 | Image tag | Build target | Contents | Entrypoint |
 |-----------|--------------|----------|------------|
 | `example/arr-mcp:mcp` | `--target mcp` | `arr-mcp[mcp]` — **connector-focused**, includes `epistemic-graph[full]`; no model-orchestration stack | `arr-mcp` |
-| `example/arr-mcp@sha256:<digest>` | `--target agent` (default) | `arr-mcp[agent]` — **agent runtime**, model orchestration + `epistemic-graph[full]` | `arr-agent` |
 
 ```bash
 docker build --target mcp   -t example/arr-mcp:mcp    docker/   # connector-focused MCP server
-docker build --target agent -t example/arr-mcp:agent-local docker/   # agent runtime
 ```
 
-`docker/mcp.compose.yml` runs the connector-focused `:mcp` server; `docker/agent.compose.yml` runs the
 agent (`immutable agent digest`) with a co-located `:mcp` sidecar.
 
 ### Knowledge-graph database (`epistemic-graph`)
 
-Both `[mcp]` and `[agent]` carry the **epistemic-graph** engine through the required
-Agent Utilities core dependency (`epistemic-graph[full]`). The `[mcp]` extra keeps
-the server connector-focused; `[agent]` also enables model orchestration. Local
+Agent Connector SDK core dependency (`epistemic-graph[full]`). The `[mcp]` extra keeps
 deployments can use the bundled engine. For production or shared state, run
 **epistemic-graph as a dedicated database service** and configure the runtime to use it.
 Deployment recipes (single-node + Raft HA), connection configuration, and architecture
@@ -1725,85 +1469,3 @@ arr-mcp
 Or start it as a Streamable-HTTP server on port `8000`:
 ```bash
 arr-mcp --transport streamable-http --port 8000
-```
-
-### 2. Running the Graph Agent Server
-Start the interactive Pydantic AI Graph Agent CLI with OIDC token delegation and Eunomia policies:
-```bash
-arr-agent --provider openai --model-id gpt-4o
-```
-
----
-
-## Repository Owners
-
-<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=example&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
-
-![GitHub followers](https://img.shields.io/github/followers/example)
-![GitHub User's stars](https://img.shields.io/github/stars/example)
-
----
-
-## Documentation
-
-The complete documentation is published as the
-[official documentation site](https://knuckles-team.github.io/arr-mcp/) and is the
-recommended reference for installation, deployment, and day-to-day operation.
-
-| Page | Contents |
-|---|---|
-| [Installation](https://knuckles-team.github.io/arr-mcp/installation/) | pip, source, extras, prebuilt Docker image |
-| [Deployment](https://knuckles-team.github.io/arr-mcp/deployment/) | run the MCP and agent servers, Compose, Caddy + Technitium, env config |
-| [Usage](https://knuckles-team.github.io/arr-mcp/usage/) | the MCP tools, the Python API clients, the CLI |
-| [Backing Platform](https://knuckles-team.github.io/arr-mcp/platform/) | provision the Arr Suite services with Docker |
-| [Overview](https://knuckles-team.github.io/arr-mcp/overview/) | ecosystem role, enterprise readiness, configuration |
-| [Concepts](https://knuckles-team.github.io/arr-mcp/concepts/) | concept registry (`CONCEPT:ARR-*`) |
-
----
-
-## Contribute
-
-Contributions are welcome! Please ensure code quality by running local checks before submitting pull requests:
-- Format code using `ruff format .`
-- Lint code using `ruff check .`
-- Validate type-safety with `mypy .`
-- Ran test suites using `pytest`
-
-
-<!-- BEGIN agent-utilities-deployment (generated; do not edit between markers) -->
-
-## Deploy with `agent-utilities-deployment`
-
-Provision this package with the consolidated **`agent-utilities-deployment`**
-workflow. It selects an installed-package, editable-source, or immutable-container
-path; records only runtime secret and TLS-profile references in `AgentConfig`; and
-runs doctor, registration, policy, observability, and rollback gates. Ask your agent
-to **"deploy `arr-mcp` with agent-utilities-deployment"**.
-
-| Install mode | Command |
-|------|---------|
-| Installed package | `uv tool install "arr-mcp[mcp]"`, then run `arr-mcp` |
-| Editable source | `uv pip install -e ".[agent]"`, then run `arr-mcp` |
-| Immutable container | deploy `registry.example.invalid/arr-mcp@sha256:<digest>` through the operator-selected orchestrator |
-
-The repository embeds no deployment profile, credential value, certificate path, or
-environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
-configured secret provider.
-
-<!-- END agent-utilities-deployment -->
-
-<!-- GOVERNED-CAPABILITY:START -->
-## Governed capability contract
-
-This package ships a compact canonical skill surface with specialist procedures
-kept as referenced workflows. The current MCP tools, skill metadata,
-`connector_manifest.yml`, ontology, mappings, shapes, fixtures, migrations,
-tool-schema fingerprints, and certification metadata form one versioned
-capability contract. Validate them together; do not rely on stale tool names or
-historical per-task skill wrappers.
-
-Runtime endpoints, credentials, certificate trust, tenant identity, retention,
-and observability policy are deployment inputs and are never packaged values.
-See [Configuration, trust, and privacy](docs/configuration.md) before enabling a
-network transport, connector ingestion, GraphOS delegation, or trace export.
-<!-- GOVERNED-CAPABILITY:END -->
