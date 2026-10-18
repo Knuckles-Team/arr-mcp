@@ -471,38 +471,44 @@ def test_sonarr_radarr_lookup_empty():
 
 
 @pytest.mark.asyncio
-async def test_condensed_action_tools_dispatch_via_client():
-    """The organized condensed tools resolve a client via the auth factory and
-    dispatch the requested action through it (CONCEPT:AU-ECO.mcp.tool-mode-standardization)."""
+async def test_operation_tools_dispatch_via_client():
+    """Each per-operation tool resolves its client through the service's auth
+    factory and calls the matching client method."""
     from unittest.mock import MagicMock
 
     from arr_mcp.mcp_server import get_mcp_instance
 
-    mcp, _, _, _ = get_mcp_instance()
+    services = [
+        "bazarr",
+        "chaptarr",
+        "lidarr",
+        "prowlarr",
+        "radarr",
+        "seerr",
+        "sonarr",
+    ]
+    fakes = {}
+    patches = []
+    for svc in services:
+        fake = MagicMock()
+        fake.get_system_status.return_value = {"status": "success"}
+        fake.get_status.return_value = {"status": "success"}
+        fakes[svc] = fake
+        patches.append(patch(f"arr_mcp.mcp_server.get_{svc}_client", return_value=fake))
+    for p in patches:
+        p.start()
+    try:
+        mcp, _, _, _ = get_mcp_instance()
+    finally:
+        for p in patches:
+            p.stop()
 
-    # tool_name -> the auth factory it resolves its client from.
-    action_tools = {
-        "bazarr_action": "arr_mcp.mcp.mcp_bazarr.get_bazarr_client",
-        "chaptarr_action": "arr_mcp.mcp.mcp_chaptarr.get_chaptarr_client",
-        "lidarr_action": "arr_mcp.mcp.mcp_lidarr.get_lidarr_client",
-        "prowlarr_action": "arr_mcp.mcp.mcp_prowlarr.get_prowlarr_client",
-        "radarr_action": "arr_mcp.mcp.mcp_radarr.get_radarr_client",
-        "seerr_action": "arr_mcp.mcp.mcp_seerr.get_seerr_client",
-        "sonarr_action": "arr_mcp.mcp.mcp_sonarr.get_sonarr_client",
-    }
-
-    for tool_name, factory_path in action_tools.items():
-        tool = await mcp.get_tool(tool_name)
-        tool_fn = tool.fn
-
-        fake_client = MagicMock()
-        fake_client.get_status.return_value = {"status": "success"}
-
-        with patch(factory_path, return_value=fake_client) as mock_factory:
-            res = await tool_fn(action="get_status", params_json='{"page": 1}')
-
-        mock_factory.assert_called_once()
-        fake_client.get_status.assert_called_once_with(page=1)
+    for svc in services:
+        method = "get_status" if svc == "seerr" else "get_system_status"
+        tool = await mcp.get_tool(f"{svc}_{method}")
+        assert "action" not in tool.parameters.get("properties", {})
+        res = await tool.fn()
+        getattr(fakes[svc], method).assert_called_once()
         assert res == {"status": "success"}
 
 
