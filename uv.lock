@@ -69,7 +69,7 @@ wheels = [
 
 [[package]]
 name = "arr-mcp"
-version = "2.2.0"
+version = "2.2.1"
 source = { editable = "." }
 dependencies = [
     { name = "agent-connector-sdk", extra = ["mcp"] },
