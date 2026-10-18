@@ -258,8 +258,8 @@ schema_mappings:
 sync:
 - preset: arr-indexers
   server: arr-mcp
-  tool: prowlarr_action
-  action: get_indexer
+  tool: prowlarr_get_indexer
+  action: null
   records_path: ''
   id_field: id
   title_field: name
@@ -267,11 +267,10 @@ sync:
   updated_field: ''
   pagination: null
   doc_type: indexer
-  tool_schema_sha256: 7039914282e843a73b16fd585bbf833e15cb2340c1d9e2410122c4a9a37f543c
+  tool_schema_sha256: fd92a2aa35afd986b386e6d4708d90f80b5900e1590ed4773b7563e625d90dad
   raw:
     server: arr-mcp
-    tool: prowlarr_action
-    action: get_indexer
+    tool: prowlarr_get_indexer
     records_path: ''
     id_field: id
     title_field: name
@@ -280,8 +279,8 @@ sync:
     doc_type: indexer
 - preset: arr-movies
   server: arr-mcp
-  tool: radarr_action
-  action: get_movie
+  tool: radarr_get_movie
+  action: null
   records_path: ''
   id_field: tmdbId
   title_field: title
@@ -289,11 +288,10 @@ sync:
   updated_field: added
   pagination: null
   doc_type: movie
-  tool_schema_sha256: a969fff358225777a5cb940c37c7e3401de4e589172ff2e407aa8f76f51d74f0
+  tool_schema_sha256: 474517e1a4ef0df68c13a07805b2182e3dd871ec224b86e2fc10685b0734f659
   raw:
     server: arr-mcp
-    tool: radarr_action
-    action: get_movie
+    tool: radarr_get_movie
     records_path: ''
     id_field: tmdbId
     title_field: title
@@ -302,8 +300,8 @@ sync:
     doc_type: movie
 - preset: arr-series
   server: arr-mcp
-  tool: sonarr_action
-  action: get_series
+  tool: sonarr_get_series
+  action: null
   records_path: ''
   id_field: tvdbId
   title_field: title
@@ -311,11 +309,10 @@ sync:
   updated_field: added
   pagination: null
   doc_type: series
-  tool_schema_sha256: 718113ff12e6570d698a523cd1c8c268d046120bd601a5af5066218c7664f9d1
+  tool_schema_sha256: f3a1cc18c5227ee4d092770051a9712acc72e574e386d5c6c340f0bdde3554fd
   raw:
     server: arr-mcp
-    tool: sonarr_action
-    action: get_series
+    tool: sonarr_get_series
     records_path: ''
     id_field: tvdbId
     title_field: title

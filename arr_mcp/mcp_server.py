@@ -41,7 +41,7 @@ from arr_mcp.auth import (
     get_sonarr_client,
 )
 
-__version__ = "2.2.1"
+__version__ = "2.3.0"
 
 logger = get_logger(name="ArrMCP")
 logger.setLevel(logging.INFO)
@@ -141,37 +141,37 @@ def get_mcp_instance() -> tuple[Any, Any, Any, list[str]]:
             {
                 "client_cls": SonarrApi,
                 "get_client": get_sonarr_client,
-                "tool_prefix": "sonarr",
+                "prefix": "sonarr",
             },
             {
                 "client_cls": RadarrApi,
                 "get_client": get_radarr_client,
-                "tool_prefix": "radarr",
+                "prefix": "radarr",
             },
             {
                 "client_cls": LidarrApi,
                 "get_client": get_lidarr_client,
-                "tool_prefix": "lidarr",
+                "prefix": "lidarr",
             },
             {
                 "client_cls": ProwlarrApi,
                 "get_client": get_prowlarr_client,
-                "tool_prefix": "prowlarr",
+                "prefix": "prowlarr",
             },
             {
                 "client_cls": BazarrApi,
                 "get_client": get_bazarr_client,
-                "tool_prefix": "bazarr",
+                "prefix": "bazarr",
             },
             {
                 "client_cls": SeerrApi,
                 "get_client": get_seerr_client,
-                "tool_prefix": "seerr",
+                "prefix": "seerr",
             },
             {
                 "client_cls": ChaptarrApi,
                 "get_client": get_chaptarr_client,
-                "tool_prefix": "chaptarr",
+                "prefix": "chaptarr",
             },
         ],
     )
