@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
-import requests
+import httpx
 
 from arr_mcp.api._security import decode_response, request_url, validate_base_url
 
@@ -60,12 +60,10 @@ def test_validate_base_url_rejects_non_origin_configuration(base_url):
 def test_response_decoder_rejects_oversized_streamed_content(
     monkeypatch: pytest.MonkeyPatch,
 ):
-    response = requests.Response()
-    response.status_code = 200
-    response.headers = requests.structures.CaseInsensitiveDict()
+    response = httpx.Response(200)
     monkeypatch.setattr(
         response,
-        "iter_content",
+        "iter_bytes",
         lambda **_kwargs: iter([b"x" * (16 * 1024 * 1024 + 1)]),
     )
 

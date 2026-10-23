@@ -7,12 +7,16 @@ import time
 from typing import Any
 from urllib.parse import SplitResult, urljoin, urlsplit
 
-import requests
+import httpx
+from agent_connector_sdk.auth.static import ApiKeyAuth
+from agent_connector_sdk.http.client import create_http_client
+from agent_connector_sdk.http.options import HttpClientOptions
+from agent_connector_sdk.tls.profile import ResolvedTLSProfile
 
 _MAX_ENDPOINT_CHARS = 4096
 _MAX_RESPONSE_BYTES = 16 * 1024 * 1024
 _MAX_RESPONSE_SECONDS = 60.0
-REQUEST_TIMEOUT = (5.0, 30.0)
+REQUEST_TIMEOUT = httpx.Timeout(30.0, connect=5.0)
 
 
 def _origin(parsed: SplitResult) -> tuple[str, str, int]:
@@ -71,9 +75,36 @@ def request_url(
     return url
 
 
-def decode_response(response: requests.Response) -> Any:
+def build_client(
+    base_url: str, tls_profile: ResolvedTLSProfile, api_key: str | None = None
+) -> httpx.Client:
+    """A governed SDK client for one arr service; the key travels as ``X-Api-Key``."""
+    return create_http_client(
+        HttpClientOptions(
+            base_url=base_url,
+            timeout=REQUEST_TIMEOUT,
+            tls=tls_profile,
+            auth=ApiKeyAuth(api_key, header="X-Api-Key") if api_key else None,
+            allow_plaintext=base_url.lower().startswith("http://"),
+        )
+    )
+
+
+def send_request(
+    client: httpx.Client,
+    method: str,
+    url: str,
+    params: dict[str, Any] | None,
+    data: dict[str, Any] | None,
+) -> httpx.Response:
+    """Send one request and leave the body unread so it can be size-bounded."""
+    request = client.build_request(method, url, params=params, json=data)
+    return client.send(request, stream=True)
+
+
+def decode_response(response: httpx.Response) -> Any:
     """Decode one response while bounding decompressed production content."""
-    if isinstance(response, requests.Response):
+    if isinstance(response, httpx.Response):
         declared = response.headers.get("content-length")
         if declared:
             try:
@@ -84,7 +115,7 @@ def decode_response(response: requests.Response) -> Any:
                 raise RuntimeError("API response size limit exceeded")
         body = bytearray()
         deadline = time.monotonic() + _MAX_RESPONSE_SECONDS
-        for chunk in response.iter_content(chunk_size=64 * 1024):
+        for chunk in response.iter_bytes(chunk_size=64 * 1024):
             if time.monotonic() > deadline:
                 raise RuntimeError("API response time limit exceeded")
             if not chunk:
@@ -110,6 +141,8 @@ def decode_response(response: requests.Response) -> Any:
 
 __all__ = [
     "REQUEST_TIMEOUT",
+    "build_client",
+    "send_request",
     "decode_response",
     "request_url",
     "validate_base_url",

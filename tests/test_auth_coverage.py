@@ -23,14 +23,17 @@ def tls_profile():
     resolver.assert_called_once()
 
 
-def test_requests_session_uses_resolved_tls_profile():
+@pytest.mark.spec("CONN-ARR-MCP-SDK-CENTRALIZATION-R001.2")
+def test_session_uses_resolved_tls_profile():
     profile = MagicMock()
-    client = SonarrApi(
-        base_url="https://sonarr.example.invalid",
-        token="token",
-        tls_profile=profile,
-    )
-    profile.configure_requests_session.assert_called_once_with(client._session)
+    with patch("arr_mcp.api.api_client_sonarr.build_client") as build:
+        client = SonarrApi(
+            base_url="https://sonarr.example.invalid",
+            token="token",
+            tls_profile=profile,
+        )
+    build.assert_called_once_with(client.base_url, profile, "token")
+    assert client._session is build.return_value
 
 
 @pytest.mark.parametrize(
@@ -63,7 +66,9 @@ def test_get_sonarr_client_success(tls_profile):
             client = get_sonarr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://sonarr.test", token="sonarr-token", tls_profile=tls_profile
+                base_url="http://sonarr.test",
+                token="sonarr-token",
+                tls_profile=tls_profile,
             )
 
 
@@ -79,7 +84,9 @@ def test_get_radarr_client_success(tls_profile):
             client = get_radarr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://radarr.test", token="radarr-token", tls_profile=tls_profile
+                base_url="http://radarr.test",
+                token="radarr-token",
+                tls_profile=tls_profile,
             )
 
 
@@ -95,7 +102,9 @@ def test_get_lidarr_client_success(tls_profile):
             client = get_lidarr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://lidarr.test", token="lidarr-token", tls_profile=tls_profile
+                base_url="http://lidarr.test",
+                token="lidarr-token",
+                tls_profile=tls_profile,
             )
 
 
@@ -111,7 +120,9 @@ def test_get_prowlarr_client_success(tls_profile):
             client = get_prowlarr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://prowlarr.test", token="prowlarr-token", tls_profile=tls_profile
+                base_url="http://prowlarr.test",
+                token="prowlarr-token",
+                tls_profile=tls_profile,
             )
 
 
@@ -127,7 +138,9 @@ def test_get_bazarr_client_success(tls_profile):
             client = get_bazarr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://bazarr.test", api_key="bazarr-key", tls_profile=tls_profile
+                base_url="http://bazarr.test",
+                api_key="bazarr-key",
+                tls_profile=tls_profile,
             )
 
 
@@ -143,7 +156,9 @@ def test_get_seerr_client_success(tls_profile):
             client = get_seerr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://seerr.test", api_key="seerr-key", tls_profile=tls_profile
+                base_url="http://seerr.test",
+                api_key="seerr-key",
+                tls_profile=tls_profile,
             )
 
 
@@ -159,5 +174,7 @@ def test_get_chaptarr_client_success(tls_profile):
             client = get_chaptarr_client()
             assert client is not None
             mock_api.assert_called_once_with(
-                base_url="http://chaptarr.test", token="chaptarr-token", tls_profile=tls_profile
+                base_url="http://chaptarr.test",
+                token="chaptarr-token",
+                tls_profile=tls_profile,
             )

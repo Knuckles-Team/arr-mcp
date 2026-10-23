@@ -74,47 +74,47 @@ def test_arr_apis_error_handling():
     from arr_mcp.api.api_client_bazarr import Api
 
     # 1. Error status code >= 400
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         response = MagicMock()
         response.status_code = 400
         response.text = "Bad Request"
-        session.request.return_value = response
+        session.send.return_value = response
         api = Api(base_url="http://test", api_key="test")
         with pytest.raises(RuntimeError, match="API error: HTTP 400"):
             api.get_series()
 
     # 2. Error status code >= 400 with text property raising Exception
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         response = MagicMock()
         response.status_code = 400
         type(response).text = property(
             lambda self: (_ for _ in ()).throw(ValueError("Read error"))
         )
-        session.request.return_value = response
+        session.send.return_value = response
         api = Api(base_url="http://test", api_key="test")
         with pytest.raises(RuntimeError, match="API error: HTTP 400"):
             api.get_series()
 
     # 3. Status code 204
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         response = MagicMock()
         response.status_code = 204
-        session.request.return_value = response
+        session.send.return_value = response
         api = Api(base_url="http://test", api_key="test")
         res = api.get_series()
         assert res == {"status": "success"}
 
     # 4. JSON Deserialization error
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         response = MagicMock()
         response.status_code = 200
         response.json.side_effect = ValueError("Invalid JSON")
         response.text = "Not JSON"
-        session.request.return_value = response
+        session.send.return_value = response
         api = Api(base_url="http://test", api_key="test")
         res = api.get_series()
         assert res == {"status": "success", "text": "Not JSON"}
@@ -357,47 +357,47 @@ def test_all_api_clients_error_handling_and_special_cases():
 
     for mod, method_name, init_kwargs in modules_and_methods:
         # Case 1: Status >= 400 with text reading error
-        with patch("requests.Session") as mock_sess:
+        with patch("httpx.Client") as mock_sess:
             session = mock_sess.return_value
             response = MagicMock()
             response.status_code = 400
             type(response).text = property(
                 lambda self: (_ for _ in ()).throw(ValueError("Read error"))
             )
-            session.request.return_value = response
+            session.send.return_value = response
             api = mod.Api(base_url="http://test", **init_kwargs)
             with pytest.raises(RuntimeError, match="API error: HTTP 400"):
                 getattr(api, method_name)()
 
         # Case 2: Status 204
-        with patch("requests.Session") as mock_sess:
+        with patch("httpx.Client") as mock_sess:
             session = mock_sess.return_value
             response = MagicMock()
             response.status_code = 204
-            session.request.return_value = response
+            session.send.return_value = response
             api = mod.Api(base_url="http://test", **init_kwargs)
             res = getattr(api, method_name)()
             assert res == {"status": "success"}
 
         # Case 3: List response
-        with patch("requests.Session") as mock_sess:
+        with patch("httpx.Client") as mock_sess:
             session = mock_sess.return_value
             response = MagicMock()
             response.status_code = 200
             response.json.return_value = [{"id": 1}]
-            session.request.return_value = response
+            session.send.return_value = response
             api = mod.Api(base_url="http://test", **init_kwargs)
             res = getattr(api, method_name)()
             assert res == {"result": [{"id": 1}]}
 
         # Case 4: Non-JSON Response (JSON decode failure)
-        with patch("requests.Session") as mock_sess:
+        with patch("httpx.Client") as mock_sess:
             session = mock_sess.return_value
             response = MagicMock()
             response.status_code = 200
             response.json.side_effect = ValueError("Invalid JSON")
             response.text = "Plain Text Response"
-            session.request.return_value = response
+            session.send.return_value = response
             api = mod.Api(base_url="http://test", **init_kwargs)
             res = getattr(api, method_name)()
             assert res == {"status": "success", "text": "Plain Text Response"}
@@ -408,12 +408,12 @@ def test_sonarr_radarr_lookup_empty():
     from arr_mcp.api.api_client_sonarr import Api as SonarrApi
 
     # Sonarr lookup empty
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         response = MagicMock()
         response.status_code = 200
         response.json.return_value = []
-        session.request.return_value = response
+        session.send.return_value = response
         api = SonarrApi(base_url="http://test", token="test")
         res = api.add_series(
             term="unknown", root_folder_path="/data", quality_profile_id=1
@@ -421,7 +421,7 @@ def test_sonarr_radarr_lookup_empty():
         assert "error" in res
 
     # Sonarr lookup success and add series
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         resp_lookup = MagicMock()
         resp_lookup.status_code = 200
@@ -431,7 +431,7 @@ def test_sonarr_radarr_lookup_empty():
         resp_add = MagicMock()
         resp_add.status_code = 200
         resp_add.json.return_value = {"id": 456, "title": "Test Title"}
-        session.request.side_effect = [resp_lookup, resp_add]
+        session.send.side_effect = [resp_lookup, resp_add]
         api = SonarrApi(base_url="http://test", token="test")
         res = api.add_series(
             term="test", root_folder_path="/data", quality_profile_id=1
@@ -439,12 +439,12 @@ def test_sonarr_radarr_lookup_empty():
         assert res == {"id": 456, "title": "Test Title"}
 
     # Radarr lookup empty
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         response = MagicMock()
         response.status_code = 200
         response.json.return_value = []
-        session.request.return_value = response
+        session.send.return_value = response
         radarr_api = RadarrApi(base_url="http://test", token="test")
         res = radarr_api.add_movie(
             term="unknown", root_folder_path="/data", quality_profile_id=1
@@ -452,7 +452,7 @@ def test_sonarr_radarr_lookup_empty():
         assert "error" in res
 
     # Radarr lookup success and add movie
-    with patch("requests.Session") as mock_sess:
+    with patch("httpx.Client") as mock_sess:
         session = mock_sess.return_value
         resp_lookup = MagicMock()
         resp_lookup.status_code = 200
@@ -462,7 +462,7 @@ def test_sonarr_radarr_lookup_empty():
         resp_add = MagicMock()
         resp_add.status_code = 200
         resp_add.json.return_value = {"id": 101, "title": "Test Movie"}
-        session.request.side_effect = [resp_lookup, resp_add]
+        session.send.side_effect = [resp_lookup, resp_add]
         radarr_api = RadarrApi(base_url="http://test", token="test")
         res = radarr_api.add_movie(
             term="test", root_folder_path="/data", quality_profile_id=1
