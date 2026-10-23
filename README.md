@@ -20,7 +20,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
 
-*Version: 2.3.2*
+*Version: 2.3.3*
 
 > **Documentation** — Installation, deployment, usage across the API, CLI, MCP, and
 > maintained in the [official documentation](https://knuckles-team.github.io/arr-mcp/).
