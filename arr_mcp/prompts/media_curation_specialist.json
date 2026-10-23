@@ -4,8 +4,6 @@
   "schema_version": "1.0",
   "prompt_version": "0.1.0",
   "source": "arr-mcp",
-  "extends": "agent-connector-sdk:base",
-  "compose": "append",
   "description": "Arr media-curation specialist: manage the Radarr/Sonarr/Prowlarr library and map its state into the knowledge graph via the arr-mcp MCP server.",
   "metadata": {
     "topic": "Arr media automation",

@@ -1,14 +1,11 @@
 {
   "api_version": "arbora.io/v1",
   "artifacts": {
-    "arr_mcp/connectors/mcp_source_presets.json": "ccc173fce568106e6e3918acebcbb761ebaf8e4561a4c818cbed54b2a16f71bd",
-    "arr_mcp/connectors/tool_schema_fingerprints.json": "4d97f9bd6388960b1875c6ded1d807378e15d2b751596e75b11bf94f95663868",
     "arr_mcp/ontology/arr.ttl": "61474cd8c885409f3f9c85fea0e562942d13721f400da880c0f61b617c6d031f",
     "arr_mcp/ontology/fixtures/records.json": "26f0df2ba7800fe4aa352382d2417b216217c8ae85648c7e35477cfed0c85af9",
     "arr_mcp/ontology/mappings/source.yaml": "b9c852315cff2b64843cb21f144f83525c2fceeb4ee1d13ad4978df404bc6189",
     "arr_mcp/ontology/migrations/manifest.json": "a732d59657716a3b32a6d417d58d2662008b0e2915c183d457cc4427604fa1b2",
-    "arr_mcp/ontology/shapes/connector.shacl.ttl": "56f237a737b400e2a882d2edcc85dc39ab6b0e41f4ab7335b432993902e195bd",
-    "connector_manifest.yml": "db44d8f97988b56d291f1e3eb723aea01aac66718624ea7dc321ccee12f2a0fc"
+    "arr_mcp/ontology/shapes/connector.shacl.ttl": "56f237a737b400e2a882d2edcc85dc39ab6b0e41f4ab7335b432993902e195bd"
   },
   "checks": {
     "declared_tool_schema": "passed",
