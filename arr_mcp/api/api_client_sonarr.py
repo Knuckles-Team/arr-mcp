@@ -6,14 +6,14 @@ This module provides a class to interact with the Sonarr API for managing TV sho
 
 from typing import Any
 
-import requests
 from agent_connector_sdk.tls.profile import ResolvedTLSProfile
 from agent_connector_sdk.tls.resolve import resolve_tls_profile
 
 from arr_mcp.api._security import (
-    REQUEST_TIMEOUT,
+    build_client,
     decode_response,
     request_url,
+    send_request,
     validate_base_url,
 )
 
@@ -42,12 +42,8 @@ class Api:
         """
         self.base_url, self._origin = validate_base_url(base_url)
         self.token = token
-        self._session = requests.Session()
         self._tls_profile = tls_profile or resolve_tls_profile("sonarr")
-        self._tls_profile.configure_requests_session(self._session)
-
-        if token:
-            self._session.headers.update({"X-Api-Key": token})
+        self._session = build_client(self.base_url, self._tls_profile, token)
 
     def request(
         self,
@@ -72,15 +68,7 @@ class Api:
             Exception: If the API returns a status code >= 400.
         """
         url = request_url(self.base_url, self._origin, endpoint)
-        response = self._session.request(
-            method=method,
-            url=url,
-            params=params,
-            json=data,
-            timeout=REQUEST_TIMEOUT,
-            allow_redirects=False,
-            stream=True,
-        )
+        response = send_request(self._session, method, url, params, data)
         try:
             if response.status_code >= 400:
                 raise RuntimeError(f"API error: HTTP {response.status_code}")

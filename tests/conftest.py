@@ -49,8 +49,8 @@ class DictListMock:
 
 @pytest.fixture
 def mock_session():
-    """Fixture to patch requests.Session for REST client isolation."""
-    with patch("requests.Session") as mock_s:
+    """Fixture to patch httpx.Client for REST client isolation."""
+    with patch("httpx.Client") as mock_s:
         session = mock_s.return_value
         response = MagicMock()
         response.status_code = 200
@@ -61,7 +61,7 @@ def mock_session():
         session.put.return_value = response
         session.delete.return_value = response
         session.patch.return_value = response
-        session.request.return_value = response
+        session.send.return_value = response
         yield session
 
 
@@ -72,3 +72,10 @@ def mock_env():
     yield os.environ
     os.environ.clear()
     os.environ.update(original_env)
+
+
+def pytest_configure(config):
+    """Register the spec marker that binds a test to a requirement row."""
+    config.addinivalue_line(
+        "markers", "spec(id): Binds a test to a requirement row of a spec."
+    )

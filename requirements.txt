@@ -1,4 +1,2 @@
 tree-sitter>=0.23.2
-requests>=2.8.1
-urllib3>=2.2.2
 pydantic>=2.0.0

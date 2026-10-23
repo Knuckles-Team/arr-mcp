@@ -97,7 +97,9 @@ class Generator:
                 if func_name.startswith("_") or func_name in _RESERVED_METHOD_NAMES:
                     func_name = f"operation_{func_name.lstrip('_')}"
                 if func_name in method_names:
-                    raise ValueError("OpenAPI operation names collide after normalization")
+                    raise ValueError(
+                        "OpenAPI operation names collide after normalization"
+                    )
                 method_names.add(func_name)
 
                 description = (
@@ -144,9 +146,7 @@ class Generator:
                     schema = param.get("schema", {})
                     if not isinstance(schema, dict):
                         raise ValueError("OpenAPI parameter schema must be an object")
-                    p_type = TYPE_MAPPING.get(
-                        schema.get("type", "string"), "Any"
-                    )
+                    p_type = TYPE_MAPPING.get(schema.get("type", "string"), "Any")
                     p_required = param.get("required", False)
                     p_in = param.get("in", "query")
                     if not isinstance(p_required, bool) or p_in not in {
@@ -175,7 +175,9 @@ class Generator:
                         raise ValueError("OpenAPI request content must be an object")
                     if "application/json" in content:
                         if "data" in parameter_names:
-                            raise ValueError("OpenAPI body collides with a data parameter")
+                            raise ValueError(
+                                "OpenAPI body collides with a data parameter"
+                            )
                         params.append(
                             {
                                 "name": "data",
@@ -206,12 +208,11 @@ class Generator:
             "#!/usr/bin/env python",
             "# coding: utf-8",
             "",
-            "import requests",
             "from typing import Dict, List, Optional, Any",
             "from agent_connector_sdk.tls.profile import ResolvedTLSProfile",
             "from agent_connector_sdk.tls.resolve import resolve_tls_profile",
             "from arr_mcp.api._security import (",
-            "    REQUEST_TIMEOUT, decode_response, request_url, validate_base_url,",
+            "    build_client, decode_response, request_url, send_request, validate_base_url,",
             ")",
             "",
             "class Api:",
@@ -223,14 +224,8 @@ class Generator:
             "    ):",
             "        self.base_url, self._origin = validate_base_url(base_url)",
             "        self.token = token",
-            "        self._session = requests.Session()",
             f'        self._tls_profile = tls_profile or resolve_tls_profile("{self.service_name}")',
-            "        self._tls_profile.configure_requests_session(self._session)",
-            "",
-            "        if token:",
-            "            # Some arr apps accept key in header X-Api-Key",
-            "            self._session.headers.update({'X-Api-Key': token})",
-            "            # Also support query param in requests if needed, but header is cleaner",
+            "        self._session = build_client(self.base_url, self._tls_profile, token)",
             "",
             "    def request(",
             "        self,",
@@ -240,10 +235,7 @@ class Generator:
             "        data: Dict | None = None,",
             "    ) -> Any:",
             "        url = request_url(self.base_url, self._origin, endpoint)",
-            "        response = self._session.request(",
-            "            method=method, url=url, params=params, json=data,",
-            "            timeout=REQUEST_TIMEOUT, allow_redirects=False, stream=True,",
-            "        )",
+            "        response = send_request(self._session, method, url, params, data)",
             "        try:",
             "            if response.status_code >= 400:",
             "                raise RuntimeError(f'API error: HTTP {response.status_code}')",
@@ -336,7 +328,9 @@ class Generator:
 
             for p in sorted_params:
                 default_val = "..." if p["required"] else "None"
-                field_desc = f"Field(default={default_val}, description={p['orig_name']!r})"
+                field_desc = (
+                    f"Field(default={default_val}, description={p['orig_name']!r})"
+                )
                 sig_lines.append(f"    {p['name']}: {p['type']} = {field_desc},")
 
             sig_lines.append(
