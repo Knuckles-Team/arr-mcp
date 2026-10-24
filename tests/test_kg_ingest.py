@@ -16,8 +16,7 @@ import pytest
 from agent_connector_sdk.ingest import IngestError, KnowledgeIngest
 
 from arr_mcp.kg_ingest import (
-    ingest_documents,
-    ingest_entities,
+    STREAM,
     ingest_indexers,
     ingest_movies,
     ingest_series,
@@ -51,7 +50,7 @@ def ingest() -> tuple[KnowledgeIngest, _FakeTransport]:
 @pytest.mark.asyncio
 async def test_ingest_entities_writes_nodes_and_edges(ingest):
     service, transport = ingest
-    res = await ingest_entities(
+    res = await STREAM.entities(
         [
             {"id": "a", "node_type": "Movie", "title": "p"},
             {"id": "b", "node_type": "QualityProfile"},
@@ -162,7 +161,7 @@ async def test_ingest_indexers_maps_indexer(ingest):
 @pytest.mark.asyncio
 async def test_ingest_documents_writes_document_nodes(ingest):
     service, transport = ingest
-    res = await ingest_documents(
+    res = await STREAM.documents(
         [{"id": "arr:Document:x", "text": "hello", "title": "X"}],
         ingest=service,
     )
@@ -174,7 +173,7 @@ async def test_ingest_documents_writes_document_nodes(ingest):
 async def test_missing_node_type_is_rejected(ingest):
     service, _transport = ingest
     with pytest.raises(IngestError, match="node_type"):
-        await ingest_entities(
+        await STREAM.entities(
             [{"id": "retired", "type": "RetiredAlias"}],
             ingest=service,
         )
@@ -184,4 +183,4 @@ async def test_missing_node_type_is_rejected(ingest):
 async def test_empty_entities_is_rejected(ingest):
     service, _transport = ingest
     with pytest.raises(IngestError, match="at least one entity"):
-        await ingest_entities([], ingest=service)
+        await STREAM.entities([], ingest=service)

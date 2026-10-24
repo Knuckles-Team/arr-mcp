@@ -7,9 +7,6 @@ Served live as ``connector://resources``. Regenerate by editing the declarations
 from __future__ import annotations
 
 from agent_connector_sdk.ingest.live_declaration import source_meta
-from agent_connector_sdk.ingest.sources import IngestSourceDeclaration, IngestSourceSpec
-
-CONNECTOR = "arr-mcp"
 
 SOURCES = (
     source_meta(
@@ -59,185 +56,65 @@ SOURCES = (
     ),
 )
 
+SCHEMA_VERSION = 2
+
+FIELD_SETS = {
+    "fields_1": {
+        "enabled": "xsd:boolean",
+        "hasFile": "xsd:boolean",
+        "imdbId": "xsd:string",
+        "mediaStatus": "xsd:string",
+        "monitored": "xsd:boolean",
+        "overview": "xsd:string",
+        "protocol": "xsd:string",
+        "requestStatus": "xsd:string",
+        "sizeOnDisk": "xsd:integer",
+        "title": "xsd:string",
+        "tmdbId": "xsd:string",
+        "tvdbId": "xsd:string",
+        "year": "xsd:integer",
+    },
+}
+
 SCHEMA_MAPPINGS = {
     "Album": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "Artist": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "Book": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "Episode": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "Indexer": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "MediaRequest": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "Movie": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "QualityProfile": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "RootFolder": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
     "Series": {
-        "fields": {
-            "enabled": "xsd:boolean",
-            "hasFile": "xsd:boolean",
-            "imdbId": "xsd:string",
-            "mediaStatus": "xsd:string",
-            "monitored": "xsd:boolean",
-            "overview": "xsd:string",
-            "protocol": "xsd:string",
-            "requestStatus": "xsd:string",
-            "sizeOnDisk": "xsd:integer",
-            "title": "xsd:string",
-            "tmdbId": "xsd:string",
-            "tvdbId": "xsd:string",
-            "year": "xsd:integer",
-        },
+        "field_sets": ["fields_1"],
         "ontology_class": None,
     },
 }
@@ -294,22 +171,3 @@ RESOURCES = (
         "name": "Series",
     },
 )
-
-
-def declaration() -> IngestSourceDeclaration:
-    """The declaration the server assembles from this module."""
-    specs = []
-    for item in SOURCES:
-        for entry in item["connector_sources"]:
-            body = {k: v for k, v in entry.items() if k not in ("tool", "mapping")}
-            specs.append(
-                IngestSourceSpec.model_validate({**body, "tools": (entry["tool"],)})
-            )
-    return IngestSourceDeclaration.model_validate(
-        {
-            "connector": CONNECTOR,
-            "sources": specs,
-            "schema_mappings": SCHEMA_MAPPINGS,
-            "resources": RESOURCES,
-        }
-    )

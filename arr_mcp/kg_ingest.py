@@ -11,83 +11,11 @@ from __future__ import annotations
 from typing import Any
 
 from agent_connector_sdk.ingest import (
-    ChangeSet,
-    Document,
-    Entity,
-    IngestBinding,
-    IngestError,
     KnowledgeIngest,
-    Relationship,
-    current_ingest,
+    SourceStream,
 )
 
-_BINDING = IngestBinding(connector="arr-mcp", stream="arr")
-
-
-def _to_entity(record: dict[str, Any]) -> Entity:
-    return Entity(
-        id=record.get("id"),
-        node_type=record.get("node_type"),
-        properties={k: v for k, v in record.items() if k not in ("id", "node_type")},
-    )
-
-
-def _to_relationship(record: dict[str, Any]) -> Relationship:
-    props = {
-        k: v for k, v in record.items() if k not in ("source", "target", "relationship")
-    }
-    return Relationship(
-        source=record["source"],
-        target=record["target"],
-        relationship=record["relationship"],
-        properties=props or None,
-    )
-
-
-def _to_document(record: dict[str, Any]) -> Document:
-    return Document(
-        id=record.get("id"),
-        text=record.get("text"),
-        title=record.get("title"),
-        source_uri=record.get("source_uri"),
-        properties={
-            k: v
-            for k, v in record.items()
-            if k not in ("id", "text", "title", "source_uri")
-        },
-    )
-
-
-async def ingest_entities(
-    entities: list[dict[str, Any]],
-    relationships: list[dict[str, Any]] | None = None,
-    *,
-    ingest: KnowledgeIngest | None = None,
-) -> dict[str, int]:
-    """Write canonical typed nodes and relationships through agent-connector-sdk."""
-    if not entities:
-        raise IngestError("ingest_entities needs at least one entity")
-    change_set = ChangeSet(
-        entities=tuple(_to_entity(e) for e in entities),
-        relationships=tuple(_to_relationship(r) for r in relationships or ()),
-    )
-    service = ingest or current_ingest()
-    receipt = await service.submit(_BINDING, change_set)
-    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
-
-
-async def ingest_documents(
-    documents: list[dict[str, Any]],
-    *,
-    ingest: KnowledgeIngest | None = None,
-) -> dict[str, int]:
-    """Write searchable documents through the authoritative knowledge-ingest path."""
-    if not documents:
-        raise IngestError("ingest_documents needs at least one document")
-    change_set = ChangeSet(documents=tuple(_to_document(d) for d in documents))
-    service = ingest or current_ingest()
-    receipt = await service.submit(_BINDING, change_set)
-    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
+STREAM = SourceStream.for_package(__package__.split(".")[0], "arr")
 
 
 def _ext_id(record: dict[str, Any], *keys: str) -> str | None:
@@ -149,9 +77,11 @@ async def ingest_movies(
                     else None,
                 }
             )
-    res = await ingest_entities(entities, relationships, ingest=ingest)
+    res = await STREAM.entities(entities, relationships, ingest=ingest)
     doc_res = (
-        await ingest_documents(docs, ingest=ingest) if docs else {"nodes": 0, "edges": 0}
+        await STREAM.documents(docs, ingest=ingest)
+        if docs
+        else {"nodes": 0, "edges": 0}
     )
     return _merge(res, doc_res)
 
@@ -203,9 +133,11 @@ async def ingest_series(
                     else None,
                 }
             )
-    res = await ingest_entities(entities, relationships, ingest=ingest)
+    res = await STREAM.entities(entities, relationships, ingest=ingest)
     doc_res = (
-        await ingest_documents(docs, ingest=ingest) if docs else {"nodes": 0, "edges": 0}
+        await STREAM.documents(docs, ingest=ingest)
+        if docs
+        else {"nodes": 0, "edges": 0}
     )
     return _merge(res, doc_res)
 
@@ -233,7 +165,7 @@ async def ingest_indexers(
                 "externalToolId": str(iid),
             }
         )
-    return await ingest_entities(entities, ingest=ingest)
+    return await STREAM.entities(entities, ingest=ingest)
 
 
 def _merge(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:

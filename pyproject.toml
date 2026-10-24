@@ -4,40 +4,32 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arr-mcp"
-version = "2.3.4"
+version = "2.3.5"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.12, <3.15"
-dependencies = [ "agent-connector-sdk[mcp]>=0.4.1,<1.0.0", "tree-sitter>=0.26.0", "pydantic>=2.14.1",]
+dependencies = [ "agent-connector-sdk[mcp]>=0.5.4,<0.6.0", "tree-sitter>=0.26.0", "pydantic>=2.14.1",]
 [[project.authors]]
-name = "Genius"
-email = "genius@example.com"
+name = "Repository Maintainers"
+email = "maintainers@knuckles.team"
 
 [project.license]
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-connector-sdk[mcp]>=0.4.1,<1.0.0",]
-all = [ "agent-connector-sdk[mcp]>=0.4.1,<1.0.0",]
 test = [
     "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0",]
 
 [project.scripts]
-arr-mcp = "arr_mcp.mcp_server:mcp_server"
-
-[project.entry-points."agent_connector_sdk.skill_providers"]
-arr-mcp = "arr_mcp.skills"
-
-[project.entry-points."agent_connector_sdk.ontology_providers"]
-arr-mcp = "arr_mcp.ontology"
+arr-mcp = "agent_connector_sdk.cli:serve"
 
 [project.entry-points."agent_connector_sdk.prompt_providers"]
 arr-mcp = "arr_mcp.prompts"
 
 # The one declared connector identity: the fleet name (SDK-CONNECTOR-CONTROL-R071).
 [project.entry-points."agent_connector_sdk.connector"]
-arr-mcp = "arr_mcp"
+arr-mcp = "arr_mcp:connector"
 
 [tool.uv.workspace]
 members = ["."]
@@ -52,6 +44,7 @@ override-dependencies = [
 
 
 [tool.ruff]
+extend-exclude = ["tests", "scripts"]
 line-length = 88
 target-version = "py312"
 
@@ -80,3 +73,10 @@ exempt = ["specs/*", "specs/**/*"]
 
 [tool.vulture]
 ignore_names = ["connector", "stream"]
+
+[tool.pipelines.container]
+debug_apt = ["default-jre", "ripgrep", "tree", "fd-find", "curl", "nano", "build-essential", "cmake", "libssl-dev", "libcurl4-openssl-dev", "pkg-config", "cargo", "rustc"]
+compose_env = ["AUTH_TYPE=${AUTH_TYPE:?set-AUTH_TYPE-to-a-configured-auth-provider}"]
+
+[tool.pipelines.codespell]
+exclude = [".specify"]

@@ -5,10 +5,8 @@ CONCEPT:AU-ECO.mcp.fastmcp-middleware — MCP & Universal Skills
 CONCEPT:AU-ORCH.adapter.kg-graph-materialization — Action Execution Pipeline
 """
 
-import asyncio
 import inspect
 from typing import Any
-from unittest.mock import patch
 
 from arr_mcp.api.api_client_bazarr import Api as BazarrApi
 from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
@@ -80,72 +78,3 @@ def test_apis_brute_force(mock_session):
                 method(*pos_args, **kwargs)
             except Exception as e:
                 print(f"Operation failed: {type(e).__name__}")
-
-
-def test_mcp_server_coverage(mock_session):
-    _ = mock_session
-    from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
-
-    from arr_mcp.mcp_server import get_mcp_instance
-
-    async def mock_on_request(self, context, call_next):
-        return await call_next(context)
-
-    with patch.object(RateLimitingMiddleware, "on_request", mock_on_request):
-        # Enable all tool categories via env
-        env = {
-            "SONARR_BASE_URL": "http://test.com",
-            "SONARR_API_KEY": "mock",
-            "RADARR_BASE_URL": "http://test.com",
-            "RADARR_API_KEY": "mock",
-            "LIDARR_BASE_URL": "http://test.com",
-            "LIDARR_API_KEY": "mock",
-            "PROWLARR_BASE_URL": "http://test.com",
-            "PROWLARR_API_KEY": "mock",
-            "BAZARR_BASE_URL": "http://test.com",
-            "BAZARR_API_KEY": "mock",
-            "SEERR_BASE_URL": "http://test.com",
-            "SEERR_API_KEY": "mock",
-            "CHAPTARR_BASE_URL": "http://test.com",
-            "CHAPTARR_API_KEY": "mock",
-        }
-        with patch.dict("os.environ", env):
-            mcp_data = get_mcp_instance()
-            mcp = mcp_data[0] if isinstance(mcp_data, tuple) else mcp_data
-
-            async def run_tools():
-                tool_objs = (
-                    await mcp.list_tools()
-                    if inspect.iscoroutinefunction(mcp.list_tools)
-                    else mcp.list_tools()
-                )
-
-                # Sample some tools since there are HUNDREDS
-                # But we want 80% coverage, so maybe we SHOULD call them all?
-                # Let's try calling all of them, but with a timeout or just fast mocks
-                for tool in tool_objs:
-                    tool_name = tool.name
-                    print(f"Testing MCP tool: {tool_name}")
-                    try:
-                        target_params: dict[str, Any] = {}
-                        if hasattr(tool, "parameters") and hasattr(
-                            tool.parameters, "properties"
-                        ):
-                            for p in tool.parameters.properties:
-                                # Guess value based on name
-                                if "id" in p.lower():
-                                    target_params[p] = 123
-                                elif "url" in p.lower():
-                                    target_params[p] = "http://test.com"
-                                elif "enabled" in p.lower():
-                                    target_params[p] = True
-                                else:
-                                    target_params[p] = "test"
-
-                        await mcp.call_tool(tool_name, target_params)
-                    except Exception as e:
-                        print(f"Operation failed: {type(e).__name__}")
-
-            loop = asyncio.new_event_loop()
-            loop.run_until_complete(run_tools())
-            loop.close()
