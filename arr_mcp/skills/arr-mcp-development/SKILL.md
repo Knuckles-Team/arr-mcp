@@ -29,10 +29,9 @@ deployment identity remain owned by the SDK, Arbora, and the platform.
 - `arr_mcp/auth.py` constructs clients from the service-specific `*_BASE_URL`,
   token or API-key, and TLS-profile settings. Do not put credentials in source,
   fixtures, documentation, or skill content.
-- `arr_mcp/connector_sources.py` declares the live source presets and mappings;
-  `arr_mcp/connectors/` carries packaged connector metadata and fingerprints.
-- `arr_mcp/ontology/` contains `arr.ttl`, source mappings, shapes, fixtures, and
-  migration metadata for the Arr resource model.
+- `arr_mcp/connector_sources.py` declares the live source presets and mappings.
+- `arr_mcp/ontology/` contains `arr.ttl`, source mappings, fixtures, and migration
+  metadata for the Arr resource model.
 - `arr_mcp/skills/` contains the packaged operations, movie-library,
   series-library, indexer-management, and this development skill.
 - `arr_mcp/prompts/` contains the packaged media-curation prompt. `docs/` is the
