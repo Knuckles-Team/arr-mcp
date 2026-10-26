@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arr-mcp"
-version = "2.3.5"
+version = "2.3.6"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
@@ -76,7 +76,15 @@ ignore_names = ["connector", "stream"]
 
 [tool.pipelines.container]
 debug_apt = ["default-jre", "ripgrep", "tree", "fd-find", "curl", "nano", "build-essential", "cmake", "libssl-dev", "libcurl4-openssl-dev", "pkg-config", "cargo", "rustc"]
+image_var = "ARR_MCP_MCP_IMAGE"
+restart = "always"
+tmpfs_size = "64m"
+compose_host = {env = "ARR_MCP_MCP_BIND_ADDRESS", default = "127.0.0.1"}
+publish_port = {env = "ARR_MCP_MCP_PORT", default = 8000}
+container_name = "arr-mcp-mcp"
+hostname = "arr-mcp-mcp"
 compose_env = ["AUTH_TYPE=${AUTH_TYPE:?set-AUTH_TYPE-to-a-configured-auth-provider}"]
+limits = {mcp = {memory_limit_env = "MCP_CONTAINER_MEMORY_LIMIT", memory_limit = "2g", cpu_limit_env = "MCP_CONTAINER_CPU_LIMIT", cpu_limit = "1.0"}}
 
 [tool.pipelines.codespell]
 exclude = [".specify"]
