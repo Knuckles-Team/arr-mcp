@@ -28,7 +28,9 @@ class _FakeTransport:
         self.requests: list[Any] = []
 
     async def source_status(self, connector: str, stream: str) -> Any:
-        return SimpleNamespace(accepted_checkpoint=None)
+        return SimpleNamespace(
+            connector=connector, stream=stream, accepted_checkpoint=None
+        )
 
     async def submit(self, request: Any) -> Any:
         self.requests.append(request)
@@ -66,9 +68,7 @@ async def test_ingest_entities_writes_nodes_and_edges(ingest):
     assert a_record.payload["title"] == "p"
     assert request.relationships[0].source.record_id == "a"
     assert request.relationships[0].target.record_id == "b"
-    assert request.relationships[0].relation_reference.endswith(
-        "/hasQualityProfile"
-    )
+    assert request.relationships[0].relation_reference.endswith("/hasQualityProfile")
 
 
 @pytest.mark.asyncio
@@ -99,9 +99,7 @@ async def test_ingest_movies_maps_movie_quality_and_document(ingest):
     assert mv.payload["title"] == "Inception"
     assert mv.payload["tmdbId"] == "27205"
     assert mv.payload["externalToolId"] == "27205"
-    assert any(
-        r.record_id == "arr:QualityProfile:1" for r in entity_request.records
-    )
+    assert any(r.record_id == "arr:QualityProfile:1" for r in entity_request.records)
     assert entity_request.relationships[0].source.record_id == "arr:Movie:27205"
     assert entity_request.relationships[0].target.record_id == "arr:QualityProfile:1"
     doc = doc_request.records[0]

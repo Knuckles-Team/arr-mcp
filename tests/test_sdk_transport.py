@@ -89,5 +89,5 @@ def test_request_shapes_are_unchanged() -> None:
 def test_dependencies_come_from_the_sdk() -> None:
     text = (ROOT / "pyproject.toml").read_text()
     assert not re.search(r'"(requests|urllib3)\s*[>=<~!]', text)
-    floors = re.findall(r"agent-connector-sdk\[mcp\]>=(\d+)\.(\d+)\.(\d+)", text)
+    floors = re.findall(r"scion-sdk\[mcp\]>=(\d+)\.(\d+)\.(\d+)", text)
     assert floors and all(tuple(map(int, f)) >= (0, 3, 11) for f in floors)
