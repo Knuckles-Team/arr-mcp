@@ -6,8 +6,8 @@ This module provides a class to interact with the Bazarr API for managing subtit
 
 from typing import Any
 
-from agent_connector_sdk.tls.profile import ResolvedTLSProfile
-from agent_connector_sdk.tls.resolve import resolve_tls_profile
+from scion_sdk.tls.profile import ResolvedTLSProfile
+from scion_sdk.tls.resolve import resolve_tls_profile
 
 from arr_mcp.api._security import (
     build_client,

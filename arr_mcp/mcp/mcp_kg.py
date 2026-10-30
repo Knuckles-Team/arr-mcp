@@ -8,9 +8,9 @@ the caller. Auto-discovered by ``register_tool_surface`` (gated by ``KGTOOL``, d
 
 from typing import Any
 
-from agent_connector_sdk.mcp.concurrency import run_blocking
 from fastmcp import FastMCP
 from pydantic import Field
+from scion_sdk.mcp.concurrency import run_blocking
 
 from arr_mcp.auth import (
     get_prowlarr_client,

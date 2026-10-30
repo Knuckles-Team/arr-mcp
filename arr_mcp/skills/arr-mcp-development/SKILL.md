@@ -38,14 +38,14 @@ deployment identity remain owned by the SDK, Arbora, and the platform.
   MkDocs source, and `tests/` contains client, security, ingestion, and startup
   contract checks.
 - The only declared console entry point is `arr-mcp`, provided by
-  `agent_connector_sdk.cli:serve`; `arr_mcp/__main__.py` delegates to the SDK
+  `scion_sdk.cli:serve`; `arr_mcp/__main__.py` delegates to the SDK
   runner for local invocation.
 
 ## Route and inspect before editing
 
 1. Read `AGENTS.md` and locate the owning row with `git grep -n "<term>" --
    specs` before changing behavior.
-2. Reuse `agent-connector-sdk` transport, TLS, configuration, and Connector
+2. Reuse `scion-sdk` transport, TLS, configuration, and Connector
    registration helpers. Do not add an alternate MCP server or admission path.
 3. Keep service-specific API details in the matching client and MCP module. Keep
    shared auth and TLS behavior in `arr_mcp/auth.py` and the SDK helpers.

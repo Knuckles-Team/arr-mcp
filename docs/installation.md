@@ -22,7 +22,7 @@ The base install is intentionally minimal. Install the extra for what the operat
 
 | Extra | Install | Pulls in |
 |---|---|---|
-| `mcp` | `pip install "arr-mcp[mcp]"` | FastMCP MCP-server runtime (`agent-connector-sdk`) |
+| `mcp` | `pip install "arr-mcp[mcp]"` | FastMCP MCP-server runtime (`scion-sdk`) |
 | `all` | `pip install "arr-mcp[all]"` | Everything above |
 | `test` | `pip install "arr-mcp[test]"` | The pytest suite (`pytest`, `pytest-xdist`, `pytest-asyncio`) |
 

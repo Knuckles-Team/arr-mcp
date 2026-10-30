@@ -42,7 +42,7 @@ xychart-beta
 `██████████████░░░░░░` 74/100
 
 > [!NOTE]
-> Detected ecosystem marker: agent-connector-sdk → Agent-Utilities Ecosystem
+> Detected ecosystem marker: scion-sdk → Agent-Utilities Ecosystem
 
 | Criterion | Points | Evidence | Reasoning |
 |-----------|--------|----------|-----------|
@@ -315,7 +315,7 @@ xychart-beta
 | 12 | 🔴 High | Environment Variables | Only 15% of env vars documented in README.md | High | Medium |
 | 13 | 🔴 High | Environment Variables | Undocumented env vars: ALLOWED_CLIENT_REDIRECT_URIS, AUTH_TYPE, BAZARR_API_KEY,  | High | Medium |
 | 14 | 🔴 High | Environment Variables | 27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_ | High | Medium |
-| 15 | 🟡 Medium | Project Analysis | Detected ecosystem marker: agent-connector-sdk → Agent-Utilities Ecosystem | Medium | Low |
+| 15 | 🟡 Medium | Project Analysis | Detected ecosystem marker: scion-sdk → Agent-Utilities Ecosystem | Medium | Low |
 | 16 | 🟡 Medium | Project Analysis | Protocol support: MCP | Medium | Low |
 | 17 | 🟡 Medium | Test Coverage | Test suite lacks intent diversity (only one type) | Medium | Low |
 | 18 | 🟡 Medium | Test Coverage | 12 potential doc-test drift items | Medium | Low |

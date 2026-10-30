@@ -11,7 +11,7 @@ description: >-
 license: MIT
 tags: [arr, sonarr, tv, series, media-automation, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 # Arr Series Library (Sonarr)

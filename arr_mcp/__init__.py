@@ -1,4 +1,4 @@
-from agent_connector_sdk.connector import Connector
+from scion_sdk.connector import Connector
 
 from arr_mcp.api.api_client_bazarr import Api as BazarrApi
 from arr_mcp.api.api_client_chaptarr import Api as ChaptarrApi
