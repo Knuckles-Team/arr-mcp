@@ -7,3 +7,4 @@ Each row is one requirement. A row names the file it touches and the test that p
 | ID | Requirement | Acceptance |
 |---|---|---|
 | `CONN-ARR-MCP-CONNECTOR-CONTENT-R001` | **Default content.** `pyproject.toml` declares `arr-mcp` as the single `agent_connector_sdk.connector` entry point. The server lists the packaged `skill://` and `ontology://` resources and the packaged prompts with no `content=` argument. Proving test: `tests/test_default_content_surfaces.py`. | `resources/list` includes `skill://` and `ontology://`; `prompts/list` includes each packaged prompt. |
+| `CONN-ARR-MCP-CONNECTOR-CONTENT-R002` | **Rename connector :Episode to a mv:TelevisionEpisode subclass.** Rename the connector ontology class :Episode to a subclass of mv:TelevisionEpisode, which resolves the collision with the core :Episode class. | Test: ontology load shows no duplicate class IRI with core. |
