@@ -8,10 +8,10 @@ from typing import Any
 from urllib.parse import SplitResult, urljoin, urlsplit
 
 import httpx
-from agent_connector_sdk.auth.static import ApiKeyAuth
-from agent_connector_sdk.http.client import create_http_client
-from agent_connector_sdk.http.options import HttpClientOptions
-from agent_connector_sdk.tls.profile import ResolvedTLSProfile
+from scion_sdk.auth.static import ApiKeyAuth
+from scion_sdk.http.client import create_http_client
+from scion_sdk.http.options import HttpClientOptions
+from scion_sdk.tls.profile import ResolvedTLSProfile
 
 _MAX_ENDPOINT_CHARS = 4096
 _MAX_RESPONSE_BYTES = 16 * 1024 * 1024

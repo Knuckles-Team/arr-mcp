@@ -171,7 +171,7 @@
     rdfs:comment """The *arr media-automation stack — Radarr movies, Sonarr series and
     episodes, Lidarr artists and albums, Chaptarr books, Prowlarr indexers,
     Overseerr/Jellyseerr media requests and quality profiles — with their library,
-    indexing, request and download relationships, federated into the agent-connector-sdk
+    indexing, request and download relationships, federated into the scion-sdk
     knowledge-graph hub. Reuses the shared :MediaAsset, :Blob, :Document and :Person
     classes for imported files and requesting users.""" .
 

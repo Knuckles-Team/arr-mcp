@@ -4,7 +4,7 @@
     "score": 74,
     "grade": "C",
     "findings": [
-      "Detected ecosystem marker: agent-connector-sdk \u2192 Agent-Utilities Ecosystem",
+      "Detected ecosystem marker: scion-sdk \u2192 Agent-Utilities Ecosystem",
       "Protocol support: MCP"
     ],
     "justifications": [
@@ -113,14 +113,14 @@
         "version_source": "installed",
         "summary": "HTTP library with thread-safe connection pooling, file post, and more."
       },
-      "agent-connector-sdk": {
+      "scion-sdk": {
         "current": "0.16.0",
         "constraint": "0.16.0",
         "installed": "0.16.0",
         "latest": "0.16.0",
         "status": "up-to-date",
         "version_source": "installed",
-        "summary": "Agent Connector SDK for Pydantic AI Agents"
+        "summary": "Scion SDK for Pydantic AI Agents"
       },
       "pytest-xdist": {
         "current": "3.8.0",

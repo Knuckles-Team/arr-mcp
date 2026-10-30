@@ -11,7 +11,7 @@ description: >-
 license: MIT
 tags: [arr, radarr, movies, media-automation, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 # Arr Movie Library (Radarr)

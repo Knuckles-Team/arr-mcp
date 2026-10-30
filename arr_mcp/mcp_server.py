@@ -12,9 +12,9 @@ Action Execution Pipeline
 import importlib
 from typing import Any
 
-from agent_connector_sdk.config import setting
-from agent_connector_sdk.mcp.action_dispatch import dispatch, parse_json_object
-from agent_connector_sdk.tls.resolve import resolve_tls_profile
+from scion_sdk.config import setting
+from scion_sdk.mcp.action_dispatch import dispatch, parse_json_object
+from scion_sdk.tls.resolve import resolve_tls_profile
 
 
 def execute_arr_action(

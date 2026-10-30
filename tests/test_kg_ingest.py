@@ -2,7 +2,7 @@
 
 Exercises the real ``ingest_entities`` / ``ingest_movies`` / ``ingest_series`` /
 ``ingest_indexers`` seam against a fake epistemic-graph transport (no engine required),
-letting the agent-connector-sdk's own request builder run on top of it so the test
+letting the scion-sdk's own request builder run on top of it so the test
 exercises the SDK's validation contract rather than re-deriving it.
 CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 """
@@ -13,7 +13,7 @@ from types import SimpleNamespace
 from typing import Any
 
 import pytest
-from agent_connector_sdk.ingest import IngestError, KnowledgeIngest
+from scion_sdk.ingest import IngestError, KnowledgeIngest
 
 from arr_mcp.kg_ingest import (
     STREAM,

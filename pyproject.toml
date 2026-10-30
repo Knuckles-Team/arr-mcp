@@ -9,7 +9,7 @@ description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.12, <3.15"
-dependencies = [ "scion-sdk[mcp]>=0.5.9,<0.6.0", "tree-sitter>=0.26.0", "pydantic>=2.14.1",]
+dependencies = [ "scion-sdk[mcp]>=0.6.0,<0.7.0", "tree-sitter>=0.26.0", "pydantic>=2.14.1",]
 [[project.authors]]
 name = "Repository Maintainers"
 email = "maintainers@knuckles.team"
@@ -22,13 +22,13 @@ test = [
     "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0",]
 
 [project.scripts]
-arr-mcp = "agent_connector_sdk.cli:serve"
+arr-mcp = "scion_sdk.cli:serve"
 
-[project.entry-points."agent_connector_sdk.prompt_providers"]
+[project.entry-points."scion_sdk.prompt_providers"]
 arr-mcp = "arr_mcp.prompts"
 
 # The one declared connector identity: the fleet name (SCION-CONNECTOR-CONTROL-R071).
-[project.entry-points."agent_connector_sdk.connector"]
+[project.entry-points."scion_sdk.connector"]
 arr-mcp = "arr_mcp:connector"
 
 [tool.uv.workspace]
