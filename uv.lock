@@ -45,7 +45,7 @@ wheels = [
 
 [[package]]
 name = "arr-mcp"
-version = "2.3.6"
+version = "2.3.7"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },
@@ -71,7 +71,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'test'", specifier = ">=9.1.1" },
     { name = "pytest-asyncio", marker = "extra == 'test'", specifier = ">=1.4.0" },
     { name = "pytest-xdist", marker = "extra == 'test'", specifier = ">=3.8.0" },
-    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.5.9,<0.6.0" },
+    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.6.4,<0.7.0" },
     { name = "tree-sitter", specifier = ">=0.26.0" },
 ]
 provides-extras = ["test"]
@@ -1259,7 +1259,7 @@ wheels = [
 
 [[package]]
 name = "scion-sdk"
-version = "0.5.9"
+version = "0.6.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1272,9 +1272,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/da/33/974f6fd4df64f31008739f5c964d9588b01e06717df9bdd9a1614c690db5/scion_sdk-0.5.9.tar.gz", hash = "sha256:ba040fcc0f1320abffbf752ec8e52937c56004335fea3c0e8e87347c099d76ac", size = 1084120, upload-time = "2026-10-29T19:25:52.763Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/91/61/5a694538fe4b5c3313d18dfb2ddf28b3a15d9dd93eb6e32c4f5486326c62/scion_sdk-0.6.4.tar.gz", hash = "sha256:4441e8e543f65587def7e98a78246be303a95ca840acae73f92bdaa08d8ea10f", size = 1151330, upload-time = "2026-10-31T02:50:26.547Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/b0/c0b0ca2390fe8843e22b09baafb623934abca3030b948f3d68b0dcc64ba1/scion_sdk-0.5.9-py3-none-any.whl", hash = "sha256:6b5548b1cc499eba3cb6560d30abce70e761491a12b61b578c7c78dc05a0d898", size = 988008, upload-time = "2026-10-29T19:25:54.334Z" },
+    { url = "https://files.pythonhosted.org/packages/3a/34/2990f86ca875f09a7ddbc2179668635b54e058cfc704d7dfea6e397c4762/scion_sdk-0.6.4-py3-none-any.whl", hash = "sha256:b5535a9342a3f675e173c933fcb3e26b59bb2f603875ad419bfb4261486ab5d2", size = 1093413, upload-time = "2026-10-31T02:50:25.131Z" },
 ]
 
 [package.optional-dependencies]
