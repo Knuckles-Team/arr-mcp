@@ -14,3 +14,4 @@ Read the existing specs first. Extend the spec that owns the behavior. Create a 
 
 - [`CONN-ARR-MCP-SDK-CENTRALIZATION`](sdk-centralization/spec.md) — Capabilities through the SDK.
 - [`CONN-ARR-MCP-CONNECTOR-CONTENT`](connector-content/spec.md) — The connector serves its packaged content.
+- [`CONN-ARR-MCP-COMPETENCY-OPERATIONS`](competency-operations/spec.md) — Per-title search history.
