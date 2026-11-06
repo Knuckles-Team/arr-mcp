@@ -2,92 +2,64 @@
 name: arr-movie-library
 skill_type: skill
 description: >-
-  Manage the Radarr movie library via the arr-mcp MCP server — list monitored
-  movies, look up a movie by TMDB id, add a movie, trigger searches, and check
-  wanted/missing. Use when the agent must inspect or curate the film collection,
-  add a new movie for download, or reason about a movie's monitored/hasFile
-  status. Do NOT use for TV series (use arr-series-library), music, books, or
-  indexer configuration (use arr-indexer-management); prefer those.
+  Manage the Radarr movie library through arr-mcp: add a movie and search for it, search
+  for missing movies, read the library, queue, history and wanted list, and tag movies.
+  Use for any film in the movie library. Do NOT use for TV (arr-series-library), music
+  (arr-music-library), books (arr-book-library), indexers (arr-indexer-management) or
+  user requests (arr-media-requests).
 license: MIT
-tags: [arr, radarr, movies, media-automation, mcp]
+tags: [arr, media-automation, mcp, radarr]
 metadata:
   author: Knuckles-Team
-  version: '0.1.0'
+  version: '1.0.0'
 ---
+
 # Arr Movie Library (Radarr)
 
-Domain-typed access to the **Radarr** movie library through the arr-mcp MCP
-server. Radarr tracks films by their TMDB id, monitors them, and grabs releases
-from configured indexers. Prefer the condensed `radarr_action` tool — it routes
-to the real Radarr client methods and returns movie-shaped records.
+Use the typed tools of the `arr-mcp` connector: one tool per upstream API operation, named `<app>_<operation>` (for example `radarr_get_queue`). Each tool takes typed parameters; there is no `action` or `params_json` routing.
 
-## When to use
-- List the movie library / triage monitored but not-yet-downloaded films.
-- Look up a single movie by TMDB id or internal Radarr id.
-- Add a new movie and kick off a search.
-- Ingest the movie library into the knowledge graph as typed `:Movie` nodes.
+## Where the data lives
 
-## When NOT to use
-- TV series / episodes → `arr-series-library` (Sonarr).
-- Music (artists/albums), books → the Lidarr / Chaptarr surfaces.
-- Adding, enabling, or testing indexers → `arr-indexer-management` (Prowlarr).
-- User-facing "please add this" requests routed through Overseerr → the
-  `seerr_action` tool.
+- **Radarr** (`radarr_*` tools, `RADARR_BASE_URL`): the movie library holding films; files under `/movies`.
 
-## Prerequisites & environment
-Connect via the `mcp-client` skill against the **`arr-mcp`** MCP server.
+## Workflows (tool-use contracts)
 
-| Variable | Required | Notes |
-|----------|----------|-------|
-| `RADARR_BASE_URL` | ✅ | Radarr base URL (e.g. `http://radarr:7878`) |
-| `RADARR_TOKEN` | ✅ | Radarr API key (sent as the API token) |
-| `RADARR_SSL_VERIFY` | optional | TLS verification toggle (default off) |
+Each workflow is a tool-use contract in the connector ontology (`ontology://arr-mcp/arr-contracts.ttl`, `arr:ToolUseContract`). Run the steps in order; a parameter written `stepN.field` comes from step N's result.
 
-`MCP_TOOL_MODE` (`condensed`|`verbose`|`both`) selects the condensed
-`radarr_action` tool (used below) vs. the 1:1 `radarr_<method>` verbose tools.
+### Add a movie and search for it (`radarr-add-and-search`)
 
-## Tools & actions
-Prefer the **condensed** tool; it takes `action` + a `params_json` **JSON string**
-whose keys are passed straight to the Radarr client method. Call
-`action="list_actions"` to discover every valid action.
+Resolve the movie library location and quality profile, look the title up, add it monitored and start a search, then confirm it reached the download queue.
 
-| Condensed tool | Key actions |
-|----------------|-------------|
-| `radarr_action` | `get_movie`, `get_movie_id`, `post_movie`, `put_movie_id`, `delete_movie_id`, `get_wanted_missing`, `get_qualityprofile` |
-| `arr_ingest_library` | `services="movies"` → push `:Movie` nodes into the KG |
+1. `radarr_get_rootfolder` — Pick the library root folder; use its `path`.
+2. `radarr_get_qualityprofile` — Pick the quality profile the operator named (default the first); use its `id`.
+3. `radarr_get_movie_lookup` (`term` = operator input: title or tmdb:/tvdb: id) — Confirm the right title and year before adding.
+4. `radarr_get_movie` (`tmdbId` = step3.result[0].tmdbId) — Stop if the title is already in the library.
+5. `radarr_add_movie` (`term` = operator input: title or tmdb:/tvdb: id, `root_folder_path` = step1.result[0].path, `quality_profile_id` = step2.result[0].id, `monitored` = true, `search_for_movie` = true) — Adds the title monitored and starts the search.
+6. `radarr_get_queue` (`page` = 1, `pageSize` = 20) — A grabbed release shows here; an empty queue means no release matched yet.
 
-### Key parameters
-- `get_movie` — no args lists all; pass `{"tmdbId": <id>}` to fetch one by TMDB.
-- `get_movie_id` — `{"id": <radarr_id>}` for the internal id.
-- `post_movie` — `{"data": {...}}` with `tmdbId`, `qualityProfileId`,
-  `rootFolderPath`, `monitored`, and `addOptions.searchForMovie`.
+### Search for missing movie items (`radarr-search-missing`)
 
-## Recipes (`params_json`)
-List the whole library:
-```json
-{}
-```
-Look up one movie by TMDB id:
-```json
-{"tmdbId": 27205}
-```
-Add a movie and search for it immediately:
-```json
-{"data": {"tmdbId": 27205, "qualityProfileId": 1, "rootFolderPath": "/movies", "monitored": true, "addOptions": {"searchForMovie": true}}}
-```
+List the monitored items that have no file and start one search command for them.
 
-## Gotchas
-- `params_json` is a **string** of JSON, not an object — serialize it.
-- `get_movie` with no `tmdbId` returns the **entire** library; page/filter client-side.
-- TMDB id (`tmdbId`) is the stable external key; the numeric Radarr `id` is
-  instance-local — the KG keys `:Movie` nodes by `arr:Movie:<tmdbId>`.
-- Adding a movie needs a valid `qualityProfileId` **and** `rootFolderPath`;
-  fetch them via `get_qualityprofile` / `get_rootfolder` first.
-- Plural guesses like `get_movies` are alias-resolved to `get_movie`, but prefer
-  the real singular action name.
+1. `radarr_get_wanted_missing` (`monitored` = true, `pageSize` = 50) — Collect the ids of the missing items.
+2. `radarr_post_command` (`data` = {"name": "MoviesSearch", "movieIds": "<ids or id from step1>"}) — One command per batch; never one per item.
+3. `radarr_get_queue` (`page` = 1) — Confirm grabs.
 
-## Related
-- `arr_ingest_library` (tag `kg`) ingests movies (and series/indexers) as typed
-  KG nodes — ingestion only, not part of the curation surface.
-- **Related skills:** `arr-series-library` (Sonarr), `arr-indexer-management`
-  (Prowlarr).
+### Create and remove a label tag (reversible) (`radarr-tag-roundtrip`)
+
+Create a tag to group items, verify it, and delete it again when it was only a test.
+
+1. `radarr_get_tag` — Reuse an existing tag with the same label.
+2. `radarr_post_tag` (`data` = {"label": "zz-validation-<date>"}) — Labels are lower case.
+3. `radarr_delete_tag_id` (`id` = step2.id, `confirm` = true) — Only for tags this run created.
+
+Needs approval: `radarr_delete_tag_id`.
+
+## Guardrails
+
+- Read before you write: every change starts from the read steps of its contract.
+- Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
+- Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
+- Never change API keys, download client credentials, or app connection settings.
+- Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
+- Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

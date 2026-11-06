@@ -1,8 +1,8 @@
 """Native knowledge-graph ingestion tool for the *arr stack (Wire-First).
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor — lists the live library via the real
-Radarr/Sonarr/Prowlarr clients and pushes it into epistemic-graph as typed :Movie /
-:Series / :Indexer nodes (+ :Document overviews). Native-ingest failures propagate to
+Radarr/Sonarr/Prowlarr clients and pushes it into epistemic-graph as typed :Film /
+:Series / :MediaIndexer nodes (medulla core classes) (+ :Document overviews). Native-ingest failures propagate to
 the caller. Auto-discovered by ``register_tool_surface`` (gated by ``KGTOOL``, default on).
 """
 

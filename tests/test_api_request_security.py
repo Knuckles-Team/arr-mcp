@@ -4,8 +4,8 @@ import importlib.util
 import json
 from pathlib import Path
 
-import pytest
 import httpx
+import pytest
 
 from arr_mcp.api._security import decode_response, request_url, validate_base_url
 
@@ -13,7 +13,9 @@ GENERATOR_PATH = Path(__file__).parents[1] / "scripts" / "generate_api.py"
 
 
 def _load_generator_module():
-    spec = importlib.util.spec_from_file_location("_arr_secure_generator", GENERATOR_PATH)
+    spec = importlib.util.spec_from_file_location(
+        "_arr_secure_generator", GENERATOR_PATH
+    )
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -80,10 +82,10 @@ def test_generator_quotes_untrusted_openapi_text(tmp_path):
         json.dumps(
             {
                 "paths": {
-                    '/api/items/{item_id}/\"; injected = True; #': {
+                    '/api/items/{item_id}/"; injected = True; #': {
                         "get": {
                             "operationId": "getItem",
-                            "description": '\"\"\"; injected = True; #',
+                            "description": '"""; injected = True; #',
                             "parameters": [
                                 {
                                     "name": "item_id",

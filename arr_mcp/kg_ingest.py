@@ -34,7 +34,7 @@ async def ingest_movies(
     *,
     ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Map Radarr movie records → ``:Movie`` nodes (+ overview ``:Document`` links)."""
+    """Map Radarr movie records → ``:Film`` nodes (medulla core) (+ overview ``:Document`` links)."""
     entities: list[dict[str, Any]] = []
     relationships: list[dict[str, Any]] = []
     docs: list[dict[str, Any]] = []
@@ -46,7 +46,7 @@ async def ingest_movies(
         entities.append(
             {
                 "id": mid,
-                "node_type": "Movie",
+                "node_type": "Film",
                 "title": m.get("title"),
                 "year": m.get("year"),
                 "tmdbId": str(m["tmdbId"]) if m.get("tmdbId") else None,
@@ -147,7 +147,7 @@ async def ingest_indexers(
     *,
     ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Map Prowlarr/*arr indexer records → ``:Indexer`` nodes."""
+    """Map Prowlarr/*arr indexer records → ``:MediaIndexer`` nodes (medulla core)."""
     entities: list[dict[str, Any]] = []
     for ix in indexers or []:
         iid = ix.get("id")
@@ -156,7 +156,7 @@ async def ingest_indexers(
         entities.append(
             {
                 "id": f"arr:Indexer:{iid}",
-                "node_type": "Indexer",
+                "node_type": "MediaIndexer",
                 "name": ix.get("name"),
                 "protocol": ix.get("protocol"),
                 "enabled": ix.get("enable"),

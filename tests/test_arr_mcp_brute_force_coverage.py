@@ -118,83 +118,6 @@ def test_arr_apis_error_handling():
         assert res == {"status": "success", "text": "Not JSON"}
 
 
-def test_execute_arr_action_failures_and_models():
-    from arr_mcp.mcp_server import execute_arr_action
-
-    # 1. Base URL is None
-    with pytest.raises(ValueError, match="Base URL must be provided"):
-        execute_arr_action("radarr", None, "test", "some_action", "{}", "token")
-
-    # 2. Unknown service name
-    with pytest.raises(ValueError, match="Unknown service"):
-        execute_arr_action(
-            "invalid_service",
-            "http://test",
-            "test",
-            "some_action",
-            "{}",
-            "token",
-        )
-
-    # 3. Invalid params_json
-    with pytest.raises(ValueError, match="params_json must be valid JSON"):
-        execute_arr_action(
-            "radarr", "http://test", "test", "some_action", "{invalid", "token"
-        )
-
-    # 4. Unknown action method
-    with pytest.raises(ValueError, match="Unknown action"):
-        execute_arr_action(
-            "radarr", "http://test", "test", "invalid_action", "{}", "token"
-        )
-
-    # 5. Current Pydantic model_dump conversion coverage
-    class DummyModelDump:
-        def model_dump(self):
-            return {"source": "model_dump"}
-
-    with patch("importlib.import_module") as mock_import:
-        mock_module = MagicMock()
-        mock_api = MagicMock()
-        mock_import.return_value = mock_module
-        mock_module.Api = mock_api
-
-        instance = mock_api.return_value
-        instance.some_action.return_value = DummyModelDump()
-        res = execute_arr_action(
-            "radarr", "http://test", "test", "some_action", "{}", "token"
-        )
-        assert res == {"source": "model_dump"}
-
-        # Test standard return (dict)
-        instance.some_action.return_value = {"source": "plain"}
-        res = execute_arr_action(
-            "radarr", "http://test", "test", "some_action", "{}", "token"
-        )
-        assert res == {"source": "plain"}
-
-
-def test_is_service_enabled():
-    from arr_mcp.mcp_server import is_service_enabled
-
-    # 1. Default return is True
-    with patch("os.getenv", return_value=None):
-        assert is_service_enabled("bazarr") is True
-
-    # 2. Specifically enabled or disabled via environment variable
-    with patch.dict("os.environ", {"BAZARR_ENABLED": "false"}):
-        assert is_service_enabled("bazarr") is False
-
-    with patch.dict("os.environ", {"BAZARR_ENABLED": "true"}):
-        assert is_service_enabled("bazarr") is True
-
-    with patch.dict("os.environ", {"BAZARR_ENABLED": "0"}):
-        assert is_service_enabled("bazarr") is False
-
-    with patch.dict("os.environ", {"BAZARR_ENABLED": "1"}):
-        assert is_service_enabled("bazarr") is True
-
-
 def test_all_api_clients_error_handling_and_special_cases():
     from typing import Any
 
@@ -331,23 +254,3 @@ def test_sonarr_radarr_lookup_empty():
             term="test", root_folder_path="/data", quality_profile_id=1
         )
         assert res == {"id": 101, "title": "Test Movie"}
-
-
-def test_mcp_server_dependency_warning_import_error():
-    import builtins
-    import importlib
-    import sys
-
-    # Save original __import__
-    original_import = builtins.__import__
-
-    def mock_import(name, *args, **kwargs):
-        if "RequestsDependencyWarning" in name or name == "requests.exceptions":
-            raise ImportError("Mocked import error")
-        return original_import(name, *args, **kwargs)
-
-    # Patch import and reload the module
-    with patch("builtins.__import__", side_effect=mock_import):
-        if "arr_mcp.mcp_server" in sys.modules:
-            mcp_module = sys.modules["arr_mcp.mcp_server"]
-            importlib.reload(mcp_module)

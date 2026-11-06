@@ -95,16 +95,40 @@ def send_request(
     method: str,
     url: str,
     params: dict[str, Any] | None,
-    data: dict[str, Any] | None,
+    data: Any,
+    *,
+    form: dict[str, Any] | None = None,
 ) -> httpx.Response:
-    """Send one request and leave the body unread so it can be size-bounded."""
-    request = client.build_request(method, url, params=params, json=data)
+    """Send one request and leave the body unread so it can be size-bounded.
+
+    ``data`` travels as a JSON body, ``form`` as a form-encoded body; a call
+    names at most one of them.
+    """
+    if form:
+        request = client.build_request(method, url, params=params, data=form)
+    else:
+        request = client.build_request(method, url, params=params, json=data)
     return client.send(request, stream=True)
+
+
+#: Refusal raised when an API call answers with a web page instead of data.
+NOT_AN_API_RESPONSE = "NOT_AN_API_RESPONSE"
+
+
+def _refuse_html(response: httpx.Response) -> None:
+    """An HTML page is the app's web UI (a wrong route or a login redirect), never data."""
+    kind = response.headers.get("content-type", "").split(";", 1)[0].strip().lower()
+    if kind in {"text/html", "application/xhtml+xml"}:
+        raise RuntimeError(
+            f"{NOT_AN_API_RESPONSE}: HTTP {response.status_code} returned a web page; "
+            "the route does not exist on this app version or the API key was refused"
+        )
 
 
 def decode_response(response: httpx.Response) -> Any:
     """Decode one response while bounding decompressed production content."""
     if isinstance(response, httpx.Response):
+        _refuse_html(response)
         declared = response.headers.get("content-length")
         if declared:
             try:
@@ -140,6 +164,7 @@ def decode_response(response: httpx.Response) -> Any:
 
 
 __all__ = [
+    "NOT_AN_API_RESPONSE",
     "REQUEST_TIMEOUT",
     "build_client",
     "send_request",

@@ -20,7 +20,7 @@ Tool-neutral rules for any AI agent or human working in this repository. This bl
 - Core Libraries: `scion-sdk`, `fastmcp`, `pydantic-ai`
 - Key principles: Functional patterns, Pydantic for data validation, asynchronous tool execution.
 - Architecture:
-    - `mcp_server.py`: Main MCP server entry point and tool registration.
+    - `__init__.py`: the declared `Connector`; the SDK serves one typed tool per client method of `api/`.
     - `skills/`: Directory containing modular agent skills (if applicable).
 
 ### Architecture Diagram
@@ -53,11 +53,11 @@ pre-commit run --all-files
 
 # Execution Commands
 # arr-mcp
-arr_mcp.mcp_server:mcp_server
+arr-mcp  (scion_sdk.cli:serve, connector arr_mcp:connector)
 # arr-agent
 
 ## Project Structure Quick Reference
-- MCP Entry Point → `mcp_server.py`
+- MCP Entry Point → `arr_mcp/__init__.py` (`connector`)
 - Agent Entry Point → `agent.py`
 - Source Code → `arr_mcp/`
 - Skills → `skills/` (if exists)
@@ -101,7 +101,7 @@ async def my_tool(param: str) -> str:
 - Use `scion-sdk` base classes.
 
 **Ask first:**
-- Major refactors of `mcp_server.py` or `agent.py`.
+- Major refactors of the connector declaration or the API clients.
 - Removing or renaming public tool functions.
 
 **Never do:**

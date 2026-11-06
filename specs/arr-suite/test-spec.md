@@ -1,0 +1,14 @@
+# CONN-ARR-MCP-SUITE — Test specification
+
+Governing spec: [spec.md](spec.md).
+
+| Test ID | Requirement | Proving test | Expected observation |
+|---|---|---|---|
+| T-001 | `CONN-ARR-MCP-SUITE-R001` | `tests/test_suite_surface.py::test_every_upstream_operation_has_a_client_method`, `tests/test_suite_surface.py::test_every_client_method_is_served_as_a_tool` | Each fixture operation has a client method, each client route is an upstream operation, and each method is a served tool. |
+| T-002 | `CONN-ARR-MCP-SUITE-R002` | `tests/test_suite_surface.py::test_no_action_routed_or_raw_request_tool`, `tests/test_suite_surface.py::test_deletes_ask_for_confirmation` | No served tool has `params_json`, an `_action` name, or `method` plus `endpoint` parameters; every delete tool is destructive. |
+| T-003 | `CONN-ARR-MCP-SUITE-R003` | `tests/test_suite_surface.py::test_an_html_page_is_refused_not_reported_as_success`, `tests/test_suite_surface.py::test_bazarr_routes_and_query_parameters_match_the_live_api`, `tests/test_suite_surface.py::test_seerr_body_fields_travel_as_json` | An HTML answer raises `NOT_AN_API_RESPONSE`; the Bazarr and Seerr requests carry the upstream paths and field names. |
+| T-004 | `CONN-ARR-MCP-SUITE-R004` | `tests/test_suite_surface.py::test_contract_tools_are_served`, `tests/test_suite_surface.py::test_every_app_has_a_skill_and_contracts`, `tests/test_suite_surface.py::test_contract_steps_are_ordered_and_bound`, `tests/test_suite_surface.py::test_skill_files_name_only_served_tools` | Every contract tool is served; every app has contracts; steps are numbered 1..n with one tool each; skills name only served tools. |
+| T-005 | `CONN-ARR-MCP-SUITE-R005` | `tests/test_suite_surface.py::test_operator_and_role_prompts_exist`, `tests/test_suite_surface.py::test_prompt_is_a_complete_agent_definition` | Each prompt is served, names only served tools, has every section, and its ontology links equal its tool list. |
+| T-006 | `CONN-ARR-MCP-SUITE-R006` | `tests/test_suite_surface.py::test_every_app_has_an_instance_library_and_settings`, `tests/test_suite_surface.py::test_routing_and_federation_are_recorded` | Every app has an instance, a library and its setting names; there are at least 5 routes and all 3 federation kinds. |
+| T-007 | `CONN-ARR-MCP-SUITE-R007` | `tests/test_suite_surface.py::test_no_ontology_imports`, `tests/test_suite_surface.py::test_every_class_reaches_medulla_core_and_bfo_entity`, `tests/test_suite_surface.py::test_media_classes_the_library_holds_are_core` | No import; every arr class has a core ancestor and reaches `BFO_0000001`; held media classes are core classes. |
+| T-008 | `CONN-ARR-MCP-SUITE-R008` | `tests/test_suite_surface.py::test_ingest_presets_name_served_tools_with_current_pins`, `tests/test_suite_surface.py::test_ingest_node_types_are_medulla_core_classes` | Every preset tool is served with a matching pin; every emitted node type is a core class. |

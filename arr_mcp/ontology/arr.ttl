@@ -1,183 +1,556 @@
-@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix dc: <http://purl.org/dc/terms/> .
 @prefix : <http://knuckles.team/kg#> .
+@prefix arr: <http://knuckles.team/kg/arr#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# Arr media-automation ontology — the *arr stack (Radarr movies, Sonarr series/episodes,
-# Lidarr artists/albums, Chaptarr books, Prowlarr indexers, Overseerr/Jellyseerr requests,
-# Bazarr subtitles). All classes and properties live in the shared `:` (kg#) namespace;
-# only the owl:Ontology node gets the per-package IRI. Shared classes (:MediaAsset, :Blob,
-# :Document, :Person) are REUSED, never redefined. Backs the arr-mcp condensed tool surface
-# (radarr_action / sonarr_action / lidarr_action / prowlarr_action / seerr_action / ...).
-
-# --- classes (owl:Class) ---
-
-:Movie a owl:Class ;
-    rdfs:label "Movie" ;
-    rdfs:comment "A film tracked by Radarr (radarr_action get_movie)." .
-
-:Series a owl:Class ;
-    rdfs:label "Series" ;
-    rdfs:comment "A TV series tracked by Sonarr (sonarr_action get_series)." .
-
-:Episode a owl:Class .
-
-
-:Artist a owl:Class ;
-    rdfs:label "Artist" ;
-    rdfs:comment "A music artist tracked by Lidarr (lidarr_action get_artist)." .
-
-:Album a owl:Class ;
-    rdfs:label "Album" ;
-    rdfs:comment "A music album/release by an Artist (lidarr_action get_album)." .
-
-:Book a owl:Class ;
-    rdfs:label "Book" ;
-    rdfs:comment "A book/ebook tracked by Chaptarr (chaptarr_action get_book)." .
-
-:Indexer a owl:Class ;
-    rdfs:label "Indexer" ;
-    rdfs:comment "A search indexer (Torznab/Newznab) configured in Prowlarr or an *arr app (prowlarr_action get_indexer)." .
-
-:MediaRequest a owl:Class ;
-    rdfs:label "Media Request" ;
-    rdfs:comment "A user request for a movie or series in Overseerr/Jellyseerr (seerr_action get_request)." .
-
-:QualityProfile a owl:Class ;
-    rdfs:label "Quality Profile" ;
-    rdfs:comment "A quality/cutoff profile governing which release qualities an *arr app grabs (get_qualityprofile)." .
-
-:RootFolder a owl:Class ;
-    rdfs:label "Root Folder" ;
-    rdfs:comment "A library root path where an *arr app stores media (get_rootfolder)." .
-
-# --- links (owl:ObjectProperty) ---
-
-:hasEpisode a owl:ObjectProperty ;
-    rdfs:label "has episode" ;
-    rdfs:comment "Links a Series to an Episode it contains." ;
-    rdfs:domain :Series ;
-    rdfs:range :Episode .
-
-:hasAlbum a owl:ObjectProperty ;
-    rdfs:label "has album" ;
-    rdfs:comment "Links an Artist to an Album they released." ;
-    rdfs:domain :Artist ;
-    rdfs:range :Album .
-
-:indexedBy a owl:ObjectProperty ;
-    rdfs:label "indexed by" ;
-    rdfs:comment "Links a Movie, Series, Album, or Book to an Indexer that can source its releases." ;
-    rdfs:range :Indexer .
-
-:requestedBy a owl:ObjectProperty ;
-    rdfs:label "requested by" ;
-    rdfs:comment "Links a MediaRequest to the Person who submitted it." ;
-    rdfs:domain :MediaRequest ;
-    rdfs:range :Person .
-
-:requestsMedia a owl:ObjectProperty ;
-    rdfs:label "requests media" ;
-    rdfs:comment "Links a MediaRequest to the Movie or Series it asks for." ;
-    rdfs:domain :MediaRequest .
-
-:hasQualityProfile a owl:ObjectProperty ;
-    rdfs:label "has quality profile" ;
-    rdfs:comment "Links a Movie, Series, Artist, or Book to the QualityProfile governing its grabs." ;
-    rdfs:range :QualityProfile .
-
-:storedIn a owl:ObjectProperty ;
-    rdfs:label "stored in" ;
-    rdfs:comment "Links a Movie or Series to the RootFolder its files live under." ;
-    rdfs:range :RootFolder .
-
-:downloadedAs a owl:ObjectProperty ;
-    rdfs:label "downloaded as" ;
-    rdfs:comment "Links a Movie, Episode, Album, or Book to the imported :MediaAsset (the file on disk)." ;
-    rdfs:range :MediaAsset .
-
-# --- fields (owl:DatatypeProperty) ---
-
-:title a owl:DatatypeProperty ;
-    rdfs:label "title" ;
-    rdfs:comment "Display title of a Movie, Series, Album, or Book." ;
-    rdfs:range xsd:string .
-
-:year a owl:DatatypeProperty ;
-    rdfs:label "year" ;
-    rdfs:comment "Release/first-air year." ;
-    rdfs:range xsd:integer .
-
-:tmdbId a owl:DatatypeProperty ;
-    rdfs:label "tmdb id" ;
-    rdfs:comment "The Movie Database id of a Movie (Radarr's stable external key)." ;
-    rdfs:range xsd:string .
-
-:tvdbId a owl:DatatypeProperty ;
-    rdfs:label "tvdb id" ;
-    rdfs:comment "TheTVDB id of a Series (Sonarr's stable external key)." ;
-    rdfs:range xsd:string .
-
-:imdbId a owl:DatatypeProperty ;
-    rdfs:label "imdb id" ;
-    rdfs:comment "IMDb id of a Movie or Series." ;
-    rdfs:range xsd:string .
-
-:overview a owl:DatatypeProperty ;
-    rdfs:label "overview" ;
-    rdfs:comment "Synopsis / plot summary of a media item." ;
-    rdfs:range xsd:string .
-
-:monitored a owl:DatatypeProperty ;
-    rdfs:label "monitored" ;
-    rdfs:comment "Whether the *arr app is actively searching/grabbing for this item." ;
-    rdfs:range xsd:boolean .
-
-:hasFile a owl:DatatypeProperty ;
-    rdfs:label "has file" ;
-    rdfs:comment "Whether the item has at least one imported file on disk." ;
-    rdfs:range xsd:boolean .
-
-:mediaStatus a owl:DatatypeProperty ;
-    rdfs:label "media status" ;
-    rdfs:comment "Lifecycle status of a media item (announced, inCinemas, released, continuing, ended)." ;
-    rdfs:range xsd:string .
-
-:sizeOnDisk a owl:DatatypeProperty ;
-    rdfs:label "size on disk" ;
-    rdfs:comment "Total bytes the item's files occupy on disk." ;
-    rdfs:range xsd:integer .
-
-:protocol a owl:DatatypeProperty ;
-    rdfs:label "protocol" ;
-    rdfs:comment "Indexer protocol (usenet or torrent)." ;
-    rdfs:range xsd:string .
-
-:enabled a owl:DatatypeProperty ;
-    rdfs:label "enabled" ;
-    rdfs:comment "Whether an Indexer is enabled." ;
-    rdfs:range xsd:boolean .
-
-:requestStatus a owl:DatatypeProperty ;
-    rdfs:label "request status" ;
-    rdfs:comment "State of a MediaRequest (1=pending, 2=approved, 3=declined)." ;
-    rdfs:range xsd:string .
+# The arr-mcp connector ontology: the suite apps, their instances and libraries,
+# where the data lives, how the apps federate and route, and (in arr-contracts.ttl) the
+# tool-use contracts, skills and prompts. Every class subclasses a medulla core class and
+# so reaches bfo:Entity through core; the module never owl:imports core.
 
 <http://knuckles.team/kg/arr> a owl:Ontology ;
-    rdfs:label "Arr Media Automation Ontology" ;
-    rdfs:comment """The *arr media-automation stack — Radarr movies, Sonarr series and
-    episodes, Lidarr artists and albums, Chaptarr books, Prowlarr indexers,
-    Overseerr/Jellyseerr media requests and quality profiles — with their library,
-    indexing, request and download relationships, federated into the scion-sdk
-    knowledge-graph hub. Reuses the shared :MediaAsset, :Blob, :Document and :Person
-    classes for imported files and requesting users.""" .
+    rdfs:label "Arr media suite connector ontology" ;
+    rdfs:comment "Apps, instances, libraries, data locations, federation, routing, tool-use contracts, skills and prompts of the arr-mcp connector. Rolls up to medulla core by subclassing." .
 
-# ontology-codemod R3
-<http://knuckles.team/kg#RootFolder> rdfs:subClassOf <http://knuckles.team/kg#Folder> .
+# --- classes ---
+arr:SuiteApp a owl:Class ;
+    rdfs:label "SuiteApp" ;
+    rdfs:comment "One application of the arr media suite (Radarr, Sonarr, Lidarr, Chaptarr, Prowlarr, Bazarr, Seerr)." ;
+    rdfs:subClassOf :Application .
 
-# ontology-codemod R4
-<http://knuckles.team/kg#MediaRequest> rdfs:subClassOf <http://knuckles.team/kg#WorkItem> .
-<http://knuckles.team/kg#QualityProfile> rdfs:subClassOf <http://knuckles.team/kg#Policy> .
+arr:AppInstance a owl:Class ;
+    rdfs:label "AppInstance" ;
+    rdfs:comment "One deployed instance of a suite app, reached at its base URL setting with its API key setting." ;
+    rdfs:subClassOf :AssetInstance .
+
+arr:Library a owl:Class ;
+    rdfs:label "Library" ;
+    rdfs:comment "The managed store of media one app instance holds (the movie, TV, music or book library)." ;
+    rdfs:subClassOf :MediaLibrary .
+
+arr:LibraryRootFolder a owl:Class ;
+    rdfs:label "LibraryRootFolder" ;
+    rdfs:comment "A root folder where an app stores library files; the data location of a library." ;
+    rdfs:subClassOf :Folder .
+
+arr:IndexerPool a owl:Class ;
+    rdfs:label "IndexerPool" ;
+    rdfs:comment "The search indexers Prowlarr manages and syncs to the apps." ;
+    rdfs:subClassOf :ConfigurationItemCollection .
+
+arr:SubtitleStore a owl:Class ;
+    rdfs:label "SubtitleStore" ;
+    rdfs:comment "The subtitle files Bazarr manages beside the media of Sonarr and Radarr." ;
+    rdfs:subClassOf :MediaCollection .
+
+arr:RequestQueue a owl:Class ;
+    rdfs:label "RequestQueue" ;
+    rdfs:comment "The user media requests Seerr holds before routing them to Radarr or Sonarr." ;
+    rdfs:subClassOf :Collection .
+
+arr:DownloadClient a owl:Class ;
+    rdfs:label "DownloadClient" ;
+    rdfs:comment "A download client an app sends grabbed releases to (for example qBittorrent)." ;
+    rdfs:subClassOf :ConfigurationItem .
+
+arr:QueueItem a owl:Class ;
+    rdfs:label "QueueItem" ;
+    rdfs:comment "One download in an app's queue." ;
+    rdfs:subClassOf :DownloadTransfer .
+
+arr:SubtitleFile a owl:Class ;
+    rdfs:label "SubtitleFile" ;
+    rdfs:comment "A subtitle file stored beside a media file." ;
+    rdfs:subClassOf :MediaFile .
+
+arr:LabelTag a owl:Class ;
+    rdfs:label "LabelTag" ;
+    rdfs:comment "A label an app attaches to media, indexers or clients to group them." ;
+    rdfs:subClassOf :Concept .
+
+arr:FederationLink a owl:Class ;
+    rdfs:label "FederationLink" ;
+    rdfs:comment "Two suite apps working together: indexer sync, request forwarding or subtitles." ;
+    rdfs:subClassOf :ConfigurationItemCollection .
+
+arr:RoutingRule a owl:Class ;
+    rdfs:label "RoutingRule" ;
+    rdfs:comment "Which app instance a kind of media request routes to, and the root folder it lands in." ;
+    rdfs:subClassOf :Policy .
+
+arr:ConnectorTool a owl:Class ;
+    rdfs:label "ConnectorTool" ;
+    rdfs:comment "One typed MCP tool of the arr-mcp connector: one upstream API operation." ;
+    rdfs:subClassOf :Tool .
+
+arr:ToolUseContract a owl:Class ;
+    rdfs:label "ToolUseContract" ;
+    rdfs:comment "A workflow: which tools run, in what order, with which parameters." ;
+    rdfs:subClassOf :Procedure .
+
+arr:ContractStep a owl:Class ;
+    rdfs:label "ContractStep" ;
+    rdfs:comment "One ordered step of a tool-use contract: one tool call." ;
+    rdfs:subClassOf :TaskStep .
+
+arr:ParameterBinding a owl:Class ;
+    rdfs:label "ParameterBinding" ;
+    rdfs:comment "Where one parameter of a step comes from: operator input, a constant, or an earlier step's result." ;
+    rdfs:subClassOf :ActionParameter .
+
+arr:ConnectorSkill a owl:Class ;
+    rdfs:label "ConnectorSkill" ;
+    rdfs:comment "A skill shipped in the connector package: a set of task workflows over the connector's tools." ;
+    rdfs:subClassOf :Procedure .
+
+arr:ConnectorPrompt a owl:Class ;
+    rdfs:label "ConnectorPrompt" ;
+    rdfs:comment "A prompt shipped in the connector package; an agent definition arbora builds an agent from." ;
+    rdfs:subClassOf :Prompt .
+
+arr:ArrAgentRole a owl:Class ;
+    rdfs:label "ArrAgentRole" ;
+    rdfs:comment "A business role an agent plays over the arr suite; a connector prompt is its system prompt." ;
+    rdfs:subClassOf :Role .
+
+arr:ArrOperator a owl:Class ;
+    rdfs:label "Arr Suite Operator" ;
+    rdfs:comment "The Arr Suite Operator role over the arr suite." ;
+    rdfs:subClassOf arr:ArrAgentRole .
+
+arr:MediaLibrarian a owl:Class ;
+    rdfs:label "Media Librarian" ;
+    rdfs:comment "The Media Librarian role over the arr suite." ;
+    rdfs:subClassOf arr:ArrAgentRole .
+
+arr:RequestManager a owl:Class ;
+    rdfs:label "Media Request Manager" ;
+    rdfs:comment "The Media Request Manager role over the arr suite." ;
+    rdfs:subClassOf arr:ArrAgentRole .
+
+arr:IndexerMaintainer a owl:Class ;
+    rdfs:label "Indexer Maintainer" ;
+    rdfs:comment "The Indexer Maintainer role over the arr suite." ;
+    rdfs:subClassOf arr:ArrAgentRole .
+
+arr:SubtitleCurator a owl:Class ;
+    rdfs:label "Subtitle Curator" ;
+    rdfs:comment "The Subtitle Curator role over the arr suite." ;
+    rdfs:subClassOf arr:ArrAgentRole .
+
+arr:DownloadMonitor a owl:Class ;
+    rdfs:label "Download Monitor" ;
+    rdfs:comment "The Download Monitor role over the arr suite." ;
+    rdfs:subClassOf arr:ArrAgentRole .
+
+# --- properties ---
+arr:instanceOf a owl:ObjectProperty ;
+    rdfs:label "instanceOf" ;
+    rdfs:domain arr:AppInstance ;
+    rdfs:range arr:SuiteApp ;
+    rdfs:comment "The app this instance runs." .
+
+arr:holdsLibrary a owl:ObjectProperty ;
+    rdfs:label "holdsLibrary" ;
+    rdfs:domain arr:AppInstance ;
+    rdfs:range arr:Library ;
+    rdfs:comment "The library this instance holds." .
+
+arr:storedIn a owl:ObjectProperty ;
+    rdfs:label "storedIn" ;
+    rdfs:domain arr:Library ;
+    rdfs:range arr:LibraryRootFolder ;
+    rdfs:comment "The root folder the library's files live in." .
+
+arr:holdsMediaClass a owl:ObjectProperty ;
+    rdfs:label "holdsMediaClass" ;
+    rdfs:domain arr:Library ;
+    rdfs:comment "The medulla core media class the library holds (for example :Film)." .
+
+arr:downloadsWith a owl:ObjectProperty ;
+    rdfs:label "downloadsWith" ;
+    rdfs:domain arr:AppInstance ;
+    rdfs:range arr:DownloadClient ;
+    rdfs:comment "The download client the instance sends releases to." .
+
+arr:federationSource a owl:ObjectProperty ;
+    rdfs:label "federationSource" ;
+    rdfs:domain arr:FederationLink ;
+    rdfs:range arr:AppInstance ;
+    rdfs:comment "The instance that provides (indexers, requests, subtitles)." .
+
+arr:federationTarget a owl:ObjectProperty ;
+    rdfs:label "federationTarget" ;
+    rdfs:domain arr:FederationLink ;
+    rdfs:range arr:AppInstance ;
+    rdfs:comment "The instance that receives." .
+
+arr:federationKind a owl:DatatypeProperty ;
+    rdfs:label "federationKind" ;
+    rdfs:domain arr:FederationLink ;
+    rdfs:comment "syncsIndexersTo, forwardsRequestsTo or subtitlesFor." .
+
+arr:routesMediaClass a owl:ObjectProperty ;
+    rdfs:label "routesMediaClass" ;
+    rdfs:domain arr:RoutingRule ;
+    rdfs:comment "The core media class a request carries." .
+
+arr:routesTo a owl:ObjectProperty ;
+    rdfs:label "routesTo" ;
+    rdfs:domain arr:RoutingRule ;
+    rdfs:range arr:AppInstance ;
+    rdfs:comment "The instance requests of that class go to." .
+
+arr:landsIn a owl:ObjectProperty ;
+    rdfs:label "landsIn" ;
+    rdfs:domain arr:RoutingRule ;
+    rdfs:range arr:LibraryRootFolder ;
+    rdfs:comment "The root folder routed media lands in." .
+
+arr:toolOf a owl:ObjectProperty ;
+    rdfs:label "toolOf" ;
+    rdfs:domain arr:ConnectorTool ;
+    rdfs:range arr:SuiteApp ;
+    rdfs:comment "The app whose API operation the tool calls." .
+
+arr:toolName a owl:DatatypeProperty ;
+    rdfs:label "toolName" ;
+    rdfs:domain arr:ConnectorTool ;
+    rdfs:comment "The served MCP tool name." .
+
+arr:toolPrefix a owl:DatatypeProperty ;
+    rdfs:label "toolPrefix" ;
+    rdfs:domain arr:SuiteApp ;
+    rdfs:comment "The tool name prefix of the app's tools." .
+
+arr:apiBasePath a owl:DatatypeProperty ;
+    rdfs:label "apiBasePath" ;
+    rdfs:domain arr:SuiteApp ;
+    rdfs:comment "The API path prefix of the app." .
+
+arr:baseUrlSetting a owl:DatatypeProperty ;
+    rdfs:label "baseUrlSetting" ;
+    rdfs:domain arr:AppInstance ;
+    rdfs:comment "The setting that holds the instance base URL (never the URL itself)." .
+
+arr:apiKeySetting a owl:DatatypeProperty ;
+    rdfs:label "apiKeySetting" ;
+    rdfs:domain arr:AppInstance ;
+    rdfs:comment "The setting that holds the API key (never the key)." .
+
+arr:rootFolderPath a owl:DatatypeProperty ;
+    rdfs:label "rootFolderPath" ;
+    rdfs:domain arr:LibraryRootFolder ;
+    rdfs:comment "The path of the root folder inside the app." .
+
+arr:hasStep a owl:ObjectProperty ;
+    rdfs:label "hasStep" ;
+    rdfs:domain arr:ToolUseContract ;
+    rdfs:range arr:ContractStep ;
+    rdfs:comment "A step of the contract." .
+
+arr:stepIndex a owl:DatatypeProperty ;
+    rdfs:label "stepIndex" ;
+    rdfs:domain arr:ContractStep ;
+    rdfs:comment "The 1-based position of the step." .
+
+arr:callsTool a owl:ObjectProperty ;
+    rdfs:label "callsTool" ;
+    rdfs:domain arr:ContractStep ;
+    rdfs:range arr:ConnectorTool ;
+    rdfs:comment "The tool the step calls." .
+
+arr:precedesStep a owl:ObjectProperty ;
+    rdfs:label "precedesStep" ;
+    rdfs:domain arr:ContractStep ;
+    rdfs:range arr:ContractStep ;
+    rdfs:comment "The next step." .
+
+arr:bindsParameter a owl:ObjectProperty ;
+    rdfs:label "bindsParameter" ;
+    rdfs:domain arr:ContractStep ;
+    rdfs:range arr:ParameterBinding ;
+    rdfs:comment "A parameter binding of the step." .
+
+arr:parameterName a owl:DatatypeProperty ;
+    rdfs:label "parameterName" ;
+    rdfs:domain arr:ParameterBinding ;
+    rdfs:comment "The tool parameter name." .
+
+arr:parameterSource a owl:DatatypeProperty ;
+    rdfs:label "parameterSource" ;
+    rdfs:domain arr:ParameterBinding ;
+    rdfs:comment "operator input, a constant, or stepN.field." .
+
+arr:needsApproval a owl:DatatypeProperty ;
+    rdfs:label "needsApproval" ;
+    rdfs:domain arr:ContractStep ;
+    rdfs:comment "True when the step needs the operator's approval." .
+
+arr:contractOf a owl:ObjectProperty ;
+    rdfs:label "contractOf" ;
+    rdfs:domain arr:ToolUseContract ;
+    rdfs:range arr:ConnectorSkill ;
+    rdfs:comment "The skill that documents the contract." .
+
+arr:skillName a owl:DatatypeProperty ;
+    rdfs:label "skillName" ;
+    rdfs:domain arr:ConnectorSkill ;
+    rdfs:comment "The skill directory name." .
+
+arr:usesSkill a owl:ObjectProperty ;
+    rdfs:label "usesSkill" ;
+    rdfs:domain arr:ConnectorPrompt ;
+    rdfs:range arr:ConnectorSkill ;
+    rdfs:comment "A skill the prompt's agent loads." .
+
+arr:runsContract a owl:ObjectProperty ;
+    rdfs:label "runsContract" ;
+    rdfs:domain arr:ConnectorPrompt ;
+    rdfs:range arr:ToolUseContract ;
+    rdfs:comment "A contract the prompt's agent runs." .
+
+arr:usesTool a owl:ObjectProperty ;
+    rdfs:label "usesTool" ;
+    rdfs:domain arr:ConnectorPrompt ;
+    rdfs:range arr:ConnectorTool ;
+    rdfs:comment "A tool the prompt's agent may call." .
+
+arr:systemPromptForRole a owl:ObjectProperty ;
+    rdfs:label "systemPromptForRole" ;
+    rdfs:domain arr:ConnectorPrompt ;
+    rdfs:range arr:ArrAgentRole ;
+    rdfs:comment "The role class the prompt is the system prompt for." .
+
+arr:promptName a owl:DatatypeProperty ;
+    rdfs:label "promptName" ;
+    rdfs:domain arr:ConnectorPrompt ;
+    rdfs:comment "The served MCP prompt name." .
+
+arr:resourceUri a owl:DatatypeProperty ;
+    rdfs:label "resourceUri" ;
+    rdfs:comment "The MCP resource URI that serves this item." .
+
+# --- apps, instances, libraries and data locations ---
+arr:app-radarr a arr:SuiteApp ;
+    rdfs:label "Radarr" ;
+    arr:toolPrefix "radarr_" ;
+    arr:apiBasePath "/api/v3" .
+
+arr:instance-radarr a arr:AppInstance ;
+    rdfs:label "Radarr (default instance)" ;
+    arr:instanceOf arr:app-radarr ;
+    arr:holdsLibrary arr:library-radarr ;
+    arr:baseUrlSetting "RADARR_BASE_URL" ;
+    arr:apiKeySetting "RADARR_API_KEY" ;
+    arr:downloadsWith arr:download-client-qbittorrent .
+
+arr:library-radarr a arr:Library ;
+    rdfs:label "Radarr movie library" ;
+    rdfs:comment "Holds films." ;
+    arr:holdsMediaClass :Film ;
+    arr:storedIn arr:rootfolder-radarr .
+
+arr:rootfolder-radarr a arr:LibraryRootFolder ;
+    rdfs:label "Radarr root folder /movies" ;
+    arr:rootFolderPath "/movies" .
+
+arr:app-sonarr a arr:SuiteApp ;
+    rdfs:label "Sonarr" ;
+    arr:toolPrefix "sonarr_" ;
+    arr:apiBasePath "/api/v3" .
+
+arr:instance-sonarr a arr:AppInstance ;
+    rdfs:label "Sonarr (default instance)" ;
+    arr:instanceOf arr:app-sonarr ;
+    arr:holdsLibrary arr:library-sonarr ;
+    arr:baseUrlSetting "SONARR_BASE_URL" ;
+    arr:apiKeySetting "SONARR_API_KEY" ;
+    arr:downloadsWith arr:download-client-qbittorrent .
+
+arr:library-sonarr a arr:Library ;
+    rdfs:label "Sonarr TV library" ;
+    rdfs:comment "Holds TV series, seasons and episodes." ;
+    arr:holdsMediaClass :Series ;
+    arr:storedIn arr:rootfolder-sonarr .
+
+arr:rootfolder-sonarr a arr:LibraryRootFolder ;
+    rdfs:label "Sonarr root folder /tv" ;
+    arr:rootFolderPath "/tv" .
+
+arr:app-lidarr a arr:SuiteApp ;
+    rdfs:label "Lidarr" ;
+    arr:toolPrefix "lidarr_" ;
+    arr:apiBasePath "/api/v1" .
+
+arr:instance-lidarr a arr:AppInstance ;
+    rdfs:label "Lidarr (default instance)" ;
+    arr:instanceOf arr:app-lidarr ;
+    arr:holdsLibrary arr:library-lidarr ;
+    arr:baseUrlSetting "LIDARR_BASE_URL" ;
+    arr:apiKeySetting "LIDARR_API_KEY" ;
+    arr:downloadsWith arr:download-client-qbittorrent .
+
+arr:library-lidarr a arr:Library ;
+    rdfs:label "Lidarr music library" ;
+    rdfs:comment "Holds music artists, albums and tracks." ;
+    arr:holdsMediaClass :MusicAlbum ;
+    arr:storedIn arr:rootfolder-lidarr .
+
+arr:rootfolder-lidarr a arr:LibraryRootFolder ;
+    rdfs:label "Lidarr root folder /music" ;
+    arr:rootFolderPath "/music" .
+
+arr:app-chaptarr a arr:SuiteApp ;
+    rdfs:label "Chaptarr" ;
+    arr:toolPrefix "chaptarr_" ;
+    arr:apiBasePath "/api/v1" .
+
+arr:instance-chaptarr a arr:AppInstance ;
+    rdfs:label "Chaptarr (default instance)" ;
+    arr:instanceOf arr:app-chaptarr ;
+    arr:holdsLibrary arr:library-chaptarr ;
+    arr:baseUrlSetting "CHAPTARR_BASE_URL" ;
+    arr:apiKeySetting "CHAPTARR_API_KEY" .
+
+arr:library-chaptarr a arr:Library ;
+    rdfs:label "Chaptarr book library" ;
+    rdfs:comment "Holds authors, e-books and audiobooks." ;
+    arr:holdsMediaClass :Book .
+
+arr:app-prowlarr a arr:SuiteApp ;
+    rdfs:label "Prowlarr" ;
+    arr:toolPrefix "prowlarr_" ;
+    arr:apiBasePath "/api/v1" .
+
+arr:instance-prowlarr a arr:AppInstance ;
+    rdfs:label "Prowlarr (default instance)" ;
+    arr:instanceOf arr:app-prowlarr ;
+    arr:holdsLibrary arr:library-prowlarr ;
+    arr:baseUrlSetting "PROWLARR_BASE_URL" ;
+    arr:apiKeySetting "PROWLARR_API_KEY" .
+
+arr:library-prowlarr a arr:IndexerPool ;
+    rdfs:label "Prowlarr indexer pool" ;
+    rdfs:comment "Holds search indexers, synced to Radarr, Sonarr and Lidarr." .
+
+arr:app-bazarr a arr:SuiteApp ;
+    rdfs:label "Bazarr" ;
+    arr:toolPrefix "bazarr_" ;
+    arr:apiBasePath "/api" .
+
+arr:instance-bazarr a arr:AppInstance ;
+    rdfs:label "Bazarr (default instance)" ;
+    arr:instanceOf arr:app-bazarr ;
+    arr:holdsLibrary arr:library-bazarr ;
+    arr:baseUrlSetting "BAZARR_BASE_URL" ;
+    arr:apiKeySetting "BAZARR_API_KEY" .
+
+arr:library-bazarr a arr:SubtitleStore ;
+    rdfs:label "Bazarr subtitle store" ;
+    rdfs:comment "Holds subtitle files beside the Sonarr and Radarr media." .
+
+arr:app-seerr a arr:SuiteApp ;
+    rdfs:label "Seerr" ;
+    arr:toolPrefix "seerr_" ;
+    arr:apiBasePath "/api/v1" .
+
+arr:instance-seerr a arr:AppInstance ;
+    rdfs:label "Seerr (default instance)" ;
+    arr:instanceOf arr:app-seerr ;
+    arr:holdsLibrary arr:library-seerr ;
+    arr:baseUrlSetting "SEERR_BASE_URL" ;
+    arr:apiKeySetting "SEERR_API_KEY" .
+
+arr:library-seerr a arr:RequestQueue ;
+    rdfs:label "Seerr request queue" ;
+    rdfs:comment "Holds user media requests, forwarded to Radarr and Sonarr." .
+
+arr:download-client-qbittorrent a arr:DownloadClient ;
+    rdfs:label "qBittorrent" ;
+    rdfs:comment "The torrent client Radarr, Sonarr and Lidarr send grabbed releases to." .
+
+# --- federation ---
+arr:federation-prowlarr-syncsIndexersTo-radarr a arr:FederationLink ;
+    rdfs:label "Prowlarr pushes its indexer pool to Radarr (full sync)." ;
+    arr:federationSource arr:instance-prowlarr ;
+    arr:federationTarget arr:instance-radarr ;
+    arr:federationKind "syncsIndexersTo" .
+
+arr:federation-prowlarr-syncsIndexersTo-sonarr a arr:FederationLink ;
+    rdfs:label "Prowlarr pushes its indexer pool to Sonarr (full sync)." ;
+    arr:federationSource arr:instance-prowlarr ;
+    arr:federationTarget arr:instance-sonarr ;
+    arr:federationKind "syncsIndexersTo" .
+
+arr:federation-prowlarr-syncsIndexersTo-lidarr a arr:FederationLink ;
+    rdfs:label "Prowlarr pushes its indexer pool to Lidarr (full sync)." ;
+    arr:federationSource arr:instance-prowlarr ;
+    arr:federationTarget arr:instance-lidarr ;
+    arr:federationKind "syncsIndexersTo" .
+
+arr:federation-seerr-forwardsRequestsTo-radarr a arr:FederationLink ;
+    rdfs:label "Seerr sends approved movie requests to Radarr (root folder /movies)." ;
+    arr:federationSource arr:instance-seerr ;
+    arr:federationTarget arr:instance-radarr ;
+    arr:federationKind "forwardsRequestsTo" .
+
+arr:federation-seerr-forwardsRequestsTo-sonarr a arr:FederationLink ;
+    rdfs:label "Seerr sends approved series requests to Sonarr (root folder /tv)." ;
+    arr:federationSource arr:instance-seerr ;
+    arr:federationTarget arr:instance-sonarr ;
+    arr:federationKind "forwardsRequestsTo" .
+
+arr:federation-bazarr-subtitlesFor-sonarr a arr:FederationLink ;
+    rdfs:label "Bazarr reads episodes from Sonarr and writes subtitles beside them." ;
+    arr:federationSource arr:instance-bazarr ;
+    arr:federationTarget arr:instance-sonarr ;
+    arr:federationKind "subtitlesFor" .
+
+arr:federation-bazarr-subtitlesFor-radarr a arr:FederationLink ;
+    rdfs:label "Bazarr reads movies from Radarr and writes subtitles beside them." ;
+    arr:federationSource arr:instance-bazarr ;
+    arr:federationTarget arr:instance-radarr ;
+    arr:federationKind "subtitlesFor" .
+
+# --- routing: which instance a request for a media class goes to ---
+arr:route-Film-radarr a arr:RoutingRule ;
+    rdfs:label "Film requests go to Radarr" ;
+    arr:routesMediaClass :Film ;
+    arr:routesTo arr:instance-radarr ;
+    arr:landsIn arr:rootfolder-radarr .
+
+arr:route-Series-sonarr a arr:RoutingRule ;
+    rdfs:label "Series requests go to Sonarr" ;
+    arr:routesMediaClass :Series ;
+    arr:routesTo arr:instance-sonarr ;
+    arr:landsIn arr:rootfolder-sonarr .
+
+arr:route-TelevisionEpisode-sonarr a arr:RoutingRule ;
+    rdfs:label "TelevisionEpisode requests go to Sonarr" ;
+    arr:routesMediaClass :TelevisionEpisode ;
+    arr:routesTo arr:instance-sonarr ;
+    arr:landsIn arr:rootfolder-sonarr .
+
+arr:route-MusicAlbum-lidarr a arr:RoutingRule ;
+    rdfs:label "MusicAlbum requests go to Lidarr" ;
+    arr:routesMediaClass :MusicAlbum ;
+    arr:routesTo arr:instance-lidarr ;
+    arr:landsIn arr:rootfolder-lidarr .
+
+arr:route-MusicTrack-lidarr a arr:RoutingRule ;
+    rdfs:label "MusicTrack requests go to Lidarr" ;
+    arr:routesMediaClass :MusicTrack ;
+    arr:routesTo arr:instance-lidarr ;
+    arr:landsIn arr:rootfolder-lidarr .
+
+arr:route-Book-chaptarr a arr:RoutingRule ;
+    rdfs:label "Book requests go to Chaptarr" ;
+    arr:routesMediaClass :Book ;
+    arr:routesTo arr:instance-chaptarr .
+
+arr:route-Audiobook-chaptarr a arr:RoutingRule ;
+    rdfs:label "Audiobook requests go to Chaptarr" ;
+    arr:routesMediaClass :Audiobook ;
+    arr:routesTo arr:instance-chaptarr .

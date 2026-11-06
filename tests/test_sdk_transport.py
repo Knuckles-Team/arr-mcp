@@ -59,7 +59,7 @@ def test_clients_are_governed_and_send_the_api_key(module) -> None:
 
     api = _client(module, handler)
     assert isinstance(api._session, httpx.Client)
-    assert api.request("GET", "/api/v3/system/status") == {"ok": True}
+    assert api._request("GET", "/api/v3/system/status") == {"ok": True}
     assert seen[0].headers["X-Api-Key"] == "secret"
 
 
@@ -73,16 +73,16 @@ def test_request_shapes_are_unchanged() -> None:
         return httpx.Response(status, json=[1, 2])
 
     api = _client(api_client_sonarr, handler)
-    assert api.request("POST", "/api/v3/series", params={"a": 1}, data={"x": 2}) == {
+    assert api._request("POST", "/api/v3/series", params={"a": 1}, data={"x": 2}) == {
         "result": [1, 2]
     }
     assert str(seen[0].url) == "http://arr.test:8989/api/v3/series?a=1"
     assert json.loads(seen[0].content) == {"x": 2}
-    assert api.request("DELETE", "/gone") == {"status": "success"}
+    assert api._request("DELETE", "/gone") == {"status": "success"}
     with pytest.raises(RuntimeError, match=r"API error: HTTP 500"):
-        api.request("GET", "/bad")
+        api._request("GET", "/bad")
     with pytest.raises(ValueError):
-        api.request("GET", "https://evil.example/api")
+        api._request("GET", "https://evil.example/api")
 
 
 @pytest.mark.spec(f"{ID}.4")

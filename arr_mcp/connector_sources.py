@@ -12,7 +12,7 @@ SOURCES = (
     source_meta(
         tool="prowlarr_get_indexer",
         source_id="arr-indexers",
-        record_type="Indexer",
+        record_type="MediaIndexer",
         id_field="id",
         cursor_field="",
         preset={
@@ -27,7 +27,7 @@ SOURCES = (
     source_meta(
         tool="radarr_get_movie",
         source_id="arr-movies",
-        record_type="Movie",
+        record_type="Film",
         id_field="tmdbId",
         cursor_field="added",
         preset={
