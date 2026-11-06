@@ -130,5 +130,64 @@
     "radarr_get_downloadclient",
     "radarr_post_downloadclient_test",
     "radarr_put_downloadclient_id"
-  ]
+  ],
+  "agent": {
+    "kind": "business-role",
+    "business_role": "download monitor",
+    "tools": [
+      "radarr_get_queue_status",
+      "radarr_get_queue",
+      "sonarr_get_queue_status",
+      "sonarr_get_queue",
+      "lidarr_get_queue_status",
+      "lidarr_get_queue",
+      "chaptarr_get_queue_status",
+      "chaptarr_get_queue",
+      "radarr_delete_queue_id",
+      "radarr_post_command",
+      "radarr_get_system_status",
+      "radarr_get_health",
+      "sonarr_get_system_status",
+      "sonarr_get_health",
+      "lidarr_get_system_status",
+      "lidarr_get_health",
+      "chaptarr_get_system_status",
+      "chaptarr_get_health",
+      "prowlarr_get_system_status",
+      "prowlarr_get_health",
+      "bazarr_get_system_status",
+      "bazarr_get_system_health",
+      "seerr_get_status",
+      "arr_ingest_library",
+      "radarr_get_downloadclient",
+      "radarr_post_downloadclient_test",
+      "radarr_put_downloadclient_id"
+    ],
+    "skills": [
+      "arr-download-queue",
+      "arr-mcp-operations"
+    ],
+    "data": {
+      "reads": [
+        "arr-queue"
+      ],
+      "writes": [
+        "arr-queue"
+      ]
+    },
+    "guardrails": {
+      "approval_required": [
+        "radarr_delete_queue_id",
+        "radarr_put_downloadclient_id"
+      ],
+      "never": [
+        "Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.",
+        "Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them."
+      ]
+    },
+    "outputs": [
+      "A queue table per app: title, status, progress, time left, warnings.",
+      "Stalled downloads removed (with approval) and the new search started."
+    ]
+  }
 }

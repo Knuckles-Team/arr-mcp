@@ -61,6 +61,8 @@ A graph query answers which instance holds which library, where its files are, a
 - **FR-009**: Bazarr's hidden operations are tools. Rows: `CONN-ARR-MCP-SUITE-R009`.
 - **FR-010**: A failed call says why, and long calls get time. Rows: `CONN-ARR-MCP-SUITE-R010`.
 - **FR-011**: Provisioning workflows proven live are contracts. Rows: `CONN-ARR-MCP-SUITE-R011`.
+- **FR-012**: Settings reads never return secret values. Rows: `CONN-ARR-MCP-SUITE-R012`.
+- **FR-013**: The whole surface is declared. Rows: `CONN-ARR-MCP-SUITE-R013`.
 
 ## Success Criteria
 
@@ -90,3 +92,5 @@ A graph query answers which instance holds which library, where its files are, a
 | FR-009 | `CONN-ARR-MCP-SUITE-R009` | [plan.md](plan.md) | T-009 | [test-spec.md](test-spec.md) |
 | FR-010 | `CONN-ARR-MCP-SUITE-R010` | [plan.md](plan.md) | T-010 | [test-spec.md](test-spec.md) |
 | FR-011 | `CONN-ARR-MCP-SUITE-R011` | [plan.md](plan.md) | T-011 | [test-spec.md](test-spec.md) |
+| FR-012 | `CONN-ARR-MCP-SUITE-R012` | [plan.md](plan.md) | T-012 | [test-spec.md](test-spec.md) |
+| FR-013 | `CONN-ARR-MCP-SUITE-R013` | [plan.md](plan.md) | T-013 | [test-spec.md](test-spec.md) |

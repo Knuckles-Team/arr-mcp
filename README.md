@@ -1253,10 +1253,19 @@ Every upstream API operation is one typed tool named `<app>_<operation>`. No too
 | `bazarr_get_system_status` | Return environment information and versions |
 | `bazarr_get_system_tasks` | List tasks |
 | `bazarr_patch_episodes_subtitles` | Download an episode subtitles |
-| `bazarr_patch_movies` | Run actions on specific movies |
+| `bazarr_patch_movies_scan_disk` | Scan the disk for subtitles of specific movies |
+| `bazarr_patch_movies_search_missing` | Search missing subtitles of specific movies |
+| `bazarr_patch_movies_search_wanted` | Search wanted subtitles of specific movies |
+| `bazarr_patch_movies_sync` | Sync Radarr data for specific movies |
 | `bazarr_patch_movies_subtitles` | Download a movie subtitles |
-| `bazarr_patch_series` | Run actions on specific series |
-| `bazarr_patch_subtitles` | Apply mods/tools on external subtitles |
+| `bazarr_patch_series_scan_disk` | Scan the disk for subtitles of specific series |
+| `bazarr_patch_series_search_missing` | Search missing subtitles of specific series |
+| `bazarr_patch_series_search_wanted` | Search wanted subtitles of specific series |
+| `bazarr_patch_series_sync` | Sync Sonarr data for specific series |
+| `bazarr_patch_subtitles_sync` | Sync external subtitles with the video |
+| `bazarr_patch_subtitles_translate` | Translate external subtitles |
+| `bazarr_patch_subtitles_extract` | Extract embedded subtitles |
+| `bazarr_patch_subtitles_mod` | Apply a named mod to external subtitles |
 | `bazarr_patch_system_backups` | Restore a backup file |
 | `bazarr_patch_system_jobs` | Empty a specific jobs queue |
 | `bazarr_post_episodes_blacklist` | Add an episodes subtitles to blacklist |
@@ -1275,11 +1284,13 @@ Every upstream API operation is one typed tool named `<app>_<operation>`. No too
 | `bazarr_post_plex_webhook_delete` | post /plex/webhook/delete |
 | `bazarr_post_provider_episodes` | Manually download an episode subtitles |
 | `bazarr_post_provider_movies` | Manually download a movie subtitles |
-| `bazarr_post_providers` | Reset providers status |
+| `bazarr_post_providers_reset` | Reset providers status |
 | `bazarr_post_series` | Update specific series languages profile |
 | `bazarr_post_system_announcements` | Mark announcement as dismissed |
 | `bazarr_post_system_backups` | Create a new backup |
-| `bazarr_post_system_jobs` | Force start, move to top or move to bottom of the queue a specific job |
+| `bazarr_post_system_jobs_force_start` | Force start a specific job |
+| `bazarr_post_system_jobs_move_top` | Move a specific job to the top of the queue |
+| `bazarr_post_system_jobs_move_bottom` | Move a specific job to the bottom of the queue |
 | `bazarr_post_system_tasks` | Run task |
 | `bazarr_post_system_webhook_test` | Test external webhook connection |
 | `bazarr_post_web_hooks_plex` | Trigger subtitles search on play media event in Plex |

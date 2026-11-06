@@ -446,7 +446,7 @@ def test_bazarr_hidden_operations_are_served(served):
         "bazarr_get_system_settings",
         "bazarr_post_system_settings",
         "bazarr_patch_system_notifications",
-        "bazarr_post_system",
+        "bazarr_post_system_restart",
     ):
         assert name in tools, name
 
@@ -554,3 +554,42 @@ def test_provisioning_contracts_are_recorded_with_approval_steps(contract, graph
             node,
         ) in graph
     assert f"(`{contract}`)" in (PKG / "skills" / skill / "SKILL.md").read_text()
+
+
+# --- R012: settings reads never return secret values -------------------------
+
+
+@pytest.mark.spec(f"{ID}-R012")
+def test_bazarr_settings_read_masks_secrets():
+    def handler(request):
+        return httpx.Response(
+            200,
+            json={
+                "auth": {"apikey": "k1", "username": ""},
+                "sonarr": {"apikey": "k2", "ip": "127.0.0.1"},
+                "plex": {"encryption_key": "k3", "token": ""},
+                "translator": {"gemini_keys": ["k4"]},
+                "general": {"use_sonarr": True, "enabled_providers": ["gestdown"]},
+            },
+        )
+
+    api = _api("bazarr", handler)
+    out = api.get_system_settings()
+    assert out["auth"]["apikey"] == "<set>"
+    assert out["sonarr"] == {"apikey": "<set>", "ip": "127.0.0.1"}
+    assert out["plex"] == {"encryption_key": "<set>", "token": ""}
+    assert out["translator"]["gemini_keys"] == "<set>"
+    assert out["general"]["enabled_providers"] == ["gestdown"]
+    assert "k1" not in json.dumps(out) and "k4" not in json.dumps(out)
+
+
+# --- R013: the whole surface is declared -------------------------------------
+
+
+@pytest.mark.spec(f"{ID}-R013")
+def test_every_tool_is_called_by_a_contract_step(served):
+    from arr_mcp.connector_contracts import CONTRACTS
+
+    tools, _, _ = served
+    called = {step.tool for contract in CONTRACTS for step in contract.steps}
+    assert not sorted(set(tools) - called - {"connector_status"}), "tools no contract calls"

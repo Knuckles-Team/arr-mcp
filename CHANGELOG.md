@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2026-11-06
+
+### Added
+- Surface contracts: a tool-use contract step for every tool, links, data locations, roles, and agent definitions for the operator and the five business-role prompts (scion-sdk 0.9.0).
+
+### Changed
+- Tools that routed several operations through an `action` argument are one typed tool per action: `bazarr_patch_movies_*`, `bazarr_patch_series_*`, `bazarr_patch_subtitles_*`, `bazarr_post_providers_reset`, `bazarr_post_system_restart`/`_shutdown`, `bazarr_post_system_jobs_*`. `bazarr_get_history_stats` filters by `action_type`.
+
+### Security
+- `bazarr_get_system_settings` masks every API key, password, token, cookie and encryption key as `<set>`; 3.1.0 returned them in plain text.
+
 ## [3.1.0] - 2026-11-06
 
 ### Added

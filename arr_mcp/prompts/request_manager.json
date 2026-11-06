@@ -125,5 +125,70 @@
     "seerr_get_settings_sonarr",
     "seerr_post_settings_sonarr",
     "seerr_put_settings_sonarr_id"
-  ]
+  ],
+  "agent": {
+    "kind": "business-role",
+    "business_role": "request manager",
+    "tools": [
+      "seerr_get_request_count",
+      "seerr_get_request",
+      "seerr_get_request_id",
+      "seerr_get_service_radarr",
+      "seerr_get_service_sonarr",
+      "seerr_post_request_id_status",
+      "seerr_get_search",
+      "seerr_get_movie_id",
+      "seerr_post_request",
+      "seerr_get_settings_radarr",
+      "seerr_post_request_id_retry",
+      "radarr_get_queue_status",
+      "radarr_get_queue",
+      "sonarr_get_queue_status",
+      "sonarr_get_queue",
+      "lidarr_get_queue_status",
+      "lidarr_get_queue",
+      "chaptarr_get_queue_status",
+      "chaptarr_get_queue",
+      "radarr_delete_queue_id",
+      "radarr_post_command",
+      "radarr_get_qualityprofile",
+      "seerr_post_settings_radarr_test",
+      "seerr_post_settings_radarr",
+      "seerr_put_settings_radarr_id",
+      "seerr_get_settings_sonarr",
+      "seerr_post_settings_sonarr",
+      "seerr_put_settings_sonarr_id"
+    ],
+    "skills": [
+      "arr-media-requests",
+      "arr-download-queue"
+    ],
+    "data": {
+      "reads": [
+        "arr-requests"
+      ],
+      "writes": [
+        "arr-requests"
+      ]
+    },
+    "guardrails": {
+      "approval_required": [
+        "radarr_delete_queue_id",
+        "seerr_post_request_id_status",
+        "seerr_post_settings_radarr",
+        "seerr_put_settings_radarr_id",
+        "seerr_post_settings_sonarr",
+        "seerr_put_settings_sonarr_id"
+      ],
+      "never": [
+        "Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.",
+        "Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them."
+      ]
+    },
+    "outputs": [
+      "The pending, approved and failed request counts.",
+      "Each request decided: title, requester, decision and the server it routed to.",
+      "Failed requests that still fail after a retry, with the reason."
+    ]
+  }
 }
