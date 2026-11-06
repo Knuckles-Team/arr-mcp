@@ -4,5 +4,5 @@ Governing spec: [spec.md](spec.md). Design: [plan.md](plan.md). Rows: [requireme
 
 Each task line reads `- [ ] T001 [P] [US1] <ID>-R012.4 description`. Order is producer first.
 
-- [ ] T001 [US1] CONN-ARR-MCP-CONNECTOR-CONTENT-R002 Rename connector :Episode to a mv:TelevisionEpisode subclass.
+- [x] T001 [US1] CONN-ARR-MCP-CONNECTOR-CONTENT-R002 The connector ontology redeclares no core class.
 - [x] T002 [US1] CONN-ARR-MCP-CONNECTOR-CONTENT-R001 Default content.

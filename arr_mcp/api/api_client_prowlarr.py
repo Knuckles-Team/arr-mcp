@@ -45,7 +45,7 @@ class Api:
         self._tls_profile = tls_profile or resolve_tls_profile("prowlarr")
         self._session = build_client(self.base_url, self._tls_profile, token)
 
-    def request(
+    def _request(
         self,
         method: str,
         endpoint: str,
@@ -84,12 +84,12 @@ class Api:
     def get_api(self) -> Any:
         """Get the base API information."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api", params=params, data=None)
+        return self._request("GET", "/api", params=params, data=None)
 
     def get_applications_id(self, id: int) -> Any:
         """Get details for a specific application by ID."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/applications/{id}", params=params, data=None
         )
 
@@ -100,47 +100,47 @@ class Api:
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/applications/{id}", params=params, data=data
         )
 
     def delete_applications_id(self, id: int) -> Any:
         """Delete an application configuration."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/applications/{id}", params=params, data=None
         )
 
     def get_applications(self) -> Any:
         """Get all applications managed by Prowlarr."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/applications", params=params, data=None)
+        return self._request("GET", "/api/v1/applications", params=params, data=None)
 
     def post_applications(self, data: dict, forceSave: bool | None = None) -> Any:
         """Add a new applications."""
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request("POST", "/api/v1/applications", params=params, data=data)
+        return self._request("POST", "/api/v1/applications", params=params, data=data)
 
     def put_applications_bulk(self, data: dict) -> Any:
         """Update applications bulk."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "PUT", "/api/v1/applications/bulk", params=params, data=data
         )
 
     def delete_applications_bulk(self, data: dict) -> Any:
         """Delete applications bulk."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", "/api/v1/applications/bulk", params=params, data=data
         )
 
     def get_applications_schema(self) -> Any:
         """Get applications schema."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/applications/schema", params=params, data=None
         )
 
@@ -149,55 +149,59 @@ class Api:
         params: dict[str, Any] = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
-        return self.request(
+        return self._request(
             "POST", "/api/v1/applications/test", params=params, data=data
         )
 
     def post_applications_testall(self) -> Any:
         """Add a new applications testall."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", "/api/v1/applications/testall", params=params, data=None
         )
 
     def post_applications_action_name(self, name: str, data: dict) -> Any:
         """Add a new applications action name."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", f"/api/v1/applications/action/{name}", params=params, data=data
         )
 
     def post_appprofile(self, data: dict) -> Any:
         """Add a new appprofile."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/appprofile", params=params, data=data)
+        return self._request("POST", "/api/v1/appprofile", params=params, data=data)
 
     def get_appprofile(self) -> Any:
         """Get appprofile."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/appprofile", params=params, data=None)
+        return self._request("GET", "/api/v1/appprofile", params=params, data=None)
 
     def delete_appprofile_id(self, id: int) -> Any:
         """Delete appprofile id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/appprofile/{id}", params=params, data=None
         )
 
     def put_appprofile_id(self, id: str, data: dict) -> Any:
         """Update appprofile id."""
         params: dict[str, Any] = {}
-        return self.request("PUT", f"/api/v1/appprofile/{id}", params=params, data=data)
+        return self._request(
+            "PUT", f"/api/v1/appprofile/{id}", params=params, data=data
+        )
 
     def get_appprofile_id(self, id: int) -> Any:
         """Get specific appprofile."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/api/v1/appprofile/{id}", params=params, data=None)
+        return self._request(
+            "GET", f"/api/v1/appprofile/{id}", params=params, data=None
+        )
 
     def get_appprofile_schema(self) -> Any:
         """Get appprofile schema."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/appprofile/schema", params=params, data=None
         )
 
@@ -206,120 +210,122 @@ class Api:
         params: dict[str, Any] = {}
         if returnUrl is not None:
             params["returnUrl"] = returnUrl
-        return self.request("POST", "/login", params=params, data=None)
+        return self._request("POST", "/login", params=params, data=None)
 
     def get_login(self) -> Any:
         """Get login."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/login", params=params, data=None)
+        return self._request("GET", "/login", params=params, data=None)
 
     def get_logout(self) -> Any:
         """Get logout."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/logout", params=params, data=None)
+        return self._request("GET", "/logout", params=params, data=None)
 
     def get_system_backup(self) -> Any:
         """Get system backup."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/system/backup", params=params, data=None)
+        return self._request("GET", "/api/v1/system/backup", params=params, data=None)
 
     def delete_system_backup_id(self, id: int) -> Any:
         """Delete system backup id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/system/backup/{id}", params=params, data=None
         )
 
     def post_system_backup_restore_id(self, id: int) -> Any:
         """Add a new system backup restore id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", f"/api/v1/system/backup/restore/{id}", params=params, data=None
         )
 
     def post_system_backup_restore_upload(self) -> Any:
         """Add a new system backup restore upload."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", "/api/v1/system/backup/restore/upload", params=params, data=None
         )
 
     def get_command_id(self, id: int) -> Any:
         """Get specific command."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/api/v1/command/{id}", params=params, data=None)
+        return self._request("GET", f"/api/v1/command/{id}", params=params, data=None)
 
     def delete_command_id(self, id: int) -> Any:
         """Delete command id."""
         params: dict[str, Any] = {}
-        return self.request("DELETE", f"/api/v1/command/{id}", params=params, data=None)
+        return self._request(
+            "DELETE", f"/api/v1/command/{id}", params=params, data=None
+        )
 
     def post_command(self, data: dict) -> Any:
         """Add a new command."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/command", params=params, data=data)
+        return self._request("POST", "/api/v1/command", params=params, data=data)
 
     def get_command(self) -> Any:
         """Get command."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/command", params=params, data=None)
+        return self._request("GET", "/api/v1/command", params=params, data=None)
 
     def get_customfilter_id(self, id: int) -> Any:
         """Get specific customfilter."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/customfilter/{id}", params=params, data=None
         )
 
     def put_customfilter_id(self, id: str, data: dict) -> Any:
         """Update customfilter id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/customfilter/{id}", params=params, data=data
         )
 
     def delete_customfilter_id(self, id: int) -> Any:
         """Delete customfilter id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/customfilter/{id}", params=params, data=None
         )
 
     def get_customfilter(self) -> Any:
         """Get customfilter."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/customfilter", params=params, data=None)
+        return self._request("GET", "/api/v1/customfilter", params=params, data=None)
 
     def post_customfilter(self, data: dict) -> Any:
         """Add a new customfilter."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/customfilter", params=params, data=data)
+        return self._request("POST", "/api/v1/customfilter", params=params, data=data)
 
     def put_config_development_id(self, id: str, data: dict) -> Any:
         """Update config development id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/config/development/{id}", params=params, data=data
         )
 
     def get_config_development_id(self, id: int) -> Any:
         """Get specific config development."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/config/development/{id}", params=params, data=None
         )
 
     def get_config_development(self) -> Any:
         """Get config development."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/config/development", params=params, data=None
         )
 
     def get_downloadclient_id(self, id: int) -> Any:
         """Get specific downloadclient."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/downloadclient/{id}", params=params, data=None
         )
 
@@ -330,47 +336,47 @@ class Api:
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/downloadclient/{id}", params=params, data=data
         )
 
     def delete_downloadclient_id(self, id: int) -> Any:
         """Delete downloadclient id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/downloadclient/{id}", params=params, data=None
         )
 
     def get_downloadclient(self) -> Any:
         """Get downloadclient."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/downloadclient", params=params, data=None)
+        return self._request("GET", "/api/v1/downloadclient", params=params, data=None)
 
     def post_downloadclient(self, data: dict, forceSave: bool | None = None) -> Any:
         """Add a new downloadclient."""
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request("POST", "/api/v1/downloadclient", params=params, data=data)
+        return self._request("POST", "/api/v1/downloadclient", params=params, data=data)
 
     def put_downloadclient_bulk(self, data: dict) -> Any:
         """Update downloadclient bulk."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "PUT", "/api/v1/downloadclient/bulk", params=params, data=data
         )
 
     def delete_downloadclient_bulk(self, data: dict) -> Any:
         """Delete downloadclient bulk."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", "/api/v1/downloadclient/bulk", params=params, data=data
         )
 
     def get_downloadclient_schema(self) -> Any:
         """Get downloadclient schema."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/downloadclient/schema", params=params, data=None
         )
 
@@ -381,42 +387,42 @@ class Api:
         params: dict[str, Any] = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
-        return self.request(
+        return self._request(
             "POST", "/api/v1/downloadclient/test", params=params, data=data
         )
 
     def post_downloadclient_testall(self) -> Any:
         """Add a new downloadclient testall."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", "/api/v1/downloadclient/testall", params=params, data=None
         )
 
     def post_downloadclient_action_name(self, name: str, data: dict) -> Any:
         """Add a new downloadclient action name."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", f"/api/v1/downloadclient/action/{name}", params=params, data=data
         )
 
     def get_config_downloadclient_id(self, id: int) -> Any:
         """Get specific config downloadclient."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/config/downloadclient/{id}", params=params, data=None
         )
 
     def put_config_downloadclient_id(self, id: str, data: dict) -> Any:
         """Update config downloadclient id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/config/downloadclient/{id}", params=params, data=data
         )
 
     def get_config_downloadclient(self) -> Any:
         """Get config downloadclient."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/config/downloadclient", params=params, data=None
         )
 
@@ -436,19 +442,19 @@ class Api:
             params["allowFoldersWithoutTrailingSlashes"] = (
                 allowFoldersWithoutTrailingSlashes
             )
-        return self.request("GET", "/api/v1/filesystem", params=params, data=None)
+        return self._request("GET", "/api/v1/filesystem", params=params, data=None)
 
     def get_filesystem_type(self, path: str | None = None) -> Any:
         """Get filesystem type."""
         params: dict[str, Any] = {}
         if path is not None:
             params["path"] = path
-        return self.request("GET", "/api/v1/filesystem/type", params=params, data=None)
+        return self._request("GET", "/api/v1/filesystem/type", params=params, data=None)
 
     def get_health(self) -> Any:
         """Get health."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/health", params=params, data=None)
+        return self._request("GET", "/api/v1/health", params=params, data=None)
 
     def get_history(
         self,
@@ -479,7 +485,7 @@ class Api:
             params["downloadId"] = downloadId
         if indexerIds is not None:
             params["indexerIds"] = indexerIds
-        return self.request("GET", "/api/v1/history", params=params, data=None)
+        return self._request("GET", "/api/v1/history", params=params, data=None)
 
     def get_history_since(
         self, date: str | None = None, eventType: str | None = None
@@ -490,7 +496,7 @@ class Api:
             params["date"] = date
         if eventType is not None:
             params["eventType"] = eventType
-        return self.request("GET", "/api/v1/history/since", params=params, data=None)
+        return self._request("GET", "/api/v1/history/since", params=params, data=None)
 
     def get_history_indexer(
         self,
@@ -506,101 +512,105 @@ class Api:
             params["eventType"] = eventType
         if limit is not None:
             params["limit"] = limit
-        return self.request("GET", "/api/v1/history/indexer", params=params, data=None)
+        return self._request("GET", "/api/v1/history/indexer", params=params, data=None)
 
     def get_config_host_id(self, id: int) -> Any:
         """Get specific config host."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/config/host/{id}", params=params, data=None
         )
 
     def put_config_host_id(self, id: str, data: dict) -> Any:
         """Update config host id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/config/host/{id}", params=params, data=data
         )
 
     def get_config_host(self) -> Any:
         """Get config host."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/config/host", params=params, data=None)
+        return self._request("GET", "/api/v1/config/host", params=params, data=None)
 
     def get_indexer_id(self, id: int) -> Any:
         """Get specific indexer."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/api/v1/indexer/{id}", params=params, data=None)
+        return self._request("GET", f"/api/v1/indexer/{id}", params=params, data=None)
 
     def put_indexer_id(self, id: str, data: dict, forceSave: bool | None = None) -> Any:
         """Update indexer id."""
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request("PUT", f"/api/v1/indexer/{id}", params=params, data=data)
+        return self._request("PUT", f"/api/v1/indexer/{id}", params=params, data=data)
 
     def delete_indexer_id(self, id: int) -> Any:
         """Delete indexer id."""
         params: dict[str, Any] = {}
-        return self.request("DELETE", f"/api/v1/indexer/{id}", params=params, data=None)
+        return self._request(
+            "DELETE", f"/api/v1/indexer/{id}", params=params, data=None
+        )
 
     def get_indexer(self) -> Any:
         """Get indexer."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/indexer", params=params, data=None)
+        return self._request("GET", "/api/v1/indexer", params=params, data=None)
 
     def post_indexer(self, data: dict, forceSave: bool | None = None) -> Any:
         """Add a new indexer."""
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request("POST", "/api/v1/indexer", params=params, data=data)
+        return self._request("POST", "/api/v1/indexer", params=params, data=data)
 
     def put_indexer_bulk(self, data: dict) -> Any:
         """Update indexer bulk."""
         params: dict[str, Any] = {}
-        return self.request("PUT", "/api/v1/indexer/bulk", params=params, data=data)
+        return self._request("PUT", "/api/v1/indexer/bulk", params=params, data=data)
 
     def delete_indexer_bulk(self, data: dict) -> Any:
         """Delete indexer bulk."""
         params: dict[str, Any] = {}
-        return self.request("DELETE", "/api/v1/indexer/bulk", params=params, data=data)
+        return self._request("DELETE", "/api/v1/indexer/bulk", params=params, data=data)
 
     def get_indexer_schema(self) -> Any:
         """Get indexer schema."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/indexer/schema", params=params, data=None)
+        return self._request("GET", "/api/v1/indexer/schema", params=params, data=None)
 
     def post_indexer_test(self, data: dict, forceTest: bool | None = None) -> Any:
         """Test indexer."""
         params: dict[str, Any] = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
-        return self.request("POST", "/api/v1/indexer/test", params=params, data=data)
+        return self._request("POST", "/api/v1/indexer/test", params=params, data=data)
 
     def post_indexer_testall(self) -> Any:
         """Add a new indexer testall."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/indexer/testall", params=params, data=None)
+        return self._request(
+            "POST", "/api/v1/indexer/testall", params=params, data=None
+        )
 
     def post_indexer_action_name(self, name: str, data: dict) -> Any:
         """Add a new indexer action name."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", f"/api/v1/indexer/action/{name}", params=params, data=data
         )
 
     def get_indexer_categories(self) -> Any:
         """Get indexer categories."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/indexer/categories", params=params, data=None
         )
 
     def get_indexerproxy_id(self, id: int) -> Any:
         """Get specific indexerproxy."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/indexerproxy/{id}", params=params, data=None
         )
 
@@ -611,33 +621,33 @@ class Api:
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/indexerproxy/{id}", params=params, data=data
         )
 
     def delete_indexerproxy_id(self, id: int) -> Any:
         """Delete indexerproxy id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/indexerproxy/{id}", params=params, data=None
         )
 
     def get_indexerproxy(self) -> Any:
         """Get indexerproxy."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/indexerproxy", params=params, data=None)
+        return self._request("GET", "/api/v1/indexerproxy", params=params, data=None)
 
     def post_indexerproxy(self, data: dict, forceSave: bool | None = None) -> Any:
         """Add a new indexerproxy."""
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request("POST", "/api/v1/indexerproxy", params=params, data=data)
+        return self._request("POST", "/api/v1/indexerproxy", params=params, data=data)
 
     def get_indexerproxy_schema(self) -> Any:
         """Get indexerproxy schema."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/indexerproxy/schema", params=params, data=None
         )
 
@@ -646,21 +656,21 @@ class Api:
         params: dict[str, Any] = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
-        return self.request(
+        return self._request(
             "POST", "/api/v1/indexerproxy/test", params=params, data=data
         )
 
     def post_indexerproxy_testall(self) -> Any:
         """Add a new indexerproxy testall."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", "/api/v1/indexerproxy/testall", params=params, data=None
         )
 
     def post_indexerproxy_action_name(self, name: str, data: dict) -> Any:
         """Add a new indexerproxy action name."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", f"/api/v1/indexerproxy/action/{name}", params=params, data=data
         )
 
@@ -684,22 +694,22 @@ class Api:
             params["protocols"] = protocols
         if tags is not None:
             params["tags"] = tags
-        return self.request("GET", "/api/v1/indexerstats", params=params, data=None)
+        return self._request("GET", "/api/v1/indexerstats", params=params, data=None)
 
     def get_indexerstatus(self) -> Any:
         """Get indexerstatus."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/indexerstatus", params=params, data=None)
+        return self._request("GET", "/api/v1/indexerstatus", params=params, data=None)
 
     def get_localization(self) -> Any:
         """Get localization."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/localization", params=params, data=None)
+        return self._request("GET", "/api/v1/localization", params=params, data=None)
 
     def get_localization_options(self) -> Any:
         """Get localization options."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/localization/options", params=params, data=None
         )
 
@@ -723,17 +733,17 @@ class Api:
             params["sortDirection"] = sortDirection
         if level is not None:
             params["level"] = level
-        return self.request("GET", "/api/v1/log", params=params, data=None)
+        return self._request("GET", "/api/v1/log", params=params, data=None)
 
     def get_log_file(self) -> Any:
         """Get log file."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/log/file", params=params, data=None)
+        return self._request("GET", "/api/v1/log/file", params=params, data=None)
 
     def get_log_file_filename(self, filename: str) -> Any:
         """Get log file filename."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/log/file/{filename}", params=params, data=None
         )
 
@@ -839,7 +849,7 @@ class Api:
             params["host"] = host
         if server is not None:
             params["server"] = server
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/indexer/{id}/newznab", params=params, data=None
         )
 
@@ -945,7 +955,7 @@ class Api:
             params["host"] = host
         if server is not None:
             params["server"] = server
-        return self.request("GET", f"/{id}/api", params=params, data=None)
+        return self._request("GET", f"/{id}/api", params=params, data=None)
 
     def get_indexer_id_download(
         self, id: int, link: str | None = None, file: str | None = None
@@ -956,7 +966,7 @@ class Api:
             params["link"] = link
         if file is not None:
             params["file"] = file
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/indexer/{id}/download", params=params, data=None
         )
 
@@ -969,12 +979,12 @@ class Api:
             params["link"] = link
         if file is not None:
             params["file"] = file
-        return self.request("GET", f"/{id}/download", params=params, data=None)
+        return self._request("GET", f"/{id}/download", params=params, data=None)
 
     def get_notification_id(self, id: int) -> Any:
         """Get specific notification."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/notification/{id}", params=params, data=None
         )
 
@@ -985,33 +995,33 @@ class Api:
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request(
+        return self._request(
             "PUT", f"/api/v1/notification/{id}", params=params, data=data
         )
 
     def delete_notification_id(self, id: int) -> Any:
         """Delete notification id."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "DELETE", f"/api/v1/notification/{id}", params=params, data=None
         )
 
     def get_notification(self) -> Any:
         """Get all configured notifications."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/notification", params=params, data=None)
+        return self._request("GET", "/api/v1/notification", params=params, data=None)
 
     def post_notification(self, data: dict, forceSave: bool | None = None) -> Any:
         """Add a new notification."""
         params: dict[str, Any] = {}
         if forceSave is not None:
             params["forceSave"] = forceSave
-        return self.request("POST", "/api/v1/notification", params=params, data=data)
+        return self._request("POST", "/api/v1/notification", params=params, data=data)
 
     def get_notification_schema(self) -> Any:
         """Get notification schema."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/notification/schema", params=params, data=None
         )
 
@@ -1020,33 +1030,33 @@ class Api:
         params: dict[str, Any] = {}
         if forceTest is not None:
             params["forceTest"] = forceTest
-        return self.request(
+        return self._request(
             "POST", "/api/v1/notification/test", params=params, data=data
         )
 
     def post_notification_testall(self) -> Any:
         """Add a new notification testall."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", "/api/v1/notification/testall", params=params, data=None
         )
 
     def post_notification_action_name(self, name: str, data: dict) -> Any:
         """Add a new notification action name."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "POST", f"/api/v1/notification/action/{name}", params=params, data=data
         )
 
     def get_ping(self) -> Any:
         """Ping the Prowlarr API to check connectivity."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/ping", params=params, data=None)
+        return self._request("GET", "/ping", params=params, data=None)
 
     def post_search(self, data: dict) -> Any:
         """Perform a bulk search across multiple indexers."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/search", params=params, data=data)
+        return self._request("POST", "/api/v1/search", params=params, data=data)
 
     def get_search(
         self,
@@ -1071,131 +1081,135 @@ class Api:
             params["limit"] = limit
         if offset is not None:
             params["offset"] = offset
-        return self.request("GET", "/api/v1/search", params=params, data=None)
+        return self._request("GET", "/api/v1/search", params=params, data=None)
 
     def post_search_bulk(self, data: dict) -> Any:
         """Add a new search bulk."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/search/bulk", params=params, data=data)
+        return self._request("POST", "/api/v1/search/bulk", params=params, data=data)
 
     def get_content_path(self, path: str) -> Any:
         """Get content path."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/content/{path}", params=params, data=None)
+        return self._request("GET", f"/content/{path}", params=params, data=None)
 
     def get_(self, path: str) -> Any:
         """Get ."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/", params=params, data=None)
+        return self._request("GET", "/", params=params, data=None)
 
     def get_path(self, path: str) -> Any:
         """Get path."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/{path}", params=params, data=None)
+        return self._request("GET", f"/{path}", params=params, data=None)
 
     def get_system_status(self) -> Any:
         """Get system status."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/system/status", params=params, data=None)
+        return self._request("GET", "/api/v1/system/status", params=params, data=None)
 
     def get_system_routes(self) -> Any:
         """Get system routes."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/system/routes", params=params, data=None)
+        return self._request("GET", "/api/v1/system/routes", params=params, data=None)
 
     def get_system_routes_duplicate(self) -> Any:
         """Get system routes duplicate."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", "/api/v1/system/routes/duplicate", params=params, data=None
         )
 
     def post_system_shutdown(self) -> Any:
         """Add a new system shutdown."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/system/shutdown", params=params, data=None)
+        return self._request(
+            "POST", "/api/v1/system/shutdown", params=params, data=None
+        )
 
     def post_system_restart(self) -> Any:
         """Add a new system restart."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/system/restart", params=params, data=None)
+        return self._request("POST", "/api/v1/system/restart", params=params, data=None)
 
     def get_tag_id(self, id: int) -> Any:
         """Get specific tag."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/api/v1/tag/{id}", params=params, data=None)
+        return self._request("GET", f"/api/v1/tag/{id}", params=params, data=None)
 
     def put_tag_id(self, id: str, data: dict) -> Any:
         """Update tag id."""
         params: dict[str, Any] = {}
-        return self.request("PUT", f"/api/v1/tag/{id}", params=params, data=data)
+        return self._request("PUT", f"/api/v1/tag/{id}", params=params, data=data)
 
     def delete_tag_id(self, id: int) -> Any:
         """Delete tag id."""
         params: dict[str, Any] = {}
-        return self.request("DELETE", f"/api/v1/tag/{id}", params=params, data=None)
+        return self._request("DELETE", f"/api/v1/tag/{id}", params=params, data=None)
 
     def get_tag(self) -> Any:
         """Get tag."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/tag", params=params, data=None)
+        return self._request("GET", "/api/v1/tag", params=params, data=None)
 
     def post_tag(self, data: dict) -> Any:
         """Add a new tag."""
         params: dict[str, Any] = {}
-        return self.request("POST", "/api/v1/tag", params=params, data=data)
+        return self._request("POST", "/api/v1/tag", params=params, data=data)
 
     def get_tag_detail_id(self, id: int) -> Any:
         """Get specific tag detail."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/api/v1/tag/detail/{id}", params=params, data=None)
+        return self._request(
+            "GET", f"/api/v1/tag/detail/{id}", params=params, data=None
+        )
 
     def get_tag_detail(self) -> Any:
         """Get tag detail."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/tag/detail", params=params, data=None)
+        return self._request("GET", "/api/v1/tag/detail", params=params, data=None)
 
     def get_system_task(self) -> Any:
         """Get system task."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/system/task", params=params, data=None)
+        return self._request("GET", "/api/v1/system/task", params=params, data=None)
 
     def get_system_task_id(self, id: int) -> Any:
         """Get specific system task."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/system/task/{id}", params=params, data=None
         )
 
     def put_config_ui_id(self, id: str, data: dict) -> Any:
         """Update config ui id."""
         params: dict[str, Any] = {}
-        return self.request("PUT", f"/api/v1/config/ui/{id}", params=params, data=data)
+        return self._request("PUT", f"/api/v1/config/ui/{id}", params=params, data=data)
 
     def get_config_ui_id(self, id: int) -> Any:
         """Get specific config ui."""
         params: dict[str, Any] = {}
-        return self.request("GET", f"/api/v1/config/ui/{id}", params=params, data=None)
+        return self._request("GET", f"/api/v1/config/ui/{id}", params=params, data=None)
 
     def get_config_ui(self) -> Any:
         """Get config ui."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/config/ui", params=params, data=None)
+        return self._request("GET", "/api/v1/config/ui", params=params, data=None)
 
     def get_update(self) -> Any:
         """Get update."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/update", params=params, data=None)
+        return self._request("GET", "/api/v1/update", params=params, data=None)
 
     def get_log_file_update(self) -> Any:
         """Get log file update."""
         params: dict[str, Any] = {}
-        return self.request("GET", "/api/v1/log/file/update", params=params, data=None)
+        return self._request("GET", "/api/v1/log/file/update", params=params, data=None)
 
     def get_log_file_update_filename(self, filename: str) -> Any:
         """Get log file update filename."""
         params: dict[str, Any] = {}
-        return self.request(
+        return self._request(
             "GET", f"/api/v1/log/file/update/{filename}", params=params, data=None
         )
 

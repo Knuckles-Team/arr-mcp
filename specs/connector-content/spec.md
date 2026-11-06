@@ -23,25 +23,25 @@ The `arr-mcp` server serves its packaged skills, prompts and ontology to any cli
 **Acceptance Scenarios**:
 
 1. **Given** the connector is configured, **When** the behaviour of row `CONN-ARR-MCP-CONNECTOR-CONTENT-R001` (default content) is exercised, **Then** `resources/list` includes `skill://` and `ontology://`; `prompts/list` includes each packaged prompt.
-2. **Given** the connector is configured, **When** the behaviour of row `CONN-ARR-MCP-CONNECTOR-CONTENT-R002` (rename connector :episode to a mv:televisionepisode subclass) is exercised, **Then** rename connector :Episode to a mv:TelevisionEpisode subclass.
+2. **Given** the connector is configured, **When** the behaviour of row `CONN-ARR-MCP-CONNECTOR-CONTENT-R002` (the connector ontology redeclares no core class) is exercised, **Then** the ontology declares classes only in the arr namespace.
 3. **Given** the connector is configured, **When** the behaviour of row `CONN-ARR-MCP-CONNECTOR-CONTENT-R001` (default content) is exercised, **Then** `resources/list` includes `skill://` and `ontology://`; `prompts/list` includes each packaged prompt.
 
 ### Edge Cases
 
 - If `CONN-ARR-MCP-CONNECTOR-CONTENT-R001` is not met, its proving test fails: default content.
-- If `CONN-ARR-MCP-CONNECTOR-CONTENT-R002` is not met, its proving test fails: rename connector :episode to a mv:televisionepisode subclass.
+- If `CONN-ARR-MCP-CONNECTOR-CONTENT-R002` is not met, its proving test fails: the connector ontology redeclares no core class.
 - If `CONN-ARR-MCP-CONNECTOR-CONTENT-R001` is not met, its proving test fails: default content.
 
 ## Requirements
 
 - **FR-001**: Default content. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R001`.
-- **FR-002**: Rename connector :Episode to a mv:TelevisionEpisode subclass. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R002`.
+- **FR-002**: The connector ontology redeclares no core class. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R002`.
 - **FR-003**: Default content. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R001`.
 
 ## Success Criteria
 
 - **SC-001**: `resources/list` includes `skill://` and `ontology://`; `prompts/list` includes each packaged prompt. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R001`.
-- **SC-002**: Rename connector :Episode to a mv:TelevisionEpisode subclass. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R002`.
+- **SC-002**: The connector ontology redeclares no core class. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R002`.
 - **SC-003**: `resources/list` includes `skill://` and `ontology://`; `prompts/list` includes each packaged prompt. Rows: `CONN-ARR-MCP-CONNECTOR-CONTENT-R001`.
 
 ## Assumptions

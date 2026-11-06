@@ -2,95 +2,63 @@
 name: arr-series-library
 skill_type: skill
 description: >-
-  Manage the Sonarr TV series library via the arr-mcp MCP server — list series,
-  look one up by TVDB id, add a series, inspect seasons/episodes, and check
-  wanted/missing episodes. Use when the agent must inspect or curate the TV
-  collection, add a new show for download, or reason about a series'
-  monitored/continuing status. Do NOT use for movies (use arr-movie-library),
-  music, books, or indexer setup (use arr-indexer-management); prefer those.
+  Manage the Sonarr TV library through arr-mcp: add a series and search for it, search
+  for missing episodes, read series, episodes, queue and wanted list, and tag series.
+  Use for any TV series. Do NOT use for movies (arr-movie-library), music, books,
+  indexers or user requests.
 license: MIT
-tags: [arr, sonarr, tv, series, media-automation, mcp]
+tags: [arr, media-automation, mcp, sonarr]
 metadata:
   author: Knuckles-Team
-  version: '0.1.0'
+  version: '1.0.0'
 ---
+
 # Arr Series Library (Sonarr)
 
-Domain-typed access to the **Sonarr** TV library through the arr-mcp MCP server.
-Sonarr tracks series by their TVDB id, monitors seasons/episodes, and grabs
-releases from configured indexers. Prefer the condensed `sonarr_action` tool — it
-routes to the real Sonarr client methods and returns series-shaped records.
+Use the typed tools of the `arr-mcp` connector: one tool per upstream API operation, named `<app>_<operation>` (for example `radarr_get_queue`). Each tool takes typed parameters; there is no `action` or `params_json` routing.
 
-## When to use
-- List the series library / triage monitored shows with missing episodes.
-- Look up a single series by TVDB id or internal Sonarr id.
-- Add a new series and choose which seasons to monitor.
-- Ingest the series library into the knowledge graph as typed `:Series` nodes.
+## Where the data lives
 
-## When NOT to use
-- Movies → `arr-movie-library` (Radarr).
-- Music (artists/albums), books → the Lidarr / Chaptarr surfaces.
-- Adding, enabling, or testing indexers → `arr-indexer-management` (Prowlarr).
-- User-facing "please add this show" requests via Overseerr → the `seerr_action`
-  tool.
+- **Sonarr** (`sonarr_*` tools, `SONARR_BASE_URL`): the TV library holding TV series, seasons and episodes; files under `/tv`.
 
-## Prerequisites & environment
-Connect via the `mcp-client` skill against the **`arr-mcp`** MCP server.
+## Workflows (tool-use contracts)
 
-| Variable | Required | Notes |
-|----------|----------|-------|
-| `SONARR_BASE_URL` | ✅ | Sonarr base URL (e.g. `http://sonarr:8989`) |
-| `SONARR_TOKEN` | ✅ | Sonarr API key (sent as the API token) |
-| `SONARR_SSL_VERIFY` | optional | TLS verification toggle (default off) |
+Each workflow is a tool-use contract in the connector ontology (`ontology://arr-mcp/arr-contracts.ttl`, `arr:ToolUseContract`). Run the steps in order; a parameter written `stepN.field` comes from step N's result.
 
-`MCP_TOOL_MODE` (`condensed`|`verbose`|`both`) selects the condensed
-`sonarr_action` tool (used below) vs. the 1:1 `sonarr_<method>` verbose tools.
+### Add a series and search for it (`sonarr-add-and-search`)
 
-## Tools & actions
-Prefer the **condensed** tool; it takes `action` + a `params_json` **JSON string**
-whose keys are passed straight to the Sonarr client method. Call
-`action="list_actions"` to discover every valid action.
+Resolve the TV library location and quality profile, look the title up, add it monitored and start a search, then confirm it reached the download queue.
 
-| Condensed tool | Key actions |
-|----------------|-------------|
-| `sonarr_action` | `get_series`, `get_series_id`, `post_series`, `put_series_id`, `delete_series_id`, `get_episode`, `get_wanted_missing`, `get_series_lookup` |
-| `arr_ingest_library` | `services="series"` → push `:Series` nodes into the KG |
+1. `sonarr_get_rootfolder` — Pick the library root folder; use its `path`.
+2. `sonarr_get_qualityprofile` — Pick the quality profile the operator named (default the first); use its `id`.
+3. `sonarr_get_series_lookup` (`term` = operator input: title or tmdb:/tvdb: id) — Confirm the right title and year before adding.
+4. `sonarr_get_series` (`tvdbId` = step3.result[0].tvdbId) — Stop if the title is already in the library.
+5. `sonarr_add_series` (`term` = operator input: title or tmdb:/tvdb: id, `root_folder_path` = step1.result[0].path, `quality_profile_id` = step2.result[0].id, `monitored` = true, `search_for_missing_episodes` = true) — Adds the title monitored and starts the search.
+6. `sonarr_get_queue` (`page` = 1, `pageSize` = 20) — A grabbed release shows here; an empty queue means no release matched yet.
 
-### Key parameters
-- `get_series` — no args lists all; pass `{"tvdbId": <id>}` to fetch one by TVDB.
-- `get_series_id` — `{"id": <sonarr_id>}` for the internal id.
-- `post_series` — `{"data": {...}}` with `tvdbId`, `qualityProfileId`,
-  `rootFolderPath`, `languageProfileId`, `monitored`, and a `seasons` array /
-  `addOptions.monitor`.
+### Search for missing series items (`sonarr-search-missing`)
 
-## Recipes (`params_json`)
-List the whole library:
-```json
-{}
-```
-Look up one series by TVDB id:
-```json
-{"tvdbId": 121361}
-```
-Search for a show to add (by term), then add it monitoring all seasons:
-```json
-{"term": "The Expanse"}
-```
-```json
-{"data": {"tvdbId": 121361, "qualityProfileId": 1, "rootFolderPath": "/tv", "monitored": true, "addOptions": {"monitor": "all", "searchForMissingEpisodes": true}}}
-```
+List the monitored items that have no file and start one search command for them.
 
-## Gotchas
-- `params_json` is a **string** of JSON, not an object — serialize it.
-- `get_series` with no `tvdbId` returns the **entire** library; filter client-side.
-- TVDB id (`tvdbId`) is the stable external key; the numeric Sonarr `id` is
-  instance-local — the KG keys `:Series` nodes by `arr:Series:<tvdbId>`.
-- Series size lives under `statistics.sizeOnDisk`, not a top-level field.
-- Adding a series needs a valid `qualityProfileId` **and** `rootFolderPath`;
-  use `get_series_lookup` (term search) to resolve the `tvdbId` first.
+1. `sonarr_get_wanted_missing` (`monitored` = true, `pageSize` = 50) — Collect the ids of the missing items.
+2. `sonarr_post_command` (`data` = {"name": "EpisodeSearch", "episodeIds": "<ids or id from step1>"}) — One command per batch; never one per item.
+3. `sonarr_get_queue` (`page` = 1) — Confirm grabs.
 
-## Related
-- `arr_ingest_library` (tag `kg`) ingests series (and movies/indexers) as typed
-  KG nodes — ingestion only, not part of the curation surface.
-- **Related skills:** `arr-movie-library` (Radarr), `arr-indexer-management`
-  (Prowlarr).
+### Create and remove a label tag (reversible) (`sonarr-tag-roundtrip`)
+
+Create a tag to group items, verify it, and delete it again when it was only a test.
+
+1. `sonarr_get_tag` — Reuse an existing tag with the same label.
+2. `sonarr_post_tag` (`data` = {"label": "zz-validation-<date>"}) — Labels are lower case.
+3. `sonarr_delete_tag_id` (`id` = step2.id, `confirm` = true) — Only for tags this run created.
+
+Needs approval: `sonarr_delete_tag_id`.
+
+## Guardrails
+
+- Read before you write: every change starts from the read steps of its contract.
+- Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
+- Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
+- Never change API keys, download client credentials, or app connection settings.
+- Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
+- Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

@@ -7,26 +7,22 @@ entrypoint. The ecosystem role and configuration are summarized in
 
 ## As an MCP server
 
-Once [deployed](deployment.md), the server registers one consolidated, action-routed
-tool per Arr service. A service's tool registers only when its credentials are
-configured, so the tool surface stays compact.
+Once [deployed](deployment.md), the server registers one typed tool per upstream API
+operation, named `<app>_<operation>`: 1,375 tools across Radarr, Sonarr, Lidarr, Chaptarr,
+Prowlarr, Bazarr and Seerr, plus `arr_ingest_library`. No tool routes by `action`.
 
-| Tool | Service |
+| Request | Tool |
 |---|---|
-| `sonarr_action` | Sonarr (TV) |
-| `radarr_action` | Radarr (movies) |
-| `lidarr_action` | Lidarr (music) |
-| `prowlarr_action` | Prowlarr (indexers) |
-| `bazarr_action` | Bazarr (subtitles) |
-| `seerr_action` | Seerr (requests) |
-| `chaptarr_action` | Chaptarr (audiobooks / ebooks) |
+| *"List the series Sonarr is tracking"* | `sonarr_get_series` |
+| *"Search Prowlarr for 'nyaa'"* | `prowlarr_get_search` |
+| *"Show pending requests in Seerr"* | `seerr_get_request` with `filter="pending"` |
+| *"What is downloading?"* | `radarr_get_queue`, `sonarr_get_queue`, `lidarr_get_queue` |
 
-Each tool takes an `action` plus parameters and dispatches to the corresponding API
-method. Example agent prompts that map onto these tools:
-
-- *"List the series Sonarr is tracking"* → `sonarr_action`
-- *"Search Prowlarr for an indexer named 'nyaa'"* → `prowlarr_action`
-- *"Show pending requests in Seerr"* → `seerr_action`
+The packaged skills (`skill://arr-*/SKILL.md`) hold the task workflows, and the packaged
+prompts are agent definitions for the operator and each role (media librarian, request
+manager, indexer maintainer, subtitle curator, download monitor). The ontology
+(`ontology://arr-mcp/arr.ttl`, `ontology://arr-mcp/arr-contracts.ttl`) records the tool-use
+contracts, where each library lives, and how the apps federate.
 
 ## As a Python API
 

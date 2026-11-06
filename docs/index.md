@@ -19,9 +19,10 @@ provides:
 
 - **Per-service API clients** — request-session facades over Sonarr, Radarr, Lidarr,
   Prowlarr, Bazarr, Seerr, and Chaptarr, each constructed from the environment.
-- **Action-dispatch MCP tools** — one consolidated tool per service
-  (`sonarr_action`, `radarr_action`, …) that keeps the LLM tool surface compact and
-  togglable.
+- **Typed MCP tools** — one tool per upstream API operation (`radarr_get_queue`,
+  `seerr_get_request`, …), loaded on demand by a fleet gateway.
+- **Skills, agent-definition prompts and an ontology** — task workflows, operator and
+  role prompts, and the tool-use contracts, data locations and federation of the suite.
   Agent Control Protocol with an optional web interface.
 
 Each service connector remains inactive when its credentials are absent, so the

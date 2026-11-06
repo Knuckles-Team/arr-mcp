@@ -2,93 +2,63 @@
 name: arr-indexer-management
 skill_type: skill
 description: >-
-  Manage Prowlarr search indexers via the arr-mcp MCP server — list configured
-  indexers, inspect one, add/update/delete an indexer, and test connectivity. Use
-  when the agent must audit which Torznab/Newznab indexers are enabled, add or
-  fix an indexer, or ingest the indexer inventory into the knowledge graph. Do
-  NOT use for curating movies (use arr-movie-library) or series (use
-  arr-series-library); prefer those.
+  Keep the Prowlarr indexer pool healthy through arr-mcp: fix a failing indexer, sync
+  indexers to Radarr, Sonarr and Lidarr, and search releases across indexers. Use when
+  searches find nothing, health shows indexer failures, or an indexer must be added or
+  fixed. Do NOT use for library curation or user requests.
 license: MIT
-tags: [arr, prowlarr, indexers, media-automation, mcp]
+tags: [arr, media-automation, mcp, prowlarr]
 metadata:
   author: Knuckles-Team
-  version: '0.1.0'
+  version: '1.0.0'
 ---
+
 # Arr Indexer Management (Prowlarr)
 
-Domain-typed access to the **Prowlarr** indexer inventory through the arr-mcp MCP
-server. Prowlarr centralizes Torznab/Newznab search indexers and syncs them to
-the *arr apps. Prefer the condensed `prowlarr_action` tool — it routes to the real
-Prowlarr client methods and returns indexer-shaped records. (The same
-`get_indexer` action exists on `radarr_action`/`sonarr_action` for per-app
-indexers.)
+Use the typed tools of the `arr-mcp` connector: one tool per upstream API operation, named `<app>_<operation>` (for example `radarr_get_queue`). Each tool takes typed parameters; there is no `action` or `params_json` routing.
 
-## When to use
-- Audit which indexers are configured and which are `enabled`.
-- Inspect a single indexer by id (protocol, priority, implementation).
-- Add, update, or delete an indexer; test one before saving.
-- Ingest the indexer inventory into the knowledge graph as typed `:Indexer` nodes.
+## Where the data lives
 
-## When NOT to use
-- Curating the movie library → `arr-movie-library` (Radarr).
-- Curating the series library → `arr-series-library` (Sonarr).
-- Download-client (not indexer) configuration → the `get_downloadclient` actions
-  on the per-app tools.
+- **Prowlarr** (`prowlarr_*` tools, `PROWLARR_BASE_URL`): the indexer pool holding search indexers, synced to Radarr, Sonarr and Lidarr; no file root folder.
 
-## Prerequisites & environment
-Connect via the `mcp-client` skill against the **`arr-mcp`** MCP server.
+## Workflows (tool-use contracts)
 
-| Variable | Required | Notes |
-|----------|----------|-------|
-| `PROWLARR_BASE_URL` | ✅ | Prowlarr base URL (e.g. `http://prowlarr:9696`) |
-| `PROWLARR_TOKEN` | ✅ | Prowlarr API key (sent as the API token) |
-| `PROWLARR_SSL_VERIFY` | optional | TLS verification toggle (default off) |
+Each workflow is a tool-use contract in the connector ontology (`ontology://arr-mcp/arr-contracts.ttl`, `arr:ToolUseContract`). Run the steps in order; a parameter written `stepN.field` comes from step N's result.
 
-`MCP_TOOL_MODE` (`condensed`|`verbose`|`both`) selects the condensed
-`prowlarr_action` tool (used below) vs. the 1:1 `prowlarr_<method>` verbose tools.
+### Fix a failing indexer (`prowlarr-fix-failing-indexer`)
 
-## Tools & actions
-Prefer the **condensed** tool; it takes `action` + a `params_json` **JSON string**
-whose keys are passed straight to the Prowlarr client method. Call
-`action="list_actions"` to discover every valid action.
+Find indexers Prowlarr has disabled after failures, read the failure, retest, and change the indexer settings only with approval.
 
-| Condensed tool | Key actions |
-|----------------|-------------|
-| `prowlarr_action` | `get_indexer`, `get_indexer_id`, `post_indexer`, `put_indexer_id`, `delete_indexer_id`, `post_indexer_test`, `get_indexerstats` |
-| `arr_ingest_library` | `services="indexers"` → push `:Indexer` nodes into the KG |
+1. `prowlarr_get_indexerstatus` — Each entry is a failing indexer (`indexerId`, `disabledTill`, `mostRecentFailure`).
+2. `prowlarr_get_health` — Health messages name the failing indexers and the reason.
+3. `prowlarr_get_indexer_id` (`id` = step1.indexerId) — Read the full indexer definition.
+4. `prowlarr_post_indexer_test` (`data` = step3, `forceTest` = true) — A pass clears the failure; a Cloudflare error needs the FlareSolverr proxy tag.
+5. `prowlarr_get_indexerproxy` — The proxy (FlareSolverr) and its tag.
+6. `prowlarr_put_indexer_id` (`id` = step3.id, `data` = step3 with the fix (tags, baseUrl, enable)) — Approval required: changes a shared indexer.
+7. `prowlarr_post_indexer_test` (`data` = step6, `forceTest` = true) — Confirm the fix.
 
-### Key parameters
-- `get_indexer` — no args; lists all configured indexers.
-- `get_indexer_id` — `{"id": <indexer_id>}` for one indexer.
-- `put_indexer_id` — `{"id": <id>, "data": {...}}` (e.g. toggle `enable`, set
-  `priority`); pass `forceSave: true` to bypass validation on a known-good change.
+Needs approval: `prowlarr_put_indexer_id`.
 
-## Recipes (`params_json`)
-List all indexers:
-```json
-{}
-```
-Inspect one indexer:
-```json
-{"id": 3}
-```
-Disable an indexer (fetch its full body via `get_indexer_id` first, flip
-`enable`, then):
-```json
-{"id": 3, "data": {"enable": false}, "forceSave": true}
-```
+### Sync indexers to the apps (`prowlarr-sync-indexers`)
 
-## Gotchas
-- `params_json` is a **string** of JSON, not an object — serialize it.
-- `enable` (singular, no trailing `d`) is the raw Prowlarr field; the KG maps it
-  to the `:enabled` property on `:Indexer`.
-- `protocol` is `usenet` or `torrent` — a key discriminator when auditing coverage.
-- Updates (`put_indexer_id`) usually require the **full** indexer body echoed
-  back with your changes, not just the changed field; read it first.
-- The KG keys `:Indexer` nodes by the instance-local Prowlarr `id`
-  (`arr:Indexer:<id>`) — ids are not portable across instances.
+Push the Prowlarr indexer pool to every connected app (Radarr, Sonarr, Lidarr).
 
-## Related
-- `arr_ingest_library` (tag `kg`) ingests indexers (and movies/series) as typed
-  KG nodes — ingestion only, not part of the config surface.
-- **Related skills:** `arr-movie-library` (Radarr), `arr-series-library` (Sonarr).
+1. `prowlarr_get_applications` — Each application and its sync level (fullSync).
+2. `prowlarr_post_command` (`data` = {"name": "ApplicationIndexerSync"}) — Starts the sync.
+3. `radarr_get_indexer` — The synced indexers appear in the app.
+
+### Search releases across indexers (`prowlarr-search-releases`)
+
+Run one manual search across the enabled indexers.
+
+1. `prowlarr_get_indexer` — Pick indexer ids, or omit to search all.
+2. `prowlarr_get_search` (`query` = operator input: search text, `type` = "search", `limit` = 50) — Read-only: lists releases, grabs nothing.
+
+## Guardrails
+
+- Read before you write: every change starts from the read steps of its contract.
+- Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
+- Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
+- Never change API keys, download client credentials, or app connection settings.
+- Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
+- Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

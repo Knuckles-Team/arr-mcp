@@ -25,7 +25,7 @@ deployment identity remain owned by the SDK, Arbora, and the platform.
 - `arr_mcp/__init__.py` declares the SDK `Connector`, its instructions, and the
   seven concrete Arr API client targets.
 - `arr_mcp/mcp/` contains the registered per-service MCP tools, including the
-  consolidated action routers and `arr_ingest_library`.
+  `arr_ingest_library`; every API operation is served from the client methods.
 - `arr_mcp/auth.py` constructs clients from the service-specific `*_BASE_URL`,
   token or API-key, and TLS-profile settings. Do not put credentials in source,
   fixtures, documentation, or skill content.
