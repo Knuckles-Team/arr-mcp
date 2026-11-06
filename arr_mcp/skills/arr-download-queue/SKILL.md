@@ -54,11 +54,23 @@ Remove one stalled or failed queue item, blocklist the release so it is not grab
 
 Needs approval: `radarr_delete_queue_id`.
 
+### Repair an unavailable download client (`arr-repair-download-client`)
+
+When an app reports every download client unavailable, read the client's own failure reason, fix the setting with approval and confirm the test passes.
+
+1. `radarr_get_health` — `All download clients are unavailable due to failures` starts this workflow (the same for sonarr_, lidarr_ and chaptarr_).
+2. `radarr_get_downloadclient` — The configured client, host, port and category.
+3. `radarr_post_downloadclient_test` (`data` = step2.result[0]) — The error carries the app's reason: `Host: Unable to connect to qBittorrent` (the client banned the caller after failed logins) or `Username: Authentication failure` (stale password).
+4. `radarr_put_downloadclient_id` (`id` = step2.result[0].id, `data` = step2.result[0] with the stored credentials, `forceSave` = true) — Approval required: saves the current username and password from the credential store (QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD). `forceSave` skips the test, because a banned caller fails it until the ban lifts or qBittorrent restarts.
+5. `radarr_post_downloadclient_test` (`data` = step2.result[0]) — Passes once the client accepts the login; repeat for each app that shares the client.
+
+Needs approval: `radarr_put_downloadclient_id`.
+
 ## Guardrails
 
 - Read before you write: every change starts from the read steps of its contract.
 - Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
 - Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
-- Never change API keys, download client credentials, or app connection settings.
+- Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them.
 - Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
 - Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

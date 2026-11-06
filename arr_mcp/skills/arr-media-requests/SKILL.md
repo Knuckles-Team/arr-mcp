@@ -55,11 +55,26 @@ List failed requests and retry each one after the routing problem is fixed.
 2. `seerr_get_settings_radarr` — Check the Radarr server the request routes to.
 3. `seerr_post_request_id_retry` (`request_id` = step1.results[].id) — Resends the request.
 
+### Route normal requests at 1080p and 4K requests at 4K (`seerr-route-requests-by-quality`)
+
+Give Seerr a default non-4K Radarr and Sonarr server with the 1080p profile, and keep the 4K servers for 4K requests with the 4K profile.
+
+1. `seerr_get_settings_radarr` — Each server's `is4k`, `isDefault` and profile. Normal requests go to the default server with `is4k` false; none means they have no route.
+2. `radarr_get_qualityprofile` — The 1080p and 4K profile ids.
+3. `seerr_post_settings_radarr_test` (`hostname` = the Radarr host, `port` = the Radarr port, `api_key` = secret RADARR_API_KEY, `use_ssl` = false) — Seerr reaches Radarr and reads its profiles.
+4. `seerr_post_settings_radarr` (`is4k` = false, `is_default` = true, `active_profile_id` = step2 1080p id) — Approval required: adds the default non-4K server with the 1080p profile.
+5. `seerr_put_settings_radarr_id` (`radarr_id` = the 4K server id, `active_profile_id` = step2 4K id) — Approval required: the 4K server keeps `is4k` true (default only among 4K servers) and takes the 4K profile.
+6. `seerr_get_settings_sonarr` — The same check for Sonarr.
+7. `seerr_post_settings_sonarr` (`is4k` = false, `is_default` = true) — Approval required: adds the default non-4K Sonarr server with the 1080p profile (also for anime).
+8. `seerr_put_settings_sonarr_id` (`sonarr_id` = the 4K server id) — Approval required: the 4K Sonarr server takes the 4K profile.
+
+Needs approval: `seerr_post_settings_radarr`, `seerr_put_settings_radarr_id`, `seerr_post_settings_sonarr`, `seerr_put_settings_sonarr_id`.
+
 ## Guardrails
 
 - Read before you write: every change starts from the read steps of its contract.
 - Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
 - Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
-- Never change API keys, download client credentials, or app connection settings.
+- Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them.
 - Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
 - Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

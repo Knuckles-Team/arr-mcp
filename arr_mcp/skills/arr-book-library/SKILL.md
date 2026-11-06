@@ -42,11 +42,28 @@ List monitored books with no file and start one book search.
 1. `chaptarr_get_wanted_missing` (`monitored` = true) — Collect book ids.
 2. `chaptarr_post_command` (`data` = {"name": "BookSearch", "bookIds": [<ids from step1>]}) — One command per batch.
 
+### Provision the book library (`chaptarr-provision-book-library`)
+
+Give Chaptarr its book root folder, qBittorrent as download client, and a Prowlarr link for book indexers.
+
+1. `chaptarr_get_rootfolder` — An empty result means no library.
+2. `chaptarr_get_qualityprofile` — The ebook and audiobook quality profiles (`profileType`).
+3. `chaptarr_get_metadataprofile` — The ebook and audiobook metadata profiles.
+4. `chaptarr_post_rootfolder` (`data` = {name: "Books", path: "/ebooks", folderType: 2, ebookQualityProfileId: step2 ebook id, ebookMetadataProfileId: step3 ebook id, defaultMonitorOption: "all", defaultNewItemMonitorOption: "all"}) — Approval required: adds the folder. Chaptarr needs `folderType` (1 audiobook, 2 ebook, 0 mixed) and the matching `ebookQualityProfileId` / `ebookMetadataProfileId` (or the audiobook pair).
+5. `chaptarr_get_downloadclient_schema` — The `QBittorrent` entry with its fields; categories default to `chaptarr`.
+6. `chaptarr_post_downloadclient_test` (`data` = step5 QBittorrent entry with host, port and credentials) — Tests the client with the stored qBittorrent credentials.
+7. `chaptarr_post_downloadclient` (`data` = step6 data) — Approval required: saves the client.
+8. `prowlarr_get_applications_schema` — Chaptarr speaks the Readarr API: use the `Readarr` entry.
+9. `prowlarr_post_applications_test` (`data` = step8 Readarr entry with baseUrl and apiKey) — Tests the link with Chaptarr's base URL and API key (CHAPTARR_API_KEY).
+10. `prowlarr_post_applications` (`data` = step9 data) — Approval required: adds the link with `syncLevel` fullSync, so Prowlarr pushes its book indexers.
+
+Needs approval: `chaptarr_post_rootfolder`, `chaptarr_post_downloadclient`, `prowlarr_post_applications`.
+
 ## Guardrails
 
 - Read before you write: every change starts from the read steps of its contract.
 - Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
 - Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
-- Never change API keys, download client credentials, or app connection settings.
+- Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them.
 - Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
 - Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

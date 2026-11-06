@@ -18,6 +18,7 @@ from scion_sdk.tls.resolve import resolve_tls_profile
 from arr_mcp.api._security import (
     build_client,
     decode_response,
+    raise_for_api_error,
     request_url,
     send_request,
     validate_base_url,
@@ -59,8 +60,7 @@ class Api:
             self._session, method, url, _clean(params), data, form=_clean(form)
         )
         try:
-            if response.status_code >= 400:
-                raise RuntimeError(f"API error: HTTP {response.status_code}")
+            raise_for_api_error(response)
             if response.status_code == 204:
                 return {"status": "success"}
             result = decode_response(response)
@@ -1411,3 +1411,77 @@ class Api:
                 }
             ),
         )
+
+    # Operations Bazarr serves but hides from its swagger (``Namespace.hide``):
+    # the settings page, notification test and process control. They are part
+    # of the upstream surface, so each is one typed tool (CONN-ARR-MCP-SUITE-R009).
+
+    def get_system_settings(self) -> Any:
+        """Read every Bazarr setting: general, Sonarr and Radarr connections, providers, notifications
+
+        GET /api/system/settings
+        """
+        return self._request("GET", "/api/system/settings")
+
+    def post_system_settings(
+        self,
+        *,
+        settings: Annotated[
+            dict[str, Any],
+            Field(
+                description=(
+                    "Form fields to save, keyed as the Bazarr settings page posts them: "
+                    "`settings-<section>-<key>` (for example `settings-general-use_sonarr`: "
+                    "`true`, `settings-sonarr-apikey`, `settings-general-enabled_providers`: "
+                    "[`gestdown`, `yifysubtitles`]), `languages-enabled`: [`en`], "
+                    "`languages-profiles`: a JSON string of the full profile list, and "
+                    "`notifications-providers`: JSON strings. A list value repeats the field. "
+                    "Only the fields sent change."
+                )
+            ),
+        ],
+    ) -> Any:
+        """Save Bazarr settings, language profiles and notification providers
+
+        POST /api/system/settings
+        """
+        form = {
+            key: (
+                [str(v).lower() if isinstance(v, bool) else str(v) for v in value]
+                if isinstance(value, list)
+                else str(value).lower()
+                if isinstance(value, bool)
+                else str(value)
+            )
+            for key, value in settings.items()
+        }
+        return self._request("POST", "/api/system/settings", form=form)
+
+    def patch_system_notifications(
+        self,
+        *,
+        url: Annotated[
+            str,
+            Field(
+                description="Notifications provider URL (Apprise format) to send a test message to"
+            ),
+        ],
+    ) -> Any:
+        """Send a test notification to one provider URL
+
+        PATCH /api/system/notifications
+        """
+        return self._request("PATCH", "/api/system/notifications", form={"url": url})
+
+    def post_system(
+        self,
+        *,
+        action: Annotated[
+            str, Field(description='Action to perform from ["shutdown", "restart"]')
+        ],
+    ) -> Any:
+        """Shutdown or restart Bazarr
+
+        POST /api/system
+        """
+        return self._request("POST", "/api/system", form={"action": action})

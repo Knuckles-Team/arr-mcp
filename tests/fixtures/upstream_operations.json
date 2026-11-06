@@ -1157,6 +1157,7 @@
    "GET /api/system/ping",
    "GET /api/system/releases",
    "GET /api/system/searches",
+   "GET /api/system/settings",
    "GET /api/system/status",
    "GET /api/system/tasks",
    "PATCH /api/episodes/subtitles",
@@ -1166,6 +1167,7 @@
    "PATCH /api/subtitles",
    "PATCH /api/system/backups",
    "PATCH /api/system/jobs",
+   "PATCH /api/system/notifications",
    "POST /api/episodes/blacklist",
    "POST /api/episodes/subtitles",
    "POST /api/jellyfin/test-connection",
@@ -1184,16 +1186,19 @@
    "POST /api/providers/episodes",
    "POST /api/providers/movies",
    "POST /api/series",
+   "POST /api/system",
    "POST /api/system/announcements",
    "POST /api/system/backups",
    "POST /api/system/jobs",
+   "POST /api/system/settings",
    "POST /api/system/tasks",
    "POST /api/system/webhooks/test",
    "POST /api/webhooks/plex",
    "POST /api/webhooks/radarr",
    "POST /api/webhooks/sonarr"
   ],
-  "web_ui_routes_not_served": []
+  "web_ui_routes_not_served": [],
+  "hidden_from_swagger": "Bazarr 1.6.2 serves system/settings, system/notifications and system (restart/shutdown) with Namespace.hide; read from bazarr/api/system/{settings,notifications,system}.py. system/account (web sign-in) is excluded like the Servarr web sign-in routes."
  },
  "seerr": {
   "source": "Seerr develop seerr-api.yml; live 3.5.0",
