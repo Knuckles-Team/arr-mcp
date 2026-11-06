@@ -15,3 +15,5 @@ Each task line reads `- [ ] T001 [P] [US1] <ID>-R012.4 description`. Order is pr
 - [x] T009 [US1] CONN-ARR-MCP-SUITE-R009 Bazarr's hidden operations are tools.
 - [x] T010 [US1] CONN-ARR-MCP-SUITE-R010 A failed call says why, and long calls get time.
 - [x] T011 [US2] CONN-ARR-MCP-SUITE-R011 Provisioning workflows proven live are contracts.
+- [x] T012 [US1] CONN-ARR-MCP-SUITE-R012 Settings reads never return secret values.
+- [x] T013 [US2] CONN-ARR-MCP-SUITE-R013 The whole surface is declared.

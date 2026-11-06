@@ -87,5 +87,52 @@
     "prowlarr_get_indexer_schema",
     "prowlarr_post_indexer",
     "prowlarr_delete_indexer_id"
-  ]
+  ],
+  "agent": {
+    "kind": "business-role",
+    "business_role": "indexer maintainer",
+    "tools": [
+      "prowlarr_get_indexerstatus",
+      "prowlarr_get_health",
+      "prowlarr_get_indexer_id",
+      "prowlarr_post_indexer_test",
+      "prowlarr_get_indexerproxy",
+      "prowlarr_put_indexer_id",
+      "prowlarr_get_applications",
+      "prowlarr_post_command",
+      "radarr_get_indexer",
+      "prowlarr_get_indexer",
+      "prowlarr_get_search",
+      "prowlarr_get_indexer_schema",
+      "prowlarr_post_indexer",
+      "prowlarr_delete_indexer_id"
+    ],
+    "skills": [
+      "arr-indexer-management"
+    ],
+    "data": {
+      "reads": [
+        "arr-indexers"
+      ],
+      "writes": [
+        "arr-indexers"
+      ]
+    },
+    "guardrails": {
+      "approval_required": [
+        "prowlarr_put_indexer_id",
+        "prowlarr_post_indexer",
+        "prowlarr_delete_indexer_id"
+      ],
+      "never": [
+        "Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.",
+        "Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them."
+      ]
+    },
+    "outputs": [
+      "The indexer table: name, enabled, failing until, last failure reason.",
+      "Each indexer fixed: what changed and the passing test.",
+      "Indexers that stay broken and what they need (for example an account or a proxy)."
+    ]
+  }
 }

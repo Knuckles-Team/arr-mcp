@@ -75,7 +75,7 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'test'", specifier = ">=1.4.0" },
     { name = "pytest-xdist", marker = "extra == 'test'", specifier = ">=3.8.0" },
     { name = "rdflib", marker = "extra == 'test'", specifier = ">=7.0.0,<8" },
-    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.8.2,<0.9" },
+    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.9.0,<0.10" },
     { name = "tree-sitter", specifier = ">=0.26.0" },
 ]
 provides-extras = ["test"]
@@ -1284,7 +1284,7 @@ wheels = [
 
 [[package]]
 name = "scion-sdk"
-version = "0.8.2"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1297,9 +1297,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a9/46/be1a794123bb92160b3d5b3daecd221ddb97bb7e7dd6feb3c5736dba33f4/scion_sdk-0.8.2.tar.gz", hash = "sha256:d69defd6cc0f81e4a3c5dc486f038b01982baf118f9f97a597836f66263b039a", size = 1213277, upload-time = "2026-11-06T02:39:34.704Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/f7/dd721738f473d85cff0cf6c9da0bd3ec4c2074c6b77c7c6ff8acd9088713/scion_sdk-0.9.0.tar.gz", hash = "sha256:790bc113361113acd72518a18c2032409c7da4f6aafa4b4c1ec1dba792201448", size = 1232376, upload-time = "2026-11-06T17:46:33.46Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/95/3c/538c1f055da7602fd7f0e591e4d9abcd3671bc52ae418cb258e7402503d6/scion_sdk-0.8.2-py3-none-any.whl", hash = "sha256:283259ccb840d94c7e8add74a964466c91530d007185a016a932d7c6cf2a2f11", size = 1185428, upload-time = "2026-11-06T02:39:32.912Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/e2/ebcdfa941a09040790670e3f40a15b0d2ccd7291baf9c60ea6154e1d4421/scion_sdk-0.9.0-py3-none-any.whl", hash = "sha256:584a38421a262c8e500bb102978843bca635e5cd190ff3af2c6b5b11e46aa1ed", size = 1201656, upload-time = "2026-11-06T17:46:34.833Z" },
 ]
 
 [package.optional-dependencies]

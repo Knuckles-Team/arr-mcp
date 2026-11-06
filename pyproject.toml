@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arr-mcp"
-version = "3.1.0"
+version = "3.1.1"
 description = "Arr Suite MCP Server for Agentic AI!"
 readme = "README.md"
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: MIT License", "Environment :: Console", "Operating System :: POSIX :: Linux", "Programming Language :: Python :: 3",]
 requires-python = ">=3.12, <3.15"
-dependencies = [ "scion-sdk[mcp]>=0.8.2,<0.9", "tree-sitter>=0.26.0", "pydantic>=2.14.1",]
+dependencies = [ "scion-sdk[mcp]>=0.9.0,<0.10", "tree-sitter>=0.26.0", "pydantic>=2.14.1",]
 [[project.authors]]
 name = "Repository Maintainers"
 email = "maintainers@knuckles.team"

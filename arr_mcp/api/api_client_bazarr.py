@@ -32,6 +32,38 @@ def _clean(values: dict[str, Any] | None) -> dict[str, Any] | None:
     return kept or None
 
 
+_SECRET_KEY_PARTS = (
+    "apikey",
+    "api_key",
+    "password",
+    "passkey",
+    "token",
+    "cookies",
+    "encryption_key",
+    "secret",
+    "gemini_keys",
+    "anti_captcha_key",
+    "captchaai_key",
+)
+
+
+def _redact(value: Any) -> Any:
+    """Mask every secret-named field of a Bazarr settings tree (CONN-ARR-MCP-SUITE-R012)."""
+    if isinstance(value, dict):
+        out: dict[str, Any] = {}
+        for key, item in value.items():
+            if any(
+                part in str(key).lower() for part in _SECRET_KEY_PARTS
+            ) and not isinstance(item, dict | bool):
+                out[key] = "<set>" if item else item
+            else:
+                out[key] = _redact(item)
+        return out
+    if isinstance(value, list):
+        return [_redact(item) for item in value]
+    return value
+
+
 class Api:
     """API client for Bazarr."""
 
@@ -314,8 +346,8 @@ class Api:
                 description='Timeframe to get stats for. Must be in ["week", "month", "trimester", "year"]'
             ),
         ] = None,
-        action: Annotated[
-            str | None, Field(description="Action type to filter for.")
+        action_type: Annotated[
+            str | None, Field(description="History action type to filter for.")
         ] = None,
         provider: Annotated[
             str | None, Field(description="Provider name to filter for.")
@@ -333,7 +365,7 @@ class Api:
             "/api/history/stats",
             params={
                 "timeFrame": time_frame,
-                "action": action,
+                "action": action_type,
                 "provider": provider,
                 "language": language,
             },
@@ -436,23 +468,76 @@ class Api:
             "POST", "/api/movies", params={"radarrid": radarrid, "profileid": profileid}
         )
 
-    def patch_movies(
+    def patch_movies_scan_disk(
         self,
         *,
         radarrid: Annotated[int | None, Field(description="Radarr movie ID")] = None,
-        action: Annotated[
-            str | None,
-            Field(
-                description='Action to perform from ["scan-disk", "search-missing", "search-wanted", "sync"]'
-            ),
-        ] = None,
     ) -> Any:
-        """Run actions on specific movies
+        """Scan the disk for subtitles of specific movies
 
         PATCH /api/movies
         """
         return self._request(
-            "PATCH", "/api/movies", params={"radarrid": radarrid, "action": action}
+            "PATCH",
+            "/api/movies",
+            params={
+                "radarrid": radarrid,
+                "action": "scan-disk",
+            },
+        )
+
+    def patch_movies_search_missing(
+        self,
+        *,
+        radarrid: Annotated[int | None, Field(description="Radarr movie ID")] = None,
+    ) -> Any:
+        """Search missing subtitles of specific movies
+
+        PATCH /api/movies
+        """
+        return self._request(
+            "PATCH",
+            "/api/movies",
+            params={
+                "radarrid": radarrid,
+                "action": "search-missing",
+            },
+        )
+
+    def patch_movies_search_wanted(
+        self,
+        *,
+        radarrid: Annotated[int | None, Field(description="Radarr movie ID")] = None,
+    ) -> Any:
+        """Search wanted subtitles of specific movies
+
+        PATCH /api/movies
+        """
+        return self._request(
+            "PATCH",
+            "/api/movies",
+            params={
+                "radarrid": radarrid,
+                "action": "search-wanted",
+            },
+        )
+
+    def patch_movies_sync(
+        self,
+        *,
+        radarrid: Annotated[int | None, Field(description="Radarr movie ID")] = None,
+    ) -> Any:
+        """Sync Radarr data for specific movies
+
+        PATCH /api/movies
+        """
+        return self._request(
+            "PATCH",
+            "/api/movies",
+            params={
+                "radarrid": radarrid,
+                "action": "sync",
+            },
         )
 
     def get_movies_blacklist(
@@ -799,16 +884,20 @@ class Api:
         """
         return self._request("GET", "/api/providers", params={"history": history})
 
-    def post_providers(
+    def post_providers_reset(
         self,
-        *,
-        action: Annotated[str, Field(description='Action to perform from ["reset"]')],
     ) -> Any:
         """Reset providers status
 
         POST /api/providers
         """
-        return self._request("POST", "/api/providers", params={"action": action})
+        return self._request(
+            "POST",
+            "/api/providers",
+            params={
+                "action": "reset",
+            },
+        )
 
     def get_provider_episodes(
         self, *, episodeid: Annotated[int, Field(description="Episode ID")]
@@ -965,23 +1054,76 @@ class Api:
             "POST", "/api/series", params={"seriesid": seriesid, "profileid": profileid}
         )
 
-    def patch_series(
+    def patch_series_scan_disk(
         self,
         *,
         seriesid: Annotated[int | None, Field(description="Sonarr series ID")] = None,
-        action: Annotated[
-            str | None,
-            Field(
-                description='Action to perform from ["scan-disk", "search-missing", "search-wanted", "sync"]'
-            ),
-        ] = None,
     ) -> Any:
-        """Run actions on specific series
+        """Scan the disk for subtitles of specific series
 
         PATCH /api/series
         """
         return self._request(
-            "PATCH", "/api/series", params={"seriesid": seriesid, "action": action}
+            "PATCH",
+            "/api/series",
+            params={
+                "seriesid": seriesid,
+                "action": "scan-disk",
+            },
+        )
+
+    def patch_series_search_missing(
+        self,
+        *,
+        seriesid: Annotated[int | None, Field(description="Sonarr series ID")] = None,
+    ) -> Any:
+        """Search missing subtitles of specific series
+
+        PATCH /api/series
+        """
+        return self._request(
+            "PATCH",
+            "/api/series",
+            params={
+                "seriesid": seriesid,
+                "action": "search-missing",
+            },
+        )
+
+    def patch_series_search_wanted(
+        self,
+        *,
+        seriesid: Annotated[int | None, Field(description="Sonarr series ID")] = None,
+    ) -> Any:
+        """Search wanted subtitles of specific series
+
+        PATCH /api/series
+        """
+        return self._request(
+            "PATCH",
+            "/api/series",
+            params={
+                "seriesid": seriesid,
+                "action": "search-wanted",
+            },
+        )
+
+    def patch_series_sync(
+        self,
+        *,
+        seriesid: Annotated[int | None, Field(description="Sonarr series ID")] = None,
+    ) -> Any:
+        """Sync Sonarr data for specific series
+
+        PATCH /api/series
+        """
+        return self._request(
+            "PATCH",
+            "/api/series",
+            params={
+                "seriesid": seriesid,
+                "action": "sync",
+            },
         )
 
     def get_series_tags(self) -> Any:
@@ -1018,15 +1160,9 @@ class Api:
             },
         )
 
-    def patch_subtitles(
+    def patch_subtitles_sync(
         self,
         *,
-        action: Annotated[
-            str,
-            Field(
-                description='Action from ["sync", "translate", "extract" or mods name]'
-            ),
-        ],
         language: Annotated[str, Field(description="Language code2")],
         type: Annotated[str, Field(description='Media type from ["episode", "movie"]')],
         id: Annotated[int, Field(description="Media ID (episodeId, radarrId)")],
@@ -1075,7 +1211,7 @@ class Api:
             ),
         ] = None,
     ) -> Any:
-        """Apply mods/tools on external subtitles
+        """Sync external subtitles with the video
 
         PATCH /api/subtitles
         """
@@ -1083,11 +1219,10 @@ class Api:
             "PATCH",
             "/api/subtitles",
             params={
-                "action": action,
                 "language": language,
-                "path": path,
                 "type": type,
                 "id": id,
+                "path": path,
                 "forced": forced,
                 "hi": hi,
                 "original_format": original_format,
@@ -1099,6 +1234,242 @@ class Api:
                 "quality_max_offset_seconds": quality_max_offset_seconds,
                 "quality_max_framerate_deviation": quality_max_framerate_deviation,
                 "subtitles_id": subtitles_id,
+                "action": "sync",
+            },
+        )
+
+    def patch_subtitles_translate(
+        self,
+        *,
+        language: Annotated[str, Field(description="Language code2")],
+        type: Annotated[str, Field(description='Media type from ["episode", "movie"]')],
+        id: Annotated[int, Field(description="Media ID (episodeId, radarrId)")],
+        path: Annotated[str | None, Field(description="Subtitles file path")] = None,
+        forced: Annotated[
+            str | None, Field(description='Forced subtitles from ["True", "False"]')
+        ] = None,
+        hi: Annotated[
+            str | None, Field(description='HI subtitles from ["True", "False"]')
+        ] = None,
+        original_format: Annotated[
+            str | None,
+            Field(description='Use original subtitles format from ["True", "False"]'),
+        ] = None,
+        reference: Annotated[
+            str | None,
+            Field(
+                description="Reference to use for sync from video file track number (a:0) or some subtitles file path"
+            ),
+        ] = None,
+        max_offset_seconds: Annotated[
+            str | None, Field(description="Maximum offset seconds to allow")
+        ] = None,
+        no_fix_framerate: Annotated[
+            str | None,
+            Field(description='Don\'t try to fix framerate from ["True", "False"]'),
+        ] = None,
+        gss: Annotated[
+            str | None,
+            Field(description='Use Golden-Section Search from ["True", "False"]'),
+        ] = None,
+        quality_min_score: Annotated[
+            str | None, Field(description="Minimum quality score for sync (0.0-1.0)")
+        ] = None,
+        quality_max_offset_seconds: Annotated[
+            str | None,
+            Field(description="Maximum offset in seconds for quality checks"),
+        ] = None,
+        quality_max_framerate_deviation: Annotated[
+            str | None, Field(description="Maximum framerate deviation (0.0-1.0)")
+        ] = None,
+        subtitles_id: Annotated[
+            int | None,
+            Field(
+                description='Subtitles database ID (required for the "extract" action)'
+            ),
+        ] = None,
+    ) -> Any:
+        """Translate external subtitles
+
+        PATCH /api/subtitles
+        """
+        return self._request(
+            "PATCH",
+            "/api/subtitles",
+            params={
+                "language": language,
+                "type": type,
+                "id": id,
+                "path": path,
+                "forced": forced,
+                "hi": hi,
+                "original_format": original_format,
+                "reference": reference,
+                "max_offset_seconds": max_offset_seconds,
+                "no_fix_framerate": no_fix_framerate,
+                "gss": gss,
+                "quality_min_score": quality_min_score,
+                "quality_max_offset_seconds": quality_max_offset_seconds,
+                "quality_max_framerate_deviation": quality_max_framerate_deviation,
+                "subtitles_id": subtitles_id,
+                "action": "translate",
+            },
+        )
+
+    def patch_subtitles_extract(
+        self,
+        *,
+        language: Annotated[str, Field(description="Language code2")],
+        type: Annotated[str, Field(description='Media type from ["episode", "movie"]')],
+        id: Annotated[int, Field(description="Media ID (episodeId, radarrId)")],
+        path: Annotated[str | None, Field(description="Subtitles file path")] = None,
+        forced: Annotated[
+            str | None, Field(description='Forced subtitles from ["True", "False"]')
+        ] = None,
+        hi: Annotated[
+            str | None, Field(description='HI subtitles from ["True", "False"]')
+        ] = None,
+        original_format: Annotated[
+            str | None,
+            Field(description='Use original subtitles format from ["True", "False"]'),
+        ] = None,
+        reference: Annotated[
+            str | None,
+            Field(
+                description="Reference to use for sync from video file track number (a:0) or some subtitles file path"
+            ),
+        ] = None,
+        max_offset_seconds: Annotated[
+            str | None, Field(description="Maximum offset seconds to allow")
+        ] = None,
+        no_fix_framerate: Annotated[
+            str | None,
+            Field(description='Don\'t try to fix framerate from ["True", "False"]'),
+        ] = None,
+        gss: Annotated[
+            str | None,
+            Field(description='Use Golden-Section Search from ["True", "False"]'),
+        ] = None,
+        quality_min_score: Annotated[
+            str | None, Field(description="Minimum quality score for sync (0.0-1.0)")
+        ] = None,
+        quality_max_offset_seconds: Annotated[
+            str | None,
+            Field(description="Maximum offset in seconds for quality checks"),
+        ] = None,
+        quality_max_framerate_deviation: Annotated[
+            str | None, Field(description="Maximum framerate deviation (0.0-1.0)")
+        ] = None,
+        subtitles_id: Annotated[
+            int | None,
+            Field(
+                description='Subtitles database ID (required for the "extract" action)'
+            ),
+        ] = None,
+    ) -> Any:
+        """Extract embedded subtitles
+
+        PATCH /api/subtitles
+        """
+        return self._request(
+            "PATCH",
+            "/api/subtitles",
+            params={
+                "language": language,
+                "type": type,
+                "id": id,
+                "path": path,
+                "forced": forced,
+                "hi": hi,
+                "original_format": original_format,
+                "reference": reference,
+                "max_offset_seconds": max_offset_seconds,
+                "no_fix_framerate": no_fix_framerate,
+                "gss": gss,
+                "quality_min_score": quality_min_score,
+                "quality_max_offset_seconds": quality_max_offset_seconds,
+                "quality_max_framerate_deviation": quality_max_framerate_deviation,
+                "subtitles_id": subtitles_id,
+                "action": "extract",
+            },
+        )
+
+    def patch_subtitles_mod(
+        self,
+        *,
+        mod: Annotated[str, Field(description="Name of the subtitle mod to apply")],
+        language: Annotated[str, Field(description="Language code2")],
+        type: Annotated[str, Field(description='Media type from ["episode", "movie"]')],
+        id: Annotated[int, Field(description="Media ID (episodeId, radarrId)")],
+        path: Annotated[str | None, Field(description="Subtitles file path")] = None,
+        forced: Annotated[
+            str | None, Field(description='Forced subtitles from ["True", "False"]')
+        ] = None,
+        hi: Annotated[
+            str | None, Field(description='HI subtitles from ["True", "False"]')
+        ] = None,
+        original_format: Annotated[
+            str | None,
+            Field(description='Use original subtitles format from ["True", "False"]'),
+        ] = None,
+        reference: Annotated[
+            str | None,
+            Field(
+                description="Reference to use for sync from video file track number (a:0) or some subtitles file path"
+            ),
+        ] = None,
+        max_offset_seconds: Annotated[
+            str | None, Field(description="Maximum offset seconds to allow")
+        ] = None,
+        no_fix_framerate: Annotated[
+            str | None,
+            Field(description='Don\'t try to fix framerate from ["True", "False"]'),
+        ] = None,
+        gss: Annotated[
+            str | None,
+            Field(description='Use Golden-Section Search from ["True", "False"]'),
+        ] = None,
+        quality_min_score: Annotated[
+            str | None, Field(description="Minimum quality score for sync (0.0-1.0)")
+        ] = None,
+        quality_max_offset_seconds: Annotated[
+            str | None,
+            Field(description="Maximum offset in seconds for quality checks"),
+        ] = None,
+        quality_max_framerate_deviation: Annotated[
+            str | None, Field(description="Maximum framerate deviation (0.0-1.0)")
+        ] = None,
+        subtitles_id: Annotated[
+            int | None,
+            Field(
+                description='Subtitles database ID (required for the "extract" action)'
+            ),
+        ] = None,
+    ) -> Any:
+        """Apply a named mod to external subtitles
+
+        PATCH /api/subtitles
+        """
+        return self._request(
+            "PATCH",
+            "/api/subtitles",
+            params={
+                "language": language,
+                "type": type,
+                "id": id,
+                "path": path,
+                "forced": forced,
+                "hi": hi,
+                "original_format": original_format,
+                "reference": reference,
+                "max_offset_seconds": max_offset_seconds,
+                "no_fix_framerate": no_fix_framerate,
+                "gss": gss,
+                "quality_min_score": quality_min_score,
+                "quality_max_offset_seconds": quality_max_offset_seconds,
+                "quality_max_framerate_deviation": quality_max_framerate_deviation,
+                "subtitles_id": subtitles_id,
+                "action": mod,
             },
         )
 
@@ -1205,23 +1576,58 @@ class Api:
             "GET", "/api/system/jobs", params={"id": id, "status": status}
         )
 
-    def post_system_jobs(
+    def post_system_jobs_force_start(
         self,
         *,
         id: Annotated[int, Field(description="Job ID act onto")],
-        action: Annotated[
-            str,
-            Field(
-                description='Action to perform from ["force_start", "move_top", "move_bottom"]'
-            ),
-        ],
     ) -> Any:
-        """Force start, move to top or move to bottom of the queue a specific job
+        """Force start a specific job
 
         POST /api/system/jobs
         """
         return self._request(
-            "POST", "/api/system/jobs", params={"id": id, "action": action}
+            "POST",
+            "/api/system/jobs",
+            params={
+                "id": id,
+                "action": "force_start",
+            },
+        )
+
+    def post_system_jobs_move_top(
+        self,
+        *,
+        id: Annotated[int, Field(description="Job ID act onto")],
+    ) -> Any:
+        """Move a specific job to the top of the queue
+
+        POST /api/system/jobs
+        """
+        return self._request(
+            "POST",
+            "/api/system/jobs",
+            params={
+                "id": id,
+                "action": "move_top",
+            },
+        )
+
+    def post_system_jobs_move_bottom(
+        self,
+        *,
+        id: Annotated[int, Field(description="Job ID act onto")],
+    ) -> Any:
+        """Move a specific job to the bottom of the queue
+
+        POST /api/system/jobs
+        """
+        return self._request(
+            "POST",
+            "/api/system/jobs",
+            params={
+                "id": id,
+                "action": "move_bottom",
+            },
         )
 
     def patch_system_jobs(
@@ -1419,9 +1825,13 @@ class Api:
     def get_system_settings(self) -> Any:
         """Read every Bazarr setting: general, Sonarr and Radarr connections, providers, notifications
 
+        Secret values (API keys, passwords, tokens, cookies, passkeys, encryption
+        keys) are replaced by ``"<set>"`` or ``""``: an agent sees whether a
+        credential is configured, never its value.
+
         GET /api/system/settings
         """
-        return self._request("GET", "/api/system/settings")
+        return _redact(self._request("GET", "/api/system/settings"))
 
     def post_system_settings(
         self,
@@ -1473,15 +1883,32 @@ class Api:
         """
         return self._request("PATCH", "/api/system/notifications", form={"url": url})
 
-    def post_system(
+    def post_system_restart(
         self,
-        *,
-        action: Annotated[
-            str, Field(description='Action to perform from ["shutdown", "restart"]')
-        ],
     ) -> Any:
-        """Shutdown or restart Bazarr
+        """Restart Bazarr
 
         POST /api/system
         """
-        return self._request("POST", "/api/system", form={"action": action})
+        return self._request(
+            "POST",
+            "/api/system",
+            form={
+                "action": "restart",
+            },
+        )
+
+    def post_system_shutdown(
+        self,
+    ) -> Any:
+        """Shut Bazarr down
+
+        POST /api/system
+        """
+        return self._request(
+            "POST",
+            "/api/system",
+            form={
+                "action": "shutdown",
+            },
+        )

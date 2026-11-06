@@ -152,5 +152,102 @@
     "prowlarr_get_applications_schema",
     "prowlarr_post_applications_test",
     "prowlarr_post_applications"
-  ]
+  ],
+  "agent": {
+    "kind": "business-role",
+    "business_role": "media librarian",
+    "tools": [
+      "radarr_get_rootfolder",
+      "radarr_get_qualityprofile",
+      "radarr_get_movie_lookup",
+      "radarr_get_movie",
+      "radarr_add_movie",
+      "radarr_get_queue",
+      "radarr_get_wanted_missing",
+      "radarr_post_command",
+      "radarr_get_tag",
+      "radarr_post_tag",
+      "radarr_delete_tag_id",
+      "sonarr_get_rootfolder",
+      "sonarr_get_qualityprofile",
+      "sonarr_get_series_lookup",
+      "sonarr_get_series",
+      "sonarr_add_series",
+      "sonarr_get_queue",
+      "sonarr_get_wanted_missing",
+      "sonarr_post_command",
+      "sonarr_get_tag",
+      "sonarr_post_tag",
+      "sonarr_delete_tag_id",
+      "lidarr_get_rootfolder",
+      "lidarr_get_qualityprofile",
+      "lidarr_get_metadataprofile",
+      "lidarr_get_artist_lookup",
+      "lidarr_get_artist",
+      "lidarr_post_artist",
+      "lidarr_get_queue",
+      "lidarr_get_wanted_missing",
+      "lidarr_post_command",
+      "chaptarr_get_rootfolder",
+      "chaptarr_get_qualityprofile",
+      "chaptarr_get_metadataprofile",
+      "chaptarr_get_author_lookup",
+      "chaptarr_post_author",
+      "chaptarr_get_queue",
+      "chaptarr_get_wanted_missing",
+      "chaptarr_post_command",
+      "radarr_get_queue_status",
+      "sonarr_get_queue_status",
+      "lidarr_get_queue_status",
+      "chaptarr_get_queue_status",
+      "radarr_delete_queue_id",
+      "chaptarr_post_rootfolder",
+      "chaptarr_get_downloadclient_schema",
+      "chaptarr_post_downloadclient_test",
+      "chaptarr_post_downloadclient",
+      "prowlarr_get_applications_schema",
+      "prowlarr_post_applications_test",
+      "prowlarr_post_applications"
+    ],
+    "skills": [
+      "arr-movie-library",
+      "arr-series-library",
+      "arr-music-library",
+      "arr-book-library",
+      "arr-download-queue"
+    ],
+    "data": {
+      "reads": [
+        "arr-movies",
+        "arr-series",
+        "arr-artists",
+        "arr-authors"
+      ],
+      "writes": [
+        "arr-movies",
+        "arr-series",
+        "arr-artists",
+        "arr-authors"
+      ]
+    },
+    "guardrails": {
+      "approval_required": [
+        "radarr_delete_queue_id",
+        "radarr_delete_tag_id",
+        "sonarr_delete_tag_id",
+        "chaptarr_post_rootfolder",
+        "chaptarr_post_downloadclient",
+        "prowlarr_post_applications"
+      ],
+      "never": [
+        "Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.",
+        "Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them."
+      ]
+    },
+    "outputs": [
+      "For each title handled: the library, the external id, added or already present, and whether a release was grabbed.",
+      "A count of missing items searched per library.",
+      "Titles that could not be added and why."
+    ]
+  }
 }

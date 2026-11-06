@@ -40,9 +40,9 @@ Check that Bazarr is connected to Sonarr and Radarr, list the episodes and movie
 Read the provider status and reset throttled providers with approval.
 
 1. `bazarr_get_providers` (`history` = false) — Throttled providers carry a status and retry time.
-2. `bazarr_post_providers` (`action` = "reset") — Approval required: clears every provider's throttle.
+2. `bazarr_post_providers_reset` — Approval required: clears every provider's throttle.
 
-Needs approval: `bazarr_post_providers`.
+Needs approval: `bazarr_post_providers_reset`.
 
 ### Connect Bazarr to Sonarr and Radarr (`bazarr-connect-sonarr-radarr`)
 
