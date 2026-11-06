@@ -58,10 +58,13 @@ A graph query answers which instance holds which library, where its files are, a
 - **FR-006**: Data location, routing and federation. Rows: `CONN-ARR-MCP-SUITE-R006`.
 - **FR-007**: Every class rolls up to medulla core. Rows: `CONN-ARR-MCP-SUITE-R007`.
 - **FR-008**: Ingest uses core classes and served tools. Rows: `CONN-ARR-MCP-SUITE-R008`.
+- **FR-009**: Bazarr's hidden operations are tools. Rows: `CONN-ARR-MCP-SUITE-R009`.
+- **FR-010**: A failed call says why, and long calls get time. Rows: `CONN-ARR-MCP-SUITE-R010`.
+- **FR-011**: Provisioning workflows proven live are contracts. Rows: `CONN-ARR-MCP-SUITE-R011`.
 
 ## Success Criteria
 
-- **SC-001**: 1,369 of 1,369 census operations are served as typed tools. Rows: `CONN-ARR-MCP-SUITE-R001`.
+- **SC-001**: 1,373 of 1,373 census operations are served as typed tools. Rows: `CONN-ARR-MCP-SUITE-R001`.
 - **SC-002**: 0 tools route by action or take `params_json`. Rows: `CONN-ARR-MCP-SUITE-R002`.
 - **SC-003**: 100% of contract, skill and prompt tool names are served tools. Rows: `CONN-ARR-MCP-SUITE-R004`, `CONN-ARR-MCP-SUITE-R005`.
 - **SC-004**: 100% of arr classes reach `BFO_0000001` through medulla core. Rows: `CONN-ARR-MCP-SUITE-R007`.
@@ -84,3 +87,6 @@ A graph query answers which instance holds which library, where its files are, a
 | FR-006 | `CONN-ARR-MCP-SUITE-R006` | [plan.md](plan.md) | T-006 | [test-spec.md](test-spec.md) |
 | FR-007 | `CONN-ARR-MCP-SUITE-R007` | [plan.md](plan.md) | T-007 | [test-spec.md](test-spec.md) |
 | FR-008 | `CONN-ARR-MCP-SUITE-R008` | [plan.md](plan.md) | T-008 | [test-spec.md](test-spec.md) |
+| FR-009 | `CONN-ARR-MCP-SUITE-R009` | [plan.md](plan.md) | T-009 | [test-spec.md](test-spec.md) |
+| FR-010 | `CONN-ARR-MCP-SUITE-R010` | [plan.md](plan.md) | T-010 | [test-spec.md](test-spec.md) |
+| FR-011 | `CONN-ARR-MCP-SUITE-R011` | [plan.md](plan.md) | T-011 | [test-spec.md](test-spec.md) |

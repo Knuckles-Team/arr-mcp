@@ -59,6 +59,6 @@ Needs approval: `sonarr_delete_tag_id`.
 - Read before you write: every change starts from the read steps of its contract.
 - Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
 - Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
-- Never change API keys, download client credentials, or app connection settings.
+- Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them.
 - Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
 - Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.

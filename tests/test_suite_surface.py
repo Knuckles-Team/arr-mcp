@@ -410,3 +410,147 @@ def test_ingest_node_types_are_medulla_core_classes():
     source = (PKG / "kg_ingest.py").read_text()
     for node_type in set(re.findall(r'"node_type": "([A-Za-z]+)"', source)):
         assert (rdflib.URIRef(KG + node_type), RDF.type, OWL.Class) in core, node_type
+
+
+# --- R009: Bazarr operations hidden from its swagger -------------------------
+
+
+@pytest.mark.spec(f"{ID}-R009")
+def test_bazarr_settings_save_posts_the_settings_page_form():
+    seen = []
+
+    def handler(request):
+        seen.append(request)
+        return httpx.Response(204)
+
+    api = _api("bazarr", handler)
+    assert api.post_system_settings(
+        settings={
+            "settings-general-use_sonarr": True,
+            "settings-general-enabled_providers": ["gestdown", "yifysubtitles"],
+            "languages-enabled": ["en"],
+        }
+    ) == {"status": "success"}
+    request = seen[0]
+    assert (request.method, request.url.path) == ("POST", "/api/system/settings")
+    body = request.content.decode()
+    assert "settings-general-use_sonarr=true" in body
+    assert body.count("settings-general-enabled_providers=") == 2
+    assert "languages-enabled=en" in body
+
+
+@pytest.mark.spec(f"{ID}-R009")
+def test_bazarr_hidden_operations_are_served(served):
+    tools, _, _ = served
+    for name in (
+        "bazarr_get_system_settings",
+        "bazarr_post_system_settings",
+        "bazarr_patch_system_notifications",
+        "bazarr_post_system",
+    ):
+        assert name in tools, name
+
+
+# --- R010: a failed call carries the app's own reason ------------------------
+
+
+@pytest.mark.spec(f"{ID}-R010")
+@pytest.mark.parametrize(
+    ("body", "reason"),
+    [
+        (
+            [
+                {
+                    "propertyName": "Host",
+                    "errorMessage": "Unable to connect to qBittorrent",
+                    "severity": "error",
+                }
+            ],
+            "Host: Unable to connect to qBittorrent",
+        ),
+        (
+            {
+                "title": "One or more validation errors occurred.",
+                "errors": {"$": ["missing required properties including: 'folderType'."]},
+            },
+            "$: missing required properties including: 'folderType'.",
+        ),
+        ({"message": "Request not found"}, "Request not found"),
+    ],
+)
+def test_a_failed_call_raises_with_the_upstream_reason(body, reason):
+    from arr_mcp.api._security import raise_for_api_error
+
+    response = httpx.Response(
+        400, json=body, request=httpx.Request("POST", "http://arr.test/api")
+    )
+    with pytest.raises(RuntimeError) as raised:
+        raise_for_api_error(response)
+    assert str(raised.value).startswith("API error: HTTP 400: ")
+    assert reason in str(raised.value)
+
+
+@pytest.mark.spec(f"{ID}-R010")
+def test_a_proxy_error_page_is_named_not_dumped():
+    def handler(request):
+        return httpx.Response(
+            504, text="<html>504 Gateway Time-out</html>", headers={"content-type": "text/html"}
+        )
+
+    api = _api("bazarr", handler)
+    with pytest.raises(RuntimeError, match=r"HTTP 504: the app answered with a web page"):
+        api.get_badges()
+
+
+@pytest.mark.spec(f"{ID}-R010")
+@pytest.mark.parametrize("app", APPS)
+def test_every_client_raises_through_the_shared_boundary(app):
+    source = (PKG / f"api/api_client_{app}.py").read_text()
+    assert "raise_for_api_error(response)" in source
+    assert 'RuntimeError(f"API error: HTTP {response.status_code}")' not in source
+
+
+@pytest.mark.spec(f"{ID}-R010")
+def test_long_upstream_operations_have_minutes_not_seconds():
+    from arr_mcp.api import _security
+
+    assert _security.REQUEST_TIMEOUT.read >= 300
+    assert _security._MAX_RESPONSE_SECONDS >= 300
+
+
+# --- R011: provisioning workflows proven live are contracts -----------------
+
+
+PROVISIONING = {
+    "bazarr-connect-sonarr-radarr": ("arr-subtitle-management", "subtitle_curator"),
+    "bazarr-enable-free-providers": ("arr-subtitle-management", "subtitle_curator"),
+    "arr-repair-download-client": ("arr-download-queue", "download_monitor"),
+    "chaptarr-provision-book-library": ("arr-book-library", "media_librarian"),
+    "prowlarr-replace-dead-indexer": ("arr-indexer-management", "indexer_maintainer"),
+    "seerr-route-requests-by-quality": ("arr-media-requests", "request_manager"),
+}
+
+
+@pytest.mark.spec(f"{ID}-R011")
+@pytest.mark.parametrize("contract", sorted(PROVISIONING))
+def test_provisioning_contracts_are_recorded_with_approval_steps(contract, graph):
+    skill, prompt = PROVISIONING[contract]
+    node = rdflib.URIRef(ARR + f"contract-{contract}")
+    assert (node, RDF.type, rdflib.URIRef(ARR + "ToolUseContract")) in graph
+    assert graph.value(node, rdflib.URIRef(ARR + "contractOf")) == rdflib.URIRef(
+        ARR + f"skill-{skill}"
+    )
+    approvals = [
+        bool(graph.value(step, rdflib.URIRef(ARR + "needsApproval")).toPython())
+        for step in graph.objects(node, rdflib.URIRef(ARR + "hasStep"))
+    ]
+    assert any(approvals), contract
+    for runner in (prompt, "arr_operator"):
+        doc = json.loads((PKG / "prompts" / f"{runner}.json").read_text())
+        assert contract in doc["contracts"], runner
+        assert (
+            rdflib.URIRef(ARR + f"prompt-{runner}"),
+            rdflib.URIRef(ARR + "runsContract"),
+            node,
+        ) in graph
+    assert f"(`{contract}`)" in (PKG / "skills" / skill / "SKILL.md").read_text()

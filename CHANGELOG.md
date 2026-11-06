@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-11-06
+
+### Added
+- Bazarr's settings, notification-test and restart operations, which Bazarr hides from its API description: `bazarr_get_system_settings`, `bazarr_post_system_settings`, `bazarr_patch_system_notifications`, `bazarr_post_system` (1,379 tools).
+- Six tool-use contracts proven on the live suite: connect Bazarr to Sonarr and Radarr, enable free subtitle providers and the default language profile, repair an unavailable download client, provision the Chaptarr book library, replace a dead Prowlarr indexer, and route Seerr requests by quality (28 contracts).
+
+### Changed
+- A failed call raises `API error: HTTP <status>: <reason>` with the app's own validation or error message instead of the status alone.
+- Calls wait up to 300 seconds, so indexer tests, FlareSolverr challenges and subtitle searches no longer report `Upstream timed out`.
+- The credential guardrail allows a connection or credential change only in an approval-required contract step, with keys read from the credential store.
+
 ## [3.0.0] - 2026-11-06
 
 ### Changed

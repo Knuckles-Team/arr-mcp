@@ -15,8 +15,15 @@ from scion_sdk.tls.profile import ResolvedTLSProfile
 
 _MAX_ENDPOINT_CHARS = 4096
 _MAX_RESPONSE_BYTES = 16 * 1024 * 1024
-_MAX_RESPONSE_SECONDS = 60.0
-REQUEST_TIMEOUT = httpx.Timeout(30.0, connect=5.0)
+#: Indexer and download-client tests, provider subtitle searches and FlareSolverr
+#: challenges routinely take one to four minutes upstream; a shorter read
+#: timeout reported a working call as "Upstream timed out".
+_MAX_RESPONSE_SECONDS = 300.0
+REQUEST_TIMEOUT = httpx.Timeout(300.0, connect=5.0)
+#: Bytes of an error body read to explain a failed call.
+_MAX_ERROR_BYTES = 16 * 1024
+#: Characters of explanation kept in the raised message.
+_MAX_ERROR_CHARS = 1500
 
 
 def _origin(parsed: SplitResult) -> tuple[str, str, int]:
@@ -125,6 +132,76 @@ def _refuse_html(response: httpx.Response) -> None:
         )
 
 
+def _error_detail(payload: Any) -> str:
+    """Flatten an arr / Seerr / Bazarr error body into one readable line."""
+    if isinstance(payload, list):
+        parts = []
+        for item in payload:
+            if isinstance(item, dict):
+                message = item.get("errorMessage") or item.get("message")
+                prop = item.get("propertyName")
+                if message:
+                    parts.append(f"{prop}: {message}" if prop else str(message))
+                    continue
+            parts.append(str(item))
+        return "; ".join(parts)
+    if isinstance(payload, dict):
+        errors = payload.get("errors")
+        if isinstance(errors, dict):
+            flat = [
+                f"{key}: {' '.join(map(str, value)) if isinstance(value, list) else value}"
+                for key, value in errors.items()
+            ]
+            title = payload.get("title")
+            return "; ".join(([str(title)] if title else []) + flat)
+        for key in ("message", "detail", "error", "title"):
+            if payload.get(key):
+                return str(payload[key])
+    return str(payload)
+
+
+def raise_for_api_error(response: httpx.Response) -> None:
+    """Raise when the call failed, carrying the status and the app's own reason.
+
+    The reason is the upstream validation or error message (for example
+    ``baseUrl: Unable to connect to indexer``), read from a bounded body, so an
+    agent can act on it instead of seeing only ``HTTP 400``.
+    """
+    if response.status_code < 400:
+        return
+    status = response.status_code
+    raw = bytearray()
+    try:
+        if isinstance(response, httpx.Response):
+            for chunk in response.iter_bytes(chunk_size=4096):
+                raw.extend(chunk)
+                if len(raw) >= _MAX_ERROR_BYTES:
+                    break
+        else:
+            raw.extend(str(getattr(response, "text", "") or "").encode())
+    except Exception:  # noqa: BLE001 - an unreadable body still raises the status
+        raw.clear()
+    text = raw[:_MAX_ERROR_BYTES].decode("utf-8", errors="replace").strip()
+    kind = (
+        str(response.headers.get("content-type", "")).split(";", 1)[0].strip().lower()
+    )
+    if not text:
+        detail = ""
+    elif kind in {"text/html", "application/xhtml+xml"} or text.startswith("<"):
+        detail = (
+            "the app answered with a web page (wrong route, proxy error or refused key)"
+        )
+    else:
+        try:
+            detail = _error_detail(json.loads(text))
+        except (json.JSONDecodeError, ValueError):
+            detail = text
+    detail = " ".join(detail.split())[:_MAX_ERROR_CHARS]
+    raise RuntimeError(
+        f"API error: HTTP {status}: {detail}" if detail else f"API error: HTTP {status}"
+    )
+
+
 def decode_response(response: httpx.Response) -> Any:
     """Decode one response while bounding decompressed production content."""
     if isinstance(response, httpx.Response):
@@ -169,6 +246,7 @@ __all__ = [
     "build_client",
     "send_request",
     "decode_response",
+    "raise_for_api_error",
     "request_url",
     "validate_base_url",
 ]

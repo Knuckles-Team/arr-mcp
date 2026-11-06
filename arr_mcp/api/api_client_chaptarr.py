@@ -14,6 +14,7 @@ from scion_sdk.tls.resolve import resolve_tls_profile
 from arr_mcp.api._security import (
     build_client,
     decode_response,
+    raise_for_api_error,
     request_url,
     send_request,
     validate_base_url,
@@ -72,8 +73,7 @@ class Api:
         url = request_url(self.base_url, self._origin, endpoint)
         response = send_request(self._session, method, url, params, data)
         try:
-            if response.status_code >= 400:
-                raise RuntimeError(f"API error: HTTP {response.status_code}")
+            raise_for_api_error(response)
             if response.status_code == 204:
                 return {"status": "success"}
             result = decode_response(response)

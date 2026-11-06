@@ -1689,45 +1689,645 @@ arr:prompt-arr_operator a arr:ConnectorPrompt ;
     arr:promptName "arr_operator" ;
     arr:systemPromptForRole arr:ArrOperator ;
     arr:usesSkill arr:skill-arr-movie-library, arr:skill-arr-series-library, arr:skill-arr-music-library, arr:skill-arr-book-library, arr:skill-arr-indexer-management, arr:skill-arr-subtitle-management, arr:skill-arr-media-requests, arr:skill-arr-download-queue, arr:skill-arr-mcp-operations ;
-    arr:runsContract arr:contract-radarr-add-and-search, arr:contract-radarr-search-missing, arr:contract-radarr-tag-roundtrip, arr:contract-sonarr-add-and-search, arr:contract-sonarr-search-missing, arr:contract-sonarr-tag-roundtrip, arr:contract-lidarr-add-artist-and-search, arr:contract-lidarr-search-missing, arr:contract-chaptarr-add-author-and-search, arr:contract-chaptarr-search-missing, arr:contract-prowlarr-fix-failing-indexer, arr:contract-prowlarr-sync-indexers, arr:contract-prowlarr-search-releases, arr:contract-bazarr-download-wanted-subtitles, arr:contract-bazarr-reset-providers, arr:contract-seerr-triage-requests, arr:contract-seerr-request-title, arr:contract-seerr-retry-failed, arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download, arr:contract-arr-suite-health-check, arr:contract-arr-ingest-library ;
-    arr:usesTool arr:tool-radarr_get_rootfolder, arr:tool-radarr_get_qualityprofile, arr:tool-radarr_get_movie_lookup, arr:tool-radarr_get_movie, arr:tool-radarr_add_movie, arr:tool-radarr_get_queue, arr:tool-radarr_get_wanted_missing, arr:tool-radarr_post_command, arr:tool-radarr_get_tag, arr:tool-radarr_post_tag, arr:tool-radarr_delete_tag_id, arr:tool-sonarr_get_rootfolder, arr:tool-sonarr_get_qualityprofile, arr:tool-sonarr_get_series_lookup, arr:tool-sonarr_get_series, arr:tool-sonarr_add_series, arr:tool-sonarr_get_queue, arr:tool-sonarr_get_wanted_missing, arr:tool-sonarr_post_command, arr:tool-sonarr_get_tag, arr:tool-sonarr_post_tag, arr:tool-sonarr_delete_tag_id, arr:tool-lidarr_get_rootfolder, arr:tool-lidarr_get_qualityprofile, arr:tool-lidarr_get_metadataprofile, arr:tool-lidarr_get_artist_lookup, arr:tool-lidarr_get_artist, arr:tool-lidarr_post_artist, arr:tool-lidarr_get_queue, arr:tool-lidarr_get_wanted_missing, arr:tool-lidarr_post_command, arr:tool-chaptarr_get_rootfolder, arr:tool-chaptarr_get_qualityprofile, arr:tool-chaptarr_get_metadataprofile, arr:tool-chaptarr_get_author_lookup, arr:tool-chaptarr_post_author, arr:tool-chaptarr_get_queue, arr:tool-chaptarr_get_wanted_missing, arr:tool-chaptarr_post_command, arr:tool-prowlarr_get_indexerstatus, arr:tool-prowlarr_get_health, arr:tool-prowlarr_get_indexer_id, arr:tool-prowlarr_post_indexer_test, arr:tool-prowlarr_get_indexerproxy, arr:tool-prowlarr_put_indexer_id, arr:tool-prowlarr_get_applications, arr:tool-prowlarr_post_command, arr:tool-radarr_get_indexer, arr:tool-prowlarr_get_indexer, arr:tool-prowlarr_get_search, arr:tool-bazarr_get_system_status, arr:tool-bazarr_get_providers, arr:tool-bazarr_get_episodes_wanted, arr:tool-bazarr_patch_episodes_subtitles, arr:tool-bazarr_get_movies_wanted, arr:tool-bazarr_patch_movies_subtitles, arr:tool-bazarr_post_providers, arr:tool-seerr_get_request_count, arr:tool-seerr_get_request, arr:tool-seerr_get_request_id, arr:tool-seerr_get_service_radarr, arr:tool-seerr_get_service_sonarr, arr:tool-seerr_post_request_id_status, arr:tool-seerr_get_search, arr:tool-seerr_get_movie_id, arr:tool-seerr_post_request, arr:tool-seerr_get_settings_radarr, arr:tool-seerr_post_request_id_retry, arr:tool-radarr_get_queue_status, arr:tool-sonarr_get_queue_status, arr:tool-lidarr_get_queue_status, arr:tool-chaptarr_get_queue_status, arr:tool-radarr_delete_queue_id, arr:tool-radarr_get_system_status, arr:tool-radarr_get_health, arr:tool-sonarr_get_system_status, arr:tool-sonarr_get_health, arr:tool-lidarr_get_system_status, arr:tool-lidarr_get_health, arr:tool-chaptarr_get_system_status, arr:tool-chaptarr_get_health, arr:tool-prowlarr_get_system_status, arr:tool-bazarr_get_system_health, arr:tool-seerr_get_status, arr:tool-arr_ingest_library .
+    arr:runsContract arr:contract-radarr-add-and-search, arr:contract-radarr-search-missing, arr:contract-radarr-tag-roundtrip, arr:contract-sonarr-add-and-search, arr:contract-sonarr-search-missing, arr:contract-sonarr-tag-roundtrip, arr:contract-lidarr-add-artist-and-search, arr:contract-lidarr-search-missing, arr:contract-chaptarr-add-author-and-search, arr:contract-chaptarr-search-missing, arr:contract-prowlarr-fix-failing-indexer, arr:contract-prowlarr-sync-indexers, arr:contract-prowlarr-search-releases, arr:contract-bazarr-download-wanted-subtitles, arr:contract-bazarr-reset-providers, arr:contract-seerr-triage-requests, arr:contract-seerr-request-title, arr:contract-seerr-retry-failed, arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download, arr:contract-arr-suite-health-check, arr:contract-arr-ingest-library, arr:contract-bazarr-connect-sonarr-radarr, arr:contract-bazarr-enable-free-providers, arr:contract-arr-repair-download-client, arr:contract-chaptarr-provision-book-library, arr:contract-prowlarr-replace-dead-indexer, arr:contract-seerr-route-requests-by-quality ;
+    arr:usesTool arr:tool-radarr_get_rootfolder, arr:tool-radarr_get_qualityprofile, arr:tool-radarr_get_movie_lookup, arr:tool-radarr_get_movie, arr:tool-radarr_add_movie, arr:tool-radarr_get_queue, arr:tool-radarr_get_wanted_missing, arr:tool-radarr_post_command, arr:tool-radarr_get_tag, arr:tool-radarr_post_tag, arr:tool-radarr_delete_tag_id, arr:tool-sonarr_get_rootfolder, arr:tool-sonarr_get_qualityprofile, arr:tool-sonarr_get_series_lookup, arr:tool-sonarr_get_series, arr:tool-sonarr_add_series, arr:tool-sonarr_get_queue, arr:tool-sonarr_get_wanted_missing, arr:tool-sonarr_post_command, arr:tool-sonarr_get_tag, arr:tool-sonarr_post_tag, arr:tool-sonarr_delete_tag_id, arr:tool-lidarr_get_rootfolder, arr:tool-lidarr_get_qualityprofile, arr:tool-lidarr_get_metadataprofile, arr:tool-lidarr_get_artist_lookup, arr:tool-lidarr_get_artist, arr:tool-lidarr_post_artist, arr:tool-lidarr_get_queue, arr:tool-lidarr_get_wanted_missing, arr:tool-lidarr_post_command, arr:tool-chaptarr_get_rootfolder, arr:tool-chaptarr_get_qualityprofile, arr:tool-chaptarr_get_metadataprofile, arr:tool-chaptarr_get_author_lookup, arr:tool-chaptarr_post_author, arr:tool-chaptarr_get_queue, arr:tool-chaptarr_get_wanted_missing, arr:tool-chaptarr_post_command, arr:tool-prowlarr_get_indexerstatus, arr:tool-prowlarr_get_health, arr:tool-prowlarr_get_indexer_id, arr:tool-prowlarr_post_indexer_test, arr:tool-prowlarr_get_indexerproxy, arr:tool-prowlarr_put_indexer_id, arr:tool-prowlarr_get_applications, arr:tool-prowlarr_post_command, arr:tool-radarr_get_indexer, arr:tool-prowlarr_get_indexer, arr:tool-prowlarr_get_search, arr:tool-bazarr_get_system_status, arr:tool-bazarr_get_providers, arr:tool-bazarr_get_episodes_wanted, arr:tool-bazarr_patch_episodes_subtitles, arr:tool-bazarr_get_movies_wanted, arr:tool-bazarr_patch_movies_subtitles, arr:tool-bazarr_post_providers, arr:tool-seerr_get_request_count, arr:tool-seerr_get_request, arr:tool-seerr_get_request_id, arr:tool-seerr_get_service_radarr, arr:tool-seerr_get_service_sonarr, arr:tool-seerr_post_request_id_status, arr:tool-seerr_get_search, arr:tool-seerr_get_movie_id, arr:tool-seerr_post_request, arr:tool-seerr_get_settings_radarr, arr:tool-seerr_post_request_id_retry, arr:tool-radarr_get_queue_status, arr:tool-sonarr_get_queue_status, arr:tool-lidarr_get_queue_status, arr:tool-chaptarr_get_queue_status, arr:tool-radarr_delete_queue_id, arr:tool-radarr_get_system_status, arr:tool-radarr_get_health, arr:tool-sonarr_get_system_status, arr:tool-sonarr_get_health, arr:tool-lidarr_get_system_status, arr:tool-lidarr_get_health, arr:tool-chaptarr_get_system_status, arr:tool-chaptarr_get_health, arr:tool-prowlarr_get_system_status, arr:tool-bazarr_get_system_health, arr:tool-seerr_get_status, arr:tool-arr_ingest_library, arr:tool-bazarr_get_system_settings, arr:tool-bazarr_post_system_settings, arr:tool-bazarr_post_system_tasks, arr:tool-bazarr_get_badges, arr:tool-bazarr_get_languages_profiles, arr:tool-bazarr_get_provider_movies, arr:tool-bazarr_get_provider_episodes, arr:tool-radarr_get_downloadclient, arr:tool-radarr_post_downloadclient_test, arr:tool-radarr_put_downloadclient_id, arr:tool-chaptarr_post_rootfolder, arr:tool-chaptarr_get_downloadclient_schema, arr:tool-chaptarr_post_downloadclient_test, arr:tool-chaptarr_post_downloadclient, arr:tool-prowlarr_get_applications_schema, arr:tool-prowlarr_post_applications_test, arr:tool-prowlarr_post_applications, arr:tool-prowlarr_get_indexer_schema, arr:tool-prowlarr_post_indexer, arr:tool-prowlarr_delete_indexer_id, arr:tool-seerr_post_settings_radarr_test, arr:tool-seerr_post_settings_radarr, arr:tool-seerr_put_settings_radarr_id, arr:tool-seerr_get_settings_sonarr, arr:tool-seerr_post_settings_sonarr, arr:tool-seerr_put_settings_sonarr_id .
 
 arr:prompt-media_librarian a arr:ConnectorPrompt ;
     rdfs:label "Media Librarian" ;
     arr:promptName "media_librarian" ;
     arr:systemPromptForRole arr:MediaLibrarian ;
     arr:usesSkill arr:skill-arr-movie-library, arr:skill-arr-series-library, arr:skill-arr-music-library, arr:skill-arr-book-library, arr:skill-arr-download-queue ;
-    arr:runsContract arr:contract-radarr-add-and-search, arr:contract-radarr-search-missing, arr:contract-radarr-tag-roundtrip, arr:contract-sonarr-add-and-search, arr:contract-sonarr-search-missing, arr:contract-sonarr-tag-roundtrip, arr:contract-lidarr-add-artist-and-search, arr:contract-lidarr-search-missing, arr:contract-chaptarr-add-author-and-search, arr:contract-chaptarr-search-missing, arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download ;
-    arr:usesTool arr:tool-radarr_get_rootfolder, arr:tool-radarr_get_qualityprofile, arr:tool-radarr_get_movie_lookup, arr:tool-radarr_get_movie, arr:tool-radarr_add_movie, arr:tool-radarr_get_queue, arr:tool-radarr_get_wanted_missing, arr:tool-radarr_post_command, arr:tool-radarr_get_tag, arr:tool-radarr_post_tag, arr:tool-radarr_delete_tag_id, arr:tool-sonarr_get_rootfolder, arr:tool-sonarr_get_qualityprofile, arr:tool-sonarr_get_series_lookup, arr:tool-sonarr_get_series, arr:tool-sonarr_add_series, arr:tool-sonarr_get_queue, arr:tool-sonarr_get_wanted_missing, arr:tool-sonarr_post_command, arr:tool-sonarr_get_tag, arr:tool-sonarr_post_tag, arr:tool-sonarr_delete_tag_id, arr:tool-lidarr_get_rootfolder, arr:tool-lidarr_get_qualityprofile, arr:tool-lidarr_get_metadataprofile, arr:tool-lidarr_get_artist_lookup, arr:tool-lidarr_get_artist, arr:tool-lidarr_post_artist, arr:tool-lidarr_get_queue, arr:tool-lidarr_get_wanted_missing, arr:tool-lidarr_post_command, arr:tool-chaptarr_get_rootfolder, arr:tool-chaptarr_get_qualityprofile, arr:tool-chaptarr_get_metadataprofile, arr:tool-chaptarr_get_author_lookup, arr:tool-chaptarr_post_author, arr:tool-chaptarr_get_queue, arr:tool-chaptarr_get_wanted_missing, arr:tool-chaptarr_post_command, arr:tool-radarr_get_queue_status, arr:tool-sonarr_get_queue_status, arr:tool-lidarr_get_queue_status, arr:tool-chaptarr_get_queue_status, arr:tool-radarr_delete_queue_id .
+    arr:runsContract arr:contract-radarr-add-and-search, arr:contract-radarr-search-missing, arr:contract-radarr-tag-roundtrip, arr:contract-sonarr-add-and-search, arr:contract-sonarr-search-missing, arr:contract-sonarr-tag-roundtrip, arr:contract-lidarr-add-artist-and-search, arr:contract-lidarr-search-missing, arr:contract-chaptarr-add-author-and-search, arr:contract-chaptarr-search-missing, arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download, arr:contract-chaptarr-provision-book-library ;
+    arr:usesTool arr:tool-radarr_get_rootfolder, arr:tool-radarr_get_qualityprofile, arr:tool-radarr_get_movie_lookup, arr:tool-radarr_get_movie, arr:tool-radarr_add_movie, arr:tool-radarr_get_queue, arr:tool-radarr_get_wanted_missing, arr:tool-radarr_post_command, arr:tool-radarr_get_tag, arr:tool-radarr_post_tag, arr:tool-radarr_delete_tag_id, arr:tool-sonarr_get_rootfolder, arr:tool-sonarr_get_qualityprofile, arr:tool-sonarr_get_series_lookup, arr:tool-sonarr_get_series, arr:tool-sonarr_add_series, arr:tool-sonarr_get_queue, arr:tool-sonarr_get_wanted_missing, arr:tool-sonarr_post_command, arr:tool-sonarr_get_tag, arr:tool-sonarr_post_tag, arr:tool-sonarr_delete_tag_id, arr:tool-lidarr_get_rootfolder, arr:tool-lidarr_get_qualityprofile, arr:tool-lidarr_get_metadataprofile, arr:tool-lidarr_get_artist_lookup, arr:tool-lidarr_get_artist, arr:tool-lidarr_post_artist, arr:tool-lidarr_get_queue, arr:tool-lidarr_get_wanted_missing, arr:tool-lidarr_post_command, arr:tool-chaptarr_get_rootfolder, arr:tool-chaptarr_get_qualityprofile, arr:tool-chaptarr_get_metadataprofile, arr:tool-chaptarr_get_author_lookup, arr:tool-chaptarr_post_author, arr:tool-chaptarr_get_queue, arr:tool-chaptarr_get_wanted_missing, arr:tool-chaptarr_post_command, arr:tool-radarr_get_queue_status, arr:tool-sonarr_get_queue_status, arr:tool-lidarr_get_queue_status, arr:tool-chaptarr_get_queue_status, arr:tool-radarr_delete_queue_id, arr:tool-chaptarr_post_rootfolder, arr:tool-chaptarr_get_downloadclient_schema, arr:tool-chaptarr_post_downloadclient_test, arr:tool-chaptarr_post_downloadclient, arr:tool-prowlarr_get_applications_schema, arr:tool-prowlarr_post_applications_test, arr:tool-prowlarr_post_applications .
 
 arr:prompt-request_manager a arr:ConnectorPrompt ;
     rdfs:label "Media Request Manager" ;
     arr:promptName "request_manager" ;
     arr:systemPromptForRole arr:RequestManager ;
     arr:usesSkill arr:skill-arr-media-requests, arr:skill-arr-download-queue ;
-    arr:runsContract arr:contract-seerr-triage-requests, arr:contract-seerr-request-title, arr:contract-seerr-retry-failed, arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download ;
-    arr:usesTool arr:tool-seerr_get_request_count, arr:tool-seerr_get_request, arr:tool-seerr_get_request_id, arr:tool-seerr_get_service_radarr, arr:tool-seerr_get_service_sonarr, arr:tool-seerr_post_request_id_status, arr:tool-seerr_get_search, arr:tool-seerr_get_movie_id, arr:tool-seerr_post_request, arr:tool-seerr_get_settings_radarr, arr:tool-seerr_post_request_id_retry, arr:tool-radarr_get_queue_status, arr:tool-radarr_get_queue, arr:tool-sonarr_get_queue_status, arr:tool-sonarr_get_queue, arr:tool-lidarr_get_queue_status, arr:tool-lidarr_get_queue, arr:tool-chaptarr_get_queue_status, arr:tool-chaptarr_get_queue, arr:tool-radarr_delete_queue_id, arr:tool-radarr_post_command .
+    arr:runsContract arr:contract-seerr-triage-requests, arr:contract-seerr-request-title, arr:contract-seerr-retry-failed, arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download, arr:contract-seerr-route-requests-by-quality ;
+    arr:usesTool arr:tool-seerr_get_request_count, arr:tool-seerr_get_request, arr:tool-seerr_get_request_id, arr:tool-seerr_get_service_radarr, arr:tool-seerr_get_service_sonarr, arr:tool-seerr_post_request_id_status, arr:tool-seerr_get_search, arr:tool-seerr_get_movie_id, arr:tool-seerr_post_request, arr:tool-seerr_get_settings_radarr, arr:tool-seerr_post_request_id_retry, arr:tool-radarr_get_queue_status, arr:tool-radarr_get_queue, arr:tool-sonarr_get_queue_status, arr:tool-sonarr_get_queue, arr:tool-lidarr_get_queue_status, arr:tool-lidarr_get_queue, arr:tool-chaptarr_get_queue_status, arr:tool-chaptarr_get_queue, arr:tool-radarr_delete_queue_id, arr:tool-radarr_post_command, arr:tool-radarr_get_qualityprofile, arr:tool-seerr_post_settings_radarr_test, arr:tool-seerr_post_settings_radarr, arr:tool-seerr_put_settings_radarr_id, arr:tool-seerr_get_settings_sonarr, arr:tool-seerr_post_settings_sonarr, arr:tool-seerr_put_settings_sonarr_id .
 
 arr:prompt-indexer_maintainer a arr:ConnectorPrompt ;
     rdfs:label "Indexer Maintainer" ;
     arr:promptName "indexer_maintainer" ;
     arr:systemPromptForRole arr:IndexerMaintainer ;
     arr:usesSkill arr:skill-arr-indexer-management ;
-    arr:runsContract arr:contract-prowlarr-fix-failing-indexer, arr:contract-prowlarr-sync-indexers, arr:contract-prowlarr-search-releases ;
-    arr:usesTool arr:tool-prowlarr_get_indexerstatus, arr:tool-prowlarr_get_health, arr:tool-prowlarr_get_indexer_id, arr:tool-prowlarr_post_indexer_test, arr:tool-prowlarr_get_indexerproxy, arr:tool-prowlarr_put_indexer_id, arr:tool-prowlarr_get_applications, arr:tool-prowlarr_post_command, arr:tool-radarr_get_indexer, arr:tool-prowlarr_get_indexer, arr:tool-prowlarr_get_search .
+    arr:runsContract arr:contract-prowlarr-fix-failing-indexer, arr:contract-prowlarr-sync-indexers, arr:contract-prowlarr-search-releases, arr:contract-prowlarr-replace-dead-indexer ;
+    arr:usesTool arr:tool-prowlarr_get_indexerstatus, arr:tool-prowlarr_get_health, arr:tool-prowlarr_get_indexer_id, arr:tool-prowlarr_post_indexer_test, arr:tool-prowlarr_get_indexerproxy, arr:tool-prowlarr_put_indexer_id, arr:tool-prowlarr_get_applications, arr:tool-prowlarr_post_command, arr:tool-radarr_get_indexer, arr:tool-prowlarr_get_indexer, arr:tool-prowlarr_get_search, arr:tool-prowlarr_get_indexer_schema, arr:tool-prowlarr_post_indexer, arr:tool-prowlarr_delete_indexer_id .
 
 arr:prompt-subtitle_curator a arr:ConnectorPrompt ;
     rdfs:label "Subtitle Curator" ;
     arr:promptName "subtitle_curator" ;
     arr:systemPromptForRole arr:SubtitleCurator ;
     arr:usesSkill arr:skill-arr-subtitle-management ;
-    arr:runsContract arr:contract-bazarr-download-wanted-subtitles, arr:contract-bazarr-reset-providers ;
-    arr:usesTool arr:tool-bazarr_get_system_status, arr:tool-bazarr_get_providers, arr:tool-bazarr_get_episodes_wanted, arr:tool-bazarr_patch_episodes_subtitles, arr:tool-bazarr_get_movies_wanted, arr:tool-bazarr_patch_movies_subtitles, arr:tool-bazarr_post_providers .
+    arr:runsContract arr:contract-bazarr-download-wanted-subtitles, arr:contract-bazarr-reset-providers, arr:contract-bazarr-connect-sonarr-radarr, arr:contract-bazarr-enable-free-providers ;
+    arr:usesTool arr:tool-bazarr_get_system_status, arr:tool-bazarr_get_providers, arr:tool-bazarr_get_episodes_wanted, arr:tool-bazarr_patch_episodes_subtitles, arr:tool-bazarr_get_movies_wanted, arr:tool-bazarr_patch_movies_subtitles, arr:tool-bazarr_post_providers, arr:tool-bazarr_get_system_settings, arr:tool-sonarr_get_system_status, arr:tool-radarr_get_system_status, arr:tool-bazarr_post_system_settings, arr:tool-bazarr_post_system_tasks, arr:tool-bazarr_get_badges, arr:tool-bazarr_get_languages_profiles, arr:tool-bazarr_get_provider_movies, arr:tool-bazarr_get_provider_episodes .
 
 arr:prompt-download_monitor a arr:ConnectorPrompt ;
     rdfs:label "Download Monitor" ;
     arr:promptName "download_monitor" ;
     arr:systemPromptForRole arr:DownloadMonitor ;
     arr:usesSkill arr:skill-arr-download-queue, arr:skill-arr-mcp-operations ;
-    arr:runsContract arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download, arr:contract-arr-suite-health-check, arr:contract-arr-ingest-library ;
-    arr:usesTool arr:tool-radarr_get_queue_status, arr:tool-radarr_get_queue, arr:tool-sonarr_get_queue_status, arr:tool-sonarr_get_queue, arr:tool-lidarr_get_queue_status, arr:tool-lidarr_get_queue, arr:tool-chaptarr_get_queue_status, arr:tool-chaptarr_get_queue, arr:tool-radarr_delete_queue_id, arr:tool-radarr_post_command, arr:tool-radarr_get_system_status, arr:tool-radarr_get_health, arr:tool-sonarr_get_system_status, arr:tool-sonarr_get_health, arr:tool-lidarr_get_system_status, arr:tool-lidarr_get_health, arr:tool-chaptarr_get_system_status, arr:tool-chaptarr_get_health, arr:tool-prowlarr_get_system_status, arr:tool-prowlarr_get_health, arr:tool-bazarr_get_system_status, arr:tool-bazarr_get_system_health, arr:tool-seerr_get_status, arr:tool-arr_ingest_library .
+    arr:runsContract arr:contract-arr-check-download-queue, arr:contract-arr-remove-stalled-download, arr:contract-arr-suite-health-check, arr:contract-arr-ingest-library, arr:contract-arr-repair-download-client ;
+    arr:usesTool arr:tool-radarr_get_queue_status, arr:tool-radarr_get_queue, arr:tool-sonarr_get_queue_status, arr:tool-sonarr_get_queue, arr:tool-lidarr_get_queue_status, arr:tool-lidarr_get_queue, arr:tool-chaptarr_get_queue_status, arr:tool-chaptarr_get_queue, arr:tool-radarr_delete_queue_id, arr:tool-radarr_post_command, arr:tool-radarr_get_system_status, arr:tool-radarr_get_health, arr:tool-sonarr_get_system_status, arr:tool-sonarr_get_health, arr:tool-lidarr_get_system_status, arr:tool-lidarr_get_health, arr:tool-chaptarr_get_system_status, arr:tool-chaptarr_get_health, arr:tool-prowlarr_get_system_status, arr:tool-prowlarr_get_health, arr:tool-bazarr_get_system_status, arr:tool-bazarr_get_system_health, arr:tool-seerr_get_status, arr:tool-arr_ingest_library, arr:tool-radarr_get_downloadclient, arr:tool-radarr_post_downloadclient_test, arr:tool-radarr_put_downloadclient_id .
+
+# Workflows proven live on 2026-11-06 (CONN-ARR-MCP-SUITE-R011).
+
+arr:tool-bazarr_get_system_settings a arr:ConnectorTool ;
+    arr:toolName "bazarr_get_system_settings" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:tool-bazarr_post_system_settings a arr:ConnectorTool ;
+    arr:toolName "bazarr_post_system_settings" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:tool-bazarr_post_system_tasks a arr:ConnectorTool ;
+    arr:toolName "bazarr_post_system_tasks" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:tool-bazarr_get_badges a arr:ConnectorTool ;
+    arr:toolName "bazarr_get_badges" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:contract-bazarr-connect-sonarr-radarr a arr:ToolUseContract ;
+    rdfs:label "Connect Bazarr to Sonarr and Radarr" ;
+    rdfs:comment "Point Bazarr at the Sonarr and Radarr instances, sync their series and movies, and confirm both links are live." ;
+    arr:contractOf arr:skill-arr-subtitle-management ;
+    arr:hasStep arr:step-bazarr-connect-sonarr-radarr-1, arr:step-bazarr-connect-sonarr-radarr-2, arr:step-bazarr-connect-sonarr-radarr-3, arr:step-bazarr-connect-sonarr-radarr-4, arr:step-bazarr-connect-sonarr-radarr-5, arr:step-bazarr-connect-sonarr-radarr-6 .
+
+arr:step-bazarr-connect-sonarr-radarr-1 a arr:ContractStep ;
+    arr:stepIndex 1 ;
+    arr:callsTool arr:tool-bazarr_get_system_settings ;
+    arr:needsApproval false ;
+    rdfs:comment "`general.use_sonarr` / `general.use_radarr` false, or an empty `sonarr.apikey`, means the link is missing." ;
+    arr:precedesStep arr:step-bazarr-connect-sonarr-radarr-2 .
+
+arr:step-bazarr-connect-sonarr-radarr-2 a arr:ContractStep ;
+    arr:stepIndex 2 ;
+    arr:callsTool arr:tool-sonarr_get_system_status ;
+    arr:needsApproval false ;
+    rdfs:comment "Sonarr answers; Bazarr reaches it at the same host and port." ;
+    arr:precedesStep arr:step-bazarr-connect-sonarr-radarr-3 .
+
+arr:step-bazarr-connect-sonarr-radarr-3 a arr:ContractStep ;
+    arr:stepIndex 3 ;
+    arr:callsTool arr:tool-radarr_get_system_status ;
+    arr:needsApproval false ;
+    rdfs:comment "Radarr answers; Bazarr reaches it at the same host and port." ;
+    arr:precedesStep arr:step-bazarr-connect-sonarr-radarr-4 .
+
+arr:step-bazarr-connect-sonarr-radarr-4 a arr:ContractStep ;
+    arr:stepIndex 4 ;
+    arr:callsTool arr:tool-bazarr_post_system_settings ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: saves the connection. Keys come from the credential store (SONARR_API_KEY, RADARR_API_KEY), never from chat." ;
+    arr:precedesStep arr:step-bazarr-connect-sonarr-radarr-5 ;
+    arr:bindsParameter arr:param-bazarr-connect-sonarr-radarr-4-settings .
+
+arr:param-bazarr-connect-sonarr-radarr-4-settings a arr:ParameterBinding ;
+    arr:parameterName "settings" ;
+    arr:parameterSource "{settings-general-use_sonarr: true, settings-sonarr-ip, settings-sonarr-port, settings-sonarr-base_url: \"/\", settings-sonarr-apikey: secret SONARR_API_KEY, settings-general-use_radarr: true, settings-radarr-ip, settings-radarr-port, settings-radarr-base_url: \"/\", settings-radarr-apikey: secret RADARR_API_KEY}" .
+
+arr:step-bazarr-connect-sonarr-radarr-5 a arr:ContractStep ;
+    arr:stepIndex 5 ;
+    arr:callsTool arr:tool-bazarr_post_system_tasks ;
+    arr:needsApproval false ;
+    rdfs:comment "Sync series from Sonarr now instead of waiting for the hourly job." ;
+    arr:precedesStep arr:step-bazarr-connect-sonarr-radarr-6 ;
+    arr:bindsParameter arr:param-bazarr-connect-sonarr-radarr-5-taskid .
+
+arr:param-bazarr-connect-sonarr-radarr-5-taskid a arr:ParameterBinding ;
+    arr:parameterName "taskid" ;
+    arr:parameterSource "const:\"update_series\"" .
+
+arr:step-bazarr-connect-sonarr-radarr-6 a arr:ContractStep ;
+    arr:stepIndex 6 ;
+    arr:callsTool arr:tool-bazarr_get_badges ;
+    arr:needsApproval false ;
+    rdfs:comment "`sonarr_signalr` and `radarr_signalr` read `LIVE` once both links work; `episodes` / `movies` count what is missing subtitles." .
+
+arr:tool-bazarr_get_languages_profiles a arr:ConnectorTool ;
+    arr:toolName "bazarr_get_languages_profiles" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:tool-bazarr_get_provider_movies a arr:ConnectorTool ;
+    arr:toolName "bazarr_get_provider_movies" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:tool-bazarr_get_provider_episodes a arr:ConnectorTool ;
+    arr:toolName "bazarr_get_provider_episodes" ;
+    arr:toolOf arr:app-bazarr .
+
+arr:contract-bazarr-enable-free-providers a arr:ToolUseContract ;
+    rdfs:label "Enable free subtitle providers and the default language profile" ;
+    rdfs:comment "Enable the subtitle providers that need no account, create the default language profile, and prove a search returns subtitles for one movie and one episode." ;
+    arr:contractOf arr:skill-arr-subtitle-management ;
+    arr:hasStep arr:step-bazarr-enable-free-providers-1, arr:step-bazarr-enable-free-providers-2, arr:step-bazarr-enable-free-providers-3, arr:step-bazarr-enable-free-providers-4, arr:step-bazarr-enable-free-providers-5, arr:step-bazarr-enable-free-providers-6, arr:step-bazarr-enable-free-providers-7, arr:step-bazarr-enable-free-providers-8 .
+
+arr:step-bazarr-enable-free-providers-1 a arr:ContractStep ;
+    arr:stepIndex 1 ;
+    arr:callsTool arr:tool-bazarr_get_system_settings ;
+    arr:needsApproval false ;
+    rdfs:comment "`general.enabled_providers` lists the enabled providers; the provider sections show which need credentials." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-2 .
+
+arr:step-bazarr-enable-free-providers-2 a arr:ContractStep ;
+    arr:stepIndex 2 ;
+    arr:callsTool arr:tool-bazarr_get_languages_profiles ;
+    arr:needsApproval false ;
+    rdfs:comment "An empty list means no language profile: nothing is wanted." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-3 .
+
+arr:step-bazarr-enable-free-providers-3 a arr:ContractStep ;
+    arr:stepIndex 3 ;
+    arr:callsTool arr:tool-bazarr_post_system_settings ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: enables the no-account providers (Bazarr 1.6.2: embeddedsubtitles, gestdown, subtitlecat, supersubtitles, tvsubtitles, yifysubtitles), enables the language, saves the profile and makes it the series and movie default." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-4 ;
+    arr:bindsParameter arr:param-bazarr-enable-free-providers-3-settings .
+
+arr:param-bazarr-enable-free-providers-3-settings a arr:ParameterBinding ;
+    arr:parameterName "settings" ;
+    arr:parameterSource "{settings-general-enabled_providers: [...], languages-enabled: [\"en\"], languages-profiles: JSON [{profileId: 1, name: \"English\", items: [{id: 1, language: \"en\", hi: \"False\", forced: \"False\", audio_exclude: \"False\", audio_only_include: \"False\"}], cutoff: null, mustContain: [], mustNotContain: [], originalFormat: false}], settings-general-serie_default_enabled: true, settings-general-serie_default_profile: 1, settings-general-movie_default_enabled: true, settings-general-movie_default_profile: 1}" .
+
+arr:step-bazarr-enable-free-providers-4 a arr:ContractStep ;
+    arr:stepIndex 4 ;
+    arr:callsTool arr:tool-bazarr_get_providers ;
+    arr:needsApproval false ;
+    rdfs:comment "Each enabled provider reads `Good`; a throttled one names its retry time." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-5 .
+
+arr:step-bazarr-enable-free-providers-5 a arr:ContractStep ;
+    arr:stepIndex 5 ;
+    arr:callsTool arr:tool-bazarr_get_movies_wanted ;
+    arr:needsApproval false ;
+    rdfs:comment "Pick one movie missing subtitles (`radarrId`)." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-6 ;
+    arr:bindsParameter arr:param-bazarr-enable-free-providers-5-length .
+
+arr:param-bazarr-enable-free-providers-5-length a arr:ParameterBinding ;
+    arr:parameterName "length" ;
+    arr:parameterSource "const:5" .
+
+arr:step-bazarr-enable-free-providers-6 a arr:ContractStep ;
+    arr:stepIndex 6 ;
+    arr:callsTool arr:tool-bazarr_get_provider_movies ;
+    arr:needsApproval false ;
+    rdfs:comment "Manual search across the providers; results name provider, language and score. Can take minutes." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-7 ;
+    arr:bindsParameter arr:param-bazarr-enable-free-providers-6-radarrid .
+
+arr:param-bazarr-enable-free-providers-6-radarrid a arr:ParameterBinding ;
+    arr:parameterName "radarrid" ;
+    arr:parameterSource "step5.data[0].radarrId" .
+
+arr:step-bazarr-enable-free-providers-7 a arr:ContractStep ;
+    arr:stepIndex 7 ;
+    arr:callsTool arr:tool-bazarr_get_episodes_wanted ;
+    arr:needsApproval false ;
+    rdfs:comment "Pick one episode missing subtitles (`sonarrEpisodeId`)." ;
+    arr:precedesStep arr:step-bazarr-enable-free-providers-8 ;
+    arr:bindsParameter arr:param-bazarr-enable-free-providers-7-length .
+
+arr:param-bazarr-enable-free-providers-7-length a arr:ParameterBinding ;
+    arr:parameterName "length" ;
+    arr:parameterSource "const:5" .
+
+arr:step-bazarr-enable-free-providers-8 a arr:ContractStep ;
+    arr:stepIndex 8 ;
+    arr:callsTool arr:tool-bazarr_get_provider_episodes ;
+    arr:needsApproval false ;
+    rdfs:comment "Manual search for the episode; results name provider, language and score." ;
+    arr:bindsParameter arr:param-bazarr-enable-free-providers-8-episodeid .
+
+arr:param-bazarr-enable-free-providers-8-episodeid a arr:ParameterBinding ;
+    arr:parameterName "episodeid" ;
+    arr:parameterSource "step7.data[0].sonarrEpisodeId" .
+
+arr:tool-radarr_get_downloadclient a arr:ConnectorTool ;
+    arr:toolName "radarr_get_downloadclient" ;
+    arr:toolOf arr:app-radarr .
+
+arr:tool-radarr_post_downloadclient_test a arr:ConnectorTool ;
+    arr:toolName "radarr_post_downloadclient_test" ;
+    arr:toolOf arr:app-radarr .
+
+arr:tool-radarr_put_downloadclient_id a arr:ConnectorTool ;
+    arr:toolName "radarr_put_downloadclient_id" ;
+    arr:toolOf arr:app-radarr .
+
+arr:contract-arr-repair-download-client a arr:ToolUseContract ;
+    rdfs:label "Repair an unavailable download client" ;
+    rdfs:comment "When an app reports every download client unavailable, read the client's own failure reason, fix the setting with approval and confirm the test passes." ;
+    arr:contractOf arr:skill-arr-download-queue ;
+    arr:hasStep arr:step-arr-repair-download-client-1, arr:step-arr-repair-download-client-2, arr:step-arr-repair-download-client-3, arr:step-arr-repair-download-client-4, arr:step-arr-repair-download-client-5 .
+
+arr:step-arr-repair-download-client-1 a arr:ContractStep ;
+    arr:stepIndex 1 ;
+    arr:callsTool arr:tool-radarr_get_health ;
+    arr:needsApproval false ;
+    rdfs:comment "`All download clients are unavailable due to failures` starts this workflow (the same for sonarr_, lidarr_ and chaptarr_)." ;
+    arr:precedesStep arr:step-arr-repair-download-client-2 .
+
+arr:step-arr-repair-download-client-2 a arr:ContractStep ;
+    arr:stepIndex 2 ;
+    arr:callsTool arr:tool-radarr_get_downloadclient ;
+    arr:needsApproval false ;
+    rdfs:comment "The configured client, host, port and category." ;
+    arr:precedesStep arr:step-arr-repair-download-client-3 .
+
+arr:step-arr-repair-download-client-3 a arr:ContractStep ;
+    arr:stepIndex 3 ;
+    arr:callsTool arr:tool-radarr_post_downloadclient_test ;
+    arr:needsApproval false ;
+    rdfs:comment "The error carries the app's reason: `Host: Unable to connect to qBittorrent` (the client banned the caller after failed logins) or `Username: Authentication failure` (stale password)." ;
+    arr:precedesStep arr:step-arr-repair-download-client-4 ;
+    arr:bindsParameter arr:param-arr-repair-download-client-3-data .
+
+arr:param-arr-repair-download-client-3-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step2.result[0]" .
+
+arr:step-arr-repair-download-client-4 a arr:ContractStep ;
+    arr:stepIndex 4 ;
+    arr:callsTool arr:tool-radarr_put_downloadclient_id ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: saves the current username and password from the credential store (QBITTORRENT_USERNAME, QBITTORRENT_PASSWORD). `forceSave` skips the test, because a banned caller fails it until the ban lifts or qBittorrent restarts." ;
+    arr:precedesStep arr:step-arr-repair-download-client-5 ;
+    arr:bindsParameter arr:param-arr-repair-download-client-4-id ;
+    arr:bindsParameter arr:param-arr-repair-download-client-4-data ;
+    arr:bindsParameter arr:param-arr-repair-download-client-4-forceSave .
+
+arr:param-arr-repair-download-client-4-id a arr:ParameterBinding ;
+    arr:parameterName "id" ;
+    arr:parameterSource "step2.result[0].id" .
+
+arr:param-arr-repair-download-client-4-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step2.result[0] with the stored credentials" .
+
+arr:param-arr-repair-download-client-4-forceSave a arr:ParameterBinding ;
+    arr:parameterName "forceSave" ;
+    arr:parameterSource "const:true" .
+
+arr:step-arr-repair-download-client-5 a arr:ContractStep ;
+    arr:stepIndex 5 ;
+    arr:callsTool arr:tool-radarr_post_downloadclient_test ;
+    arr:needsApproval false ;
+    rdfs:comment "Passes once the client accepts the login; repeat for each app that shares the client." ;
+    arr:bindsParameter arr:param-arr-repair-download-client-5-data .
+
+arr:param-arr-repair-download-client-5-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step2.result[0]" .
+
+arr:tool-chaptarr_post_rootfolder a arr:ConnectorTool ;
+    arr:toolName "chaptarr_post_rootfolder" ;
+    arr:toolOf arr:app-chaptarr .
+
+arr:tool-chaptarr_get_downloadclient_schema a arr:ConnectorTool ;
+    arr:toolName "chaptarr_get_downloadclient_schema" ;
+    arr:toolOf arr:app-chaptarr .
+
+arr:tool-chaptarr_post_downloadclient_test a arr:ConnectorTool ;
+    arr:toolName "chaptarr_post_downloadclient_test" ;
+    arr:toolOf arr:app-chaptarr .
+
+arr:tool-chaptarr_post_downloadclient a arr:ConnectorTool ;
+    arr:toolName "chaptarr_post_downloadclient" ;
+    arr:toolOf arr:app-chaptarr .
+
+arr:tool-prowlarr_get_applications_schema a arr:ConnectorTool ;
+    arr:toolName "prowlarr_get_applications_schema" ;
+    arr:toolOf arr:app-prowlarr .
+
+arr:tool-prowlarr_post_applications_test a arr:ConnectorTool ;
+    arr:toolName "prowlarr_post_applications_test" ;
+    arr:toolOf arr:app-prowlarr .
+
+arr:tool-prowlarr_post_applications a arr:ConnectorTool ;
+    arr:toolName "prowlarr_post_applications" ;
+    arr:toolOf arr:app-prowlarr .
+
+arr:contract-chaptarr-provision-book-library a arr:ToolUseContract ;
+    rdfs:label "Provision the book library" ;
+    rdfs:comment "Give Chaptarr its book root folder, qBittorrent as download client, and a Prowlarr link for book indexers." ;
+    arr:contractOf arr:skill-arr-book-library ;
+    arr:hasStep arr:step-chaptarr-provision-book-library-1, arr:step-chaptarr-provision-book-library-2, arr:step-chaptarr-provision-book-library-3, arr:step-chaptarr-provision-book-library-4, arr:step-chaptarr-provision-book-library-5, arr:step-chaptarr-provision-book-library-6, arr:step-chaptarr-provision-book-library-7, arr:step-chaptarr-provision-book-library-8, arr:step-chaptarr-provision-book-library-9, arr:step-chaptarr-provision-book-library-10 .
+
+arr:step-chaptarr-provision-book-library-1 a arr:ContractStep ;
+    arr:stepIndex 1 ;
+    arr:callsTool arr:tool-chaptarr_get_rootfolder ;
+    arr:needsApproval false ;
+    rdfs:comment "An empty result means no library." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-2 .
+
+arr:step-chaptarr-provision-book-library-2 a arr:ContractStep ;
+    arr:stepIndex 2 ;
+    arr:callsTool arr:tool-chaptarr_get_qualityprofile ;
+    arr:needsApproval false ;
+    rdfs:comment "The ebook and audiobook quality profiles (`profileType`)." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-3 .
+
+arr:step-chaptarr-provision-book-library-3 a arr:ContractStep ;
+    arr:stepIndex 3 ;
+    arr:callsTool arr:tool-chaptarr_get_metadataprofile ;
+    arr:needsApproval false ;
+    rdfs:comment "The ebook and audiobook metadata profiles." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-4 .
+
+arr:step-chaptarr-provision-book-library-4 a arr:ContractStep ;
+    arr:stepIndex 4 ;
+    arr:callsTool arr:tool-chaptarr_post_rootfolder ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: adds the folder. Chaptarr needs `folderType` (1 audiobook, 2 ebook, 0 mixed) and the matching `ebookQualityProfileId` / `ebookMetadataProfileId` (or the audiobook pair)." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-5 ;
+    arr:bindsParameter arr:param-chaptarr-provision-book-library-4-data .
+
+arr:param-chaptarr-provision-book-library-4-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "{name: \"Books\", path: \"/ebooks\", folderType: 2, ebookQualityProfileId: step2 ebook id, ebookMetadataProfileId: step3 ebook id, defaultMonitorOption: \"all\", defaultNewItemMonitorOption: \"all\"}" .
+
+arr:step-chaptarr-provision-book-library-5 a arr:ContractStep ;
+    arr:stepIndex 5 ;
+    arr:callsTool arr:tool-chaptarr_get_downloadclient_schema ;
+    arr:needsApproval false ;
+    rdfs:comment "The `QBittorrent` entry with its fields; categories default to `chaptarr`." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-6 .
+
+arr:step-chaptarr-provision-book-library-6 a arr:ContractStep ;
+    arr:stepIndex 6 ;
+    arr:callsTool arr:tool-chaptarr_post_downloadclient_test ;
+    arr:needsApproval false ;
+    rdfs:comment "Tests the client with the stored qBittorrent credentials." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-7 ;
+    arr:bindsParameter arr:param-chaptarr-provision-book-library-6-data .
+
+arr:param-chaptarr-provision-book-library-6-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step5 QBittorrent entry with host, port and credentials" .
+
+arr:step-chaptarr-provision-book-library-7 a arr:ContractStep ;
+    arr:stepIndex 7 ;
+    arr:callsTool arr:tool-chaptarr_post_downloadclient ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: saves the client." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-8 ;
+    arr:bindsParameter arr:param-chaptarr-provision-book-library-7-data .
+
+arr:param-chaptarr-provision-book-library-7-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step6 data" .
+
+arr:step-chaptarr-provision-book-library-8 a arr:ContractStep ;
+    arr:stepIndex 8 ;
+    arr:callsTool arr:tool-prowlarr_get_applications_schema ;
+    arr:needsApproval false ;
+    rdfs:comment "Chaptarr speaks the Readarr API: use the `Readarr` entry." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-9 .
+
+arr:step-chaptarr-provision-book-library-9 a arr:ContractStep ;
+    arr:stepIndex 9 ;
+    arr:callsTool arr:tool-prowlarr_post_applications_test ;
+    arr:needsApproval false ;
+    rdfs:comment "Tests the link with Chaptarr's base URL and API key (CHAPTARR_API_KEY)." ;
+    arr:precedesStep arr:step-chaptarr-provision-book-library-10 ;
+    arr:bindsParameter arr:param-chaptarr-provision-book-library-9-data .
+
+arr:param-chaptarr-provision-book-library-9-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step8 Readarr entry with baseUrl and apiKey" .
+
+arr:step-chaptarr-provision-book-library-10 a arr:ContractStep ;
+    arr:stepIndex 10 ;
+    arr:callsTool arr:tool-prowlarr_post_applications ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: adds the link with `syncLevel` fullSync, so Prowlarr pushes its book indexers." ;
+    arr:bindsParameter arr:param-chaptarr-provision-book-library-10-data .
+
+arr:param-chaptarr-provision-book-library-10-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step9 data" .
+
+arr:tool-prowlarr_get_indexer_schema a arr:ConnectorTool ;
+    arr:toolName "prowlarr_get_indexer_schema" ;
+    arr:toolOf arr:app-prowlarr .
+
+arr:tool-prowlarr_post_indexer a arr:ConnectorTool ;
+    arr:toolName "prowlarr_post_indexer" ;
+    arr:toolOf arr:app-prowlarr .
+
+arr:tool-prowlarr_delete_indexer_id a arr:ConnectorTool ;
+    arr:toolName "prowlarr_delete_indexer_id" ;
+    arr:toolOf arr:app-prowlarr .
+
+arr:contract-prowlarr-replace-dead-indexer a arr:ToolUseContract ;
+    rdfs:label "Replace a permanently dead indexer" ;
+    rdfs:comment "After the fix-a-failing-indexer workflow shows an indexer cannot work (domain gone, TLS broken on every mirror, Cloudflare the proxy cannot solve), add a tested public replacement, remove the dead one and sync the apps." ;
+    arr:contractOf arr:skill-arr-indexer-management ;
+    arr:hasStep arr:step-prowlarr-replace-dead-indexer-1, arr:step-prowlarr-replace-dead-indexer-2, arr:step-prowlarr-replace-dead-indexer-3, arr:step-prowlarr-replace-dead-indexer-4, arr:step-prowlarr-replace-dead-indexer-5 .
+
+arr:step-prowlarr-replace-dead-indexer-1 a arr:ContractStep ;
+    arr:stepIndex 1 ;
+    arr:callsTool arr:tool-prowlarr_get_indexer_schema ;
+    arr:needsApproval false ;
+    rdfs:comment "Every definition with its `indexerUrls` mirrors; pick a replacement that covers the same categories." ;
+    arr:precedesStep arr:step-prowlarr-replace-dead-indexer-2 .
+
+arr:step-prowlarr-replace-dead-indexer-2 a arr:ContractStep ;
+    arr:stepIndex 2 ;
+    arr:callsTool arr:tool-prowlarr_post_indexer_test ;
+    arr:needsApproval false ;
+    rdfs:comment "Test the candidate before adding it; try each mirror in `indexerUrls`." ;
+    arr:precedesStep arr:step-prowlarr-replace-dead-indexer-3 ;
+    arr:bindsParameter arr:param-prowlarr-replace-dead-indexer-2-data ;
+    arr:bindsParameter arr:param-prowlarr-replace-dead-indexer-2-forceTest .
+
+arr:param-prowlarr-replace-dead-indexer-2-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step1 definition with baseUrl set" .
+
+arr:param-prowlarr-replace-dead-indexer-2-forceTest a arr:ParameterBinding ;
+    arr:parameterName "forceTest" ;
+    arr:parameterSource "const:true" .
+
+arr:step-prowlarr-replace-dead-indexer-3 a arr:ContractStep ;
+    arr:stepIndex 3 ;
+    arr:callsTool arr:tool-prowlarr_post_indexer ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: adds the replacement." ;
+    arr:precedesStep arr:step-prowlarr-replace-dead-indexer-4 ;
+    arr:bindsParameter arr:param-prowlarr-replace-dead-indexer-3-data .
+
+arr:param-prowlarr-replace-dead-indexer-3-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "step2 data" .
+
+arr:step-prowlarr-replace-dead-indexer-4 a arr:ContractStep ;
+    arr:stepIndex 4 ;
+    arr:callsTool arr:tool-prowlarr_delete_indexer_id ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: removes the dead indexer (destructive; pass `confirm=true` after approval)." ;
+    arr:precedesStep arr:step-prowlarr-replace-dead-indexer-5 ;
+    arr:bindsParameter arr:param-prowlarr-replace-dead-indexer-4-id .
+
+arr:param-prowlarr-replace-dead-indexer-4-id a arr:ParameterBinding ;
+    arr:parameterName "id" ;
+    arr:parameterSource "the dead indexer id" .
+
+arr:step-prowlarr-replace-dead-indexer-5 a arr:ContractStep ;
+    arr:stepIndex 5 ;
+    arr:callsTool arr:tool-prowlarr_post_command ;
+    arr:needsApproval false ;
+    rdfs:comment "Push the indexer change to every linked app." ;
+    arr:bindsParameter arr:param-prowlarr-replace-dead-indexer-5-data .
+
+arr:param-prowlarr-replace-dead-indexer-5-data a arr:ParameterBinding ;
+    arr:parameterName "data" ;
+    arr:parameterSource "const:{\"name\": \"ApplicationIndexerSync\"}" .
+
+arr:tool-seerr_post_settings_radarr_test a arr:ConnectorTool ;
+    arr:toolName "seerr_post_settings_radarr_test" ;
+    arr:toolOf arr:app-seerr .
+
+arr:tool-seerr_post_settings_radarr a arr:ConnectorTool ;
+    arr:toolName "seerr_post_settings_radarr" ;
+    arr:toolOf arr:app-seerr .
+
+arr:tool-seerr_put_settings_radarr_id a arr:ConnectorTool ;
+    arr:toolName "seerr_put_settings_radarr_id" ;
+    arr:toolOf arr:app-seerr .
+
+arr:tool-seerr_get_settings_sonarr a arr:ConnectorTool ;
+    arr:toolName "seerr_get_settings_sonarr" ;
+    arr:toolOf arr:app-seerr .
+
+arr:tool-seerr_post_settings_sonarr a arr:ConnectorTool ;
+    arr:toolName "seerr_post_settings_sonarr" ;
+    arr:toolOf arr:app-seerr .
+
+arr:tool-seerr_put_settings_sonarr_id a arr:ConnectorTool ;
+    arr:toolName "seerr_put_settings_sonarr_id" ;
+    arr:toolOf arr:app-seerr .
+
+arr:contract-seerr-route-requests-by-quality a arr:ToolUseContract ;
+    rdfs:label "Route normal requests at 1080p and 4K requests at 4K" ;
+    rdfs:comment "Give Seerr a default non-4K Radarr and Sonarr server with the 1080p profile, and keep the 4K servers for 4K requests with the 4K profile." ;
+    arr:contractOf arr:skill-arr-media-requests ;
+    arr:hasStep arr:step-seerr-route-requests-by-quality-1, arr:step-seerr-route-requests-by-quality-2, arr:step-seerr-route-requests-by-quality-3, arr:step-seerr-route-requests-by-quality-4, arr:step-seerr-route-requests-by-quality-5, arr:step-seerr-route-requests-by-quality-6, arr:step-seerr-route-requests-by-quality-7, arr:step-seerr-route-requests-by-quality-8 .
+
+arr:step-seerr-route-requests-by-quality-1 a arr:ContractStep ;
+    arr:stepIndex 1 ;
+    arr:callsTool arr:tool-seerr_get_settings_radarr ;
+    arr:needsApproval false ;
+    rdfs:comment "Each server's `is4k`, `isDefault` and profile. Normal requests go to the default server with `is4k` false; none means they have no route." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-2 .
+
+arr:step-seerr-route-requests-by-quality-2 a arr:ContractStep ;
+    arr:stepIndex 2 ;
+    arr:callsTool arr:tool-radarr_get_qualityprofile ;
+    arr:needsApproval false ;
+    rdfs:comment "The 1080p and 4K profile ids." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-3 .
+
+arr:step-seerr-route-requests-by-quality-3 a arr:ContractStep ;
+    arr:stepIndex 3 ;
+    arr:callsTool arr:tool-seerr_post_settings_radarr_test ;
+    arr:needsApproval false ;
+    rdfs:comment "Seerr reaches Radarr and reads its profiles." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-4 ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-3-hostname ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-3-port ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-3-api_key ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-3-use_ssl .
+
+arr:param-seerr-route-requests-by-quality-3-hostname a arr:ParameterBinding ;
+    arr:parameterName "hostname" ;
+    arr:parameterSource "the Radarr host" .
+
+arr:param-seerr-route-requests-by-quality-3-port a arr:ParameterBinding ;
+    arr:parameterName "port" ;
+    arr:parameterSource "the Radarr port" .
+
+arr:param-seerr-route-requests-by-quality-3-api_key a arr:ParameterBinding ;
+    arr:parameterName "api_key" ;
+    arr:parameterSource "secret RADARR_API_KEY" .
+
+arr:param-seerr-route-requests-by-quality-3-use_ssl a arr:ParameterBinding ;
+    arr:parameterName "use_ssl" ;
+    arr:parameterSource "const:false" .
+
+arr:step-seerr-route-requests-by-quality-4 a arr:ContractStep ;
+    arr:stepIndex 4 ;
+    arr:callsTool arr:tool-seerr_post_settings_radarr ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: adds the default non-4K server with the 1080p profile." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-5 ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-4-is4k ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-4-is_default ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-4-active_profile_id .
+
+arr:param-seerr-route-requests-by-quality-4-is4k a arr:ParameterBinding ;
+    arr:parameterName "is4k" ;
+    arr:parameterSource "const:false" .
+
+arr:param-seerr-route-requests-by-quality-4-is_default a arr:ParameterBinding ;
+    arr:parameterName "is_default" ;
+    arr:parameterSource "const:true" .
+
+arr:param-seerr-route-requests-by-quality-4-active_profile_id a arr:ParameterBinding ;
+    arr:parameterName "active_profile_id" ;
+    arr:parameterSource "step2 1080p id" .
+
+arr:step-seerr-route-requests-by-quality-5 a arr:ContractStep ;
+    arr:stepIndex 5 ;
+    arr:callsTool arr:tool-seerr_put_settings_radarr_id ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: the 4K server keeps `is4k` true (default only among 4K servers) and takes the 4K profile." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-6 ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-5-radarr_id ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-5-active_profile_id .
+
+arr:param-seerr-route-requests-by-quality-5-radarr_id a arr:ParameterBinding ;
+    arr:parameterName "radarr_id" ;
+    arr:parameterSource "the 4K server id" .
+
+arr:param-seerr-route-requests-by-quality-5-active_profile_id a arr:ParameterBinding ;
+    arr:parameterName "active_profile_id" ;
+    arr:parameterSource "step2 4K id" .
+
+arr:step-seerr-route-requests-by-quality-6 a arr:ContractStep ;
+    arr:stepIndex 6 ;
+    arr:callsTool arr:tool-seerr_get_settings_sonarr ;
+    arr:needsApproval false ;
+    rdfs:comment "The same check for Sonarr." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-7 .
+
+arr:step-seerr-route-requests-by-quality-7 a arr:ContractStep ;
+    arr:stepIndex 7 ;
+    arr:callsTool arr:tool-seerr_post_settings_sonarr ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: adds the default non-4K Sonarr server with the 1080p profile (also for anime)." ;
+    arr:precedesStep arr:step-seerr-route-requests-by-quality-8 ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-7-is4k ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-7-is_default .
+
+arr:param-seerr-route-requests-by-quality-7-is4k a arr:ParameterBinding ;
+    arr:parameterName "is4k" ;
+    arr:parameterSource "const:false" .
+
+arr:param-seerr-route-requests-by-quality-7-is_default a arr:ParameterBinding ;
+    arr:parameterName "is_default" ;
+    arr:parameterSource "const:true" .
+
+arr:step-seerr-route-requests-by-quality-8 a arr:ContractStep ;
+    arr:stepIndex 8 ;
+    arr:callsTool arr:tool-seerr_put_settings_sonarr_id ;
+    arr:needsApproval true ;
+    rdfs:comment "Approval required: the 4K Sonarr server takes the 4K profile." ;
+    arr:bindsParameter arr:param-seerr-route-requests-by-quality-8-sonarr_id .
+
+arr:param-seerr-route-requests-by-quality-8-sonarr_id a arr:ParameterBinding ;
+    arr:parameterName "sonarr_id" ;
+    arr:parameterSource "the 4K server id" .

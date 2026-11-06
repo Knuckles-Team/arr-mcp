@@ -54,11 +54,23 @@ Run one manual search across the enabled indexers.
 1. `prowlarr_get_indexer` — Pick indexer ids, or omit to search all.
 2. `prowlarr_get_search` (`query` = operator input: search text, `type` = "search", `limit` = 50) — Read-only: lists releases, grabs nothing.
 
+### Replace a permanently dead indexer (`prowlarr-replace-dead-indexer`)
+
+After the fix-a-failing-indexer workflow shows an indexer cannot work (domain gone, TLS broken on every mirror, Cloudflare the proxy cannot solve), add a tested public replacement, remove the dead one and sync the apps.
+
+1. `prowlarr_get_indexer_schema` — Every definition with its `indexerUrls` mirrors; pick a replacement that covers the same categories.
+2. `prowlarr_post_indexer_test` (`data` = step1 definition with baseUrl set, `forceTest` = true) — Test the candidate before adding it; try each mirror in `indexerUrls`.
+3. `prowlarr_post_indexer` (`data` = step2 data) — Approval required: adds the replacement.
+4. `prowlarr_delete_indexer_id` (`id` = the dead indexer id) — Approval required: removes the dead indexer (destructive; pass `confirm=true` after approval).
+5. `prowlarr_post_command` (`data` = {"name": "ApplicationIndexerSync"}) — Push the indexer change to every linked app.
+
+Needs approval: `prowlarr_post_indexer`, `prowlarr_delete_indexer_id`.
+
 ## Guardrails
 
 - Read before you write: every change starts from the read steps of its contract.
 - Writes that delete, approve, or change shared settings need the operator's approval first; pass `confirm=true` only after it.
 - Never delete media files, series, movies, artists, authors or real tags; only remove test objects named `zz-validation-<date>` that this run created.
-- Never change API keys, download client credentials, or app connection settings.
+- Change API keys, download client credentials or app connection settings only in an approval-required contract step, after the operator approves; read keys and passwords from the credential store and never print them.
 - Identify media by its stable external id (TMDB, TVDB, MusicBrainz), not the app-local numeric id.
 - Report a tool refusal or HTTP error as it is; never retry past a refusal or invent a result.
