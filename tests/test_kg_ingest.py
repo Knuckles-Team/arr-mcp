@@ -1,7 +1,7 @@
 """Knowledge-ingest typed-node ingestion — Wire-First coverage for arr-mcp.
 
 Exercises the real ``ingest_entities`` / ``ingest_movies`` / ``ingest_series`` /
-``ingest_indexers`` seam against a fake epistemic-graph transport (no engine required),
+``ingest_indexers`` seam against a fake medulla transport (no engine required),
 letting the scion-sdk's own request builder run on top of it so the test
 exercises the SDK's validation contract rather than re-deriving it.
 CONCEPT:AU-KG.ingest.enterprise-source-extractor.

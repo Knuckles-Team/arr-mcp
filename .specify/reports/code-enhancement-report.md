@@ -42,12 +42,12 @@ xychart-beta
 `██████████████░░░░░░` 74/100
 
 > [!NOTE]
-> Detected ecosystem marker: scion-sdk → Agent-Utilities Ecosystem
+> Detected ecosystem marker: scion-sdk → Meristem Ecosystem
 
 | Criterion | Points | Evidence | Reasoning |
 |-----------|--------|----------|-----------|
 | has_pyproject | 10 | `pyproject.toml and requirements.txt` | Both pyproject.toml and requirements.txt exist, fulfilling mandatory Python proj |
-| project_type_detected | 10 | `Agent-Utilities Ecosystem` | Identified 1 ecosystem marker(s) in dependencies |
+| project_type_detected | 10 | `Meristem Ecosystem` | Identified 1 ecosystem marker(s) in dependencies |
 | externalized_prompts | 0 | `${WORKSPACE_ROOT}/agent-packages/agents/arr-mcp` | No prompts/ directory found. Prompts may be hardcoded in source. |
 | observability | 0 | `dependency list` | No observability tools (logfire, sentry, opentelemetry) found |
 | testing_suite | 10 | `tests dir: True, pytest dep: True` | Tests directory exists, pytest in dependencies |
@@ -315,7 +315,7 @@ xychart-beta
 | 12 | 🔴 High | Environment Variables | Only 15% of env vars documented in README.md | High | Medium |
 | 13 | 🔴 High | Environment Variables | Undocumented env vars: ALLOWED_CLIENT_REDIRECT_URIS, AUTH_TYPE, BAZARR_API_KEY,  | High | Medium |
 | 14 | 🔴 High | Environment Variables | 27 Python env vars not in .env.example: BAZARR_API_KEY, BAZARR_BASE_URL, BAZARR_ | High | Medium |
-| 15 | 🟡 Medium | Project Analysis | Detected ecosystem marker: scion-sdk → Agent-Utilities Ecosystem | Medium | Low |
+| 15 | 🟡 Medium | Project Analysis | Detected ecosystem marker: scion-sdk → Meristem Ecosystem | Medium | Low |
 | 16 | 🟡 Medium | Project Analysis | Protocol support: MCP | Medium | Low |
 | 17 | 🟡 Medium | Test Coverage | Test suite lacks intent diversity (only one type) | Medium | Low |
 | 18 | 🟡 Medium | Test Coverage | 12 potential doc-test drift items | Medium | Low |

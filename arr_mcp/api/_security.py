@@ -9,7 +9,7 @@ from urllib.parse import SplitResult, urljoin, urlsplit
 
 import httpx
 from scion_sdk.auth.static import ApiKeyAuth
-from scion_sdk.http.client import create_http_client
+from scion_sdk.http.client import build_http_client
 from scion_sdk.http.options import HttpClientOptions
 from scion_sdk.tls.profile import ResolvedTLSProfile
 
@@ -86,7 +86,7 @@ def build_client(
     base_url: str, tls_profile: ResolvedTLSProfile, api_key: str | None = None
 ) -> httpx.Client:
     """A governed SDK client for one arr service; the key travels as ``X-Api-Key``."""
-    return create_http_client(
+    return build_http_client(
         HttpClientOptions(
             base_url=base_url,
             timeout=REQUEST_TIMEOUT,
