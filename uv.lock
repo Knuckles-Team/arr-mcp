@@ -75,7 +75,7 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'test'", specifier = ">=1.4.0" },
     { name = "pytest-xdist", marker = "extra == 'test'", specifier = ">=3.8.0" },
     { name = "rdflib", marker = "extra == 'test'", specifier = ">=7.0.0,<8" },
-    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.11.0,<0.12" },
+    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.11.1,<0.12" },
     { name = "tree-sitter", specifier = ">=0.26.0" },
 ]
 provides-extras = ["test"]
@@ -1284,7 +1284,7 @@ wheels = [
 
 [[package]]
 name = "scion-sdk"
-version = "0.11.0"
+version = "0.11.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1297,9 +1297,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/11/c6/88486d481d2156db2c05046ec4cc87a39db30ee0b1af6f79d62f426a10d9/scion_sdk-0.11.0.tar.gz", hash = "sha256:3d7b3ed6e54282a10a314af4a86fa02bb88380c1dfdbdfff76ea89a49ff5a1eb", size = 1267020, upload-time = "2026-11-12T19:56:18.498Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/78/57/151987feeb0795a32f2a9a5c22f5d34878449da19f4e1b0aeff162d73968/scion_sdk-0.11.1.tar.gz", hash = "sha256:3fbcb4756c5b5df8e5e3434193a2efef12d5e559a7f62d1d033fed7b17e4c9fd", size = 1268994, upload-time = "2026-11-12T23:37:58.41Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/07/f3/f73beb1e841464266dd223349212728ffda04c95076b708890b418c9c45a/scion_sdk-0.11.0-py3-none-any.whl", hash = "sha256:621a50c1aaf0e8b27d103126c38b8026b2bcaa991dbc061e2d12044e3ca27e51", size = 1222814, upload-time = "2026-11-12T19:56:12.72Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/b7/d9c1cb3ebefeec48c9e7df412a004ddbd212ed51d4a7c38d191b5644af04/scion_sdk-0.11.1-py3-none-any.whl", hash = "sha256:e577851159e55c7511ddbf4bca4badb4d80ebb1bc9f377761889b10cf99fefa7", size = 1223916, upload-time = "2026-11-12T23:37:55.214Z" },
 ]
 
 [package.optional-dependencies]
