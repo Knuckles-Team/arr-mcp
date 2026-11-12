@@ -6,7 +6,7 @@
   "prompt_version": "1.0.0",
   "source": "arr-mcp",
   "description": "Agent definition for the indexer maintainer: diagnoses and fixes failing Prowlarr indexers and syncs them to the apps.",
-  "systemPromptFor": "http://knuckles.team/kg/arr#IndexerMaintainer",
+  "systemPromptFor": "https://knuckles-team.github.io/ontology/connector/arr#IndexerMaintainer",
   "tags": [
     "arr",
     "agent-definition"

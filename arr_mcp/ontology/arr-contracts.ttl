@@ -1,11 +1,11 @@
-@prefix arr: <http://knuckles.team/kg/arr#> .
+@prefix arr: <https://knuckles-team.github.io/ontology/connector/arr#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 # Tool-use contracts, skills, prompts and the tools they name. The classes are in arr.ttl.
 
-<http://knuckles.team/kg/arr/contracts> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/arr/contracts> a owl:Ontology ;
     rdfs:label "Arr connector tool-use contracts" .
 
 arr:tool-radarr_get_rootfolder a arr:ConnectorTool ;

@@ -75,7 +75,7 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'test'", specifier = ">=1.4.0" },
     { name = "pytest-xdist", marker = "extra == 'test'", specifier = ">=3.8.0" },
     { name = "rdflib", marker = "extra == 'test'", specifier = ">=7.0.0,<8" },
-    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.10.1,<0.11" },
+    { name = "scion-sdk", extras = ["mcp"], specifier = ">=0.11.1,<0.12" },
     { name = "tree-sitter", specifier = ">=0.26.0" },
 ]
 provides-extras = ["test"]
@@ -1284,7 +1284,7 @@ wheels = [
 
 [[package]]
 name = "scion-sdk"
-version = "0.10.1"
+version = "0.11.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -1297,9 +1297,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/af/d9eb8f54d69fceb786519fe97f0e86465d7b06023a928dfe9f24976b2907/scion_sdk-0.10.1.tar.gz", hash = "sha256:72e51d440fd55e660ce537df436dde140724b79f96efef488d3df444471e0e1f", size = 1258898, upload-time = "2026-11-08T00:13:11.273Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/78/57/151987feeb0795a32f2a9a5c22f5d34878449da19f4e1b0aeff162d73968/scion_sdk-0.11.1.tar.gz", hash = "sha256:3fbcb4756c5b5df8e5e3434193a2efef12d5e559a7f62d1d033fed7b17e4c9fd", size = 1268994, upload-time = "2026-11-12T23:37:58.41Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/66/b46a5b67e4df01701a8e37940a593ffdca61c240ac6c10c45d39c2b3e65b/scion_sdk-0.10.1-py3-none-any.whl", hash = "sha256:8887292948874cdc634aeb58b421ef6a5eee1a0a62c5a3c716dba89f2d1b0120", size = 1219348, upload-time = "2026-11-08T00:13:08.397Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/b7/d9c1cb3ebefeec48c9e7df412a004ddbd212ed51d4a7c38d191b5644af04/scion_sdk-0.11.1-py3-none-any.whl", hash = "sha256:e577851159e55c7511ddbf4bca4badb4d80ebb1bc9f377761889b10cf99fefa7", size = 1223916, upload-time = "2026-11-12T23:37:55.214Z" },
 ]
 
 [package.optional-dependencies]

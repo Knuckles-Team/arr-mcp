@@ -1,6 +1,6 @@
 # CONN-ARR-MCP-SUITE — Data model
 
-The ontology namespace is `http://knuckles.team/kg/arr#` (`arr:`). The core namespace is `http://knuckles.team/kg#` (`:`). Every class subclasses one core class and reaches `bfo:Entity` through core.
+The ontology namespace is `https://knuckles-team.github.io/ontology/connector/arr#` (`arr:`). The core namespace is `https://knuckles-team.github.io/ontology/core#` (`:`). Every class subclasses one core class and reaches `bfo:Entity` through core.
 
 | Class | Core parent | Meaning |
 |---|---|---|

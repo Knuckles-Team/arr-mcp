@@ -27,8 +27,9 @@ ROOT = Path(__file__).resolve().parents[1]
 PKG = ROOT / "arr_mcp"
 APPS = ("radarr", "sonarr", "lidarr", "prowlarr", "chaptarr", "bazarr", "seerr")
 CENSUS = json.loads((ROOT / "tests/fixtures/upstream_operations.json").read_text())
-KG = "http://knuckles.team/kg#"
-ARR = "http://knuckles.team/kg/arr#"
+KG = "https://knuckles-team.github.io/ontology/core#"
+CONNECTOR_NS = "https://knuckles-team.github.io/ontology/connector/arr#"
+ARR = "https://knuckles-team.github.io/ontology/connector/arr#"
 BFO_ENTITY = rdflib.URIRef("http://purl.obolibrary.org/obo/BFO_0000001")
 
 

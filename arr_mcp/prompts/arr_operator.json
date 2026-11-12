@@ -6,7 +6,7 @@
   "prompt_version": "1.0.0",
   "source": "arr-mcp",
   "description": "Agent definition for the arr suite operator: runs health checks and every arr-mcp workflow, and routes work to the role agents.",
-  "systemPromptFor": "http://knuckles.team/kg/arr#ArrOperator",
+  "systemPromptFor": "https://knuckles-team.github.io/ontology/connector/arr#ArrOperator",
   "tags": [
     "arr",
     "agent-definition"
