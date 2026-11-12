@@ -6,7 +6,7 @@
   "prompt_version": "1.0.0",
   "source": "arr-mcp",
   "description": "Agent definition for the subtitle curator: downloads wanted subtitles through Bazarr.",
-  "systemPromptFor": "http://knuckles.team/kg/arr#SubtitleCurator",
+  "systemPromptFor": "https://knuckles-team.github.io/ontology/connector/arr#SubtitleCurator",
   "tags": [
     "arr",
     "agent-definition"

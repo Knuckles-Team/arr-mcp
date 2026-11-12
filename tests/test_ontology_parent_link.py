@@ -16,5 +16,5 @@ def test_episode_has_no_duplicate_class_iri_with_core():
     for path in ONTOLOGY.glob("*.ttl"):
         graph.parse(path, format="turtle")
     declared = {str(c) for c in graph.subjects(RDF.type, OWL.Class)}
-    assert "http://knuckles.team/kg#Episode" not in declared
-    assert all(c.startswith("http://knuckles.team/kg/arr#") for c in declared)
+    assert "https://knuckles-team.github.io/ontology/core#Episode" not in declared
+    assert all(c.startswith("https://knuckles-team.github.io/ontology/connector/arr#") for c in declared)

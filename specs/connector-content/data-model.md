@@ -1,6 +1,6 @@
 # CONN-ARR-MCP-CONNECTOR-CONTENT — Data model
 
-The packaged ontology declares classes only in the `http://knuckles.team/kg/arr#` namespace. No class IRI collides with core.
+The packaged ontology declares classes only in the `https://knuckles-team.github.io/ontology/connector/arr#` namespace. No class IRI collides with core.
 
 | Entity | Fields | Relations |
 |---|---|---|
