@@ -1,4 +1,4 @@
-"""Native epistemic-graph ingestion for *arr records.
+"""Native medulla ingestion for *arr records.
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor. Connector-specific mappers emit
 canonical node_type nodes and relationship edges. The scion-sdk knowledge-ingest
