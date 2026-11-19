@@ -6,7 +6,7 @@
   "prompt_version": "1.0.0",
   "source": "arr-mcp",
   "description": "Agent definition for the media librarian: curates the Radarr, Sonarr, Lidarr and Chaptarr libraries.",
-  "systemPromptFor": "http://knuckles.team/kg/arr#MediaLibrarian",
+  "systemPromptFor": "https://knuckles-team.github.io/ontology/connector/arr#MediaLibrarian",
   "tags": [
     "arr",
     "agent-definition"

@@ -6,7 +6,7 @@
   "prompt_version": "1.0.0",
   "source": "arr-mcp",
   "description": "Agent definition for the media request manager: triages and files Seerr requests and follows them to Radarr and Sonarr.",
-  "systemPromptFor": "http://knuckles.team/kg/arr#RequestManager",
+  "systemPromptFor": "https://knuckles-team.github.io/ontology/connector/arr#RequestManager",
   "tags": [
     "arr",
     "agent-definition"

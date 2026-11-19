@@ -6,7 +6,7 @@
   "prompt_version": "1.0.0",
   "source": "arr-mcp",
   "description": "Agent definition for the download monitor: reads every queue and clears stalled downloads.",
-  "systemPromptFor": "http://knuckles.team/kg/arr#DownloadMonitor",
+  "systemPromptFor": "https://knuckles-team.github.io/ontology/connector/arr#DownloadMonitor",
   "tags": [
     "arr",
     "agent-definition"
