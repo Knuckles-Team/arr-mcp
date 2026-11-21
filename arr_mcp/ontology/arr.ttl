@@ -1,3 +1,4 @@
+@prefix infra: <https://knuckles-team.github.io/ontology/infrastructure#> .
 @prefix : <https://knuckles-team.github.io/ontology/connector/arr#> .
 @prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix arr: <https://knuckles-team.github.io/ontology/connector/arr#> .
@@ -146,23 +147,12 @@ arr:DownloadMonitor a owl:Class ;
     rdfs:subClassOf arr:ArrAgentRole .
 
 # --- properties ---
-arr:instanceOf a owl:ObjectProperty ;
-    rdfs:label "instanceOf" ;
-    rdfs:domain arr:AppInstance ;
-    rdfs:range arr:SuiteApp ;
-    rdfs:comment "The app this instance runs." .
 
 arr:holdsLibrary a owl:ObjectProperty ;
     rdfs:label "holdsLibrary" ;
     rdfs:domain arr:AppInstance ;
     rdfs:range arr:Library ;
     rdfs:comment "The library this instance holds." .
-
-arr:storedIn a owl:ObjectProperty ;
-    rdfs:label "storedIn" ;
-    rdfs:domain arr:Library ;
-    rdfs:range arr:LibraryRootFolder ;
-    rdfs:comment "The root folder the library's files live in." .
 
 arr:holdsMediaClass a owl:ObjectProperty ;
     rdfs:label "holdsMediaClass" ;
@@ -196,12 +186,6 @@ arr:routesMediaClass a owl:ObjectProperty ;
     rdfs:label "routesMediaClass" ;
     rdfs:domain arr:RoutingRule ;
     rdfs:comment "The core media class a request carries." .
-
-arr:routesTo a owl:ObjectProperty ;
-    rdfs:label "routesTo" ;
-    rdfs:domain arr:RoutingRule ;
-    rdfs:range arr:AppInstance ;
-    rdfs:comment "The instance requests of that class go to." .
 
 arr:landsIn a owl:ObjectProperty ;
     rdfs:label "landsIn" ;
@@ -245,17 +229,6 @@ arr:rootFolderPath a owl:DatatypeProperty ;
     rdfs:domain arr:LibraryRootFolder ;
     rdfs:comment "The path of the root folder inside the app." .
 
-arr:hasStep a owl:ObjectProperty ;
-    rdfs:label "hasStep" ;
-    rdfs:domain arr:ToolUseContract ;
-    rdfs:range arr:ContractStep ;
-    rdfs:comment "A step of the contract." .
-
-arr:stepIndex a owl:DatatypeProperty ;
-    rdfs:label "stepIndex" ;
-    rdfs:domain arr:ContractStep ;
-    rdfs:comment "The 1-based position of the step." .
-
 arr:callsTool a owl:ObjectProperty ;
     rdfs:label "callsTool" ;
     rdfs:domain arr:ContractStep ;
@@ -289,12 +262,6 @@ arr:needsApproval a owl:DatatypeProperty ;
     rdfs:domain arr:ContractStep ;
     rdfs:comment "True when the step needs the operator's approval." .
 
-arr:contractOf a owl:ObjectProperty ;
-    rdfs:label "contractOf" ;
-    rdfs:domain arr:ToolUseContract ;
-    rdfs:range arr:ConnectorSkill ;
-    rdfs:comment "The skill that documents the contract." .
-
 arr:skillName a owl:DatatypeProperty ;
     rdfs:label "skillName" ;
     rdfs:domain arr:ConnectorSkill ;
@@ -311,12 +278,6 @@ arr:runsContract a owl:ObjectProperty ;
     rdfs:domain arr:ConnectorPrompt ;
     rdfs:range arr:ToolUseContract ;
     rdfs:comment "A contract the prompt's agent runs." .
-
-arr:usesTool a owl:ObjectProperty ;
-    rdfs:label "usesTool" ;
-    rdfs:domain arr:ConnectorPrompt ;
-    rdfs:range arr:ConnectorTool ;
-    rdfs:comment "A tool the prompt's agent may call." .
 
 arr:systemPromptForRole a owl:ObjectProperty ;
     rdfs:label "systemPromptForRole" ;
@@ -341,7 +302,7 @@ arr:app-radarr a arr:SuiteApp ;
 
 arr:instance-radarr a arr:AppInstance ;
     rdfs:label "Radarr (default instance)" ;
-    arr:instanceOf arr:app-radarr ;
+    core:instanceOf arr:app-radarr ;
     arr:holdsLibrary arr:library-radarr ;
     arr:baseUrlSetting "RADARR_BASE_URL" ;
     arr:apiKeySetting "RADARR_API_KEY" ;
@@ -351,7 +312,7 @@ arr:library-radarr a arr:Library ;
     rdfs:label "Radarr movie library" ;
     rdfs:comment "Holds films." ;
     arr:holdsMediaClass core:Film ;
-    arr:storedIn arr:rootfolder-radarr .
+    core:storedIn arr:rootfolder-radarr .
 
 arr:rootfolder-radarr a arr:LibraryRootFolder ;
     rdfs:label "Radarr root folder /movies" ;
@@ -364,7 +325,7 @@ arr:app-sonarr a arr:SuiteApp ;
 
 arr:instance-sonarr a arr:AppInstance ;
     rdfs:label "Sonarr (default instance)" ;
-    arr:instanceOf arr:app-sonarr ;
+    core:instanceOf arr:app-sonarr ;
     arr:holdsLibrary arr:library-sonarr ;
     arr:baseUrlSetting "SONARR_BASE_URL" ;
     arr:apiKeySetting "SONARR_API_KEY" ;
@@ -374,7 +335,7 @@ arr:library-sonarr a arr:Library ;
     rdfs:label "Sonarr TV library" ;
     rdfs:comment "Holds TV series, seasons and episodes." ;
     arr:holdsMediaClass core:Series ;
-    arr:storedIn arr:rootfolder-sonarr .
+    core:storedIn arr:rootfolder-sonarr .
 
 arr:rootfolder-sonarr a arr:LibraryRootFolder ;
     rdfs:label "Sonarr root folder /tv" ;
@@ -387,7 +348,7 @@ arr:app-lidarr a arr:SuiteApp ;
 
 arr:instance-lidarr a arr:AppInstance ;
     rdfs:label "Lidarr (default instance)" ;
-    arr:instanceOf arr:app-lidarr ;
+    core:instanceOf arr:app-lidarr ;
     arr:holdsLibrary arr:library-lidarr ;
     arr:baseUrlSetting "LIDARR_BASE_URL" ;
     arr:apiKeySetting "LIDARR_API_KEY" ;
@@ -397,7 +358,7 @@ arr:library-lidarr a arr:Library ;
     rdfs:label "Lidarr music library" ;
     rdfs:comment "Holds music artists, albums and tracks." ;
     arr:holdsMediaClass core:MusicAlbum ;
-    arr:storedIn arr:rootfolder-lidarr .
+    core:storedIn arr:rootfolder-lidarr .
 
 arr:rootfolder-lidarr a arr:LibraryRootFolder ;
     rdfs:label "Lidarr root folder /music" ;
@@ -410,7 +371,7 @@ arr:app-chaptarr a arr:SuiteApp ;
 
 arr:instance-chaptarr a arr:AppInstance ;
     rdfs:label "Chaptarr (default instance)" ;
-    arr:instanceOf arr:app-chaptarr ;
+    core:instanceOf arr:app-chaptarr ;
     arr:holdsLibrary arr:library-chaptarr ;
     arr:baseUrlSetting "CHAPTARR_BASE_URL" ;
     arr:apiKeySetting "CHAPTARR_API_KEY" .
@@ -427,7 +388,7 @@ arr:app-prowlarr a arr:SuiteApp ;
 
 arr:instance-prowlarr a arr:AppInstance ;
     rdfs:label "Prowlarr (default instance)" ;
-    arr:instanceOf arr:app-prowlarr ;
+    core:instanceOf arr:app-prowlarr ;
     arr:holdsLibrary arr:library-prowlarr ;
     arr:baseUrlSetting "PROWLARR_BASE_URL" ;
     arr:apiKeySetting "PROWLARR_API_KEY" .
@@ -443,7 +404,7 @@ arr:app-bazarr a arr:SuiteApp ;
 
 arr:instance-bazarr a arr:AppInstance ;
     rdfs:label "Bazarr (default instance)" ;
-    arr:instanceOf arr:app-bazarr ;
+    core:instanceOf arr:app-bazarr ;
     arr:holdsLibrary arr:library-bazarr ;
     arr:baseUrlSetting "BAZARR_BASE_URL" ;
     arr:apiKeySetting "BAZARR_API_KEY" .
@@ -459,7 +420,7 @@ arr:app-seerr a arr:SuiteApp ;
 
 arr:instance-seerr a arr:AppInstance ;
     rdfs:label "Seerr (default instance)" ;
-    arr:instanceOf arr:app-seerr ;
+    core:instanceOf arr:app-seerr ;
     arr:holdsLibrary arr:library-seerr ;
     arr:baseUrlSetting "SEERR_BASE_URL" ;
     arr:apiKeySetting "SEERR_API_KEY" .
@@ -519,39 +480,39 @@ arr:federation-bazarr-subtitlesFor-radarr a arr:FederationLink ;
 arr:route-Film-radarr a arr:RoutingRule ;
     rdfs:label "Film requests go to Radarr" ;
     arr:routesMediaClass core:Film ;
-    arr:routesTo arr:instance-radarr ;
+    infra:routesTo arr:instance-radarr ;
     arr:landsIn arr:rootfolder-radarr .
 
 arr:route-Series-sonarr a arr:RoutingRule ;
     rdfs:label "Series requests go to Sonarr" ;
     arr:routesMediaClass core:Series ;
-    arr:routesTo arr:instance-sonarr ;
+    infra:routesTo arr:instance-sonarr ;
     arr:landsIn arr:rootfolder-sonarr .
 
 arr:route-TelevisionEpisode-sonarr a arr:RoutingRule ;
     rdfs:label "TelevisionEpisode requests go to Sonarr" ;
     arr:routesMediaClass core:TelevisionEpisode ;
-    arr:routesTo arr:instance-sonarr ;
+    infra:routesTo arr:instance-sonarr ;
     arr:landsIn arr:rootfolder-sonarr .
 
 arr:route-MusicAlbum-lidarr a arr:RoutingRule ;
     rdfs:label "MusicAlbum requests go to Lidarr" ;
     arr:routesMediaClass core:MusicAlbum ;
-    arr:routesTo arr:instance-lidarr ;
+    infra:routesTo arr:instance-lidarr ;
     arr:landsIn arr:rootfolder-lidarr .
 
 arr:route-MusicTrack-lidarr a arr:RoutingRule ;
     rdfs:label "MusicTrack requests go to Lidarr" ;
     arr:routesMediaClass core:MusicTrack ;
-    arr:routesTo arr:instance-lidarr ;
+    infra:routesTo arr:instance-lidarr ;
     arr:landsIn arr:rootfolder-lidarr .
 
 arr:route-Book-chaptarr a arr:RoutingRule ;
     rdfs:label "Book requests go to Chaptarr" ;
     arr:routesMediaClass core:Book ;
-    arr:routesTo arr:instance-chaptarr .
+    infra:routesTo arr:instance-chaptarr .
 
 arr:route-Audiobook-chaptarr a arr:RoutingRule ;
     rdfs:label "Audiobook requests go to Chaptarr" ;
     arr:routesMediaClass core:Audiobook ;
-    arr:routesTo arr:instance-chaptarr .
+    infra:routesTo arr:instance-chaptarr .

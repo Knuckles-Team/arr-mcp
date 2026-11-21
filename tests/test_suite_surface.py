@@ -233,8 +233,8 @@ def test_every_app_has_a_skill_and_contracts(graph):
 
 @pytest.mark.spec(f"{ID}-R004")
 def test_contract_steps_are_ordered_and_bound(graph):
-    has_step = rdflib.URIRef(ARR + "hasStep")
-    index = rdflib.URIRef(ARR + "stepIndex")
+    has_step = rdflib.URIRef("https://knuckles-team.github.io/ontology/core#hasStep")
+    index = rdflib.URIRef("https://knuckles-team.github.io/ontology/core#stepIndex")
     calls = rdflib.URIRef(ARR + "callsTool")
     contracts = list(graph.subjects(RDF.type, rdflib.URIRef(ARR + "ToolUseContract")))
     assert len(contracts) >= 20
@@ -298,7 +298,7 @@ def test_prompt_is_a_complete_agent_definition(name, served, graph):
     assert (node, RDF.type, rdflib.URIRef(ARR + "ConnectorPrompt")) in graph
     linked = {
         str(graph.value(t, rdflib.URIRef(ARR + "toolName")))
-        for t in graph.objects(node, rdflib.URIRef(ARR + "usesTool"))
+        for t in graph.objects(node, rdflib.URIRef("https://knuckles-team.github.io/ontology/core#usesTool"))
     }
     assert linked == set(doc["tools"])
     role = graph.value(node, rdflib.URIRef(ARR + "systemPromptForRole"))
@@ -310,7 +310,7 @@ def test_prompt_is_a_complete_agent_definition(name, served, graph):
 
 @pytest.mark.spec(f"{ID}-R006")
 def test_every_app_has_an_instance_library_and_settings(graph):
-    instance_of = rdflib.URIRef(ARR + "instanceOf")
+    instance_of = rdflib.URIRef("https://knuckles-team.github.io/ontology/core#instanceOf")
     for app in APPS:
         node = rdflib.URIRef(ARR + f"instance-{app}")
         assert graph.value(node, instance_of) == rdflib.URIRef(ARR + f"app-{app}")
@@ -537,12 +537,12 @@ def test_provisioning_contracts_are_recorded_with_approval_steps(contract, graph
     skill, prompt = PROVISIONING[contract]
     node = rdflib.URIRef(ARR + f"contract-{contract}")
     assert (node, RDF.type, rdflib.URIRef(ARR + "ToolUseContract")) in graph
-    assert graph.value(node, rdflib.URIRef(ARR + "contractOf")) == rdflib.URIRef(
+    assert graph.value(node, rdflib.URIRef("https://knuckles-team.github.io/ontology/connector-pack#contractOf")) == rdflib.URIRef(
         ARR + f"skill-{skill}"
     )
     approvals = [
         bool(graph.value(step, rdflib.URIRef(ARR + "needsApproval")).toPython())
-        for step in graph.objects(node, rdflib.URIRef(ARR + "hasStep"))
+        for step in graph.objects(node, rdflib.URIRef("https://knuckles-team.github.io/ontology/core#hasStep"))
     ]
     assert any(approvals), contract
     for runner in (prompt, "arr_operator"):

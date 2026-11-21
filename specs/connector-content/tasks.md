@@ -6,3 +6,4 @@ Each task line reads `- [ ] T001 [P] [US1] <ID>-R012.4 description`. Order is pr
 
 - [x] T001 [US1] CONN-ARR-MCP-CONNECTOR-CONTENT-R002 The connector ontology redeclares no core class.
 - [x] T002 [US1] CONN-ARR-MCP-CONNECTOR-CONTENT-R001 Default content.
+- [x] T003 [US1] CONN-ARR-MCP-CONNECTOR-CONTENT-R003 Pack extends only the core ontology.

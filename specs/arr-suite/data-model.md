@@ -35,16 +35,16 @@ The ontology namespace is `https://knuckles-team.github.io/ontology/connector/ar
 
 | Property | From | To |
 |---|---|---|
-| `arr:instanceOf` | `arr:AppInstance` | `arr:SuiteApp` |
+| `core:instanceOf` | `arr:AppInstance` | `arr:SuiteApp` |
 | `arr:holdsLibrary` | `arr:AppInstance` | `arr:Library` |
-| `arr:storedIn` | `arr:Library` | `arr:LibraryRootFolder` |
+| `core:storedIn` | `arr:Library` | `arr:LibraryRootFolder` |
 | `arr:holdsMediaClass` | `arr:Library` | core class |
 | `arr:downloadsWith` | `arr:AppInstance` | `arr:DownloadClient` |
 | `arr:federationSource` | `arr:FederationLink` | `arr:AppInstance` |
 | `arr:federationTarget` | `arr:FederationLink` | `arr:AppInstance` |
 | `arr:federationKind` | `arr:FederationLink` | literal |
 | `arr:routesMediaClass` | `arr:RoutingRule` | core class |
-| `arr:routesTo` | `arr:RoutingRule` | `arr:AppInstance` |
+| `infra:routesTo` | `arr:RoutingRule` | `arr:AppInstance` |
 | `arr:landsIn` | `arr:RoutingRule` | `arr:LibraryRootFolder` |
 | `arr:toolOf` | `arr:ConnectorTool` | `arr:SuiteApp` |
 | `arr:toolName` | `arr:ConnectorTool` | literal |
@@ -53,19 +53,19 @@ The ontology namespace is `https://knuckles-team.github.io/ontology/connector/ar
 | `arr:baseUrlSetting` | `arr:AppInstance` | literal |
 | `arr:apiKeySetting` | `arr:AppInstance` | literal |
 | `arr:rootFolderPath` | `arr:LibraryRootFolder` | literal |
-| `arr:hasStep` | `arr:ToolUseContract` | `arr:ContractStep` |
-| `arr:stepIndex` | `arr:ContractStep` | literal |
+| `core:hasStep` | `arr:ToolUseContract` | `arr:ContractStep` |
+| `core:stepIndex` | `arr:ContractStep` | literal |
 | `arr:callsTool` | `arr:ContractStep` | `arr:ConnectorTool` |
 | `arr:precedesStep` | `arr:ContractStep` | `arr:ContractStep` |
 | `arr:bindsParameter` | `arr:ContractStep` | `arr:ParameterBinding` |
 | `arr:parameterName` | `arr:ParameterBinding` | literal |
 | `arr:parameterSource` | `arr:ParameterBinding` | literal |
 | `arr:needsApproval` | `arr:ContractStep` | literal |
-| `arr:contractOf` | `arr:ToolUseContract` | `arr:ConnectorSkill` |
+| `cp:contractOf` | `arr:ToolUseContract` | `arr:ConnectorSkill` |
 | `arr:skillName` | `arr:ConnectorSkill` | literal |
 | `arr:usesSkill` | `arr:ConnectorPrompt` | `arr:ConnectorSkill` |
 | `arr:runsContract` | `arr:ConnectorPrompt` | `arr:ToolUseContract` |
-| `arr:usesTool` | `arr:ConnectorPrompt` | `arr:ConnectorTool` |
+| `core:usesTool` | `arr:ConnectorPrompt` | `arr:ConnectorTool` |
 | `arr:systemPromptForRole` | `arr:ConnectorPrompt` | `arr:ArrAgentRole` |
 | `arr:promptName` | `arr:ConnectorPrompt` | literal |
 | `arr:resourceUri` | any | literal |
