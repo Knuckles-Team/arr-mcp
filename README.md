@@ -20,21 +20,9 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/arr-mcp)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/arr-mcp)
 
-> **Documentation** — Installation, deployment, usage across the API, CLI, MCP, and
-> maintained in the [official documentation](https://knuckles-team.github.io/arr-mcp/).
-
----
-
-## Table of Contents
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Installation](#installation)
-- [CLI or API](#cli-or-api)
-- [MCP](#mcp)
-  - [Dynamic Tool Selection & Visibility](#dynamic-tool-selection--visibility)
-- [Environment Variables](#environment-variables)
-- [Security & Governance](#security--governance)
-- [Contribute](#contribute)
+> **Documentation** — Installation, deployment, and usage across the API, CLI, MCP,
+> and A2A agent interfaces are maintained in the
+> [official documentation](https://knuckles-team.github.io/arr-mcp/).
 
 ---
 
@@ -1723,6 +1711,8 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
+---
+
 ## Agent
 
 # Set credentials
@@ -1776,3 +1766,30 @@ arr-mcp
 Or start it as a Streamable-HTTP server on port `8000`:
 ```bash
 arr-mcp --transport streamable-http --port 8000
+
+---
+
+## Documentation
+
+The complete documentation is published as the
+[official documentation site](https://knuckles-team.github.io/arr-mcp/) and is
+the recommended reference for installation, deployment, and day-to-day operation.
+
+---
+
+## Repository Owners
+
+<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=example&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
+
+![GitHub followers](https://img.shields.io/github/followers/example)
+![GitHub User's stars](https://img.shields.io/github/stars/example)
+
+---
+
+## Contribute
+
+Contributions are welcome! Please ensure code quality by running local checks before submitting pull requests:
+- Format code using `ruff format .`
+- Lint code using `ruff check .`
+- Validate type-safety with `mypy .`
+- Run test suites using `pytest`
